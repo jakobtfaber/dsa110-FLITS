@@ -3,10 +3,10 @@
   "checkpoint_id": "b9dc5776eecd",
   "session_id": "6ec547e4-5a19-4f0e-a220-5d371b4ee9fc",
   "strategy": "manual-commit",
-  "created_at": "2026-06-22T17:40:37.784131Z",
+  "created_at": "2026-06-22T17:40:42.533482Z",
   "branch": "test-entire-hooks",
   "checkpoints_count": 23,
-  "save_step_count": 13,
+  "save_step_count": 1,
   "files_touched": [],
   "agent": "Claude Code",
   "model": "claude-opus-4-8[1m]",
@@ -85,154 +85,5 @@
   ],
   "session_metrics": {
     "turn_count": 23
-  },
-  "prompt_attributions": [
-    {
-      "checkpoint_number": 1,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 2,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 3,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 4,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 5,
-      "user_lines_added": 1,
-      "user_lines_removed": 0,
-      "agent_lines_added": 814,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1
-      }
-    },
-    {
-      "checkpoint_number": 6,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 7,
-      "user_lines_added": 993,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1,
-        "scratch/codetection/normalize_codetection.py": 302,
-        "scratch/codetection/ps1_strm_resolve.py": 113,
-        "scratch/codetection/validate_foreground.py": 252,
-        "scratch/codetection/verify_crosscheck.py": 104,
-        "scratch/codetection/verify_ps1.py": 65,
-        "scratch/codetection/verify_validation.py": 156
-      }
-    },
-    {
-      "checkpoint_number": 8,
-      "user_lines_added": 1,
-      "user_lines_removed": 0,
-      "agent_lines_added": 1361,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1
-      }
-    },
-    {
-      "checkpoint_number": 9,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    },
-    {
-      "checkpoint_number": 10,
-      "user_lines_added": 1907,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1,
-        "crossmatch_paper.tex": 6,
-        "docs-analysis/foreground.md": 73,
-        "foreground_table.tex": 59,
-        "mkdocs.yml": 1,
-        "scratch/codetection/make_catalog_table.py": 283,
-        "scratch/codetection/merge_final.py": 100,
-        "scratch/codetection/normalize_codetection.py": 302,
-        "scratch/codetection/ps1_strm_adjudicate.py": 103,
-        "scratch/codetection/ps1_strm_resolve.py": 113,
-        "scratch/codetection/validate_foreground.py": 252,
-        "scratch/codetection/verify_catalog_table.py": 69,
-        "scratch/codetection/verify_crosscheck.py": 104,
-        "scratch/codetection/verify_final.py": 62,
-        "scratch/codetection/verify_paper_prose.py": 54,
-        "scratch/codetection/verify_ps1.py": 65,
-        "scratch/codetection/verify_strm_adjudicate.py": 104,
-        "scratch/codetection/verify_validation.py": 156
-      }
-    },
-    {
-      "checkpoint_number": 11,
-      "user_lines_added": 1,
-      "user_lines_removed": 0,
-      "agent_lines_added": 1906,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1
-      }
-    },
-    {
-      "checkpoint_number": 12,
-      "user_lines_added": 1,
-      "user_lines_removed": 0,
-      "agent_lines_added": 1906,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1
-      }
-    },
-    {
-      "checkpoint_number": 13,
-      "user_lines_added": 1,
-      "user_lines_removed": 0,
-      "agent_lines_added": 1767,
-      "agent_lines_removed": 0,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1
-      }
-    },
-    {
-      "checkpoint_number": 14,
-      "user_lines_added": 49,
-      "user_lines_removed": 0,
-      "agent_lines_added": 2168,
-      "agent_lines_removed": 92,
-      "user_added_per_file": {
-        ".claude/scheduled_tasks.lock": 1,
-        "ENTIRE_AUTH_HANDOFF.md": 24,
-        "docs/entire-tracing-checkpoints.md": 24
-      }
-    }
-  ]
+  }
 }
