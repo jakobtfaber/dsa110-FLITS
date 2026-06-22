@@ -1,0 +1,170 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "547e24f5c2df",
+  "session_id": "6ec547e4-5a19-4f0e-a220-5d371b4ee9fc",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:28:52.444976Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "save_step_count": 5,
+  "files_touched": [
+    "flits/__init__.py",
+    "flits/scattering/__init__.py",
+    "flits/scattering/broaden.py",
+    "scattering/scat_analysis/validation_thresholds.py",
+    "scattering/scripts/verify_scattering.py",
+    "simulation/scripts/diagnostic_scattering.py",
+    "simulation/scripts/plot_dedispersed_scattered.py",
+    "simulation/scripts/simulate_scattered_pulse.py",
+    "simulation/scripts/verify_scattering_effect.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "a688dfbfc0af",
+  "token_usage": {
+    "input_tokens": 115445,
+    "cache_creation_tokens": 2677141,
+    "cache_read_tokens": 60048333,
+    "output_tokens": 446479,
+    "api_call_count": 307
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01LtgNgXa4qXDGor6gbpJ3BR",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "a688dfbfc0af",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1496,
+        "end": 1497,
+        "entry_ids": [
+          "a505a70d-a273-4d69-8640-047d4e173611"
+        ],
+        "tool_use_id": "toolu_01LtgNgXa4qXDGor6gbpJ3BR"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LtgNgXa4qXDGor6gbpJ3BR"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01S7pCdgJqZJRCfU43HJSAtx",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "a688dfbfc0af",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1503,
+        "end": 1504,
+        "entry_ids": [
+          "be8d1a5a-217a-4d53-b625-c6e849143213"
+        ],
+        "tool_use_id": "toolu_01S7pCdgJqZJRCfU43HJSAtx"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01S7pCdgJqZJRCfU43HJSAtx"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: boris",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 32
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T18:28:52.149695Z",
+    "agent_lines": 136,
+    "agent_removed": 204,
+    "human_added": 0,
+    "human_modified": 8,
+    "human_removed": 1,
+    "total_committed": 144,
+    "total_lines_changed": 458,
+    "agent_percentage": 74.235807860262,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 47,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2056,
+      "agent_lines_removed": 114,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 46
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 22,
+      "user_lines_removed": 388,
+      "agent_lines_added": 1951,
+      "agent_lines_removed": 209,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 20,
+        "flits/__init__.py": 1
+      },
+      "user_removed_per_file": {
+        "flits/__init__.py": 7,
+        "flits/models.py": 102,
+        "flits/params.py": 26,
+        "flits/sampler.py": 203,
+        "tests/test_models.py": 25,
+        "tests/test_sampler.py": 25
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 21,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1954,
+      "agent_lines_removed": 210,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 20
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 22,
+      "user_lines_removed": 1,
+      "agent_lines_added": 1960,
+      "agent_lines_removed": 214,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 20,
+        "simulation/scripts/diagnostic_scattering.py": 1
+      },
+      "user_removed_per_file": {
+        "simulation/scripts/diagnostic_scattering.py": 1
+      }
+    }
+  ]
+}

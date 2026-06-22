@@ -3,7 +3,7 @@
   "checkpoint_id": "547e24f5c2df",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 5,
+  "checkpoints_count": 9,
   "files_touched": [
     "flits/__init__.py",
     "flits/scattering/__init__.py",
@@ -27,13 +27,19 @@
       "transcript": "/54/7e24f5c2df/1/full.jsonl",
       "content_hash": "/54/7e24f5c2df/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/54/7e24f5c2df/2/metadata.json",
+      "transcript": "/54/7e24f5c2df/2/full.jsonl",
+      "content_hash": "/54/7e24f5c2df/2/content_hash.txt",
+      "prompt": "/54/7e24f5c2df/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 495979,
-    "cache_creation_tokens": 95332,
-    "cache_read_tokens": 20621359,
-    "output_tokens": 103638,
-    "api_call_count": 136
+    "input_tokens": 611424,
+    "cache_creation_tokens": 2772473,
+    "cache_read_tokens": 80669692,
+    "output_tokens": 550117,
+    "api_call_count": 443
   }
 }

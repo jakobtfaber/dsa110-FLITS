@@ -1,0 +1,133 @@
+yes, run
+
+---
+
+yes please, go further even
+
+---
+
+what does inconclusive mean?
+
+---
+
+could you rewrite all of the information, including the inconclusive candidates into a csv or table of some sort and add that both to the mkdocs and manuscript
+
+---
+
+Which one of the CSVs is the correct one that's most up to date?
+
+---
+
+also isn't the manuscript in the git submodule repo Faber2026?
+
+---
+
+the intended manuscript is Faber2026, the overleaf synced repo.  it should be a submoduel
+
+---
+
+the intended manuscript is Faber2026, the overleaf synced repo.  it should be a submodule, and if it lives in the dsa110 org repo, it should live in the fork too, no?
+
+---
+
+the intended manuscript is Faber2026, the overleaf synced repo.  it should be a submodule, and if it lives in the dsa110 org repo, it should live in the fork too, no? The fork is meant to be a perfectly synced-up version with the upstream dsa110, where the fork is used for development and then eventually, as it goes, it syncs with the upstream dsa110 or group book.
+
+---
+
+the intended manuscript is Faber2026, the overleaf synced repo.  it should be a submodule, and if it lives in the dsa110 org repo, it should live in the fork too, no? The fork is meant to be a perfectly synced-up version with the upstream dsa110, where the fork is used for development and then eventually, as it goes, it syncs with the upstream dsa110 org repo.
+
+---
+
+reduce the cognitive load. handle this using /boris and /ponytail:ponytail
+
+---
+
+Proceed with push and then PR into fork main.
+
+---
+
+When you say bump, do you mean include or exclude?
+
+---
+
+Okay, perfect. Yes, do that.
+
+---
+
+Okay, perfect. Yes, do that.
+
+---
+
+merge PR #9
+
+---
+
+Clean one commit PR to dsa110/dsa110-FLITS, merge, bump submodule, then get it onto the fork somehow I guess? why can't it be in both? Faber2026 is a repo in jakobtfaber natively
+
+---
+
+yes clean them up
+
+---
+
+Let's run the Overleaf Rebuild check.
+
+---
+
+use `olcli`
+
+---
+
+If you lead the charge in the browser on this and I log in, then I can enter my credentials if you guide the rest:
+---
+! olcli auth
+  ⎿  To authenticate, provide your session cookie:
+
+     1. Log into overleaf.com in your browser
+     2. Open Developer Tools (F12) → Application → Cookies
+     3. Find the cookie named "overleaf_session2"
+     4. Copy its value and run:
+
+       olcli auth --cookie "your_session_cookie_value"
+
+     Or set OVERLEAF_SESSION environment variable
+
+---
+
+I'm gonna challenge you to find a way to do this headlessly.
+
+---
+
+Proceed
+
+---
+
+This repository is too tangled for me to interject at this stage. I need you to take over and make sure that this proceeds cleanly.
+
+---
+
+Do we even want to be using olcli?
+
+---
+
+Yes, I definitely want it to be hands off.
+
+---
+
+Passing to you instead, handle all 3 setup steps please.
+
+---
+
+Passing to you instead, handle all 3 setup steps please. the Git auth token is stored in my clipboard, grab it
+
+---
+
+token has been re-copied
+
+---
+
+let's uninstall olcli if we're not using it
+
+---
+
+chezmoi won't revive it?
