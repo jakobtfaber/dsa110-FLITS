@@ -15,3 +15,7 @@ How do we give you the Entire tool to use, how is it installed?
 ---
 
 make it first-class
+
+---
+
+commit + push the two .claude/ files
