@@ -3,21 +3,20 @@
   "checkpoint_id": "0f12244a3b6b",
   "session_id": "6ec547e4-5a19-4f0e-a220-5d371b4ee9fc",
   "strategy": "manual-commit",
-  "created_at": "2026-06-22T17:41:30.394373Z",
+  "created_at": "2026-06-22T17:41:34.873218Z",
   "branch": "test-entire-hooks",
   "checkpoints_count": 23,
+  "save_step_count": 1,
   "files_touched": [],
   "agent": "Claude Code",
   "model": "claude-opus-4-8[1m]",
   "turn_id": "4803ed37070d",
-  "checkpoint_transcript_start": 2236,
-  "transcript_lines_at_start": 2236,
   "token_usage": {
-    "input_tokens": 133,
-    "cache_creation_tokens": 2743,
-    "cache_read_tokens": 596574,
-    "output_tokens": 2680,
-    "api_call_count": 2
+    "input_tokens": 60785,
+    "cache_creation_tokens": 2179434,
+    "cache_read_tokens": 50318276,
+    "output_tokens": 346413,
+    "api_call_count": 252
   },
   "skill_events_version": 1,
   "skill_events": [
