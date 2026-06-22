@@ -31,3 +31,7 @@ B.1 next, use /boris and /ponytail
 ---
 
 You're not going to fix the auto-stripping?
+
+---
+
+Tell me your plan to mitigate it in all instances that it might crop up in the future. From here on out, if you encounter something like this, a gotcha that's posing an issue, do not just mention it. If you must mention it, also have the foresight to incorporate a preventative measure to prevent it from causing problems.
