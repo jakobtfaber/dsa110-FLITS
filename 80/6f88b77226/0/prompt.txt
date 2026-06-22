@@ -1,0 +1,17 @@
+Is Entire's ledger meant to be tracked according to Entire.io or no?
+
+---
+
+How do you, claude, interact with that ledger right now
+
+---
+
+Can we make it a tool you have?
+
+---
+
+How do we give you the Entire tool to use, how is it installed?
+
+---
+
+make it first-class

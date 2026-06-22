@@ -1,0 +1,157 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "806f88b77226",
+  "session_id": "12e6c6f1-cbd3-4afd-8514-1d28799cd64c",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T19:44:38.65849Z",
+  "branch": "main",
+  "checkpoints_count": 6,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "37e1ac4c8643",
+  "checkpoint_transcript_start": 945,
+  "transcript_lines_at_start": 945,
+  "token_usage": {
+    "input_tokens": 33900,
+    "cache_creation_tokens": 591199,
+    "cache_read_tokens": 5992178,
+    "output_tokens": 26123,
+    "api_call_count": 28
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-2026-06-22T17:57:07.969803Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "c058da377cdf",
+      "timestamp": "2026-06-22T17:57:07.969803Z",
+      "native": {
+        "command": "/ponytail:ponytail"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-audit-2026-06-22T17:57:38.398842Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail-audit"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ee47aa22007",
+      "timestamp": "2026-06-22T17:57:38.398842Z",
+      "native": {
+        "command": "/ponytail:ponytail-audit"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail-audit",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-goal-2026-06-22T19:07:31.084059Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "goal"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "1f1fbce2a7b6",
+      "timestamp": "2026-06-22T19:07:31.084059Z",
+      "native": {
+        "command": "/goal"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/goal",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01P49kTBTLrPiV5baEfNKNcg",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "update-config"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "37e1ac4c8643",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1082,
+        "end": 1083,
+        "entry_ids": [
+          "c6ef5629-0d7f-4160-aadd-d62a9f812bd8"
+        ],
+        "tool_use_id": "toolu_01P49kTBTLrPiV5baEfNKNcg"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01P49kTBTLrPiV5baEfNKNcg"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: update-config",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 13
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 198,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 26,
+      "user_lines_removed": 0,
+      "agent_lines_added": 198,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        ".claude/settings.json": 9,
+        ".claude/skills/entire/SKILL.md": 16
+      }
+    }
+  ]
+}
