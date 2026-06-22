@@ -1,0 +1,91 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "547e24f5c2df",
+  "session_id": "12e6c6f1-cbd3-4afd-8514-1d28799cd64c",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:28:46.80739Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "simulation/scripts/diagnostic_scattering.py",
+    "simulation/scripts/simulate_scattered_pulse.py",
+    "simulation/scripts/verify_scattering_effect.py",
+    "simulation/scripts/plot_dedispersed_scattered.py",
+    "scattering/scripts/verify_scattering.py",
+    "flits/__init__.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "774aa02ba545",
+  "checkpoint_transcript_start": 284,
+  "transcript_lines_at_start": 284,
+  "token_usage": {
+    "input_tokens": 9418,
+    "cache_creation_tokens": 95332,
+    "cache_read_tokens": 7617071,
+    "output_tokens": 60723,
+    "api_call_count": 42
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-2026-06-22T17:57:07.969803Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "c058da377cdf",
+      "timestamp": "2026-06-22T17:57:07.969803Z",
+      "native": {
+        "command": "/ponytail:ponytail"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-audit-2026-06-22T17:57:38.398842Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail-audit"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ee47aa22007",
+      "timestamp": "2026-06-22T17:57:38.398842Z",
+      "native": {
+        "command": "/ponytail:ponytail-audit"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail-audit",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T18:28:46.677837Z",
+    "agent_lines": 138,
+    "agent_removed": 100,
+    "human_added": 6,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 144,
+    "total_lines_changed": 461,
+    "agent_percentage": 51.62689804772235,
+    "metric_version": 2
+  }
+}
