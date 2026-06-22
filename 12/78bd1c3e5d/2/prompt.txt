@@ -1,0 +1,1 @@
+Audit .githooks and entire_checkpoint.py execution to verify complete functional correctness. Ensure git is configured with core.hooksPath=.githooks, all hook scripts are executable, and python3 scripts/entire_checkpoint.py runs successfully.

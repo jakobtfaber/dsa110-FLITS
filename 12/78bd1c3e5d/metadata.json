@@ -3,7 +3,7 @@
   "checkpoint_id": "1278bd1c3e5d",
   "strategy": "manual-commit",
   "branch": "_audit_tmp_checkpoint",
-  "checkpoints_count": 3,
+  "checkpoints_count": 4,
   "files_touched": [
     "scattering/scat_analysis/debug_noise.py",
     "scripts/_audit_probe.txt"
@@ -20,13 +20,19 @@
       "transcript": "/12/78bd1c3e5d/1/full.jsonl",
       "content_hash": "/12/78bd1c3e5d/1/content_hash.txt",
       "prompt": "/12/78bd1c3e5d/1/prompt.txt"
+    },
+    {
+      "metadata": "/12/78bd1c3e5d/2/metadata.json",
+      "transcript": "/12/78bd1c3e5d/2/full.jsonl",
+      "content_hash": "/12/78bd1c3e5d/2/content_hash.txt",
+      "prompt": "/12/78bd1c3e5d/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 185161,
-    "cache_creation_tokens": 127126,
-    "cache_read_tokens": 4651214,
-    "output_tokens": 38758,
-    "api_call_count": 51
+    "input_tokens": 204537,
+    "cache_creation_tokens": 191397,
+    "cache_read_tokens": 5345588,
+    "output_tokens": 48288,
+    "api_call_count": 62
   }
 }
