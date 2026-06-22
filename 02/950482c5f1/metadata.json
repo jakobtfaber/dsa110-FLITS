@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "02950482c5f1",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 5,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/check_freq_order.py",
+    "scattering/scripts/fullband_aligned.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/02/950482c5f1/0/metadata.json",
+      "transcript": "/02/950482c5f1/0/full.jsonl",
+      "content_hash": "/02/950482c5f1/0/content_hash.txt",
+      "prompt": "/02/950482c5f1/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 3843,
+    "cache_creation_tokens": 299177,
+    "cache_read_tokens": 8925420,
+    "output_tokens": 49690,
+    "api_call_count": 35
+  }
+}
