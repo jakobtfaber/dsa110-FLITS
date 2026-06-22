@@ -1,0 +1,120 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1278bd1c3e5d",
+  "session_id": "12e6c6f1-cbd3-4afd-8514-1d28799cd64c",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:08:44.891375Z",
+  "branch": "_audit_tmp_checkpoint",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "scattering/scat_analysis/debug_noise.py",
+    "scripts/_audit_probe.txt"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "774aa02ba545",
+  "token_usage": {
+    "input_tokens": 21032,
+    "cache_creation_tokens": 127126,
+    "cache_read_tokens": 3435214,
+    "output_tokens": 29987,
+    "api_call_count": 34
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-2026-06-22T17:57:07.969803Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "c058da377cdf",
+      "timestamp": "2026-06-22T17:57:07.969803Z",
+      "native": {
+        "command": "/ponytail:ponytail"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-audit-2026-06-22T17:57:38.398842Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail-audit"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ee47aa22007",
+      "timestamp": "2026-06-22T17:57:38.398842Z",
+      "native": {
+        "command": "/ponytail:ponytail-audit"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail-audit",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T18:08:44.865733Z",
+    "agent_lines": 0,
+    "agent_removed": 109,
+    "human_added": 1,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1,
+    "total_lines_changed": 110,
+    "agent_percentage": 99.0909090909091,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 2056,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        ".githooks/commit-msg": 4,
+        ".githooks/post-commit": 9,
+        ".githooks/post-commit.pre-entire": 12,
+        ".githooks/post-merge": 8,
+        ".githooks/post-rewrite": 14,
+        ".githooks/post-rewrite.pre-entire": 12,
+        ".githooks/pre-push": 5,
+        ".githooks/prepare-commit-msg": 3,
+        "ENTIRE_AUTH_HANDOFF.md": 26,
+        "scratch/codetection/make_catalog_table.py": 283,
+        "scratch/codetection/merge_final.py": 100,
+        "scratch/codetection/normalize_codetection.py": 302,
+        "scratch/codetection/ps1_strm_adjudicate.py": 103,
+        "scratch/codetection/ps1_strm_resolve.py": 113,
+        "scratch/codetection/validate_foreground.py": 252,
+        "scratch/codetection/verify_catalog_table.py": 69,
+        "scratch/codetection/verify_crosscheck.py": 104,
+        "scratch/codetection/verify_final.py": 62,
+        "scratch/codetection/verify_paper_prose.py": 54,
+        "scratch/codetection/verify_ps1.py": 65,
+        "scratch/codetection/verify_strm_adjudicate.py": 104,
+        "scratch/codetection/verify_validation.py": 156,
+        "scripts/entire_checkpoint.py": 195
+      }
+    }
+  ]
+}
