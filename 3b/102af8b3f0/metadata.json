@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "3b102af8b3f0",
+  "strategy": "manual-commit",
+  "branch": "_audit_tmp_checkpoint",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".githooks/post-commit.pre-entire",
+    ".githooks/post-merge",
+    ".githooks/post-rewrite.pre-entire",
+    "ENTIRE_AUTH_HANDOFF.md",
+    "scripts/entire_checkpoint.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/3b/102af8b3f0/0/metadata.json",
+      "transcript": "/3b/102af8b3f0/0/full.jsonl",
+      "content_hash": "/3b/102af8b3f0/0/content_hash.txt",
+      "prompt": "/3b/102af8b3f0/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 165228,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 1352576,
+    "output_tokens": 9089,
+    "api_call_count": 18
+  }
+}
