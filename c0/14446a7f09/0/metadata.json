@@ -1,0 +1,142 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "c014446a7f09",
+  "session_id": "265e6f8b-9d51-4f16-82f8-14fa7fad5c70",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T22:26:25.993145Z",
+  "branch": "main",
+  "checkpoints_count": 7,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "446a32fe9a43",
+  "token_usage": {
+    "input_tokens": 59943,
+    "cache_creation_tokens": 983746,
+    "cache_read_tokens": 17823962,
+    "output_tokens": 124575,
+    "api_call_count": 82
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-grill-with-docs-2026-06-22T19:37:05.385381Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "grill-with-docs"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "a51446c76adf",
+      "timestamp": "2026-06-22T19:37:05.385381Z",
+      "native": {
+        "command": "/grill-with-docs"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/grill-with-docs",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_013E2nto73YGKQnTTKh6d4Dd",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "zoom-out"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "446a32fe9a43",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 65,
+        "end": 66,
+        "entry_ids": [
+          "4e962d46-ccb6-43a4-ac36-3b1e2f0f1511"
+        ],
+        "tool_use_id": "toolu_013E2nto73YGKQnTTKh6d4Dd"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_013E2nto73YGKQnTTKh6d4Dd"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: zoom-out",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01VH1XKXUhdBAuyLrpn67vVa",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "446a32fe9a43",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 479,
+        "end": 480,
+        "entry_ids": [
+          "40693e55-1004-43e5-abb4-358cf68ad56c"
+        ],
+        "tool_use_id": "toolu_01VH1XKXUhdBAuyLrpn67vVa"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01VH1XKXUhdBAuyLrpn67vVa"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01KJmpq3QdLVaXnpNuz7JqYp",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "446a32fe9a43",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 480,
+        "end": 481,
+        "entry_ids": [
+          "d72fd56a-17ba-4b2f-a980-ade678230ad4"
+        ],
+        "tool_use_id": "toolu_01KJmpq3QdLVaXnpNuz7JqYp"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01KJmpq3QdLVaXnpNuz7JqYp"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: boris",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 7
+  }
+}
