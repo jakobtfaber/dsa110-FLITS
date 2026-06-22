@@ -23,3 +23,11 @@ Implement remaining Ponytail over-engineering audit recommendations in /Users/ja
 3. Remove the unused diagnostic file [debug_noise.py](file:///Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scattering/scat_analysis/debug_noise.py).
 4. Delete duplicate versioned scripts (e.g., `check_freq_order_v2.py`, `verify_flat_limit2.py`) under [scattering-refit-2026-06/](file:///Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06) after checking which one is the final version.
 5. Delete the duplicate `fullband_aligned.py` in [scattering-refit-2026-06/](file:///Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06), keeping only the active one in [scripts/](file:///Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scattering/scripts).
+
+---
+
+commit & puhs
+
+---
+
+commit & push

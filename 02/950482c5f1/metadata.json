@@ -5,8 +5,8 @@
   "branch": "main",
   "checkpoints_count": 5,
   "files_touched": [
-    "analysis/scattering-refit-2026-06/check_freq_order.py",
-    "scattering/scripts/fullband_aligned.py"
+    "flits/__init__.py",
+    "flits/plotting.py"
   ],
   "sessions": [
     {
@@ -17,10 +17,10 @@
     }
   ],
   "token_usage": {
-    "input_tokens": 3843,
-    "cache_creation_tokens": 299177,
-    "cache_read_tokens": 8925420,
-    "output_tokens": 49690,
-    "api_call_count": 35
+    "input_tokens": 34432,
+    "cache_creation_tokens": 538383,
+    "cache_read_tokens": 21197302,
+    "output_tokens": 152043,
+    "api_call_count": 116
   }
 }
