@@ -1,0 +1,75 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "3b102af8b3f0",
+  "session_id": "12e6c6f1-cbd3-4afd-8514-1d28799cd64c",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:09:01.302293Z",
+  "branch": "_audit_tmp_checkpoint",
+  "checkpoints_count": 2,
+  "save_step_count": 1,
+  "files_touched": [
+    "scattering/scat_analysis/validation_thresholds.py",
+    "flits/scattering/broaden.py",
+    "flits/scattering/__init__.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "774aa02ba545",
+  "token_usage": {
+    "input_tokens": 21032,
+    "cache_creation_tokens": 127126,
+    "cache_read_tokens": 3435214,
+    "output_tokens": 29987,
+    "api_call_count": 34
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-2026-06-22T17:57:07.969803Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "c058da377cdf",
+      "timestamp": "2026-06-22T17:57:07.969803Z",
+      "native": {
+        "command": "/ponytail:ponytail"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ponytail:ponytail-audit-2026-06-22T17:57:38.398842Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ponytail:ponytail-audit"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "1ee47aa22007",
+      "timestamp": "2026-06-22T17:57:38.398842Z",
+      "native": {
+        "command": "/ponytail:ponytail-audit"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ponytail:ponytail-audit",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 2
+  }
+}
