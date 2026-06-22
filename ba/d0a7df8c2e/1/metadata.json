@@ -1,0 +1,83 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "bad0a7df8c2e",
+  "session_id": "8ddc8893-2c24-4d44-8b3e-9f6165d97ec4",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T19:18:01.293128Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "CLAUDE.md"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "d894762e3449",
+  "token_usage": {
+    "input_tokens": 21465,
+    "cache_creation_tokens": 80467,
+    "cache_read_tokens": 434823,
+    "output_tokens": 7467,
+    "api_call_count": 7
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-setup-matt-pocock-skills-2026-06-22T19:14:47.720366Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "setup-matt-pocock-skills"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "d894762e3449",
+      "timestamp": "2026-06-22T19:14:47.720366Z",
+      "native": {
+        "command": "/setup-matt-pocock-skills"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/setup-matt-pocock-skills",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T19:18:01.271562Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 14,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 14,
+    "total_lines_changed": 14,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 12,
+      "user_lines_removed": 662,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "flits/plotting.py": 11
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/check_freq_order.py": 51,
+        "flits/__init__.py": 7,
+        "flits/models.py": 102,
+        "flits/params.py": 26,
+        "flits/plotting.py": 9,
+        "flits/sampler.py": 203,
+        "scattering/scripts/fullband_aligned.py": 214,
+        "tests/test_models.py": 25,
+        "tests/test_sampler.py": 25
+      }
+    }
+  ]
+}
