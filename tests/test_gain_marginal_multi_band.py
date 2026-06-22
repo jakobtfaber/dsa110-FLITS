@@ -167,20 +167,18 @@ def test_rank1_fallback_on_collinear_channel():
     """(c) A collinear channel triggers the eigenvalue guard's rank-1 fallback.
 
     We make the two components IDENTICAL on channel 0 (K_2 == K_1 there), so M_0 is
-    rank-deficient (min/max eig ~ 0 < eig_rel_floor) and the channel is culled. The
-    code's documented contract for a culled-but-SUPPORTED channel is NOT the gain=0
-    baseline but a rank-1 proper-prior evidence on the top eigenpair of M_f:
+    rank-deficient (min/max eig ~ 0 < eig_rel_floor) and the channel is culled to a
+    rank-1 proper-prior evidence on its top eigenpair (NOT the gain=0 baseline).
 
-        emx   = lambda_max(M_f)        (top eigenvalue)
-        bproj = b_f . v_top            (data projected on the top eigenvector)
-        Ac    = emx + sigma^2 / s2
-        lnZ_f = -0.5 (S_dd/sigma^2 - (bproj^2/Ac)/sigma^2)
-                - 0.5 T ln(2 pi sigma^2) - 0.5 ln(1 + (s2/sigma^2) emx)
-
-    We replicate that rank-1 value directly and assert the culled channel's
-    contribution matches it -- and crucially that it is strictly BELOW the gain=0
-    baseline (the merge is Occam-penalized, not rewarded), the invariant the branch
-    exists to protect.
+    Crucially, on an EXACTLY-collinear channel the fallback is not an approximation:
+    with both components equal to k(t), K_0^T K_0 = 2 k k^T = k_eff k_eff^T for the
+    single effective kernel k_eff = sqrt(2) k = v_top . K, so the channel's true
+    marginal covariance Sigma_0 = sigma^2 I + s2 K^T K is itself rank-1-plus-diagonal.
+    The full (T,T) brute force -- the SAME `_brute_lnZ` used in (a), with no reference
+    to the kernel's reduced rank-1 formula -- is therefore the exact ground truth on
+    every channel, culled or not. We also assert the culled channel's contribution
+    sits strictly BELOW its gain=0 baseline (the merge is Occam-penalized, not
+    rewarded), the invariant the rank-1 branch exists to protect.
     """
     N, F, T = 2, 3, 9
     s2 = 1e6  # large fixed s2: the regime where culling-to-baseline would REWARD a merge
@@ -196,50 +194,55 @@ def test_rank1_fallback_on_collinear_channel():
     assert diag["frac_culled"] == pytest.approx(1.0 / F)
     assert diag["n_supported"] == F - 1  # the two well-conditioned channels
 
-    # --- Recompute the expected per-channel contributions independently. ---
-    # Well-conditioned channels via the brute Woodbury (rows 1,2).
-    K = kernels
-    expected_total = 0.0
-    f_cull = 0
-    for f in range(F):
-        if f == f_cull:
-            continue
-        Kf = K[:, f, :]  # (N, T)
-        d = data[f]
-        sig2 = float(noise_std[f]) ** 2
-        Sigma = sig2 * np.eye(T) + s2 * (Kf.T @ Kf)
-        _, logdet = np.linalg.slogdet(Sigma)
-        quad = d @ np.linalg.solve(Sigma, d)
-        expected_total += -0.5 * quad - 0.5 * (logdet + T * np.log(2.0 * np.pi))
+    # Independent ground truth: the FULL (T,T) brute force over all valid channels
+    # (same _brute_lnZ as test (a)), exact even on the rank-1-collapsed channel 0
+    # because Sigma_0 = sigma^2 I + s2 K^T K is itself rank-1-plus-diagonal there.
+    brute = _brute_lnZ(kernels, data, noise_std, valid, s2)
+    np.testing.assert_allclose(lnZ, brute, rtol=1e-7, atol=1e-7)
 
-    # Culled channel 0: rank-1 proper evidence on the top eigenpair of M_0.
-    Kc = K[:, f_cull, :]  # (N, T)
-    d0 = data[f_cull]
-    sig2_0 = float(noise_std[f_cull]) ** 2
-    M0 = Kc @ Kc.T  # (N, N) = sum_t K_i K_j
-    b0 = Kc @ d0  # (N,)   = sum_t d K_i
-    S_dd0 = float(d0 @ d0)
-    evals0, evecs0 = np.linalg.eigh(M0)
-    emx = evals0[-1]
-    vtop = evecs0[:, -1]
-    bproj = float(b0 @ vtop)
-    Ac = emx + sig2_0 / s2
-    quadc = (bproj * bproj) / Ac
-    occ_c = np.log1p((s2 / sig2_0) * max(emx, 0.0))
-    lnZ_cull_expected = (
-        -0.5 * (S_dd0 / sig2_0 - quadc / sig2_0)
-        - 0.5 * T * np.log(2.0 * np.pi * sig2_0)
-        - 0.5 * occ_c
-    )
-    expected_total += lnZ_cull_expected
-
-    np.testing.assert_allclose(lnZ, expected_total, rtol=1e-7, atol=1e-7)
-
-    # Documented invariant: the rank-1 fallback sits strictly BELOW the gain=0
-    # baseline, so a degenerate merge is penalized (not the +0.5 ln(s2/var) reward
-    # that culling-to-baseline would hand back at large s2).
+    # Occam invariant: the culled channel's own contribution is strictly below its
+    # gain=0 baseline. Evaluate that single channel via the same independent brute.
+    cull_only = np.zeros(F, dtype=bool)
+    cull_only[0] = True
+    brute_cull = _brute_lnZ(kernels, data, noise_std, cull_only, s2)
+    sig2_0 = float(noise_std[0]) ** 2
+    S_dd0 = float(data[0] @ data[0])
     baseline_cull = -0.5 * S_dd0 / sig2_0 - 0.5 * T * np.log(2.0 * np.pi * sig2_0)
-    assert lnZ_cull_expected < baseline_cull
+    assert brute_cull < baseline_cull
+
+
+def test_s2_profiling_finds_interior_optimum():
+    """The production-default `s2=None` ML-profiling path (1-D max over the gain-prior
+    variance) satisfies two implementation-independent properties:
+
+      1. Profiled evidence >= evidence at ANY fixed s2 (profiling maximizes).
+      2. The optimum is INTERIOR: perturbing the profiled s2 up or down does not
+         increase lnZ -- i.e. it is not pinned to a search bound.
+
+    A fresh _FakeModel per call is required (the fake's component-call counter is
+    consumed once per _gain_marginal_multi_band invocation).
+    """
+    N, F, T = 2, 4, 16
+    kernels, data, noise_std, valid = _make_well_conditioned_case(seed=7, N=N, F=F, T=T)
+
+    def fn(s2):
+        return _gain_marginal_multi_band(
+            _FakeModel(kernels, data, noise_std, valid), *_dummy_params_keys(N), s2=s2
+        )
+
+    lnZ_prof, diag = fn(None)
+    s2_star = diag["s2"]
+    assert np.isfinite(lnZ_prof) and s2_star > 0.0
+
+    # (1) >= a couple of arbitrary fixed values near the optimum's scale.
+    for s2_fixed in (s2_star * 3.0, s2_star / 3.0):
+        lnZ_fixed, _ = fn(s2_fixed)
+        assert lnZ_prof >= lnZ_fixed - 1e-6
+    # (2) interior: a 10x step either way (well inside the +-18-in-log search range)
+    # does not beat the profiled optimum.
+    for s2_pert in (s2_star * 10.0, s2_star / 10.0):
+        lnZ_pert, _ = fn(s2_pert)
+        assert lnZ_prof >= lnZ_pert - 1e-6
 
 
 def test_no_valid_channels_returns_neg_inf():
