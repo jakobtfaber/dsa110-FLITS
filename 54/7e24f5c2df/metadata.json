@@ -1,0 +1,33 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "547e24f5c2df",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "flits/__init__.py",
+    "flits/scattering/__init__.py",
+    "flits/scattering/broaden.py",
+    "scattering/scat_analysis/validation_thresholds.py",
+    "scattering/scripts/verify_scattering.py",
+    "simulation/scripts/diagnostic_scattering.py",
+    "simulation/scripts/plot_dedispersed_scattered.py",
+    "simulation/scripts/simulate_scattered_pulse.py",
+    "simulation/scripts/verify_scattering_effect.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/54/7e24f5c2df/0/metadata.json",
+      "transcript": "/54/7e24f5c2df/0/full.jsonl",
+      "content_hash": "/54/7e24f5c2df/0/content_hash.txt",
+      "prompt": "/54/7e24f5c2df/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 486561,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 13004288,
+    "output_tokens": 42915,
+    "api_call_count": 94
+  }
+}

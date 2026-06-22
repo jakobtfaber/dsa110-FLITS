@@ -1,0 +1,96 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "547e24f5c2df",
+  "session_id": "019ef080-c862-7d11-a57c-75ce8d19749d",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:28:35.988936Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "flits/__init__.py",
+    "flits/scattering/__init__.py",
+    "flits/scattering/broaden.py",
+    "scattering/scat_analysis/validation_thresholds.py",
+    "scattering/scripts/verify_scattering.py",
+    "simulation/scripts/diagnostic_scattering.py",
+    "simulation/scripts/plot_dedispersed_scattered.py",
+    "simulation/scripts/simulate_scattered_pulse.py",
+    "simulation/scripts/verify_scattering_effect.py"
+  ],
+  "agent": "Codex",
+  "model": "gpt-5.5",
+  "turn_id": "63846fe40bf2",
+  "token_usage": {
+    "input_tokens": 486561,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 13004288,
+    "output_tokens": 42915,
+    "api_call_count": 94
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T18:28:35.876078Z",
+    "agent_lines": 138,
+    "agent_removed": 205,
+    "human_added": 0,
+    "human_modified": 7,
+    "human_removed": 1,
+    "total_committed": 145,
+    "total_lines_changed": 460,
+    "agent_percentage": 74.56521739130434,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 2102,
+      "agent_lines_removed": 114,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 21,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1845,
+      "agent_lines_removed": 144,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 20
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 22,
+      "user_lines_removed": 388,
+      "agent_lines_added": 1951,
+      "agent_lines_removed": 209,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 20,
+        "flits/__init__.py": 1
+      },
+      "user_removed_per_file": {
+        "flits/__init__.py": 7,
+        "flits/models.py": 102,
+        "flits/params.py": 26,
+        "flits/sampler.py": 203,
+        "tests/test_models.py": 25,
+        "tests/test_sampler.py": 25
+      }
+    }
+  ]
+}
