@@ -1,0 +1,116 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1127f181acbf",
+  "session_id": "6ec547e4-5a19-4f0e-a220-5d371b4ee9fc",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-22T18:30:50.298224Z",
+  "branch": "main",
+  "checkpoints_count": 4,
+  "save_step_count": 1,
+  "files_touched": [
+    "scratch/codetection/make_catalog_table.py",
+    "scratch/codetection/merge_final.py",
+    "scratch/codetection/normalize_codetection.py",
+    "scratch/codetection/ps1_strm_adjudicate.py",
+    "scratch/codetection/ps1_strm_resolve.py",
+    "scratch/codetection/source/DSA110_CHIME_Codetection_BurstProperties_Foreground .xlsx",
+    "scratch/codetection/validate_foreground.py",
+    "scratch/codetection/verify_catalog_table.py",
+    "scratch/codetection/verify_crosscheck.py",
+    "scratch/codetection/verify_final.py",
+    "scratch/codetection/verify_paper_prose.py",
+    "scratch/codetection/verify_ps1.py",
+    "scratch/codetection/verify_strm_adjudicate.py",
+    "scratch/codetection/verify_validation.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "a688dfbfc0af",
+  "token_usage": {
+    "input_tokens": 115445,
+    "cache_creation_tokens": 2677141,
+    "cache_read_tokens": 60048333,
+    "output_tokens": 446479,
+    "api_call_count": 307
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01LtgNgXa4qXDGor6gbpJ3BR",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "a688dfbfc0af",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1496,
+        "end": 1497,
+        "entry_ids": [
+          "a505a70d-a273-4d69-8640-047d4e173611"
+        ],
+        "tool_use_id": "toolu_01LtgNgXa4qXDGor6gbpJ3BR"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LtgNgXa4qXDGor6gbpJ3BR"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01S7pCdgJqZJRCfU43HJSAtx",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "a688dfbfc0af",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 1503,
+        "end": 1504,
+        "entry_ids": [
+          "be8d1a5a-217a-4d53-b625-c6e849143213"
+        ],
+        "tool_use_id": "toolu_01S7pCdgJqZJRCfU43HJSAtx"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01S7pCdgJqZJRCfU43HJSAtx"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: boris",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 32
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-22T18:30:49.659207Z",
+    "agent_lines": 1706,
+    "agent_removed": 0,
+    "human_added": 401,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 2107,
+    "total_lines_changed": 2107,
+    "agent_percentage": 80.96820123398196,
+    "metric_version": 2
+  }
+}

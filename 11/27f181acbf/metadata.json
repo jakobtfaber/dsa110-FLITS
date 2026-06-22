@@ -3,11 +3,22 @@
   "checkpoint_id": "1127f181acbf",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 3,
+  "checkpoints_count": 7,
   "files_touched": [
     "scratch/codetection/make_catalog_table.py",
+    "scratch/codetection/merge_final.py",
+    "scratch/codetection/normalize_codetection.py",
+    "scratch/codetection/ps1_strm_adjudicate.py",
+    "scratch/codetection/ps1_strm_resolve.py",
+    "scratch/codetection/source/DSA110_CHIME_Codetection_BurstProperties_Foreground .xlsx",
+    "scratch/codetection/validate_foreground.py",
     "scratch/codetection/verify_catalog_table.py",
-    "scratch/codetection/verify_paper_prose.py"
+    "scratch/codetection/verify_crosscheck.py",
+    "scratch/codetection/verify_final.py",
+    "scratch/codetection/verify_paper_prose.py",
+    "scratch/codetection/verify_ps1.py",
+    "scratch/codetection/verify_strm_adjudicate.py",
+    "scratch/codetection/verify_validation.py"
   ],
   "sessions": [
     {
@@ -15,13 +26,19 @@
       "transcript": "/11/27f181acbf/0/full.jsonl",
       "content_hash": "/11/27f181acbf/0/content_hash.txt",
       "prompt": "/11/27f181acbf/0/prompt.txt"
+    },
+    {
+      "metadata": "/11/27f181acbf/1/metadata.json",
+      "transcript": "/11/27f181acbf/1/full.jsonl",
+      "content_hash": "/11/27f181acbf/1/content_hash.txt",
+      "prompt": "/11/27f181acbf/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 493270,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 13449984,
-    "output_tokens": 44666,
-    "api_call_count": 100
+    "input_tokens": 608715,
+    "cache_creation_tokens": 2677141,
+    "cache_read_tokens": 73498317,
+    "output_tokens": 491145,
+    "api_call_count": 407
   }
 }
