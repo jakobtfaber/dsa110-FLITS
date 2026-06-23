@@ -2,7 +2,7 @@
 
 ---
 **Date:** 2026-06-23
-**Status:** Draft
+**Status:** Phase 1 done
 **Research:** [research-chime-side-dm-localization.md](research-chime-side-dm-localization.md)
 **Branch:** `feat/chime-side-dm-localization` (NOT main)
 ---
@@ -36,7 +36,7 @@ The golden `crossmatching/toa_crossmatch_results.json` is never touched.
 ## Phase 1 — DM-phase recovery harness (host, test-first, no docker)
 Settles the estimator mechanics (grid/window) against a known answer before any real extraction.
 
-- [ ] **1.1** Write failing test `tests/test_dmphase_recovery.py`:
+- [x] **1.1** Write failing test `tests/test_dmphase_recovery.py`:
   ```python
   import numpy as np
   from dispersion.dmphasev2 import DMPhaseEstimator
@@ -65,8 +65,8 @@ Settles the estimator mechanics (grid/window) against a known answer before any 
       assert dm_sigma > 0
   ```
   Run `pytest tests/test_dmphase_recovery.py -q` → watch it fail/error (import path, grid, or recovery).
-- [ ] **1.2** Settle settings so it passes: adjust grid span/step, `ref`, and (if needed) the `_window_mask` `f_cut` via the estimator's `f_cut` arg. Do **not** change `dmphasev2.py` physics; only the test's call parameters. If a real estimator bug surfaces, stop and file a mismatch.
-- [ ] **1.3** Run `pytest tests/test_dmphase_recovery.py -q` → **pass**; `ruff check tests/test_dmphase_recovery.py`.
+- [x] **1.2** Settle settings so it passes: adjust grid span/step, `ref`, and (if needed) the `_window_mask` `f_cut` via the estimator's `f_cut` arg. Do **not** change `dmphasev2.py` physics; only the test's call parameters. If a real estimator bug surfaces, stop and file a mismatch.
+- [x] **1.3** Run `pytest tests/test_dmphase_recovery.py -q` → **pass**; `ruff check tests/test_dmphase_recovery.py`.
 
 **Automated verification:** `pytest tests/test_dmphase_recovery.py -q` passes; ruff clean.
 
