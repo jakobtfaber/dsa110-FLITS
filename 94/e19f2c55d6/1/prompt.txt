@@ -1,0 +1,5 @@
+Implement separate impact parameter thresholds for galaxies and clusters:
+1. In galaxies/v2_0/config.py, define DEFAULT_CLUSTER_IMPACT_KPC = 5000.0 (5 Mpc).
+2. In galaxies/v2_0/search.py, update run_search and _foreground_mask so that clusters (detected via NED/SDSS classifications like cluster/ClG/Cl) are filtered with the cluster_impact_kpc threshold, while regular galaxies use impact_kpc.
+3. Handle search query radius properly (use the larger of the two limits for query radius but cap the maximum angular search radius to 2.0 degrees to prevent Vizier timeouts at very low redshifts).
+4. Run tests in tests/ to verify compatibility and correctness.

@@ -1,0 +1,71 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "94e19f2c55d6",
+  "session_id": "5e3abb7c-1b89-4fa9-bfa3-66785233dc4b",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T03:28:45.755736Z",
+  "branch": "fix/issue-37-per-band-dt-min",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    ".agents/implement-dt-min-per-band.md",
+    ".agents/plan-dt-min-per-band.md",
+    ".agents/research-multicomponent-joint-evidence.md",
+    "scattering/scat_analysis/burstfit_joint.py",
+    "tests/test_joint_prior_ordered.py"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "0482abe2de05",
+  "token_usage": {
+    "input_tokens": 22128,
+    "cache_creation_tokens": 107297,
+    "cache_read_tokens": 3125047,
+    "output_tokens": 30029,
+    "api_call_count": 32
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T03:28:45.699217Z",
+    "agent_lines": 78,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 13,
+    "total_committed": 78,
+    "total_lines_changed": 91,
+    "agent_percentage": 85.71428571428571,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 1164,
+      "user_lines_removed": 13,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/plan-dt-min-per-band.md": 232,
+        ".agents/research-multicomponent-joint-evidence.md": 233,
+        "analysis/burst_energies/burst_energies.json": 106,
+        "analysis/burst_energies/burst_energies.tex": 62,
+        "analysis/calculate_burst_energies.py": 272,
+        "scattering/scat_analysis/burstfit_joint.py": 24,
+        "scratch/codetection/why_missed.py": 152,
+        "tests/test_joint_prior_ordered.py": 83
+      },
+      "user_removed_per_file": {
+        "scattering/scat_analysis/burstfit_joint.py": 13
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}

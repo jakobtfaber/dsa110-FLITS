@@ -3,10 +3,13 @@
   "checkpoint_id": "94e19f2c55d6",
   "strategy": "manual-commit",
   "branch": "fix/issue-37-per-band-dt-min",
-  "checkpoints_count": 2,
+  "checkpoints_count": 4,
   "files_touched": [
+    ".agents/implement-dt-min-per-band.md",
     ".agents/plan-dt-min-per-band.md",
-    ".agents/research-multicomponent-joint-evidence.md"
+    ".agents/research-multicomponent-joint-evidence.md",
+    "scattering/scat_analysis/burstfit_joint.py",
+    "tests/test_joint_prior_ordered.py"
   ],
   "sessions": [
     {
@@ -14,13 +17,19 @@
       "transcript": "/94/e19f2c55d6/0/full.jsonl",
       "content_hash": "/94/e19f2c55d6/0/content_hash.txt",
       "prompt": "/94/e19f2c55d6/0/prompt.txt"
+    },
+    {
+      "metadata": "/94/e19f2c55d6/1/metadata.json",
+      "transcript": "/94/e19f2c55d6/1/full.jsonl",
+      "content_hash": "/94/e19f2c55d6/1/content_hash.txt",
+      "prompt": "/94/e19f2c55d6/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 21034,
-    "cache_creation_tokens": 95491,
-    "cache_read_tokens": 1458187,
-    "output_tokens": 20921,
-    "api_call_count": 16
+    "input_tokens": 43162,
+    "cache_creation_tokens": 202788,
+    "cache_read_tokens": 4583234,
+    "output_tokens": 50950,
+    "api_call_count": 48
   }
 }
