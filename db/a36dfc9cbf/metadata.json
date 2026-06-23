@@ -3,10 +3,14 @@
   "checkpoint_id": "dba36dfc9cbf",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 2,
+  "checkpoints_count": 8,
   "files_touched": [
+    "results/isha_galaxies.csv",
     "results/phineas_galaxies.csv",
-    "results/whitney_galaxies.csv"
+    "results/search_summary.csv",
+    "results/sightline_dm_scattering_budget.md",
+    "results/whitney_galaxies.csv",
+    "results/zach_galaxies.csv"
   ],
   "sessions": [
     {
@@ -14,13 +18,19 @@
       "transcript": "/db/a36dfc9cbf/0/full.jsonl",
       "content_hash": "/db/a36dfc9cbf/0/content_hash.txt",
       "prompt": "/db/a36dfc9cbf/0/prompt.txt"
+    },
+    {
+      "metadata": "/db/a36dfc9cbf/1/metadata.json",
+      "transcript": "/db/a36dfc9cbf/1/full.jsonl",
+      "content_hash": "/db/a36dfc9cbf/1/content_hash.txt",
+      "prompt": "/db/a36dfc9cbf/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 104875,
-    "cache_creation_tokens": 2514179,
-    "cache_read_tokens": 84992622,
-    "output_tokens": 505325,
-    "api_call_count": 393
+    "input_tokens": 307036,
+    "cache_creation_tokens": 6472575,
+    "cache_read_tokens": 227388001,
+    "output_tokens": 1518297,
+    "api_call_count": 1053
   }
 }

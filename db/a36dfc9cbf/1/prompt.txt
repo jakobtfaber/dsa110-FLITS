@@ -1,0 +1,344 @@
+how do you know the conversations are active?
+
+---
+
+The Entire CLI:
+---
+```
+✻ Baked for 41m 34s
+ ▐▛███▜▌   Claude Code v2.1.185
+▝▜█████▛▘  Opus 4.8 (1M context) with xhigh effort · Claude Max
+  ▘▘ ▝▝    ~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+
+  ⎿  SessionStart:clear says:
+
+     Entire CLI will link this conversation to your next commit.
+       3 other active conversation(s) in this workspace will also be included.
+       Use 'entire status' for more information.
+
+```
+
+---
+
+Got it. I wonder if you could identify a use case for the AI research workflow skills. Just something to demonstrate how they work.
+
+---
+
+Go with 2. continue
+
+---
+
+/ai-research-workflows:implement
+
+---
+
+/ai-research-workflows:validate
+
+---
+
+/ai-research-workflows:handoff
+
+---
+
+Commit it now — pathspec-only, on a new branch. The work is done, verified, and handed off; leaving
+    it dirty just risks the next session (or that "active now" galaxies session) tangling the two lanes.
+
+    Concretely:
+    git switch -c fix/issue-37-per-band-dt-min
+    git add scattering/scat_analysis/burstfit_joint.py tests/test_joint_prior_ordered.py
+    .agents/research-multicomponent-joint-evidence.md .agents/plan-dt-min-per-band.md
+    .agents/implement-dt-min-per-band.md .agents/handoff-dt-min-per-band.md
+    git commit -m "Per-band dt_min for multi-component joint fit (#37)"
+    Never git add -A — galaxies/v2_0/*, analysis/burst_energies/, scratch/codetection/ belong to the
+    other session.
+
+    The one open item (manual N=1 vs N=2 lnZ ladder on a real single-component burst) is low-risk and
+    can wait — don't block the commit on it.
+
+---
+
+Do you recommend pushing?
+
+---
+
+I wanna keep the change. Go ahead and push.
+
+---
+
+So, no handoff needed?
+
+---
+
+Are you saying that the changes made were not warranted?
+
+---
+
+So we should merge it.
+
+---
+
+Stop asking me these questions that you already know the answer to.
+
+---
+
+You know what to do next.
+
+---
+
+How's the run going?
+
+---
+
+Would it be better to run this on hpcc?
+
+---
+
+How far along is the local processess?
+
+---
+
+Yes, post result as PR #11 commend and flip docs
+
+---
+
+Where are we now regarding the joint fits?
+
+---
+
+How do you want to use /ai-research-workflows on the unlocked but not-yet-run work by #37
+
+---
+
+<task-notification>
+<task-id>bnnjyftl4</task-id>
+<tool-use-id>toolu_01DuMVp4Kpqwwbv2uCo3bkNd</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/bnnjyftl4.output</output-file>
+<status>completed</status>
+<summary>Background command "Run N-ladder foreground, 1 seed, nlive=300" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Post the correction
+
+---
+
+What is the next step you're proposing?
+
+---
+
+Kick it off.
+
+---
+
+Approved. Commit research doc and tee up experiment.
+
+---
+
+Launch experiment.
+
+---
+
+I don't understand the reason for the multi-hour wall time, can you elaborate.
+
+---
+
+<task-notification>
+<task-id>b49h7cis6</task-id>
+<tool-use-id>toolu_01CYDoCuRB7kckcnVLADKfmm</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/b49h7cis6.output</output-file>
+<status>completed</status>
+<summary>Background command "Background poller: wait for both rung result JSONs" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>w4gj206k2</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/w4gj206k2.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Adversarially verify the wilhelm N-ladder null + DSA-misfit finding, apply the FLITS 3-level fit-validation gate, review PPC figures" completed</summary>
+<result>{"null_component":{"claim":"wilhelm shows NO resolvable second temporal component in CHIME.","verdict":"CONFIRMED","numbers":"From the two JSONs: lnZ(C1D1)=3809.5898+/-0.4440, lnZ(C2D1)=3808.4120+/-0.4420 =&gt; dlnZ_21 = -1.1779 +/- 0.6265 (1.88 sigma; Bayes factor exp(dlnZ_21)=0.308, i.e. N=2 mildly DISfavored). |dlnZ_21|=1.18 vs each individual log_evidence_err ~0.44 (comparable, both converged at dlogz target 0.5). Posterior of wilhelm_joint_samples_C2D1.npz (50438 samples, ESS=5761, weighted): t0_C2 floats 2.44-&gt;13.29 ms (97.5%), zeta_C2 median 42.7 spanning 0.14-&gt;635 -&gt; flat wide pedestal vs narrow zeta_C1~0.144. Classifying components by zeta&lt;1 (narrow) vs zeta&gt;5 (pedestal): weighted mass both-narrow = 0.0012; exactly-one-narrow = 0.9988; neither = 0.0000. Within the 0.12% both-narrow tail the two t0 are ~8.1 ms apart (median) -&gt; distant noise, not a close companion. Label-switching present: narrow-is-C1 mass 0.837, narrow-is-C2 mass 0.164, and the narrow component's zeta median = 0.1426, matching the N=1 single-component zeta 0.142 exactly. dt_min floor: CHIME median |diff(time)| = 0.06144 ms (n=144 grid, 0..8.786 ms span), dt_min = 3x = 0.18432 ms; ordered separation t0_C2-t0_C1 min=0.1843 (==floor), but weighted mass with sep&lt;1.05*dt_min = 0.0028, sep&lt;2*dt_min = 0.0272; separation posterior quantiles 2/16/50/84/98% = 0.30/1.44/4.89/9.05/10.90 ms. alpha N=1 2.622+/-0.037 vs N=2 2.603+/-0.046 (consistent); tau 0.2551 vs 0.2535 (consistent).","reasoning":"All four break-attempts failed. (1) dlnZ_21 is negative (~1.9 sigma), so N=2 is mildly disfavored and certainly not supported - consistent with \"no second component\". (2) The C2 component is genuinely unconstrained, not a sampler exploration failure: 99.88% of weighted posterior mass is exactly one narrow source plus one near-flat wide pedestal that wanders across the entire time window; the narrow component (whichever label) reproduces the N=1 fit's zeta=0.142 exactly. (3) The dt_min ordered-prior floor (0.184 ms) is NOT binding - only 0.28% of mass piles at the floor and the separation posterior medians ~4.9 ms with broad spread to 10+ ms, so the components are free to approach each other but the second one prefers to flee as a pedestal; a real close companion would pile mass at the floor and it does not. (4) Each fit is converged (log_evidence_err ~0.44, comparable to and smaller than |dlnZ_21|), so the model comparison is meaningful.","refutation_attempts":"(1) Recomputed dlnZ_21 directly from both JSONs - got -1.18+/-0.63 (1.9 sigma, BF=0.31), matching the user's numbers; N=2 disfavored, not within-noise-favored. Could not flip the sign or make it support N=2. (2) Loaded the full weighted C2D1 posterior and searched for a genuine secondary narrow mode (both zeta&lt;1 AND separated t0). Found only 0.12% of mass there, and it is 8 ms-separated noise; checked for label-switching (yes, narrow flips between C1/C2 labels but always collapses to a single narrow source matching N=1) and edge-piling (zeta_C2 runs to its 999 upper bound = unbounded pedestal). No real second mode hidden by sampler failure. (3) Derived the CHIME dt_min floor from the rebuilt model (0.18432 ms = 3x median time sample) and compared to the separation posterior; only 0.28% of mass sits at the floor and the bulk sits at ~5 ms with broad spread, so the floor did NOT artificially prevent separation. (4) Compared each log_evidence_err (~0.44) to |dlnZ_21| (1.18) - errors are smaller and comparable, fits converged, comparison valid. Every attempt to break the claim reinforced it."},"dsa_misfit":{"claim":"In the wilhelm joint N-ladder, the DSA band is poorly fit in gain-marginal mode (per-band reduced chi2 ~4.75 both rungs) while CHIME is fine (~1.13); the DSA misfit is (a) real not a PPC artifact, (b) a gain-marginal-MODE artifact rather than a shared-alpha compromise (stored plain-mode joint fit DSA chi2~1.30 with shared alpha), and (c) irrelevant to the N=1-vs-N=2 evidence because it is identical across rungs and cancels in dlnZ_21.","verdict":"CONFIRMED","numbers":"Independently reconstructed the _gain_marginal_multi_band MAP model (g = solve(M + (var/s2)I, b), s2 ML-profiled by the kernel) and computed chi2_red = sum((d-model)^2/var)/dof over valid channels.\nDSA chi2_red(perpix): C1D1 = 4.7028 (chi2_tot=1805.9, 16/16 chan, T=24, npix=384, s2=0.5956); C2D1 = 4.7023. dof-adjusted (npix - N*nvalid): C1D1=4.9072, C2D1=4.9068. So \"~4.75\" is accurate (4.70 perpix / 4.91 dof-adjusted).\nCHIME chi2_red(perpix): C1D1=1.1364, C2D1=1.1227 (11/16 chan, T=144). \"~1.13\" accurate.\nCross-rung DSA identity: chi2_red diff = 4.2e-4; kernel DSA lnZ diff = 0.081 nats; s2 identical (0.5956 vs 0.5955).\nchi2 robust to gain prior: sweeping s2 in [0.01,1e8] gives DSA chi2_red 4.715-&gt;4.7028; pure LSQ (s2=inf, one free amp/chan) = 4.7028 -&gt; misfit is a temporal-SHAPE mismatch, not the gain prior.\nDSA-only best gain-marg (free DSA tau,alpha) = 4.7202 at tau=0.250,alpha=2.60 -&gt; NOT a shared-alpha compromise.\nStored plain-mode wilhelm_joint_fit.json (no gain flag, shared alpha=2.705): PPC chi2_dsa=1.296 (~1.30), chi2_chime=1.713.\ndlnZ_21 = 3808.412 - 3809.590 = -1.178 +/- ~0.63 (each lnZ_err~0.444), FAVORS N=1.\nDSA leak into dlnZ (median proxy) = 0.081 nats = 6.9% of |dlnZ_21|, of which 0.077 is from shared (tau,alpha) drift between rungs.\nCAVEAT: plain mode on the SAME nladder data is WORSE (chi2_red=10.7), and gain-marg uncropped=15.58 -&gt; the stored 1.30 came from a DIFFERENT (uncropped, t0_D=28.56) data prep, not identical pixels.","reasoning":"The stored JSONs say marginalize_gain:false, but run_joint_fit routes any multi/force_multi run (both C1D1 force_multi and C2D1) to _JointLogLikelihoodGainMulti with s2=gain_s2=None -&gt; ML-profiled; the false flag is the unrelated 8-dim single-component flag. So these ARE gain-marginal MULTI fits; the premise holds. I reconstructed the kernel's MAP model independently (not trusting its lnZ) and reproduced 4.70 exactly, with the s2 profile and 16/16 valid-channel masking matching the kernel. (a) REAL: confirmed - the misfit survives every gain-prior choice and pure LSQ, so it is a genuine temporal-shape mismatch on the cropped DSA data, not a PPC reconstruction artifact. (b) MODE artifact not shared-alpha: confirmed by the decisive test - letting DSA pick its OWN tau,alpha under the gain-marg kernel still gives 4.72, so the shared alpha is not the cause; the cause is the gain-marginal kernel (c0=1,gamma=0, per-channel amplitude only) cannot match the DSA profile that plain mode captures with free gamma/global envelope. (c) cancellation: dlnZ_21=-1.18 favors N=1; the DSA band is structurally identical (n_D=1, same data, same likelihood) in both rungs, so its large misfit is a fixed additive offset that cancels to ~93% in the difference; the residual 7% (0.08 nats) leak is from shared tau,alpha drift and does not flip the sign or exceed the 0.63-nat evidence error. The DSA chi2~4.7 therefore invalidates only the ABSOLUTE alpha from gain-marginal mode, not the N=1-vs-N=2 null.","refutation_attempts":"1) Mis-handled s2 profile? Swept s2 across 10 orders of magnitude; chi2 flat at 4.70 (pure LSQ identical). Not the culprit. NOT BROKEN.\n2) Masking/dof error? DSA uses all 16/16 channels, T=24; reported both perpix (4.70) and dof-adjusted (4.91). Number robust to dof convention. NOT BROKEN.\n3) Really identical across rungs? chi2_red diff=4.2e-4, lnZ diff=0.081. Approximately identical, not exactly. Minor caveat but immaterial.\n4) Does the misfit leak into dlnZ? YES, partially: 0.08 nats (~7%) leaks via shared tau,alpha drift. But it does not flip dlnZ_21=-1.18 (CHIME-driven part still ~-1.10) and is within the 0.63-nat error. Conclusion survives. PARTIALLY BREAKS the literal word \"IDENTICAL\"/\"cancels\" but not the conclusion.\n5) Is the shared-alpha really not the cause? DSA-only free-alpha best = 4.72 ~ shared 4.70. Confirmed not a compromise. NOT BROKEN.\n6
+... (truncated 7117 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/w4gj206k2.output)</result>
+<usage><agent_count>5</agent_count><subagent_tokens>373114</subagent_tokens><tool_uses>83</tool_uses><duration_ms>622040</duration_ms></usage>
+</task-notification>
+
+---
+
+Re-derive per-burst target list from cropped-data residuals first. Then run C1D2.
+
+---
+
+<task-notification>
+<task-id>b313md79b</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/b313md79b.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll for C1D2 completion + compute dlnZ vs C1D1" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Are we defining just one functional form for the pulse broadening function?
+
+---
+
+I wonder if our analysis would be aided by invoking power-law PBF's or other functional forms. 
+
+To start /kia-ingest ~/Downloads/Cordes_FundamentalNoiseProcessesPulsarTiming_2025.md
+
+You can /kia-query or ingest it on your own as well. This living review contains pretty much all background necessary to perform this analysis with maximum rigor.
+
+---
+
+<task-notification>
+<task-id>b870zroz0</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/b870zroz0.output</output-file>
+<status>completed</status>
+<summary>Background command "Copy file to sync dir + run sync script" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Implement the power-law PBF first
+
+---
+
+<task-notification>
+<task-id>brven3zr4</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/brven3zr4.output</output-file>
+<status>completed</status>
+<summary>Background command "Run exp + powerlaw wilhelm C1D1 in parallel, report lnZ" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+commit powerlaw-pbf work and radiometer lane
+
+---
+
+commit excluded files.
+
+---
+
+so what did we find
+
+---
+
+run per-band PBF.
+
+also include scintillation bandwidth fits and measurements of alpha fitting dnu as a function of subband across 400-1500 MHz.
+
+---
+
+Proceed with ne2025 mw-floor comparison.
+
+Build a paper-ready figure bank to fold into manuscript Faber2026 as you're going.
+
+---
+
+Proceed with check across other codetections to see if resolved-vs-MW 8× excess is sightline-specific or systematic
+
+---
+
+Is the cross-codetection check our next task? Namely extending the resolved-Δν_d-vs-MW-floor comparison to the other co-detected bursts to determine whether wilhelm's ~8× scattering excess is sightline-specific or systematic.
+
+---
+
+Yes, affirmtive. Recover the 7 unresolved sightlines by extracting the non-BIC-selected narrow Lorentzians.
+
+Then propagate NE2025's ~×2–3 uncertainty into the excess to test significance per sightline.
+
+Then commit the work on the worktree + Faber2026, bring them out of a dirty state, open a PR/multiple PR's and oversee the successful review and merge to main.
+
+---
+
+<task-notification>
+<task-id>bz2nbqdhf</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/bz2nbqdhf.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll FLITS PR CI checks until settled" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Run cleanup.
+
+---
+
+What's next?
+
+---
+
+Proceed with #1
+
+---
+
+Tackle all 5 using /ai-research-workflows workflows, as well as /boris and /ponytail
+
+---
+
+NE2025 is the most trust-worthy, moreso thatn YMW16 or NE2001
+
+---
+
+<task-notification>
+<task-id>wgcqvulp2</task-id>
+<tool-use-id>toolu_01MF1vKthtwGPaGxtJEALD13</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/wgcqvulp2.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Independently verify NE2025&gt;NE2001&gt;YMW16 scattering trustworthiness and tighten the excess-result framing" completed</summary>
+<result>{"verdicts":[{"lens":"YMW16 scattering reliability","ranking_supported":true,"key_findings":["YMW16's OWN admission (Yao, Manchester &amp; Wang 2017, Sec 3.11): they do NOT use any interstellar-scattering data to build the model ('In contrast to both TC93 and NE2001, we do not make use of observations of interstellar scattering in building the model'). Their tau_sc predictions come ENTIRELY from a single empirical tau-DM fit to the Krishnakumar et al. (2015) sample. They state observed tau_sc have 'an rms scatter about the fitted line of close to an order of magnitude' (~1 dex), defended only as 'useful' because tau varies ~8 orders of magnitude over the DM range. This is a population-mean relation, NOT a per-sightline physical prediction.","MECHANISM = single global DM-&gt;tau relation, not a sightline-resolved fluctuation/clumping treatment. Unlike NE2001/NE2025 which forward-model scattering from line-of-sight electron-density fluctuations (the Fbar/clumping parameter integrated along the path), YMW16 has no fluctuation-parameter machinery for general sightlines. The NE2025 paper (Ocker &amp; Cordes 2026) states it plainly: 'NE2025 forward models scattering from electron density fluctuations, while YMW16 uses the empirical tau-DM relation from Krishnakumar et al. (2015)' and that this relation 'cannot be readily extrapolated to predict the Galactic scattering of extragalactic sources' -- exactly the FRB-floor use case here.","QUANTIFIED reliability gap (NE2025 paper, Sec 10.1, tested against 568 pulsar scattering measurements): YMW16 distance rms = 150%; the scattering log-difference log10(tau_obs/tau_mod) has rms ~0.98 for NE2001 (comparable, since both inherit ~1 dex tau-DM spread) improving to 0.65 only for NE2025. So per-sightline scattering from YMW16 is uncertain at the ~1 dex (factor ~10) level by construction -- 'close to an order of magnitude' is the authors' own number.","DOCUMENTED 1-2 dex failures on real sightlines: (a) Gum Nebula / Vela -- 'the YMW16 model underestimates the electron density' there (Kumar et al. 2026, MNRAS, probing the Gum Nebula via pulsar scattering); both models show 'huge deviation' of predicted vs measured temporal broadening, and NE2001 is noted as giving BETTER temporal-broadening predictions than YMW16 in that region. (b) PSR/FRB underscattering: a source 'underscattered by a factor of ~30 or ~1200 compared to the NE2001 and YMW16 model predictions respectively' (Mall et al. 2022, arXiv:2108.00052) -- YMW16 was the WORSE predictor (factor 1200 = 3.1 dex off), with the true screen at ~400 pc not the modeled 2 kpc arm.","A YMW16 floor BELOW the measured value (excess&lt;1, model says the smooth Galaxy scatters MORE than observed) is NOT a physically reliable signal of 'no excess'; it is the expected failure mode for YMW16 on these sightlines. (i) YMW16's thin-disk density is ~0.4 cm^-3 vs 0.08 cm^-3 in NE2001/NE2025 -- ~5x higher midplane density and ~2x higher total Galactic DM column in the plane (NE2025 Sec 10.1, Fig 17). A model that over-assigns smooth-disk electron column will over-predict the Galactic tau floor (and hence under-predict the inferred excess), pushing excess ratios spuriously below 1. (ii) The tau-DM relation is a mean: ~half of all real pulsars at a given DM sit BELOW it and half above by up to ~1 dex, so an individual sightline landing where the smooth model 'predicts more scattering than observed' is statistically unremarkable noise in YMW16, not evidence about the true Galactic screen.","RANKING for SCATTERING specifically (NE2025 &gt; NE2001 &gt; YMW16) is supported by the evidence: NE2025 has the smallest scattering-prediction rms (0.65 dex) AND forward-models scattering from electron-density fluctuations with refit Gum/Vela/thin-disk/spiral-arm structure; NE2001 also forward-models scattering and was calibrated on 269 scattering measurements; YMW16 is last for SCATTERING because it deliberately uses NO scattering data and substitutes a single empirical tau-DM relation that is by the authors' own statement ~1 dex scattered and not extrapolable to extragalactic sightlines. NOTE the asymmetry: YMW16 is better than NE2001 for DM/DISTANCE (rms 150% vs 200%), so the user's ranking holds for scattering but would partly INVERT for distance -- the trustworthiness ordering is metric-dependent."],"citations":["Yao, Manchester &amp; Wang 2017 (ApJ 835,29; arXiv:1610.09448), Sec 1 &amp; 3.11 -- 'we do not make use of observations of interstellar scattering in building the model'; observed tau_sc have 'rms scatter about the fitted line of close to an order of magnitude'; scattering estimated via empirical DM-dependent tau relation [verified via ar5iv full text]","Ocker &amp; Cordes 2026 NE2025 (arXiv:2602.11838), Sec 10.1 -- YMW16 distance rms 150%; scattering log10(tau_obs/tau_mod) rms 0.98(NE2001)-&gt;0.65(NE2025); 'YMW16 uses the empirical tau-DM relation from Krishnakumar et al. (2015)' which 'cannot be readily extrapolated to predict the Galactic scattering of extragalactic sources'; YMW16 thin-disk 0.4 vs 0.08 cm^-3, ~2x total plane DM column [verified via downloaded PDF -&gt; pdftotext]","Krishnakumar et al. 2015 (ApJ 804,23) -- the 327 MHz scatter-broadening sample of 124 pulsars that IS YMW16's entire scattering calibration; large empirical spread in tau at fixed DM [verified: title/abstract via ADS + cited as YMW16's tau-DM source in NE2025]","Kumar et al. 2026 (MNRAS 546,3 / stag057, Gum Nebula via pulsar scattering) -- 'the YMW16 model underestimates the electron density' toward Vela/Gum; NE2001 gives better temporal-broadening predictions; both show 'huge deviation' of predicted vs measured tau [verified via WebFetch of OUP article]","Mall et al. 2022 (arXiv:2108.00052, MNRAS) -- source 'underscattered by a factor of ~30 or ~1200 compared to the NE2001 and YMW16 model predictions respectively'; true screen ~400 pc not 2 kpc arm -- YMW16 off by ~3 dex [verified via Perplexity-returned snippet; primary text not directly fetched]","Price, Flynn &amp; Deller 2021 PyGEDM (PASA; arXiv:2106.15816) -- confirms YMW16 uses no scattering measurements in construction, scattering 'dominated by a few regions along the path' [partially verified: scattering-comparison numerics not in fetched section]","Cordes &amp; Lazio 2002 NE2001 -- calibrated on 269 scattering measurements + forward-models SM from C_n^2 fluctuations (contrast to YMW16) [unverified directly this session; stated in NE2025 intro]"],"caveats":["The Mall et al. 2022 'factor ~1200' YMW16 discrepancy was confirmed only from a search-snippet quote, not from fetching the paper body this session -- the number itself is a verbatim snippet but I did not read its surrounding context/caveats.","Kumar et al. 2026 'Gum Nebula' quotes came from a fast-model WebFetch summary of the OUP page; the exact phrasing ('underestimates the electron density', 'huge deviation') is reported as verbatim but the article was behind a partial paywall and I could not cross-check section numbers.","NE2025 (Ocker &amp; Cordes 2026) is itself the user's preferred model, so its self-comparison favoring NE2025&gt;YMW16 for scattering is not a neutral source. The YMW16-specific facts I rely on (no scattering data used; tau-DM relation; thin-disk density) are independently confirmed by the YMW16 paper itself and PyGEDM, so the ranking does not rest on NE2025's self-assessment alone.","The user's measured-vs-floor comparison uses 2*pi*tau*Dnu_d = C1; this maps scattering time to scintillation bandwidth assuming a single thin screen with a specific C1 (~1.0 uniform / ~0.65 thin-screen Kolmogorov). If a sightline's true geometry differs, the YMW16 floor-tau -&gt; floor-Dnu_d conversion carries an extra geometric factor on top of YMW16's intrinsic ~1 dex error -- compounding the unreliability of an excess&lt;1 verdict.","'Excess&lt;1 is not tenable as evidence of no excess' is a statement about RELIABILITY, not a claim that YMW16 is always biased high on every sightline. 
+... (truncated 35481 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/wgcqvulp2.output)</result>
+<usage><agent_count>5</agent_count><subagent_tokens>390209</subagent_tokens><tool_uses>65</tool_uses><duration_ms>387667</duration_ms></usage>
+</task-notification>
+
+---
+
+yes, merge Faber2026 #5
+
+---
+
+What's next?
+
+---
+
+probe `iacobus` first for #3
+
+---
+
+you're looking in the wrong place
+
+---
+
+are you thinking of how to upchannelize the CHIME data maybe? those do get upchannelized to finer channels than 1024 at 0.39 Mhz to try and measure scintillation?
+
+---
+
+<task-notification>
+<task-id>wc6fjfegj</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/wc6fjfegj.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Scope + verify + author the CANFAR CHIME-baseband upchannelization recovery for the 5 resolution-limited co-detection sightlines" completed</summary>
+<result>{"priorart":{"method_summary":"All five OLD scint notebooks (scint_{casey,phineas,whitney,mahi,isha}.ipynb on iacobus) are DSA-110-ONLY analyses. Each loads its own DSA full-Stokes polcal .pkl (e.g. casey_240229aaad_fullstokes_interp.pkl) spanning 1.3-1.5 GHz with the DSA native grid 6144 ch @ 30.5176 kHz (fres in code = 0.03051757812 MHz). The scintillation method (utils/scinttools.py, identical to archive/burstprop_paper/scinttools.py) computes a 1D spectral autocorrelation (autocorr) of the time-integrated burst spectrum, then fits a single Lorentzian L(x)=m1^2/(1+(x/gamma1)^2)+c via lmfit; the fitted HWHM gamma1 IS Dnu_d (reported in kHz). An independent FFT structure-function half-power estimate is also computed. There is NO CHIME notebook among the five and NO CHIME data is loaded in any of them. A CHIME upchannelization function DOES exist in the codebase (scattering_results/utils/.ipynb_checkpoints/scinttools_new-checkpoint.py: upchannel(fftsize=32,downfreq=2 -&gt; x16) and upchannel_nopol(fftsize=16), both hardcoding the CHIME band 400.195-800.195 MHz, 1024 ch), but a grep across the whole tree finds NO caller of upchannel()/acf_scint_plot()/acf_per_subband() -- the machinery was staged but never wired into any of these (or any) source analyses. NE2001 predictions (chime_dsa_ne2001.json, generated by ne2001_pred.py) give the Galactic scintillation bandwidth SBW at 1 GHz per source; scaling SBW ~ nu^alpha with alpha=4.4 to CHIME (~600 MHz) and DSA (~1400 MHz): casey 130 kHz / 5.4 MHz, phineas 131 kHz / 5.5 MHz, whitney 83 kHz / 3.5 MHz, mahi 4.7 kHz / 0.19 MHz, isha 16 kHz / 0.66 MHz. The casey checkpoint also encodes NE2001 SBW(1.4 GHz)=1260 kHz and a near-zero Galactic tau. CHIME native channel = 390 kHz; DSA native channel = 30.5 kHz (fine). The limiting telescope is CHIME for all five: the predicted scint bandwidth at the CHIME band is at or below the 390 kHz CHIME channel width (so unresolved without baseband upchannelization), while at DSA the 30.5 kHz channels resolve the scale. Note the displayed DSA fits are themselves unreliable for 4 of 5: only casey has a clean DSA ACF fit (R^2=0.99); phineas/whitney/mahi/isha all show byte-identical stale phineas output (gamma1=3836+/-2132 kHz, 55.6% err, R^2=0.67), meaning whitney/mahi/isha were templated from phineas and the ACF/fit cells were never re-executed on their own data.","per_target":[{"name":"casey","telescope_limited":"chime","resolution_limited_reason":"DSA side is well-measured: full-spectrum DSA Lorentzian ACF fit gives Dnu_d (gamma1)=7515+/-137 kHz (7.5 MHz), R^2=0.99 (consistent with FFT structure-function 7.4 MHz); DSA 30.5 kHz channels resolve it fine. The resolution limit is at CHIME: NE2001-predicted SBW scaled to the CHIME band (~600 MHz, alpha=4.4) is ~130 kHz -- below the 390 kHz CHIME native channel, so the scintillation scale is narrower than one CHIME channel and cannot be resolved without baseband upchannelization, which was never applied. (Aside: a casey-checkpoint per-subband narrow-lag-window DSA fit collapsed to gamma1=0.58+/-6277 kHz, R^2=0.11 -- broad/narrow ACF degeneracy in that windowing -- but the full-band DSA value 7.5 MHz is the good one.)","chime_dnud_MHz":null,"dsa_dnud_MHz":"7.515 +/- 0.137 (7515 +/- 137 kHz), R^2=0.99","chime_upchan_done":false,"upchan_factor_used":null},{"name":"phineas","telescope_limited":"chime","resolution_limited_reason":"DSA Lorentzian ACF fit is poor/degenerate: Dnu_d (gamma1)=3836+/-2132 kHz (55.6% error), R^2=0.67, with the lag window only 130 data points -- broad-vs-narrow ACF degeneracy (C(gamma1,c)=-0.998), so even the DSA value is marginal. But the formal resolution limit is at CHIME: NE2001 SBW scaled to ~600 MHz (alpha=4.4) is ~131 kHz, below the 390 kHz CHIME channel; scale narrower than one CHIME channel, no upchannelization applied. DSA 30.5 kHz channels would resolve ~3.8 MHz in principle.","chime_dnud_MHz":null,"dsa_dnud_MHz":"3.836 +/- 2.132 (3836 +/- 2132 kHz, 55.6% err), R^2=0.67 (marginal/degenerate)","chime_upchan_done":false,"upchan_factor_used":null},{"name":"whitney","telescope_limited":"chime","resolution_limited_reason":"CHIME is the limiting telescope: NE2001 SBW (0.7892 MHz at 1 GHz) scaled to the CHIME band ~600 MHz (alpha=4.4) is ~83 kHz, far below the 390 kHz CHIME channel -- scale narrower than one CHIME channel, no baseband upchannelization applied. The DSA notebook shows NO genuine measurement: its ACF/Lorentzian-fit cell outputs are byte-identical stale phineas values (gamma1=3836+/-2132 kHz, R^2=0.67); the template was copied (own .pkl whitney_220310aaam_fullstokes_interp.pkl loaded) but the fit cells were never re-run, so there is no real whitney DSA Dnu_d on record. Predicted DSA scale ~3.5 MHz would be resolvable at 30.5 kHz.","chime_dnud_MHz":null,"dsa_dnud_MHz":"no genuine fit (cells show stale phineas output 3836 kHz; predicted DSA SBW ~3.5 MHz)","chime_upchan_done":false,"upchan_factor_used":null},{"name":"mahi","telescope_limited":"chime","resolution_limited_reason":"CHIME is the limiting telescope and mahi is the most extreme case: high-scattering sightline (NE2001 SBW only 0.044 MHz = 44 kHz at 1 GHz, tau~0.0042 ms). Scaled to ~600 MHz (alpha=4.4) the CHIME scint bandwidth is ~4.7 kHz -- ~80x smaller than the 390 kHz CHIME channel; completely unresolved without large baseband upchannelization (none applied). Even at DSA the predicted scale is only ~0.19 MHz (~6 DSA channels), marginal. The DSA notebook shows stale phineas output (gamma1=3836+/-2132 kHz, R^2=0.67) -- templated from phineas with own .pkl mahi_240122aaag_fullstokes_interp.pkl but fit cells never re-run; no real mahi DSA Dnu_d.","chime_dnud_MHz":null,"dsa_dnud_MHz":"no genuine fit (stale phineas output; predicted DSA SBW ~0.19 MHz)","chime_upchan_done":false,"upchan_factor_used":null},{"name":"isha","telescope_limited":"chime","resolution_limited_reason":"CHIME is the limiting telescope: NE2001 SBW (0.1496 MHz at 1 GHz) scaled to ~600 MHz (alpha=4.4) is ~16 kHz -- ~24x below the 390 kHz CHIME channel; scale far narrower than one CHIME channel, no upchannelization applied. DSA notebook shows stale phineas output (gamma1=3836+/-2132 kHz, R^2=0.67); templated from phineas with own .pkl isha_221113aaao_fullstokes_interp.pkl but fit cells never re-run, so no real isha DSA Dnu_d on record. Predicted DSA scale ~0.66 MHz (~21 DSA channels) would be resolvable.","chime_dnud_MHz":null,"dsa_dnud_MHz":"no genuine fit (stale phineas output; predicted DSA SBW ~0.66 MHz)","chime_upchan_done":false,"upchan_factor_used":null}],"key_findings":["All five notebooks (scint_{casey,phineas,whitney,mahi,isha}.ipynb) are DSA-110-ONLY (1.3-1.5 GHz, 6144 ch @ 30.5 kHz). None load or analyze CHIME data. There is no CHIME scintillation notebook for these sources anywhere in the tree.","The resolution-limited flag is at CHIME for all five. NE2001-predicted Galactic scint bandwidth, scaled to the CHIME band (~600 MHz, SBW ~ nu^4.4): casey ~130 kHz, phineas ~131 kHz, whitney ~83 kHz, isha ~16 kHz, mahi ~4.7 kHz -- all at or below the 390 kHz CHIME native channel width. The scintillation scale is narrower than one CHIME channel, so it is unresolved at CHIME native resolution.","CHIME baseband upchannelization was NOT actually attempted for any of the five. The function exists (scattering_results/utils/.ipynb_checkpoints/scinttools_new-checkpoint.py: upchannel() fftsize=32/downfreq=2 -&gt; x16, and upchannel_nopol() fftsize=16, both hardcoding the CHIME 400.195-800.195 MHz / 1024-ch band), but a tree-wide grep finds zero callers of upchannel()/acf_scint_plot()/acf_per_subband(). The machinery was staged, never wired in.","DSA channel width (30.5 kHz) is fine and is NOT the limiter; predicted/measured scales at DSA (0.19-7.5 MHz) span many DSA channels.","Only casey has a clean DSA scint measurement: Dnu_d = 7515 +/- 137 kHz (7.5 MHz), R^2=0.99. The casey-checkpoint per-subband narrow-window refit collapsed (gamma1=0.58+/-6277 kHz, R^2=0.11) due to broa
+... (truncated 28878 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/wc6fjfegj.output)</result>
+<failures>[format] failed: API Error: Overloaded</failures>
+<usage><agent_count>6</agent_count><subagent_tokens>509337</subagent_tokens><tool_uses>71</tool_uses><duration_ms>726380</duration_ms></usage>
+</task-notification>
+
+---
+
+can these runs be executed on h17 in the baseband_analysis image ther?
+
+---
+
+can these runs be executed on h17 in the baseband_analysis image therd?
+
+---
+
+can these runs be executed on h17 in the baseband_analysis image there?
