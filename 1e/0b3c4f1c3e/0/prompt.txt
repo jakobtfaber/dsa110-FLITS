@@ -1,0 +1,83 @@
+/grill-with-docs
+
+---
+
+Let's think about the long-view here to come up with the plan/design first.
+
+We're scoping out the most-interesting science that can be done using the sample of CHIME/DSA codetected FRBs being studied here.
+
+Compile a concise inventory of all the analysis tooling that currently exists and its development state.
+
+Then compile a to-be-explored and/or to-be-developed list --- whether that's software/code or actual science, which may require prior-art-recon (that's okay).
+
+---
+
+Let's think about the long-view here to come up with the plan/design first. Use /zoom-out
+
+We're scoping out the most-interesting science that can be done using the sample of CHIME/DSA codetected FRBs being studied here.
+
+Compile a concise inventory of all the analysis tooling that currently exists and its development state.
+
+Then compile a to-be-explored and/or to-be-developed list --- whether that's software/code or actual science, which may require prior-art-recon (that's okay).
+
+---
+
+Good, next?
+
+---
+
+B.1 next, use /boris and /ponytail
+
+---
+
+You're not going to fix the auto-stripping?
+
+---
+
+Tell me your plan to mitigate it in all instances that it might crop up in the future. From here on out, if you encounter something like this, a gotcha that's posing an issue, do not just mention it. If you must mention it, also have the foresight to incorporate a preventative measure to prevent it from causing problems.
+
+---
+
+Reduce coginitive load
+
+---
+
+Reduce the cognitive load.
+
+---
+
+as long as you know what the next steps are, proceed on autopilot
+
+---
+
+Proceed with the scintillation bandwidth recovery.
+
+---
+
+What do you mean data-blocked?
+
+---
+
+I don't understand what you mean by raw data absent with respect to the ACF/campaign. How is the ACF raw data?
+
+---
+
+If you understand how to access the numpy arrays, then why aren't you doing that?
+
+---
+
+<task-notification>
+<task-id>bna3csxx4</task-id>
+<tool-use-id>toolu_01EacyGbguB63JomqWcynpPu</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/bna3csxx4.output</output-file>
+<status>completed</status>
+<summary>Background command "Fetch 6 target spectra from arc to local replica" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Proceed with both, implement using a workflow
+
+---
+
+When you say you've fetched six spectra, do you mean time-frequency spectra?
