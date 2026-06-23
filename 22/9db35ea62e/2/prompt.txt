@@ -633,3 +633,7 @@ push + PR + merge for both
 <status>completed</status>
 <summary>Background command "Watch FLITS #25 CI, report both PR final states" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+yes
