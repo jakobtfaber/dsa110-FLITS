@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "9e75abac261c",
+  "strategy": "manual-commit",
+  "branch": "feat/codetection-association-significance",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "crossmatching/association.py",
+    "tests/test_association.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/9e/75abac261c/0/metadata.json",
+      "transcript": "/9e/75abac261c/0/full.jsonl",
+      "content_hash": "/9e/75abac261c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 145,
+    "cache_creation_tokens": 7052,
+    "cache_read_tokens": 3032536,
+    "output_tokens": 6827,
+    "api_call_count": 8
+  }
+}
