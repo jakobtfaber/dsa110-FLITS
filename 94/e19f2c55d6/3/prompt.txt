@@ -37,3 +37,20 @@ Go with 2. continue
 ---
 
 /ai-research-workflows:handoff
+
+---
+
+Commit it now — pathspec-only, on a new branch. The work is done, verified, and handed off; leaving
+    it dirty just risks the next session (or that "active now" galaxies session) tangling the two lanes.
+
+    Concretely:
+    git switch -c fix/issue-37-per-band-dt-min
+    git add scattering/scat_analysis/burstfit_joint.py tests/test_joint_prior_ordered.py
+    .agents/research-multicomponent-joint-evidence.md .agents/plan-dt-min-per-band.md
+    .agents/implement-dt-min-per-band.md .agents/handoff-dt-min-per-band.md
+    git commit -m "Per-band dt_min for multi-component joint fit (#37)"
+    Never git add -A — galaxies/v2_0/*, analysis/burst_energies/, scratch/codetection/ belong to the
+    other session.
+
+    The one open item (manual N=1 vs N=2 lnZ ladder on a real single-component burst) is low-risk and
+    can wait — don't block the commit on it.
