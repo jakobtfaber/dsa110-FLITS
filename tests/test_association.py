@@ -12,6 +12,8 @@ from crossmatching.association import (
     dm_agreement,
     expected_chance_associations,
     f_dm,
+    omega_disk_deg2,
+    position_consistent,
     residual_pedestal,
     timing_budget_ms,
 )
@@ -89,3 +91,14 @@ def test_residual_pedestal_significance():
     assert r["weighted_mean_ms"] == pytest.approx(2.4)
     assert r["error_ms"] == pytest.approx(2.4 / math.sqrt(12))
     assert r["n_sigma"] == pytest.approx(math.sqrt(12))
+
+
+# --- Pillar 4: positional coincidence -----------------------------------------
+def test_omega_disk_area():
+    assert omega_disk_deg2(0.5) == pytest.approx(math.pi * 0.25)
+
+
+def test_position_inside_and_outside_chime_disk():
+    dsa = "20h40m47.886s +72d52m56.378s"
+    assert position_consistent(dsa, "20h40m50s +72d53m00s", radius_deg=0.2) is True
+    assert position_consistent(dsa, "20h00m00s +60d00m00s", radius_deg=0.2) is False

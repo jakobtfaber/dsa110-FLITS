@@ -106,3 +106,19 @@ def residual_pedestal(residuals_ms, errors_ms) -> dict:
     wm = sum(wi * r for wi, r in zip(w, residuals_ms, strict=True)) / sum(w)
     err = math.sqrt(1.0 / sum(w))
     return {"weighted_mean_ms": wm, "error_ms": err, "n_sigma": abs(wm) / err}
+
+
+# --- Pillar 4: positional coincidence -----------------------------------------
+def omega_disk_deg2(radius_deg: float) -> float:
+    """Solid angle (deg^2) of a CHIME localization disk of the given radius."""
+    return math.pi * radius_deg**2
+
+
+def position_consistent(dsa_coord: str, chime_center: str, radius_deg: float) -> bool:
+    """True if the DSA (arcsec) position lies within ``radius_deg`` of the CHIME disk centre."""
+    import astropy.units as u
+    from astropy.coordinates import SkyCoord
+
+    a = SkyCoord(dsa_coord, unit=(u.hourangle, u.deg), frame="icrs")
+    b = SkyCoord(chime_center, unit=(u.hourangle, u.deg), frame="icrs")
+    return bool(a.separation(b).deg <= radius_deg)
