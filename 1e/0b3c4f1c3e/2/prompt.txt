@@ -7,3 +7,11 @@ What do you think?
 ---
 
 Flitz is a DSA 110 deliverable. For the purposes of development, it's easier if I do it in my local or personal GitHub, because then I don't have to enable certain applications, particularly agentic programming applications, in the DSA 110 organization that affect other users. I can just do it within my own account, and then once it's out of the development stage and in the production stage, I simply turn it into a DSA 110 repository again and transfer it to the org.
+
+---
+
+I just wish that the reconciliation were automatic, I guess, is the problem I want to solve.
+
+---
+
+You're totally right. Yes, please do the reversible reconcile.
