@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "bc89f3d52ede",
+  "strategy": "manual-commit",
+  "branch": "research/codetection-validation-rigor",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".experiments/chance-coincidence/bursts.json",
+    ".experiments/chance-coincidence/estimator_analytic.py",
+    ".experiments/chance-coincidence/estimator_mc.py",
+    ".experiments/chance-coincidence/inputs.py",
+    ".experiments/chance-coincidence/run.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bc/89f3d52ede/0/metadata.json",
+      "transcript": "/bc/89f3d52ede/0/full.jsonl",
+      "content_hash": "/bc/89f3d52ede/0/content_hash.txt",
+      "prompt": "/bc/89f3d52ede/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 23694,
+    "cache_creation_tokens": 840156,
+    "cache_read_tokens": 14600530,
+    "output_tokens": 133025,
+    "api_call_count": 103
+  }
+}
