@@ -1,0 +1,1 @@
+Compare the search criteria in galaxies/v2_0/search.py and config.py against the candidates in scratch/codetection/foreground.csv. Determine why these candidates were missed (check search radius limits like DEFAULT_IMPACT_KPC=100, specific catalogs like PS1-STRM, Zhou+2021, Wen+2024, or duplicate filtering). Write a python script to verify this and output the result.

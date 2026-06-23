@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "94e19f2c55d6",
+  "strategy": "manual-commit",
+  "branch": "fix/issue-37-per-band-dt-min",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".agents/plan-dt-min-per-band.md",
+    ".agents/research-multicomponent-joint-evidence.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/94/e19f2c55d6/0/metadata.json",
+      "transcript": "/94/e19f2c55d6/0/full.jsonl",
+      "content_hash": "/94/e19f2c55d6/0/content_hash.txt",
+      "prompt": "/94/e19f2c55d6/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 21034,
+    "cache_creation_tokens": 95491,
+    "cache_read_tokens": 1458187,
+    "output_tokens": 20921,
+    "api_call_count": 16
+  }
+}
