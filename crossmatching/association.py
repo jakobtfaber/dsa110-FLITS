@@ -85,3 +85,24 @@ def dm_agreement(
         "consistent": bool(n <= n_sigma_thresh),
         "reason": None,
     }
+
+
+# --- Pillar 3: timing error budget + residual-pedestal significance ------------
+def timing_budget_ms(
+    *,
+    dm_unc_ms: float,
+    fwhm_ms: float,
+    clock_ms: float = 0.0,
+    baseline_ms: float = 0.0,
+    intrachannel_ms: float = 0.0,
+) -> float:
+    """Full quadrature timing error: DM-uncertainty (+) pulse width (+) clock/baseline/intra-channel."""
+    return math.sqrt(dm_unc_ms**2 + fwhm_ms**2 + clock_ms**2 + baseline_ms**2 + intrachannel_ms**2)
+
+
+def residual_pedestal(residuals_ms, errors_ms) -> dict:
+    """Inverse-variance-weighted mean residual and its significance (tests the +2.4 ms pedestal)."""
+    w = [1.0 / e**2 for e in errors_ms]
+    wm = sum(wi * r for wi, r in zip(w, residuals_ms, strict=True)) / sum(w)
+    err = math.sqrt(1.0 / sum(w))
+    return {"weighted_mean_ms": wm, "error_ms": err, "n_sigma": abs(wm) / err}

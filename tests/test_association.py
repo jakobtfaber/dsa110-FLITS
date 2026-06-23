@@ -12,6 +12,8 @@ from crossmatching.association import (
     dm_agreement,
     expected_chance_associations,
     f_dm,
+    residual_pedestal,
+    timing_budget_ms,
 )
 
 BASE = dict(rate_per_day=1000.0, omega_win_deg2=OMEGA_WIN_BASELINE_DEG2, dt_s=1.0, ddm=5.0)
@@ -69,3 +71,21 @@ def test_dm_agreement_inconsistent_beyond_3sigma():
 def test_dm_agreement_missing_chime_dm_returns_null_reason():
     r = dm_agreement(dm_chime=None, dm_chime_err=None, dm_dsa=502.0, dm_dsa_err=1.0)
     assert r["consistent"] is None and "no CHIME DM" in r["reason"]
+
+
+# --- Pillar 3: timing budget + residual-pedestal significance ------------------
+def test_timing_budget_quadrature():
+    got = timing_budget_ms(
+        dm_unc_ms=2.4, fwhm_ms=0.96, clock_ms=0.1, baseline_ms=0.05, intrachannel_ms=0.2
+    )
+    assert got == pytest.approx(math.sqrt(2.4**2 + 0.96**2 + 0.1**2 + 0.05**2 + 0.2**2))
+
+
+def test_residual_pedestal_significance():
+    # equal residuals of +2.4 with errors 2.4 -> weighted mean 2.4, error 2.4/sqrt(12)
+    res = [2.4] * 12
+    err = [2.4] * 12
+    r = residual_pedestal(res, err)
+    assert r["weighted_mean_ms"] == pytest.approx(2.4)
+    assert r["error_ms"] == pytest.approx(2.4 / math.sqrt(12))
+    assert r["n_sigma"] == pytest.approx(math.sqrt(12))
