@@ -213,3 +213,7 @@ Implement the power-law PBF first
 <status>completed</status>
 <summary>Background command "Run exp + powerlaw wilhelm C1D1 in parallel, report lnZ" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+commit powerlaw-pbf work and radiometer lane
