@@ -106,3 +106,19 @@ def test_dsa_pointing_csv_and_offsets():
         _, _ra, dec = burst_epoch_position(n)
         theta, phi = dsa_beam_offset(dec, pdec)
         assert 0.0 <= theta < 5.0 and phi == 0.0, (n, theta)  # inside the primary beam
+
+
+def test_dsa_sefd_csv_present_and_sane():
+    import csv
+    from pathlib import Path
+
+    from analysis.flux_cal import load_dsa_sefd
+
+    p = Path("analysis/burst_energies/dsa_sefd.csv")
+    assert p.exists(), "run analysis/burst_energies/fetch_dsa_sefd.py"
+    rows = list(csv.DictReader(p.open()))
+    assert rows and {"burst", "mjd", "sefd_jy", "source"} <= set(rows[0])
+    for r in rows:
+        assert 500.0 < float(r["sefd_jy"]) < 20000.0, r  # sane DSA array SEFD
+    for n in SAMPLE:
+        assert 500.0 < load_dsa_sefd(n) < 20000.0
