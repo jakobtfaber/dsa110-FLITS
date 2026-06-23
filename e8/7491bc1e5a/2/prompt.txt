@@ -1,0 +1,478 @@
+This repo is a fork of an upstream repo in dsa110/dsa110-FLITS (also locally stored at ../../dsa110/dsa110-FLITS).
+
+I'm beginning to think that it's more of a liability to have the fork be the primary development environment, but I would like the primary development environment to still be in my personal GitHub as opposed to the dsa110 organization GitHub. I'm wondering if it would make sense to sync dsa110/dsa110-FLITS with jakobtfaber/dsa110-FLITS and then remove the dsa110-FLITS from the dsa110, and make what is now a fork at jakobtfaber/dsa110-FLITS, the primary repo instead. This would also involve removing the local clone ../../dsa110/dsa110-FLITS.
+
+What do you think?
+
+---
+
+Flitz is a DSA 110 deliverable. For the purposes of development, it's easier if I do it in my local or personal GitHub, because then I don't have to enable certain applications, particularly agentic programming applications, in the DSA 110 organization that affect other users. I can just do it within my own account, and then once it's out of the development stage and in the production stage, I simply turn it into a DSA 110 repository again and transfer it to the org.
+
+---
+
+I just wish that the reconciliation were automatic, I guess, is the problem I want to solve.
+
+---
+
+You're totally right. Yes, please do the reversible reconcile.
+
+---
+
+yes run pytest to confirm green before push
+
+---
+
+Go.
+
+---
+
+Excellent. Can you make sure that the clone on HPCC corresponds to the fork and not dsa110/dsa110-FLITS? The path on hpcc is: /home/jfaber/flits/dsa110-FLITS
+
+---
+
+Handle that discrepancy.
+
+---
+
+So it's 71 commits behind but also has a ton of uncommitted work, is that right?
+
+---
+
+Once you've gained a complete picture of the overlap and discrepancies between the two, take care of the reconciliation yourself autonomously, please.
+
+---
+
+yes, pin
+
+---
+
+the only other session running in dsa110-FLITS is this one:
+
+  Settings  Status   Config   Usage   Stats
+
+  Version:          2.1.185
+  Session name:     Plan CHIME/DSA FRB analysis tooling and science scope
+  Session ID:       265e6f8b-9d51-4f16-82f8-14fa7fad5c70
+  cwd:              /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+  Login method:     Claude Max account
+  Organization:     jakobtfaber@gmail.com's Organization
+  Email:            jakobtfaber@gmail.com
+
+  Model:            Default (Opus 4.8 with 1M context · Best for everyday, complex tasks)
+  MCP servers:      18 connected, 1 disabled · /mcp
+  Setting sources:  User settings, Shared project settings, Project local settings
+
+  Esc to cancel
+
+---
+
+that session is done now I think, you can commit
+
+---
+
+What I understand is why we still need the work-in-progress branch at all.
+
+---
+
+What I don't understand is why we still need the work-in-progress branch at all.
+
+---
+
+A single commit is fine. I just want you to push it to main now so that our main branch is clear and also make sure that our local version of that is in sync. Once that's done, I think we should remove the ../../dsa110/dsa110-FLITS just so we don't confuse ourselves with the duplicate repo locally --- wdyt?
+
+---
+
+go
+
+---
+
+yes, record
+
+---
+
+Done
+
+---
+
+Done?
+
+---
+
+Understood. Are we on the main branch now?
+
+---
+
+is hpcc dsa110-FLITS on main and have the worktrees there all been reconciled?
+
+---
+
+Reduce the cognitive load, please.
+
+---
+
+Again, reducing cognitive load. Where should I be developing this codebase?
+
+---
+
+Tree?
+
+---
+
+I'm running another agent in it right now.
+
+---
+
+Just maybe you could help me guide the work that's being done by the other agents as they finish it up. Can you see the code that was added and manuscript text that was added related to Burst Energetics?
+
+---
+
+Just to add to this, is it a problem that we're not flux calibrating? I think at either band, all that precisely if at all.
+
+---
+
+Yes. And use /ai-research-workflows:researching 
+
+Also, so you have --- I'm gonna close this session now, but here's the output from one of the agents that was working on the burst energetics stuff:
+---
+```
+  I have created a detailed handoff prompt in handoff_burst_energy.md for the implementation agent
+(Claude
+  Code).
+
+  ### Summary of Work
+
+  • Defined physics equations (
+
+    D
+     L
+
+  ,
+
+    E
+     iso
+
+  , unit conversion) and integration limits.
+
+  • Specified inputs from config.py and results_db.py.
+  • Outlined code and LaTeX manuscript tasks.
+
+> /artifact
+  ⎿  Review submitted
+
+────────────────────────────────────────────────────────────
+> [Approved] handoff_burst_energy.md
+
+
+  Would you like me to delegate this implementation task to Claude Code, or will you handle the
+  handoff?
+
+────────────────────────────────────────────────────────────
+> Yes, delete to claude code
+
+────────────────────────────────────────────────────────────
+> Yes, delegate to claude code
+
+4.1k in | 856 out | 670 thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Please read the handoff pr...) (ctrl+o to
+expand)
+
+  Task launched in background. I will notify you once Claude Code completes the implementation.
+
+────────────────────────────────────────────────────────────
+> While that's going, we imported a table from a csv a while ago containing many identified foreground
+  galaxy and galaxy cluster candidates. These were not identified in our previous search of survey data.
+  I wonder if you could delegate the exploration of this to claude code as well to figure out why our
+  previous queries of survey data missed this candidates.
+
+43.0k in | 2.9k out | 2.2k thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Compare the search criteri...) (ctrl+o to
+expand)
+
+  I have launched a second background task for Claude Code to investigate the missing foreground
+  candidates.
+
+  I will notify you as soon as either of the background tasks (the burst energy calculation or the
+  foreground candidate search gap investigation) completes.
+
+12.3k in | 672 out | 280 thinking
+● ManageTask(Task: f7a3e5da-da44-40d2-96b6-d9d8285dcab4/task-80) (ctrl+o to expand)
+
+  Task 60 (Burst energies) completed successfully!
+
+  Calculations have been verified (numerical closed-form vs quadrature agreement, and by-hand re-
+  derivation checks) and saved:
+
+  • Results: burst_energies.json
+  • LaTeX table and subsection for paper: burst_energies.tex
+
+  I am waiting for Task 80 (foreground candidate search gaps) to finish.
+
+────────────────────────────────────────────────────────────
+> Was code written for these calculations?
+
+2.1k in | 283 out | 203 thinking
+● ManageTask(Task: f7a3e5da-da44-40d2-96b6-d9d8285dcab4/task-80) (ctrl+o to expand)
+
+  Yes. The script calculate_burst_energies.py was written.
+
+  Key operations:
+
+  1. Loads coordinates/redshifts from config.py.
+  2. **Computes
+
+    D (z)
+     L
+
+  ** using config.py.
+  3. Retrieves joint fit parameters (c₀, γ) per band.
+  4. Calculates analytical integrals for power-laws over CHIME (0.4 -- 0.8  GHz) and DSA (1.31 --
+  1.50  GHz) bands:
+
+    def band_integral(c0: float, gamma: float, nu_ref: float, nu1: float, nu2: float) -> float:
+        if abs(gamma + 1.0) < 1e-9:
+            return c0 * nu_ref * np.log(nu2 / nu1)
+        g = gamma + 1.0
+        return c0 * nu_ref / g * ((nu2 / nu_ref) ** g - (nu1 / nu_ref) ** g)
+
+  5. Applies unit conversions (1  Jy·ms·Hz = 10⁻²⁹  J·m⁻²) and outputs JSON and LaTeX files.
+
+────────────────────────────────────────────────────────────
+> where are these scripts located? write out the full filepath strings
+
+
+  • Script: calculate_burst_energies.py
+  • JSON Results: burst_energies.json
+  • LaTeX Output: burst_energies.tex
+
+● Read(/Users/jakobfaber/.gemini/antigravit.../.system_generated/tasks/task-80.log) (ctrl+o to expand)
+
+────────────────────────────────────────────────────────────
+> continue
+
+4.0k in | 198 out | 101 thinking
+● Bash(python scratch/codetection/why_missed.py) (ctrl+o to expand)
+
+  The missing foreground candidate investigation has completed.
+
+  ### Location
+
+  • Script: why_missed.py
+
+  ### Findings
+
+  Of the 49 candidates in foreground.csv, 0 are recoverable under current pipeline settings:
+
+  1. Impact Parameter Gate (>100  kpc): 45/49 candidates fail because they exceed the pipeline's
+  search radius limit ( DEFAULT_IMPACT_KPC = 100.0  in config.py). For example, all 15 Wen+2024
+  clusters lie at 2 -- 5  Mpc.
+  2. Unsearched Catalogs (33/49): PS1-STRM (18 candidates) and Wen+2024 (15 candidates) are not in
+  the query list. PS1 is only used to enrich photometry.
+  3. Background Objects (12/49): 12 candidates have
+
+    z     ≥ z
+     phot    host
+
+  (flagged  ZPHOT_GE_ZHOST ) and are background systems.
+  4. Actionable: Adding PS1-STRM to search engines would recover 3 candidates (under Zach, Oran,
+  Freya) within 100  kpc.
+
+────────────────────────────────────────────────────────────
+> The Galaxy Cluster Impact Parameter matters in a different way as compared to the Foreground Galaxy
+  Impact Parameters. The Galaxy Clusters impact the dispersion measure budget significantly. Intervening
+  galaxies, not clusters, don't really do that and are more relevant to potential scattering.
+
+  Agree. Physics dictates different search scales:
+
+  • Galaxy Clusters: Large intracluster medium (ICM) gas envelopes contribute significantly to DM
+  budget even at large impact parameters (b sim 1 -- 5  Mpc or b/R₅₀₀ sim 1).
+  • Foreground Galaxies: Small-scale, dense ISM/CGM screens (b < 100  kpc) are required to produce
+  observable scattering.
+  • Pipeline Adjustment: Cluster searches need a wider radius (sim 5  Mpc) for DM modeling, while
+  keeping galaxy searches compact for scattering screen localization.
+
+────────────────────────────────────────────────────────────
+> Hence, setting the same upper limit on the impact parameter that is relevant for both is wrong.
+
+  Correct. Using a single  DEFAULT_IMPACT_KPC = 100.0  in config.py is physically incorrect.
+
+  Proposed fix:
+
+  • Galaxies (Scattering): Maintain b ≤ 100  kpc.
+  • Clusters (DM Budget): Increase limit to b ≤ 5  Mpc (or search out to 10 × R₅₀₀) to avoid missing
+  DM contributions.
+
+────────────────────────────────────────────────────────────
+> Thanks, Sid.
+
+────────────────────────────────────────────────────────────
+> Fix it.
+
+25.9k in | 6.1k out | 5.3k thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Implement separate impact ...) (ctrl+o to
+expand)
+
+  Task delegated to Claude Code in background. I will notify you when the fix is complete and
+  verified.
+
+● Bash(git diff) (ctrl+o to expand)
+
+  The fix has been implemented and verified.
+
+  ### Location of Changes
+
+  • Config: config.py ( DEFAULT_CLUSTER_IMPACT_KPC = 5000.0  added).
+  • Search Logic: search.py (updated search logic and masking).
+  • Tests: test_search_pipeline.py ( test_foreground_mask_applies_cluster_impact_threshold  added).
+
+  ### Implementation Details
+
+  1. Masking:  _foreground_mask  now detects clusters (via NED/SDSS type classification like  GClstr
+  or  ClG ) and applies  cluster_impact_kpc  (5000  kpc), while regular galaxies use  impact_kpc
+  (100  kpc).
+  2. Search Radius:  run_search  queries with the larger radius, capped at exactly
+
+       ∘
+    2.0
+
+  to prevent Vizier timeouts at very low redshifts.
+  3. Verification: All 55 tests in the test suite pass, confirming correct classification filtering.
+```
+
+---
+
+Simplify it for me. What's the deal with the calibration? Minimize cognitive load, please.
+
+---
+
+Okay, so it sounds like in order to actually get to any sort of quoted energy or quotable energy, we need to look more into how we can actually extract units that agree from these data. That seems like it would require digging into the actual telescope backends. Is that true? Or is the approach different from that?
+
+---
+
+The CHIME for B catalog quotes per-burst fluence in Jy ms, but these bursts aren't published in that catalog.
+
+---
+
+The CHIME/FRB catalog quotes per-burst fluence in Jy ms, but these bursts aren't published in that catalog.
+
+---
+
+This is going to require some prior art read-con. We're going to have to look at older CHIME instrumentation papers or recent CHIME publications that maybe do something similar to this. Perhaps the catalog paper is a good reference for that, actually. I think we need to do the same for the DSA. Do you agree?
+
+---
+
+This is going to require some prior art recon. We're going to have to look at older CHIME instrumentation papers or recent CHIME publications that maybe do something similar to this. Perhaps the catalog paper is a good reference for that, actually. I think we need to do the same for the DSA. Do you agree?
+
+---
+
+Use SciX if arxiv is kicking you off
+
+---
+
+/ai-research-workflows:plan
+
+---
+
+Build your workflow from here using /ai-research-workflows
+
+---
+
+Build your workflow from here using /ai-research-workflows and /boris and /ponytail
+
+---
+
+Before we commit, let's see if we can fix the blocker: (a) The dsa110 primary beam model exists on h17, and (b) the CHIME/FRB beam model might exist somewhere on arc/CANFAR.
+
+---
+
+That's an approximate beam model, I just downloaded the correct one in ~/Downloads/ locally, see: DSA110_beam_1.h5 and to visualize it visualize_dsa110_beam_pattern.py
+
+---
+
+/ai-research-workflows:researching pull a CHIME singlebeam h5 and inspect its flux units
+
+---
+
+Acronyms:
+CHIME — Canadian Hydrogen Intensity Mapping Experiment
+HDF5 — Hierarchical Data Format version 5
+
+On `h17`, the baseband analysis Docker image is already pulled as:
+
+`chimefrb/baseband-analysis:latest`
+
+Current digest:
+
+`sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41`
+
+The fresh CANFAR source snapshot is here:
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/baseband-analysis-canfar-src`
+
+There are wrapper scripts here:
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_shell.sh`
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_python.sh`
+
+Use it from `h17` like:
+
+```bash
+cd /data/research/astrophysics/frbs/chime-dsa-codetections
+
+./bin/baseband_analysis_shell.sh
+```
+
+or run Python directly inside the container with:
+
+```bash
+./bin/baseband_analysis_python.sh - <<'PY'
+from baseband_analysis.core.bbdata import BBData
+
+path = "/data/chime_singlebeam/singlebeam_210456524.h5"
+bb = BBData.from_file(path)
+print(bb["tiedbeam_baseband"].shape, bb["tiedbeam_baseband"].dtype)
+PY
+```
+
+Inside the container, the working data root is mounted as `/data`, so the singlebeam files are visible at:
+
+```text
+/data/chime_singlebeam/singlebeam_210456524.h5
+/data/chime_singlebeam/singlebeam_215063905.h5
+/data/chime_singlebeam/singlebeam_224263996.h5
+/data/chime_singlebeam/singlebeam_252069198.h5
+/data/chime_singlebeam/singlebeam_253635173.h5
+/data/chime_singlebeam/singlebeam_274819243.h5
+/data/chime_singlebeam/singlebeam_278720455.h5
+/data/chime_singlebeam/singlebeam_311723353.h5
+/data/chime_singlebeam/singlebeam_318353610.h5
+/data/chime_singlebeam/singlebeam_354049284.h5
+/data/chime_singlebeam/singlebeam_356959136.h5
+/data/chime_singlebeam/singlebeam_362593221.h5
+```
+
+The host-side path for those same files is:
+
+```text
+/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/
+```
+
+I just rechecked the image, wrappers, source snapshot, and all 12 `.h5` files on `h17`.
+
+---
+
+Reviewed, go ahead and plan the radiometer flux-cal step.
+
+---
+
+Execute: /ai-research-workflows:implementing-plans 
+
+On the pointing-Dec item, I couldn't find stored info in the filterbank files but I was able to query our detection logs and I've compiled the pointings of the primary beam for each event into this csv, labeled "RA ibeam" and "Dec ibeam": "~/Downloads/CHIME_DSA Codetections - DSA Primary Beam Pointings - Sheet1.csv"
+
+---
+
+Build a physics-based justification for estimator choice and then do the rigorous calibrated refit
+
+---
+
+proceed
