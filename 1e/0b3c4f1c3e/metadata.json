@@ -3,7 +3,7 @@
   "checkpoint_id": "1e0b3c4f1c3e",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 10,
+  "checkpoints_count": 12,
   "files_touched": [
     "flits/batch/analysis_logic.py",
     "flits/batch/tests/test_batch.py",
@@ -21,13 +21,19 @@
       "transcript": "/1e/0b3c4f1c3e/1/full.jsonl",
       "content_hash": "/1e/0b3c4f1c3e/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/1e/0b3c4f1c3e/2/metadata.json",
+      "transcript": "/1e/0b3c4f1c3e/2/full.jsonl",
+      "content_hash": "/1e/0b3c4f1c3e/2/content_hash.txt",
+      "prompt": "/1e/0b3c4f1c3e/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 94405,
-    "cache_creation_tokens": 1610681,
-    "cache_read_tokens": 40315261,
-    "output_tokens": 266912,
-    "api_call_count": 191
+    "input_tokens": 116972,
+    "cache_creation_tokens": 1723592,
+    "cache_read_tokens": 41216139,
+    "output_tokens": 297443,
+    "api_call_count": 202
   }
 }

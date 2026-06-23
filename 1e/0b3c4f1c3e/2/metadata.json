@@ -1,0 +1,101 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1e0b3c4f1c3e",
+  "session_id": "ac2a9913-fd5b-4f77-94f2-94af3daf53d7",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T01:20:42.111518Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "6a2532ea87a4",
+  "token_usage": {
+    "input_tokens": 22567,
+    "cache_creation_tokens": 112911,
+    "cache_read_tokens": 900878,
+    "output_tokens": 30531,
+    "api_call_count": 11
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 24766,
+      "user_lines_removed": 164,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/skills/entire/SKILL.md": 16,
+        ".claude/scheduled_tasks.lock": 1,
+        ".codex/agents/figure-reviewer.toml": 33,
+        ".codex/agents/fit-validation.toml": 91,
+        ".codex/config.toml": 6,
+        ".scratch/canfar-crossmatching/bbdata_processing_utils.py": 921,
+        ".scratch/canfar-crossmatching/chime_dm_params.json": 3362,
+        ".scratch/canfar-crossmatching/chime_dm_results.json": 99,
+        ".scratch/canfar-crossmatching/chime_dsa_onEarth.ipynb": 97,
+        ".scratch/canfar-crossmatching/dsa_dm_params.json": 12066,
+        ".scratch/canfar-crossmatching/fil_to_npy.ipynb": 859,
+        ".scratch/canfar-crossmatching/process_bbdata.ipynb": 873,
+        ".scratch/canfar-crossmatching/toa_crossmatch.ipynb": 1867,
+        ".scratch/canfar-crossmatching/toa_crossmatch.py": 117,
+        ".scratch/canfar-crossmatching/toa_crossmatch_results.json": 182,
+        ".scratch/canfar-crossmatching/toa_utilities.py": 259,
+        "AGENTS.md": 9,
+        "CONTEXT.md": 61,
+        "DATA_SOURCES.md": 15,
+        "docs/adr/0001-two-band-leverage-positioning.md": 19,
+        "docs/agents/domain.md": 53,
+        "docs/agents/issue-tracker.md": 36,
+        "docs/agents/triage-labels.md": 17,
+        "docs/codetection-science-plan.md": 89,
+        "docs/entire-tracing-checkpoints.md": 140,
+        "flits/batch/batch_runner.py": 143,
+        "flits/batch/tests/test_scint_config_discovery.py": 20,
+        "main.py": 16,
+        "scintillation/ne2025/query_ne2025_scint.py": 62,
+        "scintillation/scint_analysis/consistency.py": 113,
+        "scintillation/scint_analysis/tests/test_consistency_wiring.py": 43,
+        "scratch/codex_hook_probe.py": 2,
+        "simulation/recovery_campaign.py": 182,
+        "simulation/sim_fit_bridge.py": 13,
+        "tests/test_ne2025_floor.py": 43,
+        "tests/test_recovery_campaign.py": 54,
+        "uv.lock": 2787
+      },
+      "user_removed_per_file": {
+        ".codex/config.toml": 1,
+        "flits/batch/batch_runner.py": 116,
+        "scintillation/ne2025/query_ne2025_scint.py": 1,
+        "scintillation/scint_analysis/consistency.py": 43,
+        "simulation/sim_fit_bridge.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24765,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 58,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24765,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "flits/plotting.py": 6,
+        "matplotlibrc": 51
+      }
+    }
+  ]
+}

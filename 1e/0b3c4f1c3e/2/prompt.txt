@@ -1,0 +1,9 @@
+This repo is a fork of an upstream repo in dsa110/dsa110-FLITS (also locally stored at ../../dsa110/dsa110-FLITS).
+
+I'm beginning to think that it's more of a liability to have the fork be the primary development environment, but I would like the primary development environment to still be in my personal GitHub as opposed to the dsa110 organization GitHub. I'm wondering if it would make sense to sync dsa110/dsa110-FLITS with jakobtfaber/dsa110-FLITS and then remove the dsa110-FLITS from the dsa110, and make what is now a fork at jakobtfaber/dsa110-FLITS, the primary repo instead. This would also involve removing the local clone ../../dsa110/dsa110-FLITS.
+
+What do you think?
+
+---
+
+Flitz is a DSA 110 deliverable. For the purposes of development, it's easier if I do it in my local or personal GitHub, because then I don't have to enable certain applications, particularly agentic programming applications, in the DSA 110 organization that affect other users. I can just do it within my own account, and then once it's out of the development stage and in the production stage, I simply turn it into a DSA 110 repository again and transfer it to the org.
