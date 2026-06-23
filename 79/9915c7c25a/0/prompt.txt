@@ -1,0 +1,41 @@
+<task-notification>
+<task-id>b93heow8j</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b93heow8j.output</output-file>
+<status>completed</status>
+<summary>Background command "until out=$(gh pr view 20 --json statusCheckRollup 2&gt;/dev/null | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+rows=[(c.get('name') or c.get('context'), c.get('status') or c.get('state'), c.get('conclusion') or '') for c in d.get('statusCheckRollup') or []]
+pend=[r for r in rows if r[1] in ('IN_PROGRESS','QUEUED','PENDING')]
+[print(f'{n} -&gt; {s} {c}') for n,s,c in rows]
+sys.exit(1 if pend else 0)
+"); do sleep 15; done
+echo "=== ALL CHECKS SETTLED ==="
+echo "$out"" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+signed off
+
+---
+
+<task-notification>
+<task-id>bbzp8qs9m</task-id>
+<tool-use-id>toolu_01RgKTGBBDDBqqdBSwjJp2y5</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/bbzp8qs9m.output</output-file>
+<status>completed</status>
+<summary>Background command "until concl=$(gh run view 28048511399 --json status,conclusion 2&gt;/dev/null | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+print(d['status'], d.get('conclusion') or '')
+sys.exit(0 if d['status']=='completed' else 1)
+"); do sleep 15; done
+echo "=== MAIN CI SETTLED ==="
+echo "$concl"" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Proceed with next thread. The CHIME voltage data is stored here locally in addition to the baseband_analysis image and software backend.
