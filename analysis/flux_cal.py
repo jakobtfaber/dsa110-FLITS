@@ -130,6 +130,43 @@ def dsa_pointing_dec(nick):
     return float(_csv_lookup("dsa_pointing.csv", nick, val_col="pointing_dec_deg"))
 
 
+def _dsa_burst_config(nick):
+    """(npy_path, f_factor, t_factor) from configs/batch/dsa/<nick>_dsa.yaml (the fit's own binning)."""
+    from pathlib import Path
+
+    import yaml
+
+    cfg = Path(__file__).resolve().parents[1] / "configs" / "batch" / "dsa" / f"{nick}_dsa.yaml"
+    if not cfg.exists():
+        raise FileNotFoundError(f"{cfg} missing -- no DSA batch config for {nick}")
+    c = yaml.safe_load(cfg.read_text())
+    return (cfg.parent / c["path"]).resolve(), int(c.get("f_factor", 1)), int(c.get("t_factor", 1))
+
+
+def dsa_band_fluence_jy_ms_hz(nick):
+    """Calibrated DSA-band fluence integral [Jy*ms*Hz] for a burst (Phases 2-3 composed).
+
+    Loads the burst .npy via its batch config (same f/t binning the joint fit used), turns the
+    per-channel on-pulse S/N spectrum into Jy with sigma_S(nu)=SEFD/(sqrt(2*dnu*dt)*G(theta,nu)),
+    and integrates over the DSA band. Raises FileNotFoundError if the .npy is not staged locally
+    (data/dsa/ is external -- iacobus:burst_npys).
+    """
+    from analysis.dsa_beam import beam_gain
+
+    npy, f_factor, t_factor = _dsa_burst_config(nick)
+    if not npy.exists():
+        raise FileNotFoundError(
+            f"{npy} not materialized -- stage the DSA .npy (iacobus:burst_npys) under data/dsa/"
+        )
+    freq_hz, sn_int, dt_ms, dnu_hz = sn_spectrum_from_npy(npy, "dsa", f_factor, t_factor)
+    _mjd, _ra, dec_src = burst_epoch_position(nick)
+    theta, phi = dsa_beam_offset(dec_src, dsa_pointing_dec(nick))
+    sigma_jy = dsa_sigma_jy(
+        freq_hz, dnu_hz, load_dsa_sefd(nick), dt_ms / 1e3, theta, phi, beam_gain
+    )
+    return calibrated_band_integral_jy_ms_hz(sn_int, sigma_jy, freq_hz, dt_ms)
+
+
 def _check() -> None:
     # 1. radiometer noise vs analytic: 2000/sqrt(2*1e6*1e-3) == sqrt(2000); G=0.5 doubles it
     s = radiometer_sigma_jy(2000.0, 2, 1e6, 1e-3, 1.0)
