@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "53e87d08edda",
+  "strategy": "manual-commit",
+  "branch": "research/codetection-validation-rigor",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".agents/experiment-chance-coincidence-falsealarm.md",
+    ".agents/plan-codetection-association-significance.md",
+    ".agents/research-codetection-validation-rigor.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/53/e87d08edda/0/metadata.json",
+      "transcript": "/53/e87d08edda/0/full.jsonl",
+      "content_hash": "/53/e87d08edda/0/content_hash.txt",
+      "prompt": "/53/e87d08edda/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1379,
+    "cache_creation_tokens": 468892,
+    "cache_read_tokens": 7671818,
+    "output_tokens": 67401,
+    "api_call_count": 41
+  }
+}

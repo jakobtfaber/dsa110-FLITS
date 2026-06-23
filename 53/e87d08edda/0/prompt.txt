@@ -1,0 +1,9 @@
+Have we validated that the bursts detected at the DSA and CHIME are indeed codetections in the most rigorous way possible? /ai-research-workflows:researching
+
+---
+
+Proceed with /ai-research-workflows:planning-implementations to turn pillar 1-4 into a concrete roadmap
+
+---
+
+Proceed with /ai-research-workflows:planning-implementations to turn pillar 1-4 into a concrete roadmap. Start with /ai-research-workflows:running-experiments
