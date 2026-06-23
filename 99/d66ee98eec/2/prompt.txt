@@ -458,3 +458,7 @@ The host-side path for those same files is:
 ```
 
 I just rechecked the image, wrappers, source snapshot, and all 12 `.h5` files on `h17`.
+
+---
+
+Reviewed, go ahead and plan the radiometer flux-cal step.
