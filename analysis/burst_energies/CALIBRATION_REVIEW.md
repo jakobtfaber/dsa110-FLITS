@@ -315,3 +315,33 @@ a residual steep falloff on-axis. So the energy estimate must NOT extrapolate th
 the **calibrated per-channel fluence integral** (which integrates the measured channels directly) is
 the robust estimator and is insensitive to the gamma rail. This reinforces the estimator decision
 above.
+
+## Scope of the absolute calibration (2026-06-23) — what the catalog actually validates
+
+The independent validation pass (`docs/rse/specs/validation-radiometer-flux-cal.md`) found that the
+absolute Jy scale is **empirically catalog-anchored for only a subset of the sample**, so the energy
+table's calibration confidence is not uniform across sightlines. Scope precisely:
+
+1. **Absolute-scale cross-check covers 3 sightlines, not all.** `test_joint_band_fluence_matches_catalog_scale`
+   compares the model-based DSA fluence to the Law+2024 catalog for **oran (0.99×), zach (1.27×), and
+   whitney (2.15×)** — the only co-detections with a published catalog fluence in the repo. The other
+   DSA-band fluences (isha, phineas, wilhelm, hamilton, chromatica) rely on the radiometer model
+   (measured beam + coherent-beam SEFD) **without an independent catalog anchor**. The factor-of-3
+   test band is a sanity gate, not a tight constraint. Treat the absolute scale as validated to ~2×
+   for the 3 anchored bursts and model-trusted (no external check) for the rest.
+
+2. **Untested high model fluences exist but do not enter E_iso.** Some bursts carry large model-based
+   band-average fluences (mahi ≈ 468, freya ≈ 156 Jy·ms) with no catalog comparison. These are
+   **excluded from the energy table** because they lack a well-constrained host redshift (the
+   `z = 1.0000` placeholder flag → skipped, `calculate_burst_energies.py:156`), so they cannot bias
+   the published energies — but they flag that the per-sightline scale is not uniformly verified.
+
+3. **Redshift scope.** The E_iso table is restricted to sightlines with a real (non-placeholder) host
+   redshift; sources whose redshift is unknown or poorly constrained (freya, mahi, johndoeii) are
+   omitted. The per-source redshift quality (spectroscopic vs photometric) is inherited from the
+   galaxy-search `TARGETS` list and is **not** independently flagged here — any sightline later found
+   to have only a photometric/uncertain redshift should be demoted or annotated in the table.
+
+**Net:** the energies are correct given the model, catalog-anchored to ~2× for oran/zach/whitney, and
+band-restricted lower limits throughout. The manuscript and any energetics claim should state the
+absolute scale is catalog-validated for the 3 anchored bursts rather than implying uniform validation.
