@@ -3,24 +3,23 @@
   "checkpoint_id": "6f059af122a1",
   "session_id": "7718779b-4573-47bb-82a9-eca51458ccfd",
   "strategy": "manual-commit",
-  "created_at": "2026-06-23T18:21:32.621863893Z",
+  "created_at": "2026-06-23T18:22:13.812608295Z",
   "branch": "feat/codetection-association-significance",
   "checkpoints_count": 0,
   "files_touched": [
-    "tests/test_association.py",
     "crossmatching/association.py"
   ],
   "agent": "Claude Code",
   "model": "claude-opus-4-8",
   "turn_id": "7859d9b616a0",
-  "checkpoint_transcript_start": 1608,
-  "transcript_lines_at_start": 1608,
+  "checkpoint_transcript_start": 1651,
+  "transcript_lines_at_start": 1651,
   "token_usage": {
-    "input_tokens": 145,
-    "cache_creation_tokens": 4965,
-    "cache_read_tokens": 2949643,
-    "output_tokens": 3508,
-    "api_call_count": 8
+    "input_tokens": 6,
+    "cache_creation_tokens": 1777,
+    "cache_read_tokens": 1116397,
+    "output_tokens": 1101,
+    "api_call_count": 3
   },
   "skill_events_version": 1,
   "skill_events": [
@@ -184,15 +183,15 @@
     "turn_count": 17
   },
   "initial_attribution": {
-    "calculated_at": "2026-06-23T18:21:32.53626398Z",
-    "agent_lines": 41,
-    "agent_removed": 0,
-    "human_added": 0,
+    "calculated_at": "2026-06-23T18:22:13.719431995Z",
+    "agent_lines": 1,
+    "agent_removed": 1,
+    "human_added": 20,
     "human_modified": 0,
     "human_removed": 0,
-    "total_committed": 41,
-    "total_lines_changed": 41,
-    "agent_percentage": 100,
+    "total_committed": 21,
+    "total_lines_changed": 22,
+    "agent_percentage": 9.090909090909092,
     "metric_version": 2
   }
 }
