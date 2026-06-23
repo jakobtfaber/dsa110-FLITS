@@ -546,3 +546,7 @@ sweep
 ---
 
 What's next?
+
+---
+
+Tackle all 4 using /ai-research-workflows workflows, as well as /boris and /ponytail
