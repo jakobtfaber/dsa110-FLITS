@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "397113e6a548",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "analysis/dsa_beam.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/39/7113e6a548/0/metadata.json",
+      "transcript": "/39/7113e6a548/0/full.jsonl",
+      "content_hash": "/39/7113e6a548/0/content_hash.txt",
+      "prompt": "/39/7113e6a548/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 71531,
+    "cache_creation_tokens": 786008,
+    "cache_read_tokens": 40741538,
+    "output_tokens": 296843,
+    "api_call_count": 197
+  }
+}
