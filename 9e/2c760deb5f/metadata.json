@@ -3,7 +3,7 @@
   "checkpoint_id": "9e2c760deb5f",
   "strategy": "manual-commit",
   "branch": "feature/radiometer-flux-cal",
-  "checkpoints_count": 10,
+  "checkpoints_count": 12,
   "files_touched": [
     "analysis/burst_energies/CALIBRATION_REVIEW.md",
     "analysis/burst_energies/refit_calibrated.manifest.json",
@@ -22,13 +22,19 @@
       "transcript": "/9e/2c760deb5f/1/full.jsonl",
       "content_hash": "/9e/2c760deb5f/1/content_hash.txt",
       "prompt": "/9e/2c760deb5f/1/prompt.txt"
+    },
+    {
+      "metadata": "/9e/2c760deb5f/2/metadata.json",
+      "transcript": "/9e/2c760deb5f/2/full.jsonl",
+      "content_hash": "/9e/2c760deb5f/2/content_hash.txt",
+      "prompt": "/9e/2c760deb5f/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 117621,
-    "cache_creation_tokens": 1416076,
-    "cache_read_tokens": 60421515,
-    "output_tokens": 459129,
-    "api_call_count": 299
+    "input_tokens": 164949,
+    "cache_creation_tokens": 1927354,
+    "cache_read_tokens": 69546703,
+    "output_tokens": 538990,
+    "api_call_count": 347
   }
 }
