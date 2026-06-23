@@ -14,7 +14,9 @@ window, ``mu = R_sr_s * Omega_win * 2*dt * f_DM``; ``P = 1 - exp(-mu)``.
 
 from __future__ import annotations
 
+import json
 import math
+from pathlib import Path
 
 # CHIME/FRB Catalogue 1 (Amiri et al. 2021, ApJS 257, 59): ~525 FRBs sky^-1 day^-1 above 5 Jy ms.
 R_SKY_PER_DAY_CENTRAL = 525.0
@@ -122,3 +124,66 @@ def position_consistent(dsa_coord: str, chime_center: str, radius_deg: float) ->
     a = SkyCoord(dsa_coord, unit=(u.hourangle, u.deg), frame="icrs")
     b = SkyCoord(chime_center, unit=(u.hourangle, u.deg), frame="icrs")
     return bool(a.separation(b).deg <= radius_deg)
+
+
+# --- Assemble the association report (golden artifact never touched) -----------
+def build_association_report(
+    fixture_path,
+    *,
+    rate_per_day: float = 1000.0,
+    omega_win_deg2: float = OMEGA_WIN_BASELINE_DEG2,
+    dt_s: float = DT_BASELINE_S,
+    ddm: float = DDM_BASELINE,
+) -> dict:
+    """Run all four pillars over the fixture and return the report dict. Read-only on disk.
+
+    CHIME independent DM and localization are not yet sourced (singlebeam files carry
+    neither), so pillars 2 and 4 emit explicit null+reason rather than fabricated values.
+    """
+    fx = json.loads(Path(fixture_path).read_text())
+    bursts, dms = [], []
+    for row in fx["bursts"]:
+        dm = row["dm"]
+        dms.append(dm)
+        bursts.append(
+            {
+                "name": row["name"],
+                "chime_id": row["chime_id"],
+                "dm": dm,
+                "chance_coincidence_P": chance_probability(
+                    dm, rate_per_day=rate_per_day, omega_win_deg2=omega_win_deg2, dt_s=dt_s, ddm=ddm
+                ),
+                "dm_agreement": dm_agreement(  # CHIME DM not yet sourced -> null+reason
+                    dm_chime=None,
+                    dm_chime_err=None,
+                    dm_dsa=dm,
+                    dm_dsa_err=row.get("dm_uncertainty"),
+                ),
+                "position_consistent": None,  # CHIME localization not yet sourced
+            }
+        )
+    return {
+        "inputs": {
+            "rate_per_day": rate_per_day,
+            "omega_win_deg2": omega_win_deg2,
+            "dt_s": dt_s,
+            "ddm": ddm,
+            "dm_model": "lognormal(500,0.7) [assumption]",
+        },
+        "expected_chance_associations": expected_chance_associations(
+            dms, rate_per_day=rate_per_day, omega_win_deg2=omega_win_deg2, dt_s=dt_s, ddm=ddm
+        ),
+        "bursts": bursts,
+    }
+
+
+def main() -> None:
+    here = Path(__file__).resolve().parent
+    rep = build_association_report(here / "notebook_reproduction_fixture.json")
+    out = here / "association_report.json"
+    out.write_text(json.dumps(rep, indent=2))
+    print(f"wrote {out}  (sum_mu={rep['expected_chance_associations']:.3e})")
+
+
+if __name__ == "__main__":
+    main()

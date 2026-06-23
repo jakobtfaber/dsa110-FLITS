@@ -1,12 +1,14 @@
 """Tests for crossmatching/association.py — CHIME-DSA association significance (pillars 1-4)."""
 
 import math
+from pathlib import Path
 
 import numpy as np
 import pytest
 
 from crossmatching.association import (
     OMEGA_WIN_BASELINE_DEG2,
+    build_association_report,
     chance_mu,
     chance_probability,
     dm_agreement,
@@ -19,6 +21,7 @@ from crossmatching.association import (
 )
 
 BASE = dict(rate_per_day=1000.0, omega_win_deg2=OMEGA_WIN_BASELINE_DEG2, dt_s=1.0, ddm=5.0)
+ROOT = Path(__file__).resolve().parents[1]
 
 
 # --- Pillar 1: chance-coincidence probability ---------------------------------
@@ -102,3 +105,15 @@ def test_position_inside_and_outside_chime_disk():
     dsa = "20h40m47.886s +72d52m56.378s"
     assert position_consistent(dsa, "20h40m50s +72d53m00s", radius_deg=0.2) is True
     assert position_consistent(dsa, "20h00m00s +60d00m00s", radius_deg=0.2) is False
+
+
+# --- Phase 5: assembled report (golden untouched) -----------------------------
+def test_report_has_chance_P_for_all_12_and_golden_untouched():
+    golden = ROOT / "crossmatching/toa_crossmatch_results.json"
+    golden_before = golden.read_text()
+    report = build_association_report(ROOT / "crossmatching/notebook_reproduction_fixture.json")
+    assert len(report["bursts"]) == 12
+    assert all(b["chance_coincidence_P"] < 1e-3 for b in report["bursts"])
+    assert report["expected_chance_associations"] < 1e-3
+    # building the report must not touch the golden artifact
+    assert golden.read_text() == golden_before
