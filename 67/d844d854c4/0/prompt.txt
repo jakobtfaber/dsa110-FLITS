@@ -1,0 +1,122 @@
+how do you know the conversations are active?
+
+---
+
+The Entire CLI:
+---
+```
+✻ Baked for 41m 34s
+ ▐▛███▜▌   Claude Code v2.1.185
+▝▜█████▛▘  Opus 4.8 (1M context) with xhigh effort · Claude Max
+  ▘▘ ▝▝    ~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+
+  ⎿  SessionStart:clear says:
+
+     Entire CLI will link this conversation to your next commit.
+       3 other active conversation(s) in this workspace will also be included.
+       Use 'entire status' for more information.
+
+```
+
+---
+
+Got it. I wonder if you could identify a use case for the AI research workflow skills. Just something to demonstrate how they work.
+
+---
+
+Go with 2. continue
+
+---
+
+/ai-research-workflows:implement
+
+---
+
+/ai-research-workflows:validate
+
+---
+
+/ai-research-workflows:handoff
+
+---
+
+Commit it now — pathspec-only, on a new branch. The work is done, verified, and handed off; leaving
+    it dirty just risks the next session (or that "active now" galaxies session) tangling the two lanes.
+
+    Concretely:
+    git switch -c fix/issue-37-per-band-dt-min
+    git add scattering/scat_analysis/burstfit_joint.py tests/test_joint_prior_ordered.py
+    .agents/research-multicomponent-joint-evidence.md .agents/plan-dt-min-per-band.md
+    .agents/implement-dt-min-per-band.md .agents/handoff-dt-min-per-band.md
+    git commit -m "Per-band dt_min for multi-component joint fit (#37)"
+    Never git add -A — galaxies/v2_0/*, analysis/burst_energies/, scratch/codetection/ belong to the
+    other session.
+
+    The one open item (manual N=1 vs N=2 lnZ ladder on a real single-component burst) is low-risk and
+    can wait — don't block the commit on it.
+
+---
+
+Do you recommend pushing?
+
+---
+
+I wanna keep the change. Go ahead and push.
+
+---
+
+So, no handoff needed?
+
+---
+
+Are you saying that the changes made were not warranted?
+
+---
+
+So we should merge it.
+
+---
+
+Stop asking me these questions that you already know the answer to.
+
+---
+
+You know what to do next.
+
+---
+
+How's the run going?
+
+---
+
+Would it be better to run this on hpcc?
+
+---
+
+How far along is the local processess?
+
+---
+
+Yes, post result as PR #11 commend and flip docs
+
+---
+
+Where are we now regarding the joint fits?
+
+---
+
+How do you want to use /ai-research-workflows on the unlocked but not-yet-run work by #37
+
+---
+
+<task-notification>
+<task-id>bnnjyftl4</task-id>
+<tool-use-id>toolu_01DuMVp4Kpqwwbv2uCo3bkNd</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/265e6f8b-9d51-4f16-82f8-14fa7fad5c70/tasks/bnnjyftl4.output</output-file>
+<status>completed</status>
+<summary>Background command "Run N-ladder foreground, 1 seed, nlive=300" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Post the correction
