@@ -74,6 +74,62 @@ def sn_spectrum_from_npy(inpath, telescope, f_factor=1, t_factor=1, onpulse_thre
     return m.freq * 1e9, sn_integrated, ds.dt_ms, ds.df_MHz * 1e6
 
 
+def dsa_sigma_jy(freq_hz, dnu_hz, sefd_jy, dt_s, theta_deg, phi_deg, beam_gain_fn):
+    """Per-channel radiometer noise sigma_S(nu) [Jy] for DSA (n_pol=2) at a beam offset.
+
+    beam_gain_fn(theta_deg, phi_deg, freq_ghz) -> normalized power-beam gain (boresight=1);
+    dnu_hz is the channel bandwidth (downsampled ds.df_MHz*1e6), dt_s the sample time [s].
+    """
+    g = np.array([beam_gain_fn(theta_deg, phi_deg, f / 1e9) for f in freq_hz])
+    return radiometer_sigma_jy(sefd_jy, 2, dnu_hz, dt_s, g)
+
+
+def dsa_beam_offset(dec_src, dec_pointing):
+    """(theta_deg, phi_deg) of the source from the DSA primary-beam boresight.
+
+    DSA-110 is a transit array: at the burst's meridian transit (HA~0) the boresight sits at the
+    source RA, so the angular separation is exactly the declination difference; phi=0 (meridian).
+    HA refinement (small E-W term) is out of scope -- see the plan.
+    """
+    return abs(dec_src - dec_pointing), 0.0
+
+
+def burst_epoch_position(nick):
+    """(mjd, ra_deg, dec_deg) for a burst nickname from configs/bursts.yaml."""
+    from pathlib import Path
+
+    import yaml
+
+    b = yaml.safe_load(
+        (Path(__file__).resolve().parents[1] / "configs" / "bursts.yaml").read_text()
+    )
+    e = b["bursts"][nick]
+    return float(e["mjd"]), float(e["ra_deg"]), float(e["dec_deg"])
+
+
+def _csv_lookup(filename, key, key_col="burst", val_col=None):
+    import csv
+    from pathlib import Path
+
+    p = Path(__file__).resolve().parents[1] / "analysis" / "burst_energies" / filename
+    if not p.exists():
+        raise FileNotFoundError(f"{p} missing -- run the Phase 4 acquisition")
+    for row in csv.DictReader(p.open()):
+        if row[key_col] == key:
+            return row[val_col]
+    raise KeyError(f"{key} not in {p}")
+
+
+def load_dsa_sefd(nick):
+    """Measured DSA SEFD [Jy] nearest the burst epoch, from dsa_sefd.csv (Phase 4)."""
+    return float(_csv_lookup("dsa_sefd.csv", nick, val_col="sefd_jy"))
+
+
+def dsa_pointing_dec(nick):
+    """DSA primary-beam pointing declination [deg] for a burst, from dsa_pointing.csv (Phase 4)."""
+    return float(_csv_lookup("dsa_pointing.csv", nick, val_col="pointing_dec_deg"))
+
+
 def _check() -> None:
     # 1. radiometer noise vs analytic: 2000/sqrt(2*1e6*1e-3) == sqrt(2000); G=0.5 doubles it
     s = radiometer_sigma_jy(2000.0, 2, 1e6, 1e-3, 1.0)

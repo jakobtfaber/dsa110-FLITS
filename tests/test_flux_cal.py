@@ -44,3 +44,37 @@ def test_sn_spectrum_synthetic(tmp_path):
     assert np.all(np.isfinite(sn_int))
     assert np.median(sn_int) > 5.0  # integrated on-pulse S/N well above zero
     assert freq_hz[0] < freq_hz[-1] and dt_ms > 0 and dnu_hz > 0
+
+
+def test_dsa_sigma_jy_constant_at_boresight():
+    from analysis.flux_cal import dsa_sigma_jy
+
+    freq_hz = np.linspace(1.311e9, 1.499e9, 32)
+    dnu_hz, dt_s = 30517.578, 1.31072e-4
+    sig = dsa_sigma_jy(
+        freq_hz,
+        dnu_hz,
+        sefd_jy=4000.0,
+        dt_s=dt_s,
+        theta_deg=0.0,
+        phi_deg=0.0,
+        beam_gain_fn=lambda th, ph, f: 1.0,
+    )
+    expect = 4000.0 / np.sqrt(2 * dnu_hz * dt_s)  # G=1, n_pol=2 -> constant analytic value
+    assert np.allclose(sig, expect)
+
+
+def test_dsa_beam_offset_is_dec_difference():
+    from analysis.flux_cal import dsa_beam_offset
+
+    # transit geometry: same-RA boresight -> separation is exactly the dec difference
+    theta, phi = dsa_beam_offset(dec_src=70.31, dec_pointing=72.0)
+    assert abs(theta - 1.69) < 1e-6 and phi == 0.0
+
+
+def test_burst_epoch_position_from_yaml():
+    from analysis.flux_cal import burst_epoch_position
+
+    mjd, ra, dec = burst_epoch_position("casey")
+    assert abs(mjd - 60369.371) < 1e-3
+    assert abs(ra - 169.983542) < 1e-6 and abs(dec - 70.676222) < 1e-6
