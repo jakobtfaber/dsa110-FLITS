@@ -1,0 +1,129 @@
+This repo is a fork of an upstream repo in dsa110/dsa110-FLITS (also locally stored at ../../dsa110/dsa110-FLITS).
+
+I'm beginning to think that it's more of a liability to have the fork be the primary development environment, but I would like the primary development environment to still be in my personal GitHub as opposed to the dsa110 organization GitHub. I'm wondering if it would make sense to sync dsa110/dsa110-FLITS with jakobtfaber/dsa110-FLITS and then remove the dsa110-FLITS from the dsa110, and make what is now a fork at jakobtfaber/dsa110-FLITS, the primary repo instead. This would also involve removing the local clone ../../dsa110/dsa110-FLITS.
+
+What do you think?
+
+---
+
+Flitz is a DSA 110 deliverable. For the purposes of development, it's easier if I do it in my local or personal GitHub, because then I don't have to enable certain applications, particularly agentic programming applications, in the DSA 110 organization that affect other users. I can just do it within my own account, and then once it's out of the development stage and in the production stage, I simply turn it into a DSA 110 repository again and transfer it to the org.
+
+---
+
+I just wish that the reconciliation were automatic, I guess, is the problem I want to solve.
+
+---
+
+You're totally right. Yes, please do the reversible reconcile.
+
+---
+
+yes run pytest to confirm green before push
+
+---
+
+Go.
+
+---
+
+Excellent. Can you make sure that the clone on HPCC corresponds to the fork and not dsa110/dsa110-FLITS? The path on hpcc is: /home/jfaber/flits/dsa110-FLITS
+
+---
+
+Handle that discrepancy.
+
+---
+
+So it's 71 commits behind but also has a ton of uncommitted work, is that right?
+
+---
+
+Once you've gained a complete picture of the overlap and discrepancies between the two, take care of the reconciliation yourself autonomously, please.
+
+---
+
+yes, pin
+
+---
+
+the only other session running in dsa110-FLITS is this one:
+
+  Settings  Status   Config   Usage   Stats
+
+  Version:          2.1.185
+  Session name:     Plan CHIME/DSA FRB analysis tooling and science scope
+  Session ID:       265e6f8b-9d51-4f16-82f8-14fa7fad5c70
+  cwd:              /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+  Login method:     Claude Max account
+  Organization:     jakobtfaber@gmail.com's Organization
+  Email:            jakobtfaber@gmail.com
+
+  Model:            Default (Opus 4.8 with 1M context · Best for everyday, complex tasks)
+  MCP servers:      18 connected, 1 disabled · /mcp
+  Setting sources:  User settings, Shared project settings, Project local settings
+
+  Esc to cancel
+
+---
+
+that session is done now I think, you can commit
+
+---
+
+What I understand is why we still need the work-in-progress branch at all.
+
+---
+
+What I don't understand is why we still need the work-in-progress branch at all.
+
+---
+
+A single commit is fine. I just want you to push it to main now so that our main branch is clear and also make sure that our local version of that is in sync. Once that's done, I think we should remove the ../../dsa110/dsa110-FLITS just so we don't confuse ourselves with the duplicate repo locally --- wdyt?
+
+---
+
+go
+
+---
+
+yes, record
+
+---
+
+Done
+
+---
+
+Done?
+
+---
+
+Understood. Are we on the main branch now?
+
+---
+
+is hpcc dsa110-FLITS on main and have the worktrees there all been reconciled?
+
+---
+
+Reduce the cognitive load, please.
+
+---
+
+Again, reducing cognitive load. Where should I be developing this codebase?
+
+---
+
+Tree?
+
+---
+
+I'm running another agent in it right now.
+
+---
+
+Just maybe you could help me guide the work that's being done by the other agents as they finish it up. Can you see the code that was added and manuscript text that was added related to Burst Energetics?
+
+---
+
+Just to add to this, is it a problem that we're not flux calibrating? I think at either band, all that precisely if at all.

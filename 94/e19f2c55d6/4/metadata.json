@@ -1,0 +1,305 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "94e19f2c55d6",
+  "session_id": "ac2a9913-fd5b-4f77-94f2-94af3daf53d7",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T03:28:54.562887Z",
+  "branch": "fix/issue-37-per-band-dt-min",
+  "checkpoints_count": 27,
+  "save_step_count": 22,
+  "files_touched": [
+    ".agents/handoff-dt-min-per-band.md",
+    ".agents/plan-dt-min-per-band.md",
+    ".agents/research-multicomponent-joint-evidence.md",
+    "scattering/scat_analysis/burstfit_joint.py",
+    "tests/test_joint_prior_ordered.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "4c65206c0474",
+  "checkpoint_transcript_start": 153,
+  "transcript_lines_at_start": 153,
+  "token_usage": {
+    "input_tokens": 17093,
+    "cache_creation_tokens": 505630,
+    "cache_read_tokens": 18725191,
+    "output_tokens": 175079,
+    "api_call_count": 83
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01E1n3vHkB6SBqJTwbgLGZcu",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "4c65206c0474",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 953,
+        "end": 954,
+        "entry_ids": [
+          "7b81f954-71e8-41c2-8ed8-8a802c5a849d"
+        ],
+        "tool_use_id": "toolu_01E1n3vHkB6SBqJTwbgLGZcu"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01E1n3vHkB6SBqJTwbgLGZcu"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 29
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T03:28:54.503397Z",
+    "agent_lines": 638,
+    "agent_removed": 3,
+    "human_added": 17,
+    "human_modified": 10,
+    "human_removed": 0,
+    "total_committed": 665,
+    "total_lines_changed": 668,
+    "agent_percentage": 95.95808383233533,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24850,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24857,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24857,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24857,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24857,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24857,
+      "agent_lines_removed": 164,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35,
+      "agent_lines_removed": 10
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35,
+      "agent_lines_removed": 10
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24892,
+      "agent_lines_removed": 174
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 24892,
+      "agent_lines_removed": 174
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 233,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 285,
+      "user_lines_removed": 2,
+      "agent_lines_added": 454,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/plan-dt-min-per-band.md": 13,
+        "analysis/calculate_burst_energies.py": 272
+      },
+      "user_removed_per_file": {
+        ".agents/plan-dt-min-per-band.md": 2
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 11,
+      "user_lines_removed": 8,
+      "agent_lines_added": 1054,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "scratch/codetection/why_missed.py": 11
+      },
+      "user_removed_per_file": {
+        "scratch/codetection/why_missed.py": 8
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 1,
+      "user_lines_removed": 1,
+      "agent_lines_added": 1164,
+      "agent_lines_removed": 13,
+      "user_added_per_file": {
+        "scattering/scat_analysis/burstfit_joint.py": 1
+      },
+      "user_removed_per_file": {
+        "scattering/scat_analysis/burstfit_joint.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 21,
+      "user_lines_removed": 16,
+      "agent_lines_added": 1164,
+      "agent_lines_removed": 13,
+      "user_added_per_file": {
+        "galaxies/v2_0/config.py": 21
+      },
+      "user_removed_per_file": {
+        "galaxies/v2_0/config.py": 16
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 102,
+      "user_lines_removed": 50,
+      "agent_lines_added": 1227,
+      "agent_lines_removed": 59,
+      "user_added_per_file": {
+        "galaxies/v2_0/search.py": 102
+      },
+      "user_removed_per_file": {
+        "galaxies/v2_0/search.py": 50
+      }
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 8,
+      "user_lines_removed": 2,
+      "agent_lines_added": 1329,
+      "agent_lines_removed": 109,
+      "user_added_per_file": {
+        "galaxies/v2_0/search.py": 8
+      },
+      "user_removed_per_file": {
+        "galaxies/v2_0/search.py": 2
+      }
+    },
+    {
+      "checkpoint_number": 21,
+      "user_lines_added": 119,
+      "user_lines_removed": 8,
+      "agent_lines_added": 1340,
+      "agent_lines_removed": 112,
+      "user_added_per_file": {
+        ".agents/implement-dt-min-per-band.md": 85,
+        ".agents/plan-dt-min-per-band.md": 13,
+        "galaxies/v2_0/test_search_pipeline.py": 21
+      },
+      "user_removed_per_file": {
+        ".agents/plan-dt-min-per-band.md": 7,
+        "galaxies/v2_0/test_search_pipeline.py": 1
+      }
+    },
+    {
+      "checkpoint_number": 22,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1454,
+      "agent_lines_removed": 113
+    },
+    {
+      "checkpoint_number": 23,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1551,
+      "agent_lines_removed": 113
+    }
+  ]
+}
