@@ -3,9 +3,13 @@
   "checkpoint_id": "3155d51dffba",
   "strategy": "manual-commit",
   "branch": "feature/radiometer-flux-cal",
-  "checkpoints_count": 3,
+  "checkpoints_count": 4,
   "files_touched": [
-    "analysis/burst_energies/build_dsa_pointing.py"
+    ".gitignore",
+    "analysis/burst_energies/build_dsa_pointing.py",
+    "analysis/burst_energies/dsa_pointing.csv",
+    "analysis/burst_energies/dsa_primary_beam_pointings.csv",
+    "tests/test_flux_cal.py"
   ],
   "sessions": [
     {
@@ -19,6 +23,12 @@
       "transcript": "/31/55d51dffba/1/full.jsonl",
       "content_hash": "/31/55d51dffba/1/content_hash.txt",
       "prompt": "/31/55d51dffba/1/prompt.txt"
+    },
+    {
+      "metadata": "/31/55d51dffba/2/metadata.json",
+      "transcript": "/31/55d51dffba/2/full.jsonl",
+      "content_hash": "/31/55d51dffba/2/content_hash.txt",
+      "prompt": ""
     }
   ],
   "token_usage": {
