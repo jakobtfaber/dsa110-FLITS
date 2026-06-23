@@ -3,7 +3,7 @@
   "checkpoint_id": "90459b783082",
   "strategy": "manual-commit",
   "branch": "feature/radiometer-flux-cal",
-  "checkpoints_count": 3,
+  "checkpoints_count": 4,
   "files_touched": [
     "analysis/flux_cal.py",
     "pyproject.toml",
@@ -21,13 +21,19 @@
       "transcript": "/90/459b783082/1/full.jsonl",
       "content_hash": "/90/459b783082/1/content_hash.txt",
       "prompt": "/90/459b783082/1/prompt.txt"
+    },
+    {
+      "metadata": "/90/459b783082/2/metadata.json",
+      "transcript": "/90/459b783082/2/full.jsonl",
+      "content_hash": "/90/459b783082/2/content_hash.txt",
+      "prompt": "/90/459b783082/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 35579,
-    "cache_creation_tokens": 542870,
-    "cache_read_tokens": 29015583,
-    "output_tokens": 185502,
-    "api_call_count": 133
+    "input_tokens": 148313,
+    "cache_creation_tokens": 2428317,
+    "cache_read_tokens": 85160769,
+    "output_tokens": 671152,
+    "api_call_count": 409
   }
 }
