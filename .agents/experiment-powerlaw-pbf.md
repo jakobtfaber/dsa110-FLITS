@@ -82,17 +82,37 @@ nested-sampling ΔlnZ (**−84.28**) to 0.07 — the screen and the joint fit ag
    real but modest effect — physically sensible (lower frequency, longer scattering, more
    tail in-band) — but swamped by the DSA penalty in any *global* (single-PBF) joint fit.
 
-## Implications / follow-ups (not implemented)
-- **Per-band PBF** would be needed to capture CHIME's +6 without DSA's −90 in a joint
-  fit (CHIME power-law β≈11/3, DSA exponential). The current selector is a single global
-  env toggle — a per-band override is the minimal extension.
-- The β↔x_τ physical link (x_τ = 2β/(β−2); β=11/3 ↔ α=4.4) was **not** wired in here; α
-  was kept free and independent of β. CHIME's preferred β=11/3 ↔ α=4.4 is consistent with
-  its fitted α=4.04, a mild independent corroboration worth a dedicated linked-prior test.
-- DSA wanting a tail ≤ exponential motivates testing a *thick-medium* (rounded-rise) or
+## Follow-up result — per-band PBF (implemented + confirmed)
+
+`run_joint_fit.py` now takes `--pbf-C/--pbf-D` (+ `--beta-C/--beta-D`), setting
+`model_C.pbf`/`model_D.pbf` after prepare() (the two bands are separate FRBModel
+instances, so each carries its own PBF). Joint wilhelm C1D1, CHIME=powerlaw(β=11/3),
+DSA=exp, identical settings (nlive=800, α∈[2,6], force-multi, gain-marginal):
+
+| configuration | lnZ | ΔlnZ vs all-exp |
+|---|---|---|
+| all-exp | 3809.86 ± 0.46 | 0 |
+| all-powerlaw (β=11/3) | 3725.58 ± 0.46 | **−84.3** |
+| **per-band (CHIME pl, DSA exp)** | **3813.83 ± 0.47** | **+3.97** (~6σ) |
+
+The per-band PBF is the winner: it captures CHIME's tail gain (+3.97, consistent with
+the per-band screen's +6.15 reduced by the shared-τ/α coupling) **without** DSA's −90
+penalty. Confirms in the full joint fit that the two bands want different PBF shapes —
+a single global PBF is the wrong model. **Per-band PBF should be the default for joint
+CHIME+DSA fits.**
+
+## Implications / follow-ups
+- ✅ **Per-band PBF** — done (above).
+- The β↔x_τ physical link (x_τ = 2β/(β−2); β=11/3 ↔ α=4.4) is **not** wired in; α was
+  kept free and independent of β. CHIME's preferred β=11/3 ↔ α=4.4 ≈ its fitted α=4.04,
+  a mild corroboration worth a dedicated linked-prior test.
+- DSA wanting a tail ≤ exponential motivates a *thick-medium* (rounded-rise) or
   Gaussian-image PBF for DSA, not a heavier one.
+- See [scintillation subband Δν_d](experiment-scint-subband-alpha.md): the scattering and
+  scintillation screens are distinct (C1≈85), so PBF/α from pulse-broadening probes a
+  different screen than the resolved scintillation.
 
 ## Artifacts
-- Code: `scattering/scat_analysis/burstfit.py` (this branch)
-- Joint runs: `…/flits-refit/nladder_{exp,pl}/data/joint/wilhelm_joint_fit_C1D1.json`
+- Code: `scattering/scat_analysis/burstfit.py`, `analysis/scattering-refit-2026-06/run_joint_fit.py` (this branch)
+- Joint runs: `…/flits-refit/nladder_{exp,pl,perband}/data/joint/wilhelm_joint_fit_C1D1.json`
 - Per-band screen: `…/flits-refit/nladder/pbf_band_compare.py`
