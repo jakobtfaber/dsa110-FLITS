@@ -1,0 +1,31 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "970890fb1583",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".agents/plan-burst-energetics-calibration.md",
+    "analysis/burst_energies/burst_energies.json",
+    "analysis/burst_energies/burst_energies.tex",
+    "analysis/burst_energies/references.bib",
+    "docs/rse/specs/plan-radiometer-flux-cal.md",
+    "docs/rse/specs/research-chime-singlebeam-flux-units.md",
+    "scattering/configs/telescopes.yaml"
+  ],
+  "sessions": [
+    {
+      "metadata": "/97/0890fb1583/0/metadata.json",
+      "transcript": "/97/0890fb1583/0/full.jsonl",
+      "content_hash": "/97/0890fb1583/0/content_hash.txt",
+      "prompt": "/97/0890fb1583/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 29932,
+    "cache_creation_tokens": 429474,
+    "cache_read_tokens": 5709046,
+    "output_tokens": 74777,
+    "api_call_count": 40
+  }
+}

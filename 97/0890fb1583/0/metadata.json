@@ -1,0 +1,78 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "970890fb1583",
+  "session_id": "3af9f603-f1ee-4a00-b691-0e66b3030165",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T08:27:29.914347Z",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [
+    ".agents/plan-burst-energetics-calibration.md",
+    "analysis/burst_energies/burst_energies.json",
+    "analysis/burst_energies/burst_energies.tex",
+    "analysis/burst_energies/references.bib",
+    "docs/rse/specs/plan-radiometer-flux-cal.md",
+    "docs/rse/specs/research-chime-singlebeam-flux-units.md",
+    "scattering/configs/telescopes.yaml"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "60474e84daa2",
+  "token_usage": {
+    "input_tokens": 29932,
+    "cache_creation_tokens": 429474,
+    "cache_read_tokens": 5709046,
+    "output_tokens": 74777,
+    "api_call_count": 40
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:researching-2026-06-23T07:57:21.170166Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:researching"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "b9f12dd6b963",
+      "timestamp": "2026-06-23T07:57:21.170166Z",
+      "native": {
+        "command": "/ai-research-workflows:researching"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:researching",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 7
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T08:27:29.878187Z",
+    "agent_lines": 1171,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1171,
+    "total_lines_changed": 1171,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
