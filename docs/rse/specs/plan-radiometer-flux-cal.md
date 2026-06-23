@@ -498,24 +498,23 @@ under `data/dsa/` from `iacobus:burst_npys`, + figure-reviewer) — **pending da
 **Objective:** Provide σ_S(ν) for CHIME so its band integral can be computed the same way.
 
 **Tasks:**
-- [ ] **Recon the CHIME beam model** (concrete starting points): the baseband container's
-      `ch_util`/`cosmology` beam model on h17 (the singlebeam pipeline imports `ch_util`), and the
-      Andersen+2023 primary-beam description. Confirm a callable `G_CHIME(ra,dec,freq)` or the
-      formed-beam sensitivity at the burst position. Record the chosen source in the research doc.
-- [ ] **Write the failing test** — `tests/test_chime_beam.py::test_chime_gain_boresight`: gain at
-      the beam centre = 1, falls off-axis (mirrors `dsa_beam._check`).
-- [ ] **Implement `analysis/chime_beam.py`** `beam_gain(ra,dec,freq_mhz)` from the sourced model
-      (or a documented cylinder-beam approximation if the full model is unreachable, with the
-      approximation's error stated), plus `chime_sigma_jy(...)` using the CHIME SEFD.
-- [ ] **Acquire the CHIME SEFD** (system sensitivity, 400–800 MHz; Andersen+2023 / CHIME/FRB 2018)
-      into `analysis/burst_energies/chime_sefd.csv` with provenance.
-- [ ] **Run tests, watch pass; commit.**
+- [x] **Recon the CHIME beam model** — `ch_util` unreachable (CHIME-private, not pip; `import
+      ch_util` fails on h17's default env; local clones partial). Chose the documented cylinder-beam
+      fallback anchored to Amiri+2018 (ApJ 863:48) Table 1; recorded in
+      `research-chime-singlebeam-flux-units.md` ("Phase 6 resolution").
+- [x] **Write the failing test** — `tests/test_chime_beam.py::test_chime_gain_boresight` (+ 4 more).
+- [x] **Implement `analysis/chime_beam.py`** `beam_gain(ra,dec,freq_mhz, *, ra0,dec0)` (separable
+      Gaussian, chromatic FWHMs from Table 1; error stated) + `chime_sigma_jy(...)` + SEFD derivation.
+- [x] **Acquire the CHIME SEFD** → `analysis/burst_energies/chime_sefd.csv` (34.5 Jy zenith,
+      2 k_B Tsys/A_eff from Table 1, ~0.25 dex systematic, full provenance row).
+- [x] **Run tests, watch pass; commit.**
 
 **Dependencies:** Phase 1; external CHIME beam/SEFD sources (h17 container, literature).
 
 **Verification:**
-- [ ] `pytest tests/test_chime_beam.py -v` → passed.
-- [ ] `chime_sefd.csv` present; `beam_gain` boresight=1, falls off-axis.
+- [x] `pytest tests/test_chime_beam.py -v` → passed (5/5).
+- [x] `chime_sefd.csv` present; `beam_gain` boresight=1, falls off-axis (self-check OK; half-power at
+      FWHM/2, chromatic).
 
 ### Phase 7: Open the E_iso gate — combined table + validation
 

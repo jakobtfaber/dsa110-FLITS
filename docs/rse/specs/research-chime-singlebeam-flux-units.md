@@ -133,3 +133,24 @@ limits). `flux_jy_per_unit_C` stays `null` until that step is run.
 - External method refs (to apply, not yet applied): Andersen+2023 (AJ 166, 138);
   Michilli+2021 (ApJ 910, 147); CHIME/FRB Collab. 2024 (ApJ 969, 145). Full BibTeX in
   `analysis/burst_energies/references.bib`.
+
+## Phase 6 resolution (2026-06-23) — beam + SEFD source chosen
+
+The two open questions above (which flux-cal code is reachable; what CHIME SEFD/beam to use) are now
+resolved. The full `ch_util`/CHIME beam-model package is **unreachable** from this analysis env: it is
+CHIME-private (not pip-installable), `import ch_util` fails on h17's default env (container-gated),
+and the local `baseband-analysis` clones carry only a partial `ch_util` (`catalogs/`, no beam
+module). Per the plan's sanctioned fallback we use a **documented separable-Gaussian cylinder beam**
+(`analysis/chime_beam.py`) anchored to **Amiri et al. 2018 (ApJ 863:48) Table 1** (fetched and
+verified this session):
+- E-W primary-beam FWHM 2.5 deg (400 MHz) -> 1.3 deg (800 MHz); N-S formed-beam FWHM 40' -> 20'; both
+  ~1/nu. For a baseband-localized burst (formed at its own position at transit) G_CHIME ~ 1, so the
+  beam adds little position dependence — opposite to DSA's fixed-pointing offset (up to ~2.6 deg).
+- SEFD = 2 k_B Tsys / A_eff with Tsys=50 K and A_phys=8000 m^2 (Table 1), eta=0.5 -> **34.5 Jy**
+  zenith (`analysis/burst_energies/chime_sefd.csv`), carrying a ~0.25 dex systematic that folds in
+  eta, real Tsys, and the unmodeled element-envelope / declination / band-edge terms — matching
+  CHIME/FRB Catalog 1 treating beam-model fluences as good only to a factor of a few.
+
+The absolute CHIME scale is thus a documented ~0.25 dex approximation, not the full beam model —
+adequate given the rigorous DSA refit (CALIBRATION_REVIEW.md) already established that the energetics
+rest on the calibrated per-channel fluence integral, with a comparable systematic floor per band.
