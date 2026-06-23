@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "8177f3cc42bc",
+  "strategy": "manual-commit",
+  "branch": "feature/cluster-catalog-engine",
+  "checkpoints_count": 2,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/81/77f3cc42bc/0/metadata.json",
+      "transcript": "/81/77f3cc42bc/0/full.jsonl",
+      "content_hash": "/81/77f3cc42bc/0/content_hash.txt",
+      "prompt": "/81/77f3cc42bc/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 109064,
+    "cache_creation_tokens": 2527848,
+    "cache_read_tokens": 87963944,
+    "output_tokens": 511851,
+    "api_call_count": 402
+  }
+}
