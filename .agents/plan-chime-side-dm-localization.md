@@ -2,7 +2,7 @@
 
 ---
 **Date:** 2026-06-23
-**Status:** Phase 1 done
+**Status:** Phases 1 + 3-wiring done; Phase 2 docker run in progress
 **Research:** [research-chime-side-dm-localization.md](research-chime-side-dm-localization.md)
 **Branch:** `feat/chime-side-dm-localization` (NOT main)
 ---
@@ -87,7 +87,7 @@ Produces `crossmatching/chime_side_inputs.json` (committed to the repo) + diagno
 **Automated verification:** `crossmatching/chime_side_inputs.json` exists with 12 rows, each with finite `dm_chime>0`, `dm_chime_err>0`, and `chime_ra_deg/chime_dec_deg`. **Manual:** figure-review verdicts written; no un-reviewed manifest.
 
 ## Phase 3 — wire pillars 2 & 4 (repo, test-first)
-- [ ] **3.1** Replace `position_consistent` (bare bool) with `position_agreement(dsa_coord, chime_ra_deg, chime_dec_deg, radius_deg) -> dict` mirroring `dm_agreement`:
+- [x] **3.1** Replace `position_consistent` (bare bool) with `position_agreement(dsa_coord, chime_ra_deg, chime_dec_deg, radius_deg) -> dict` mirroring `dm_agreement`:
   ```python
   def position_agreement(dsa_coord, chime_ra_deg, chime_dec_deg, radius_deg):
       """CHIME tied-beam point vs DSA position; consistent within a stated CHIME radius."""
@@ -103,10 +103,10 @@ Produces `crossmatching/chime_side_inputs.json` (committed to the repo) + diagno
               "consistent": bool(sep <= radius_deg), "reason": None}
   ```
   Update the one position test (`tests/test_association.py:104`) to assert the dict shape (inside → consistent True + sep small; far → False).
-- [ ] **3.2** Write failing tests in `tests/test_association.py`:
+- [x] **3.2** Write failing tests in `tests/test_association.py`:
   - `test_position_agreement_inside_and_outside` (sep ~0 consistent True; 13° apart False; null coord → null+reason).
   - `test_report_activates_pillars_2_and_4`: build report from the real fixture + a tiny inline CHIME-side stub (monkeypatch / temp json), assert every burst `dm_agreement.consistent is not None` and `position.consistent is not None`, golden untouched.
-- [ ] **3.3** Extend `build_association_report(fixture_path, *, ..., chime_inputs_path=None, chime_radius_deg=0.1)`:
+- [x] **3.3** Extend `build_association_report(fixture_path, *, ..., chime_inputs_path=None, chime_radius_deg=0.1)`:
   - if `chime_inputs_path`, load it → `{chime_id: {dm_chime, dm_chime_err, chime_ra_deg, chime_dec_deg}}`;
   - feed `dm_agreement(dm_chime=ci.dm_chime, dm_chime_err=ci.dm_chime_err, dm_dsa=dm, dm_dsa_err=row.get("dm_uncertainty"))`;
   - add `"position": position_agreement(row["source_coord"], ci.chime_ra_deg, ci.chime_dec_deg, chime_radius_deg)`;
