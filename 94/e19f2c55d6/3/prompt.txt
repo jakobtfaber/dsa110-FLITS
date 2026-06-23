@@ -1,0 +1,39 @@
+how do you know the conversations are active?
+
+---
+
+The Entire CLI:
+---
+```
+✻ Baked for 41m 34s
+ ▐▛███▜▌   Claude Code v2.1.185
+▝▜█████▛▘  Opus 4.8 (1M context) with xhigh effort · Claude Max
+  ▘▘ ▝▝    ~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+
+  ⎿  SessionStart:clear says:
+
+     Entire CLI will link this conversation to your next commit.
+       3 other active conversation(s) in this workspace will also be included.
+       Use 'entire status' for more information.
+
+```
+
+---
+
+Got it. I wonder if you could identify a use case for the AI research workflow skills. Just something to demonstrate how they work.
+
+---
+
+Go with 2. continue
+
+---
+
+/ai-research-workflows:implement
+
+---
+
+/ai-research-workflows:validate
+
+---
+
+/ai-research-workflows:handoff

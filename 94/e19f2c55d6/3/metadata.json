@@ -1,0 +1,250 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "94e19f2c55d6",
+  "session_id": "76f60b7a-67a7-4bf3-88a6-c83a331b6a27",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T03:28:50.829485Z",
+  "branch": "fix/issue-37-per-band-dt-min",
+  "checkpoints_count": 8,
+  "save_step_count": 7,
+  "files_touched": [
+    ".agents/handoff-dt-min-per-band.md",
+    ".agents/implement-dt-min-per-band.md",
+    ".agents/plan-dt-min-per-band.md",
+    ".agents/research-multicomponent-joint-evidence.md",
+    "scattering/scat_analysis/burstfit_joint.py",
+    "tests/test_joint_prior_ordered.py"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "20e5f65cf34b",
+  "token_usage": {
+    "input_tokens": 26275,
+    "cache_creation_tokens": 418560,
+    "cache_read_tokens": 9592772,
+    "output_tokens": 84483,
+    "api_call_count": 65
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:implement-2026-06-23T03:12:44.396901Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:implement"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "bb127bdb3283",
+      "timestamp": "2026-06-23T03:12:44.396901Z",
+      "native": {
+        "command": "/ai-research-workflows:implement"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:implement",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:validate-2026-06-23T03:20:36.198686Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:validate"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "d4e548843c5a",
+      "timestamp": "2026-06-23T03:20:36.198686Z",
+      "native": {
+        "command": "/ai-research-workflows:validate"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:validate",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:handoff-2026-06-23T03:23:47.592037Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:handoff"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "24f21e5f393f",
+      "timestamp": "2026-06-23T03:23:47.592037Z",
+      "native": {
+        "command": "/ai-research-workflows:handoff"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:handoff",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01TxWGeF3gArzejtAvafHyJw",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:research"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "20e5f65cf34b",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 138,
+        "end": 139,
+        "entry_ids": [
+          "9e6cac7f-e275-4da8-bae0-c2782702f9e9"
+        ],
+        "tool_use_id": "toolu_01TxWGeF3gArzejtAvafHyJw"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01TxWGeF3gArzejtAvafHyJw"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:research",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 8
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T03:28:50.77481Z",
+    "agent_lines": 760,
+    "agent_removed": 13,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 760,
+    "total_lines_changed": 773,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 24892,
+      "user_lines_removed": 174,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/skills/entire/SKILL.md": 16,
+        ".codex/agents/figure-reviewer.toml": 33,
+        ".codex/agents/fit-validation.toml": 91,
+        ".codex/config.toml": 6,
+        ".scratch/canfar-crossmatching/bbdata_processing_utils.py": 921,
+        ".scratch/canfar-crossmatching/chime_dm_params.json": 3362,
+        ".scratch/canfar-crossmatching/chime_dm_results.json": 99,
+        ".scratch/canfar-crossmatching/chime_dsa_onEarth.ipynb": 97,
+        ".scratch/canfar-crossmatching/dsa_dm_params.json": 12066,
+        ".scratch/canfar-crossmatching/fil_to_npy.ipynb": 859,
+        ".scratch/canfar-crossmatching/process_bbdata.ipynb": 873,
+        ".scratch/canfar-crossmatching/toa_crossmatch.ipynb": 1867,
+        ".scratch/canfar-crossmatching/toa_crossmatch.py": 117,
+        ".scratch/canfar-crossmatching/toa_crossmatch_results.json": 182,
+        ".scratch/canfar-crossmatching/toa_utilities.py": 259,
+        "AGENTS.md": 9,
+        "CONTEXT.md": 61,
+        "DATA_SOURCES.md": 22,
+        "analysis/scattering-refit-2026-06/gain_ladder.py": 35,
+        "docs/adr/0001-two-band-leverage-positioning.md": 19,
+        "docs/agents/domain.md": 53,
+        "docs/agents/issue-tracker.md": 36,
+        "docs/agents/triage-labels.md": 17,
+        "docs/codetection-science-plan.md": 89,
+        "docs/entire-tracing-checkpoints.md": 168,
+        "flits/batch/batch_runner.py": 143,
+        "flits/batch/tests/test_scint_config_discovery.py": 20,
+        "flits/plotting.py": 6,
+        "main.py": 16,
+        "matplotlibrc": 51,
+        "scintillation/ne2025/query_ne2025_scint.py": 62,
+        "scintillation/scint_analysis/consistency.py": 113,
+        "scintillation/scint_analysis/tests/test_consistency_wiring.py": 43,
+        "scratch/codex_hook_probe.py": 2,
+        "simulation/recovery_campaign.py": 182,
+        "simulation/sim_fit_bridge.py": 13,
+        "tests/test_ne2025_floor.py": 43,
+        "tests/test_recovery_campaign.py": 54,
+        "uv.lock": 2787
+      },
+      "user_removed_per_file": {
+        ".codex/config.toml": 1,
+        "analysis/scattering-refit-2026-06/gain_ladder.py": 10,
+        "flits/batch/batch_runner.py": 116,
+        "scintillation/ne2025/query_ne2025_scint.py": 1,
+        "scintillation/scint_analysis/consistency.py": 43,
+        "simulation/sim_fit_bridge.py": 3
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 233,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1057,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1452,
+      "agent_lines_removed": 113
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1454,
+      "agent_lines_removed": 113
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 1551,
+      "agent_lines_removed": 113
+    }
+  ]
+}

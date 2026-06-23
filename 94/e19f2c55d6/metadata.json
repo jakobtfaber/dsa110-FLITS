@@ -3,8 +3,9 @@
   "checkpoint_id": "94e19f2c55d6",
   "strategy": "manual-commit",
   "branch": "fix/issue-37-per-band-dt-min",
-  "checkpoints_count": 8,
+  "checkpoints_count": 16,
   "files_touched": [
+    ".agents/handoff-dt-min-per-band.md",
     ".agents/implement-dt-min-per-band.md",
     ".agents/plan-dt-min-per-band.md",
     ".agents/research-multicomponent-joint-evidence.md",
@@ -29,13 +30,19 @@
       "transcript": "/94/e19f2c55d6/2/full.jsonl",
       "content_hash": "/94/e19f2c55d6/2/content_hash.txt",
       "prompt": "/94/e19f2c55d6/2/prompt.txt"
+    },
+    {
+      "metadata": "/94/e19f2c55d6/3/metadata.json",
+      "transcript": "/94/e19f2c55d6/3/full.jsonl",
+      "content_hash": "/94/e19f2c55d6/3/content_hash.txt",
+      "prompt": "/94/e19f2c55d6/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 43162,
-    "cache_creation_tokens": 202788,
-    "cache_read_tokens": 4583234,
-    "output_tokens": 50950,
-    "api_call_count": 48
+    "input_tokens": 69437,
+    "cache_creation_tokens": 621348,
+    "cache_read_tokens": 14176006,
+    "output_tokens": 135433,
+    "api_call_count": 113
   }
 }
