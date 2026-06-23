@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "8b90973d0fb2",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "scratch/codetection/why_missed.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/8b/90973d0fb2/0/metadata.json",
+      "transcript": "/8b/90973d0fb2/0/full.jsonl",
+      "content_hash": "/8b/90973d0fb2/0/content_hash.txt",
+      "prompt": "/8b/90973d0fb2/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30598,
+    "cache_creation_tokens": 451232,
+    "cache_read_tokens": 8308829,
+    "output_tokens": 80389,
+    "api_call_count": 50
+  }
+}
