@@ -468,3 +468,7 @@ Reviewed, go ahead and plan the radiometer flux-cal step.
 Execute: /ai-research-workflows:implementing-plans 
 
 On the pointing-Dec item, I couldn't find stored info in the filterbank files but I was able to query our detection logs and I've compiled the pointings of the primary beam for each event into this csv, labeled "RA ibeam" and "Dec ibeam": "~/Downloads/CHIME_DSA Codetections - DSA Primary Beam Pointings - Sheet1.csv"
+
+---
+
+Build a physics-based justification for estimator choice and then do the rigorous calibrated refit
