@@ -3,7 +3,7 @@
   "checkpoint_id": "de58f2671cd8",
   "strategy": "manual-commit",
   "branch": "feature/radiometer-flux-cal",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     ".agents/cropped-residual-target-list.md",
     ".agents/experiment-wilhelm-nladder.md"
@@ -20,13 +20,19 @@
       "transcript": "/de/58f2671cd8/1/full.jsonl",
       "content_hash": "/de/58f2671cd8/1/content_hash.txt",
       "prompt": "/de/58f2671cd8/1/prompt.txt"
+    },
+    {
+      "metadata": "/de/58f2671cd8/2/metadata.json",
+      "transcript": "/de/58f2671cd8/2/full.jsonl",
+      "content_hash": "/de/58f2671cd8/2/content_hash.txt",
+      "prompt": "/de/58f2671cd8/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 31177,
-    "cache_creation_tokens": 459590,
-    "cache_read_tokens": 8909313,
-    "output_tokens": 88730,
-    "api_call_count": 53
+    "input_tokens": 31791,
+    "cache_creation_tokens": 697409,
+    "cache_read_tokens": 11298508,
+    "output_tokens": 101067,
+    "api_call_count": 64
   }
 }
