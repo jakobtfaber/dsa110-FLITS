@@ -8,8 +8,12 @@ scale, k-correct, and sum:
 
     E_iso = (4 pi D_L(z)^2 / (1+z)) [ s_C int_CHIME F_C dnu + s_D int_DSA F_D dnu ]
 
-where s_C, s_D are the per-band flux scales (Jy per native .npy fluence unit;
-`flux_jy_per_unit` in configs/telescopes.yaml).
+where s_C, s_D are the per-band flux scales (`flux_jy_per_unit` in
+configs/telescopes.yaml). The live setting is "fluxcal": each band's absolute Jy
+integral is computed per channel by the radiometer conversion in
+analysis/flux_cal.joint_band_fluence_jy_ms_hz (sigma_S(nu) folded in), not a
+single Jy-per-native scalar. A float scale (the legacy native-units * scalar
+path) and None (uncalibrated) are still accepted.
 
 Why the flux scale is mandatory (see analysis/burst_energies/CALIBRATION_REVIEW.md):
 the joint fit recovers c0 in the input dynamic spectrum's NATIVE units, and CHIME
@@ -131,7 +135,7 @@ def _band_jy(scale, i_native, nick, fluence_fn):
         return None, False
     if scale == "fluxcal":
         if fluence_fn is None:
-            raise NotImplementedError("fluxcal path not wired for this band yet (CHIME is Phase 6)")
+            raise NotImplementedError("fluxcal selected but no fluence_fn supplied for this band")
         return float(fluence_fn(nick)), True
     return i_native * float(scale), True
 
