@@ -136,3 +136,7 @@ Approved. Commit research doc and tee up experiment.
 ---
 
 Launch experiment.
+
+---
+
+I don't understand the reason for the multi-hour wall time, can you elaborate.
