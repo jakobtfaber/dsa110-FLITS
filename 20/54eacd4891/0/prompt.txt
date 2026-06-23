@@ -177,3 +177,7 @@ Re-derive per-burst target list from cropped-data residuals first. Then run C1D2
 <status>completed</status>
 <summary>Background command "Poll for C1D2 completion + compute dlnZ vs C1D1" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+Are we defining just one functional form for the pulse broadening function?
