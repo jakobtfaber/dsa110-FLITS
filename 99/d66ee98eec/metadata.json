@@ -3,7 +3,7 @@
   "checkpoint_id": "99d66ee98eec",
   "strategy": "manual-commit",
   "branch": "docs/issue-37-nladder-resolved",
-  "checkpoints_count": 12,
+  "checkpoints_count": 22,
   "files_touched": [
     ".agents/handoff-dt-min-per-band.md",
     ".agents/implement-dt-min-per-band.md",
@@ -21,13 +21,19 @@
       "transcript": "/99/d66ee98eec/1/full.jsonl",
       "content_hash": "/99/d66ee98eec/1/content_hash.txt",
       "prompt": "/99/d66ee98eec/1/prompt.txt"
+    },
+    {
+      "metadata": "/99/d66ee98eec/2/metadata.json",
+      "transcript": "/99/d66ee98eec/2/full.jsonl",
+      "content_hash": "/99/d66ee98eec/2/content_hash.txt",
+      "prompt": "/99/d66ee98eec/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 6308,
-    "cache_creation_tokens": 81673,
-    "cache_read_tokens": 11257141,
-    "output_tokens": 65012,
-    "api_call_count": 43
+    "input_tokens": 78030,
+    "cache_creation_tokens": 1265238,
+    "cache_read_tokens": 39544711,
+    "output_tokens": 280914,
+    "api_call_count": 190
   }
 }
