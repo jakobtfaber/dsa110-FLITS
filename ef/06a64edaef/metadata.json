@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "ef06a64edaef",
+  "strategy": "manual-commit",
+  "branch": "ci/ne2025-extra-run-floor-tests",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "noxfile.py",
+    "pyproject.toml"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ef/06a64edaef/0/metadata.json",
+      "transcript": "/ef/06a64edaef/0/full.jsonl",
+      "content_hash": "/ef/06a64edaef/0/content_hash.txt",
+      "prompt": "/ef/06a64edaef/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1671,
+    "cache_creation_tokens": 36833,
+    "cache_read_tokens": 9626256,
+    "output_tokens": 30535,
+    "api_call_count": 32
+  }
+}

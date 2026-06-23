@@ -1,0 +1,183 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "ef06a64edaef",
+  "session_id": "7718779b-4573-47bb-82a9-eca51458ccfd",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T18:01:27.033086316Z",
+  "branch": "ci/ne2025-extra-run-floor-tests",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "noxfile.py",
+    "pyproject.toml"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8",
+  "turn_id": "b1ce6593d08c",
+  "checkpoint_transcript_start": 1228,
+  "transcript_lines_at_start": 1228,
+  "token_usage": {
+    "input_tokens": 1671,
+    "cache_creation_tokens": 36833,
+    "cache_read_tokens": 9626256,
+    "output_tokens": 30535,
+    "api_call_count": 32
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_012oUsNJ3nXEdjZL5gyLw8YX",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "b1ce6593d08c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 371,
+        "end": 372,
+        "entry_ids": [
+          "24325f1a-87b4-44a0-8734-7b5476c0f75d"
+        ],
+        "tool_use_id": "toolu_012oUsNJ3nXEdjZL5gyLw8YX"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_012oUsNJ3nXEdjZL5gyLw8YX"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_015F9xeLnsf9poLdKmbZHEKD",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:researching"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "b1ce6593d08c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 589,
+        "end": 590,
+        "entry_ids": [
+          "fbce618f-f4bd-4be4-b812-ca40e77e5c5d"
+        ],
+        "tool_use_id": "toolu_015F9xeLnsf9poLdKmbZHEKD"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_015F9xeLnsf9poLdKmbZHEKD"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:researching",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01C2d43vVFus4YiVvH4XoDf1",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:running-experiments"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "b1ce6593d08c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 727,
+        "end": 728,
+        "entry_ids": [
+          "5ea72ce5-bc7a-4956-8f2b-aa012c3e21b5"
+        ],
+        "tool_use_id": "toolu_01C2d43vVFus4YiVvH4XoDf1"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01C2d43vVFus4YiVvH4XoDf1"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:running-experiments",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01PFwthqJp34rzTsgeGsRwY8",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:planning-implementations"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "b1ce6593d08c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 846,
+        "end": 847,
+        "entry_ids": [
+          "332a7aa6-5eaa-4b79-b793-dfd8d170c67b"
+        ],
+        "tool_use_id": "toolu_01PFwthqJp34rzTsgeGsRwY8"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01PFwthqJp34rzTsgeGsRwY8"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:planning-implementations",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 14
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T18:01:26.925465423Z",
+    "agent_lines": 4,
+    "agent_removed": 2,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 4,
+    "total_lines_changed": 6,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 4,
+      "agent_lines_removed": 2
+    }
+  ]
+}

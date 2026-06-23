@@ -1,0 +1,31 @@
+<task-notification>
+<task-id>b84vevw0g</task-id>
+<tool-use-id>toolu_01Rj89NoppM9nxKiMnjJJxUZ</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b84vevw0g.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll PR #16 checks until Python tests resolve" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>b0v9gxejo</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b0v9gxejo.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for and confirm main CI run is green" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Add mwprop to a galactic/test extra
+
+---
+
+<task-notification>
+<task-id>b0qzmvhda</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b0qzmvhda.output</output-file>
+<status>completed</status>
+<summary>Background command "Install repo+mwprop in venv and run NE2025 test" completed (exit code 0)</summary>
+</task-notification>
