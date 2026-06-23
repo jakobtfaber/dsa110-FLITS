@@ -236,3 +236,82 @@ After wiring the per-channel radiometer calibration (Phase 5), the first DSA flu
    unaffected; the absolute energy is not, so this estimator reconciliation is tracked before any
    E_iso ships. (TNS-suffix note: the local detection log lists ...207A/310A/506A; the catalog/TNS
    list ...207C/310F/506D — same bursts by S/N, local suffix likely wrong.)
+
+## Estimator choice — physics justification (linear integral over boxcar matched-filter)
+
+The residual ~1-3x (Section above) is a choice between two fluence estimators. The physics
+selects the linear integral:
+
+1. **Fluence is conserved under scattering.** Scattering convolves the intrinsic profile with a
+   unit-area exponential kernel (timescale tau): it redistributes flux in time but conserves
+   `int S dt`. The physically meaningful fluence for E_iso (total radiated energy) is therefore the
+   integral over the FULL scattered profile, tail included.
+
+2. **The boxcar matched-filter is biased low for scattered bursts.** The catalog fluence
+   `F = (S/N) SEFD sqrt(W) / sqrt(n_pol dnu)` assumes a top-hat of the S/N-maximizing width W. For a
+   scattered burst the S/N-optimal boxcar is narrower than the full scattered extent (adding tail
+   past the e-folding grows noise faster than signal), so it misses tail flux. The bias goes as
+   `W_box / W_eff < 1`, with `W_eff = int P dt / P_peak` the equivalent width.
+
+3. **The data show this signature.** The linear-vs-catalog ratio tracks burst structure: compact
+   oran (95% of flux within +-0.5 ms) agrees (0.90x); tailed/structured zach and whitney sit ~2.2x
+   high — the `W_eff/W_box > 1` pattern of a catalog that under-counts the tail.
+
+**Decision: the linear integral is the correct E_iso estimator** (conserved, tail-complete), made
+robust by integrating the burst's significant extent (to the noise floor, off-pulse baseline
+subtracted) rather than an arbitrary wide window (zach's far +-3 ms blob is noise/structure, not a
+clean tail, and must be excluded). The robust realization is the **model-based fluence from the
+calibrated scattering fit**: the fit gives the profile (intrinsic width (x) exp-tau tail) and the
+calibrated amplitude c0(nu); integrating the MODEL includes the tail and excludes noise. This
+unifies the estimator with the 5c-B re-fit — one calibrated fit yields both the relaxed gamma_D and
+the tail-complete fluence. Report the catalog matched-filter value alongside, ratio = tail-fraction
+diagnostic.
+
+## Rigorous calibrated re-fit of gamma_D (2026-06-23) — `refit_calibrated.py`
+
+The bandpass proxy (Section "bandpass diagnostic", `plot_bandpass_check.py`) only measured a log-log
+slope and ignored noise weighting. This re-runs the **actual M2 MCMC** (c0, t0, gamma, tau_1ghz)
+twice per railed burst with an identical setup — on the S/N data d(nu,t), and on the flux-calibrated
+data d·sigma_S(nu) with per-channel noise sigma_S(nu) — so the beam-edge channels are down-weighted
+self-consistently. The gamma prior floor is opened from the default -5 to **-10** so the calibration
+shift is not clipped at the old rail. Figure `refit_calibrated.png` (figure-reviewed: match).
+
+**Analytic backbone (oracle).** For a power-law spectrum the noise-weighted fit satisfies
+`gamma_cal = gamma_SN + slope(sigma_S)` exactly: multiplying the data by sigma_S tilts the spectrum
+and the matching 1/sigma_S noise weighting leaves the channel weights unchanged, so the recovered
+index shifts by precisely the beam slope. `slope(sigma_S) > 0` off-axis (sigma_S rises where G falls
+toward the band edges) ⇒ calibrating makes gamma LESS negative; on-axis (flat sigma_S) it does not
+move.
+
+**Results** (median, with the analytic prediction `slope_s` as cross-check):
+
+| burst | G(1.4GHz) | gamma_SN | gamma_cal | d_gamma (MCMC) | slope_s (analytic) |
+|---|---|---|---|---|---|
+| chromatica | 0.25 | -9.91 | -9.90 | +0.01 | +2.15 |
+| oran | 0.67 | -8.49 | -7.84 | +0.65 | +0.62 |
+| phineas | 1.00 | -9.91 | -9.95 | -0.04 | +0.00 |
+| zach | 0.68 | -7.50 | -7.05 | +0.45 | +0.57 |
+| freya | 0.20 | -6.04 | -3.81 | +2.23 | +2.56 |
+
+**Three findings:**
+
+1. **The -5 rail is a real single-band DSA preference, not a joint-coupling artifact.** With the
+   floor opened, gamma_SN plunges to -6…-9.9 for every burst — the DSA band alone pushes hard against
+   whatever floor is set. The joint fit's gamma_D ≈ -5 (blue marks) was literally the old prior floor.
+
+2. **The calibration mechanism is verified.** d_gamma(MCMC) matches slope(sigma_S) for the four
+   bursts not pinned at the floor: oran 0.65 vs 0.62, zach 0.45 vs 0.57, freya 2.23 vs 2.56, phineas
+   -0.04 vs 0.00. The relaxation is real and beam-correlated — largest for the lowest-G (most
+   off-axis) bursts. freya (G=0.20) lifts -6.04 → **-3.81**, a physically plausible index.
+
+3. **Beam vs astrophysics splits by on/off-axis.** On-axis **phineas** (G≈1.0, slope_s≈0) does NOT
+   relax (-9.91 → -9.95): its steepness is astrophysical or a non-beam instrumental effect, NOT
+   band-edge. **chromatica** (G=0.25) is so steep it pins at the -10 floor even calibrated — a
+   beam-dominated near-total edge dropout (its +2.15 shift stays clipped).
+
+**Implication for E_iso.** gamma_D as a free per-band index does not reliably recover an astrophysical
+spectral index from the narrow (14%) DSA band — it is dominated by beam-edge sensitivity off-axis and
+a residual steep falloff on-axis. So the energy estimate must NOT extrapolate the gamma_D power law;
+the **calibrated per-channel fluence integral** (which integrates the measured channels directly) is
+the robust estimator and is insensitive to the gamma rail. This reinforces the estimator decision
+above.
