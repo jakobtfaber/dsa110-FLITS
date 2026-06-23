@@ -78,3 +78,31 @@ def test_burst_epoch_position_from_yaml():
     mjd, ra, dec = burst_epoch_position("casey")
     assert abs(mjd - 60369.371) < 1e-3
     assert abs(ra - 169.983542) < 1e-6 and abs(dec - 70.676222) < 1e-6
+
+
+SAMPLE = [
+    "casey",
+    "chromatica",
+    "freya",
+    "hamilton",
+    "isha",
+    "johndoeii",
+    "mahi",
+    "oran",
+    "phineas",
+    "whitney",
+    "wilhelm",
+    "zach",
+]
+
+
+def test_dsa_pointing_csv_and_offsets():
+    # every sample burst has a pointing Dec near the DSA survey strip; offset is within the beam
+    from analysis.flux_cal import burst_epoch_position, dsa_beam_offset, dsa_pointing_dec
+
+    for n in SAMPLE:
+        pdec = dsa_pointing_dec(n)
+        assert 70.0 < pdec < 73.0, (n, pdec)  # DSA transit pointing ~71.6 deg
+        _, _ra, dec = burst_epoch_position(n)
+        theta, phi = dsa_beam_offset(dec, pdec)
+        assert 0.0 <= theta < 5.0 and phi == 0.0, (n, theta)  # inside the primary beam
