@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "7de2a34cde4a",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/rse/specs/research-foreground-galaxies-sightlines.md",
+    "galaxies/v2_0/config.py",
+    "galaxies/v2_0/engines.py",
+    "galaxies/v2_0/search.py",
+    "galaxies/v2_0/test_search_pipeline.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/7d/e2a34cde4a/0/metadata.json",
+      "transcript": "/7d/e2a34cde4a/0/full.jsonl",
+      "content_hash": "/7d/e2a34cde4a/0/content_hash.txt",
+      "prompt": "/7d/e2a34cde4a/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30598,
+    "cache_creation_tokens": 451232,
+    "cache_read_tokens": 8308829,
+    "output_tokens": 80389,
+    "api_call_count": 50
+  }
+}
