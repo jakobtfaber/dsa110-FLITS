@@ -1,0 +1,29 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "649b5bb1203e",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "analysis/burst_energies/chime_sefd.csv",
+    "analysis/chime_beam.py",
+    "docs/rse/specs/plan-radiometer-flux-cal.md",
+    "docs/rse/specs/research-chime-singlebeam-flux-units.md",
+    "tests/test_chime_beam.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/64/9b5bb1203e/0/metadata.json",
+      "transcript": "/64/9b5bb1203e/0/full.jsonl",
+      "content_hash": "/64/9b5bb1203e/0/content_hash.txt",
+      "prompt": "/64/9b5bb1203e/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 30071,
+    "cache_creation_tokens": 439770,
+    "cache_read_tokens": 6988327,
+    "output_tokens": 76638,
+    "api_call_count": 45
+  }
+}

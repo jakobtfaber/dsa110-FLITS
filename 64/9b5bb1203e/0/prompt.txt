@@ -1,0 +1,97 @@
+/ai-research-workflows:researching
+
+---
+
+Ok - run this way.
+
+---
+
+<agent-message from="priorart-galaxies">
+# Prior-Art Pass: FRB Foreground Galaxy / CGM Methods
+
+All arXiv IDs returned by the semantic paper-search backend or independently verified. Two attribution issues flagged inline: (i) the brief's "Sammons et al. 2023, arXiv:2309.07256" — that ID is the *cloudlet refractive-lensing* paper (Swinburne group; lead author is NOT Sammons). Treat as misattributed. (ii) Perplexity hallucinated several MgII/PATH arXiv IDs — discarded and replaced with verified ones.
+
+## A. Methods to identify intervening/foreground galaxies along FRB sightlines
+
+- Impact-parameter + spec-z association at b⊥ ≲ r200 is the standard CGM-association cut. FLIMFLAM uses deeper narrow-field spectroscopy of galaxies at b⊥ ≲ r200, separate from wide-field spectroscopy for the IGM density field (Khrykin/Lee/Simha et al. 2024, arXiv:2402.00505).
+- "FRB foreground mapping" / DM-partition technique: FLIMFLAM DR1 reconstructs the ~Mpc-scale matter density field along 8 sightlines (ARGO Bayesian reconstruction) + halo associations, fitting a DM model with MW/IGM/halo/host terms — the canonical end-to-end pipeline (arXiv:2402.00505). Forecast precursors: Lee et al. 2022 + Simha et al. 2020 (foreground spectroscopy cuts cosmic-variance scatter ×2–3).
+- FLIMFLAM constrains CGM/IGM baryon partition (feedback proxy): f_igm = 0.59 (+0.11/−0.10), CGM gas fraction f_gas = 0.55 (+0.26/−0.29) for 10^10–10^13 M⊙ halos (f_cgm = 0.20 of cosmic baryons in CGM); first systematic split of host DM into halo vs ISM/engine. Feedback prescriptions strongly change the partition (Khrykin et al. 2023). (arXiv:2402.00505)
+- Per-sightline excess-DM attribution to specific halos/groups: Khrykin et al. 2023 (arXiv:2303.07387, 4 FRBs); Simha 2020 (arXiv:2005.13157, FRB 190608); Simha 2021 (arXiv:2108.09881, FRB 180924).
+- Group/cluster sightline crowding: FRB 20190520B intersects foreground groups/clusters, 701 redshifts (Lee 2023, arXiv:2306.05403). FRB 20221219A (DSA-110) sightline "significantly overcrowded" (CDF ~0.99 vs expected N_halos = 0.18), two intervening halos (Connor 2024, arXiv:2405.14182).
+- Baseband/interferometric foreground searches — DSA-110: first FRB+host catalog, 11 FRBs (Law/Sharma 2023, arXiv:2307.03344). Multi-halo burst (arXiv:2405.14182) identifies two interveners at z=0.492 (b=43 kpc) and z=0.438 (b=36 kpc) via optical/IR + SED fitting, then DM_igh ≈ 10 & 14 pc cm⁻³ from COS-Halos N_HII(b,M⋆).
+- Host-association statistical framework: PATH (Aggarwal et al. 2021, arXiv:2102.10627) — Bayesian P(O_i|x) from coords+uncertainties, fluxes, angular sizes. Extensions: PATH+host models (arXiv:2606.10538); chance-coincidence sub-sample (Bhandari 2022, arXiv:2009.10747).
+- Virial-radius/impact-parameter cut originates in Prochaska & Zheng 2019 — which warns the r200 "edge" is artificial: integrating to 2·r200 adds tens of pc cm⁻³ at b ≳ 0.5 r200. The cut radius is itself a modeling choice affecting DM/τ budgets.
+
+## C. CGM / halo-gas → DM and scattering (τ) models
+
+mNFW gas profile (Prochaska & Zheng 2019, arXiv:1901.11051):
+- ρ_b(r) = ρ_b^0 / [y^(1−α)(y0+y)^(2+α)], y ≡ c(r/r200); fiducial y0 = 2, α = 2. NFW disfavored for gas (too-high inner DM/short cooling time); mNFW flattens the core.
+- Fiducial f_b,halo = 0.75 (25% of baryons in stars/ISM). DM_MW,halo ≈ 50–80 pc cm⁻³ to 200 kpc; a 10^12 M⊙ halo gives tens of pc cm⁻³. FLIMFLAM uses this exact form (y0=α=2), f_gas free, stellar→halo via Moster 2013. Reference code: github.com/FRBs.
+
+Macquart relation (Macquart et al. 2020, Nature 581; arXiv:2005.13161 — verified):
+- ⟨DM_cosmic⟩ ∝ ∫ f_IGM(1+z)/E(z) dz (~935·f_IGM·I(z) pc cm⁻³; functional form McQuinn 2014/Inoue 2004, Macquart is the observational confirmation). The baseline against which "excess" DM is attributed to foreground halos.
+
+Scattering from intervening halos / CGM cloudlets:
+- Vedantham & Phinney 2019 (arXiv:1811.10876, MNRAS 483, 971 — verified): scattering by cool (~10^4 K) CGM clumps, on the McCourt 2018 "fog"/shattering model (sub-pc cloudlets, N_e ~ 10^17 cm⁻²). Foundational.
+- Cloudlet refractive lensing (arXiv:2309.07256 — "Sammons 2023" in brief is MISATTRIBUTED; this is the sub-pc-cloudlet lensing paper, Swinburne group): an FRB within r200 of a galaxy is lensed into ~20 refractive images, ~10.5 ms lensing timescale (f_V^200=10⁻⁴, r200=100 kpc, N_e^c=10^17 cm⁻², r_c=0.1 pc, 1 GHz); single-cloudlet τ ~ 35 μs. Such cloudlets would *suppress* scintillation.
+- Ocker, Cordes & Chatterjee 2021 (arXiv:2101.04784 — verified): THE geometric-leverage paper. τ ≈ 48.03 μs · A_τ F̃ DM_ℓ² / [(1+z_ℓ)³ ν⁴] · G_scatt, with G_scatt = 2 d_sl d_lo / (L d_so) for a thin layer — the lever-arm boost requested. Finds F̃ ≥10× smaller in halos than disk; MW-halo τ ≲ 12 μs at 1 GHz; intervening-halo limits for FRB 181112 (≲21 μs) & 191108 (≲4 ns) → halos make negligible scattering for those sightlines. BUT explicitly: an intervening halo CAN amplify scattering ×100+ vs the MW halo via leverage; host still often dominates.
+- Cordes et al. 2022 (arXiv:2108.01172 — verified): 14 FRBs; IGM+halos contribute to DM "but evidently not to scattering, which is then dominated by host galaxies." Uses τ as a host-DM + redshift estimator. Scattering formalism (w/ Cordes 2016, arXiv:1605.05890) reused by the DSA multi-halo paper.
+- Ocker et al. 2025, CGM turbulence microphysics (arXiv:2503.02329): hot-CGM scattering negligible (≪1 μs at 1 GHz); cool CGM detectable depending on geometry.
+- Cosmic-web scattering (arXiv:2603.22108): sheets/filaments negligible; turbulent cloudlets in intervening massive-halo CGM detectable on rare sightlines. Companion: arXiv:2603.00336.
+- CGM cloud-size limits from refractive scattering (arXiv:2504.19562): bulk of low-z cool CGM (n_e ≲ 10⁻² cm⁻³) likely cannot produce two refractive images / scattering unless clouds ≲0.1 pc — disconfirming-leaning.
+
+## D. MgII absorbers as intervening cool-gas tracers for FRB DM/scattering
+
+- Direct MgII→FRB-DM/scattering links are essentially UNCONFIRMED. No published paper ties an individual MgII absorber to a measured FRB DM or τ excess on the same sightline. Perplexity asserted such work but produced only hallucinated IDs — treat MgII→FRB as a GAP, not prior art. Potential novelty angle for the team.
+- MgII as a cool-CGM tracer (established, quasar-based, not FRB): W(MgII λ2796) declines with impact parameter; strong absorbers cluster at small b; covering fraction high within ~100–150 kpc of L* galaxies (MAGIICAT — Nielsen 2013; Chen 2010; Lan & Fukugita 2018). (Secondary-level synthesis; individual MAGIICAT IDs not separately verified this pass.)
+- MgII in clusters / DESI×SDSS: Anand et al. 2022 (arXiv:2201.07811), covering fractions ~4–5× random. MEGAFLOW X (arXiv:2312.01762) for groups.
+- Closest in spirit (not MgII): the DSA multi-halo paper (arXiv:2405.14182) uses COS-Halos N_HII(b,M⋆) — same cool photoionized phase MgII traces — for DM_igh. The practical "cool-CGM → DM" template to adapt to MgII.
+
+## E. Disconfirming evidence & limitations
+
+Scattering usually host-/MW-dominated, not foreground-dominated:
+- Cordes 2022 (arXiv:2108.01172): halos contribute to DM "but evidently not to scattering, which is dominated by host galaxies."
+- Ocker 2021 (arXiv:2101.04784): measured intervening-halo τ negligible for 181112/191108; F̃ ≥10× below disk. (Caveat: leverage can boost ×100 in favorable geometry.)
+- FRB 20190520B (Ocker 2022, arXiv:2202.13458): "large dispersion and scattering dominated by the host galaxy" — explicit host-dominated counterexample. Circumsource variability: arXiv:2210.01975.
+- CHIME population modeling (arXiv:2502.05838, arXiv:2107.10858): scattering predominantly host/circumsource.
+- CGM cloud-size limits (arXiv:2504.19562): realistic intervening CGM adds little scattering.
+- COUNTERPOINT for balance: the DSA multi-halo burst (arXiv:2405.14182) concludes the host does NOT dominate scattering for FRB 20221219A — i.e., overcrowded intervening sightlines CAN dominate, presented as the exception requiring sightline overcrowding. This is exactly the regime the high-Dec co-detection sample probes.
+
+Photo-z incompleteness / catalog depth, esp. high Dec:
+- DESI Legacy photo-z (Duncan 2022, arXiv:2203.01949; Zhou 2021, arXiv:2001.06018, σ_NMAD~0.02 for LRGs) degrade at faint mags; spec-z training sparse at high Dec / faint end. SOM analyses (arXiv:2409.14799, arXiv:2207.08657): photo-z unreliable where galaxies under-represented in training set — directly relevant to Dec > +70.
+- FRBs with photo-z only (arXiv:2603.00371, Rubin-era forecast): photo-z errors degrade H0 ~7%, but missing dim/high-z hosts degrade ~47–62% — dominant high-Dec risk is catalog DEPTH / missing faint foreground galaxies, not photo-z scatter.
+- SDSS spectroscopy largely excludes Dec > +70; GLADE+ shallow; Pan-STARRS lacks spectroscopy. A high-Dec foreground search is photometry-limited and spec-z-starved — real, citable, though no paper quantifies FRB-foreground completeness specifically at Dec > +70 (gap).
+
+False-association risk:
+- PATH (arXiv:2102.10627) quantifies chance coincidence; localization-precision bias (arXiv:2502.16791) shows hosts stable until σ_loc ≳ 2″, then degrade — large-b foreground association with coarse localization is fragile.
+- Selection biases (Seebeck/Shannon 2021, arXiv:2112.07639): radio selection (high-DM/low-scattering) skews the sample, biasing foreground-incidence stats.
+- No single FRB-specific paper gives a contamination number for intervening (vs host) association under photo-z only (gap).
+
+## Key papers (deduplicated, verified arXiv IDs)
+- Prochaska & Zheng 2019 (mNFW) — arXiv:1901.11051
+- Macquart 2020 (Nature; Macquart relation) — arXiv:2005.13161
+- Khrykin/Lee/Simha 2024 (FLIMFLAM DR1) — arXiv:2402.00505
+- Khrykin 2023 (FLIMFLAM excess-DM) — arXiv:2303.07387
+- Lee 2023 (FRB 20190520B foreground clusters) — arXiv:2306.05403
+- Simha 2020 (FRB 190608) — arXiv:2005.13157; Simha 2021 (FRB 180924) — arXiv:2108.09881
+- Ocker, Cordes & Chatterjee 2021 (halo scattering + G_scatt leverage) — arXiv:2101.04784
+- Cordes 2022 (DM/τ, host-dominated scattering) — arXiv:2108.01172
+- Vedantham & Phinney 2019 (CGM cool-clump scattering) — arXiv:1811.10876
+- Cloudlet refractive lensing (~20 images, ~10.5 ms; "Sammons 2023" misattributed) — arXiv:2309.07256
+- Ocker 2025 (CGM turbulence microphysics) — arXiv:2503.02329
+- CGM cloud-size limits — arXiv:2504.19562
+- Cosmic-web scattering — arXiv:2603.22108; CGM scattering morphology — arXiv:2603.00336
+- Connor 2024 (DSA-110 multi-halo FRB 20221219A) — arXiv:2405.14182
+- Law/Sharma 2023 (DSA-110 first FRB+host catalog) — arXiv:2307.03344
+- Ocker 2022 (FRB 20190520B host-dominated) — arXiv:2202.13458
+- Aggarwal 2021 (PATH) — arXiv:2102.10627
+- Seebeck/Shannon 2021 (FRB selection biases) — arXiv:2112.07639; localization-precision bias — arXiv:2502.16791
+- Duncan 2022 (Legacy DR8 photo-z) — arXiv:2203.01949; Rubin-era FRB photo-z impact — arXiv:2603.00371
+- Cordes 2016 (scattering formalism) — arXiv:1605.05890; Radio scattering horizons (Ocker 2022) — arXiv:2203.16716
+
+## Gaps / could not confirm
+- MgII → FRB DM/scattering: NO verified primary source. MgII–CGM baseline relations (MAGIICAT) exist but were synthesized from secondary sources; the FRB-specific link is a genuine gap — a potential novelty angle for the team.
+- arXiv:2309.07256 authorship: confirmed as the cloudlet refractive-lensing paper (Swinburne group) but lead author is NOT Sammons — the brief's citation key looks wrong; re-check before publication. A separate Sammons et al. FRB-scattering-as-cosmological-probe paper may exist but was not surfaced — worth a targeted ADS author search.
+- High-Dec (>+70°) FRB-foreground completeness: no paper quantifies catalog completeness for FRB sightlines specifically at Dec > +70; the spec-z-starvation argument is sound but uncited at that specificity — state as the team's own assessment.
+- Quantified photo-z-only false-positive rate for intervening (vs host) association: reasoned in the literature but no single number — gap.
+</agent-message>
