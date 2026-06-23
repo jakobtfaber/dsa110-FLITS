@@ -1,0 +1,8 @@
+<task-notification>
+<task-id>bz0upxyau</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/bz0upxyau.output</output-file>
+<status>completed</status>
+<summary>Background command "cd /data/research/astrophysics/frbs/chime-dsa-codetections
+timeout 3600 bash bin/baseband_analysis_python.sh scripts/extract_chime_side_inputs.py" completed (exit code 0)</summary>
+</task-notification>
