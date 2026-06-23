@@ -225,3 +225,9 @@ commit excluded files.
 ---
 
 so what did we find
+
+---
+
+run per-band PBF.
+
+also include scintillation bandwidth fits and measurements of alpha fitting dnu as a function of subband across 400-1500 MHz.
