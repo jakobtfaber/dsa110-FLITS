@@ -60,3 +60,28 @@ def chance_probability(dm: float, **kw) -> float:
 def expected_chance_associations(dms, **kw) -> float:
     """Sample-level expected chance count = sum of per-burst mu."""
     return sum(chance_mu(d, **kw) for d in dms)
+
+
+# --- Pillar 2: independent DM agreement ---------------------------------------
+def dm_agreement(
+    *, dm_chime, dm_chime_err, dm_dsa, dm_dsa_err, n_sigma_thresh: float = 3.0
+) -> dict:
+    """CHIME-vs-DSA DM consistency, each with its own error. Null+reason when CHIME DM absent."""
+    if dm_chime is None or dm_dsa is None:
+        return {
+            "delta": None,
+            "sigma": None,
+            "n_sigma": None,
+            "consistent": None,
+            "reason": "no CHIME DM available",
+        }
+    delta = abs(dm_chime - dm_dsa)
+    sigma = math.hypot(dm_chime_err or 0.0, dm_dsa_err or 0.0)
+    n = delta / sigma if sigma > 0 else float("inf")
+    return {
+        "delta": delta,
+        "sigma": sigma,
+        "n_sigma": n,
+        "consistent": bool(n <= n_sigma_thresh),
+        "reason": None,
+    }

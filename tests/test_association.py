@@ -9,6 +9,7 @@ from crossmatching.association import (
     OMEGA_WIN_BASELINE_DEG2,
     chance_mu,
     chance_probability,
+    dm_agreement,
     expected_chance_associations,
     f_dm,
 )
@@ -49,3 +50,22 @@ def test_expected_chance_associations_sums_mu():
     assert expected_chance_associations(dms, **BASE) == pytest.approx(
         sum(chance_mu(d, **BASE) for d in dms), rel=1e-12
     )
+
+
+# --- Pillar 2: independent DM agreement ---------------------------------------
+def test_dm_agreement_consistent():
+    r = dm_agreement(dm_chime=500.0, dm_chime_err=2.0, dm_dsa=502.0, dm_dsa_err=1.0)
+    assert r["delta"] == pytest.approx(2.0)
+    assert r["sigma"] == pytest.approx(math.sqrt(5.0))
+    assert r["n_sigma"] == pytest.approx(2.0 / math.sqrt(5.0))
+    assert r["consistent"] is True
+
+
+def test_dm_agreement_inconsistent_beyond_3sigma():
+    r = dm_agreement(dm_chime=500.0, dm_chime_err=1.0, dm_dsa=510.0, dm_dsa_err=1.0)
+    assert r["consistent"] is False
+
+
+def test_dm_agreement_missing_chime_dm_returns_null_reason():
+    r = dm_agreement(dm_chime=None, dm_chime_err=None, dm_dsa=502.0, dm_dsa_err=1.0)
+    assert r["consistent"] is None and "no CHIME DM" in r["reason"]
