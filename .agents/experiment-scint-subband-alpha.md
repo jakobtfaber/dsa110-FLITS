@@ -114,7 +114,10 @@ fitter's **0.060-MHz rails** (widths pinned at the lower bound, err ≫ value). 
 from `query_ne2025_scint.galactic_floor` at the catalog coordinate. Recovery of the 7
 initially-unresolved sightlines was cross-checked by **per-burst adversarial judge
 agents** (`scint_recover_verdicts.json`); the deterministic selector and the judges
-agree on the substance.
+agree on every sightline's excess/no-excess classification — they differ only on whether
+to report a weak lower limit vs a flat non-detection for one sightline (phineas: selector
+≥1.3×, judge "non-detection"), which does not move the headline (phineas is excluded
+from the excess set either way).
 
 ### NE2025-floor uncertainty → per-sightline significance
 
@@ -130,34 +133,44 @@ uncertainty (σ ≈ 0.4 dex ≈ ×2.5) combined in quadrature with the measureme
 | casey | 44.6 | 908 | 8717 | 9.6× | 2.2 | low conf (1 subband, rc 0.38) |
 | chromatica | 18.4 | 252 | 1492 | 5.9× | 1.9 | clean 2-comp |
 | oran | 16.5 | 383 | 1009 | 2.6× | 1.0 | clean |
-| freya | 22.2 | 513 | 1642 | ≥3.2× | 1.2 | broad is flat baseline → lower limit |
+| freya | 22.2 | ≤1007 | 1642 | ≥1.6× | 0.5 | broad is a flat baseline → single-Lorentzian, lower limit |
 | phineas | 44.7 | 6829 | 8704 | ≥1.3× | 0.3 | only broad (3.8–9.9 MHz) |
 | johndoeii | 13.2 | 534 | 245 | 0.5× | −0.8 | low-\|b\|, NE2025 void → floor unreliable |
 | isha | 15.8 | 595 | 229 | 0.4× | −0.9 | low-\|b\| void |
 | whitney | 34.8 | — | 5906 | ≥0.3× | — | rails only (diffractive unresolved) |
 | mahi | 10.0 | — | 152 | ≥0.1× | — | rail-only, b=+10° void |
 
-**Verdict: a COMMON (likely host/intervening) excess — not wilhelm-specific.** Four
-independent mid-\|b\| sightlines where the NE2025 floor is reliable and the diffractive
-scale resolvable show **7–11× excess at z>2** (zach, wilhelm, hamilton; casey z=2.2 but
-low-confidence), with chromatica (5.9×) just under. The excess clusters tightly at
-~7–11× — exactly the wilhelm value — and **never the reverse** where the floor is
-trustworthy: there is no reliable sightline with the measurement *above* the floor. The
-sub-unity cases (johndoeii, isha, mahi) all sit at low \|b\| in NE2025 **voids** where
-the floor is not trustworthy; the unresolved cases (whitney, mahi) yield only 0.060-MHz
-rails. Per-sightline significance is ~2σ (limited by NE2025's ×2.5 floor uncertainty),
-but the **consistency of 4 independent sightlines at the same ~7–11×, all in excess**,
-is collectively strong evidence for a real, common enhancement.
+**Verdict: a COMMON (likely host/intervening) excess — not wilhelm-specific.** The three
+clean, high-confidence mid-\|b\| sightlines (zach, wilhelm, hamilton; \|b\|≈17–18°) where
+the NE2025 floor is reliable and the diffractive scale cleanly resolved all show **7–11×
+excess at z>2**, with chromatica (5.9×, z=1.9) just under; casey (\|b\|=44.6°) adds a
+fourth z>2 point at 9.6× but is **low-confidence** (single subband). The excess clusters
+tightly at ~7–11× — exactly the wilhelm value — and **never the reverse** where the floor
+is trustworthy: no reliable sightline has the measurement *above* the floor. The
+sub-unity cases (johndoeii, isha, mahi) all sit at low \|b\| in NE2025 **voids** where the
+floor is untrustworthy; the unresolved cases (whitney, mahi) yield only 0.060-MHz rails.
 
-**Caveats.** (1) Individual significances are ~2σ — driven by NE2025's floor uncertainty,
-not the measurement. (2) casey rests on a single subband (redchi 0.38, possible
-over-fit) — the judge's defensible alternative is non-detection; treated as
-low-confidence. (3) freya's "broad" component is 259 MHz (a quasi-flat baseline wider
-than the subband), so its narrow is effectively single-Lorentzian → the excess is a
-lower limit. (4) The recovery scans **all** stored fits, not just BIC-selected; this is
-deliberate (BIC picks the best *descriptive* model, which can miss a real narrow
-diffractive component) and is the reason hamilton/chromatica were recovered as clean,
-but it must be paired with rail/over-fit rejection (done) to avoid spurious narrows.
+**On combining the significances.** Per-sightline z is ~2σ, and that error budget is
+**~94% the NE2025 floor uncertainty (σ=0.4 dex), only ~6% the measurement.** The floor
+error is a *common systematic* (one model, one calibration) — correlated across
+sightlines, **not independent** — so stacking does **not** buy a √N improvement: if
+NE2025 under-predicts the mid-\|b\| floor by ~×2.5, all four points move together and the
+joint significance stays ~2σ. The real argument is therefore not a stacked z but the
+**asymmetry**: wherever the floor is reliable and the scale resolved, the measurement is
+*always* in excess by ~7–11× and *never* below — which a random ±0.4 dex floor scatter
+would not produce. Confirming it as a calibrated systematic offset vs a true population
+excess needs an independent floor (e.g. pulsar/H I calibration) or finer channelization.
+
+**Caveats.** (1) Significance is NE2025-limited (~2σ), and the floor error is shared, so
+do not over-read a stacked significance. (2) casey rests on a single subband (redchi
+0.38, possible over-fit) — the judge's defensible alternative is non-detection; treated
+as low-confidence and excluded from the robust count of 3. (3) freya's "broad" component
+(259 MHz) is a flat baseline wider than the DSA band, so its narrow is effectively
+single-Lorentzian → tier B, excess a lower limit (the selector now caps "broad" at the
+band width, `DSA_BAND_MHZ`). (4) The recovery scans **all** stored fits, not just
+BIC-selected; this is deliberate (BIC picks the best *descriptive* model, which can miss
+a real narrow diffractive component) and is why hamilton/chromatica were recovered as
+clean, but it is paired with rail/over-fit rejection to avoid spurious narrows.
 
 ## Interpretation / consequences
 

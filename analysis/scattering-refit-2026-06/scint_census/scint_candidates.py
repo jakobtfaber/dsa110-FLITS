@@ -27,6 +27,7 @@ CATALOG = f"{REPO}/configs/bursts.yaml"
 CFGDIR = f"{REPO}/scintillation/configs/bursts"
 CHAN = 0.0305  # DSA native channel (MHz)
 BOUND = 0.060  # fitter narrow lower bound; widths within 5% are railed, not measured
+DSA_BAND_MHZ = 187.5  # full DSA bandwidth; a "broad" wider than this is a flat baseline
 
 
 def vw(v):
@@ -44,7 +45,10 @@ def candidates(sf):
                 continue
             kmin = min(lor, key=lor.get)
             val, err = w[kmin]
-            others = [v for kk, (v, e) in w.items() if kk != kmin and v and v > 0]
+            # a co-fitted "broad" wider than the full DSA band is a flat baseline, not a
+            # resolved second scale -> it does NOT make the narrow a distinct 2-component
+            # detection (e.g. freya's 259-MHz Lorentzian over a ~190-MHz band).
+            others = [v for kk, (v, e) in w.items() if kk != kmin and v and 0 < v <= DSA_BAND_MHZ]
             broad = min(others) if others else None
             railed = abs(val - BOUND) < 0.05 * BOUND
             good_err = err is not None and np.isfinite(err) and 0 < err < 0.5 * val
