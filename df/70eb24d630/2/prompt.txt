@@ -1,0 +1,643 @@
+This repo is a fork of an upstream repo in dsa110/dsa110-FLITS (also locally stored at ../../dsa110/dsa110-FLITS).
+
+I'm beginning to think that it's more of a liability to have the fork be the primary development environment, but I would like the primary development environment to still be in my personal GitHub as opposed to the dsa110 organization GitHub. I'm wondering if it would make sense to sync dsa110/dsa110-FLITS with jakobtfaber/dsa110-FLITS and then remove the dsa110-FLITS from the dsa110, and make what is now a fork at jakobtfaber/dsa110-FLITS, the primary repo instead. This would also involve removing the local clone ../../dsa110/dsa110-FLITS.
+
+What do you think?
+
+---
+
+Flitz is a DSA 110 deliverable. For the purposes of development, it's easier if I do it in my local or personal GitHub, because then I don't have to enable certain applications, particularly agentic programming applications, in the DSA 110 organization that affect other users. I can just do it within my own account, and then once it's out of the development stage and in the production stage, I simply turn it into a DSA 110 repository again and transfer it to the org.
+
+---
+
+I just wish that the reconciliation were automatic, I guess, is the problem I want to solve.
+
+---
+
+You're totally right. Yes, please do the reversible reconcile.
+
+---
+
+yes run pytest to confirm green before push
+
+---
+
+Go.
+
+---
+
+Excellent. Can you make sure that the clone on HPCC corresponds to the fork and not dsa110/dsa110-FLITS? The path on hpcc is: /home/jfaber/flits/dsa110-FLITS
+
+---
+
+Handle that discrepancy.
+
+---
+
+So it's 71 commits behind but also has a ton of uncommitted work, is that right?
+
+---
+
+Once you've gained a complete picture of the overlap and discrepancies between the two, take care of the reconciliation yourself autonomously, please.
+
+---
+
+yes, pin
+
+---
+
+the only other session running in dsa110-FLITS is this one:
+
+  Settings  Status   Config   Usage   Stats
+
+  Version:          2.1.185
+  Session name:     Plan CHIME/DSA FRB analysis tooling and science scope
+  Session ID:       265e6f8b-9d51-4f16-82f8-14fa7fad5c70
+  cwd:              /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+  Login method:     Claude Max account
+  Organization:     jakobtfaber@gmail.com's Organization
+  Email:            jakobtfaber@gmail.com
+
+  Model:            Default (Opus 4.8 with 1M context · Best for everyday, complex tasks)
+  MCP servers:      18 connected, 1 disabled · /mcp
+  Setting sources:  User settings, Shared project settings, Project local settings
+
+  Esc to cancel
+
+---
+
+that session is done now I think, you can commit
+
+---
+
+What I understand is why we still need the work-in-progress branch at all.
+
+---
+
+What I don't understand is why we still need the work-in-progress branch at all.
+
+---
+
+A single commit is fine. I just want you to push it to main now so that our main branch is clear and also make sure that our local version of that is in sync. Once that's done, I think we should remove the ../../dsa110/dsa110-FLITS just so we don't confuse ourselves with the duplicate repo locally --- wdyt?
+
+---
+
+go
+
+---
+
+yes, record
+
+---
+
+Done
+
+---
+
+Done?
+
+---
+
+Understood. Are we on the main branch now?
+
+---
+
+is hpcc dsa110-FLITS on main and have the worktrees there all been reconciled?
+
+---
+
+Reduce the cognitive load, please.
+
+---
+
+Again, reducing cognitive load. Where should I be developing this codebase?
+
+---
+
+Tree?
+
+---
+
+I'm running another agent in it right now.
+
+---
+
+Just maybe you could help me guide the work that's being done by the other agents as they finish it up. Can you see the code that was added and manuscript text that was added related to Burst Energetics?
+
+---
+
+Just to add to this, is it a problem that we're not flux calibrating? I think at either band, all that precisely if at all.
+
+---
+
+Yes. And use /ai-research-workflows:researching 
+
+Also, so you have --- I'm gonna close this session now, but here's the output from one of the agents that was working on the burst energetics stuff:
+---
+```
+  I have created a detailed handoff prompt in handoff_burst_energy.md for the implementation agent
+(Claude
+  Code).
+
+  ### Summary of Work
+
+  • Defined physics equations (
+
+    D
+     L
+
+  ,
+
+    E
+     iso
+
+  , unit conversion) and integration limits.
+
+  • Specified inputs from config.py and results_db.py.
+  • Outlined code and LaTeX manuscript tasks.
+
+> /artifact
+  ⎿  Review submitted
+
+────────────────────────────────────────────────────────────
+> [Approved] handoff_burst_energy.md
+
+
+  Would you like me to delegate this implementation task to Claude Code, or will you handle the
+  handoff?
+
+────────────────────────────────────────────────────────────
+> Yes, delete to claude code
+
+────────────────────────────────────────────────────────────
+> Yes, delegate to claude code
+
+4.1k in | 856 out | 670 thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Please read the handoff pr...) (ctrl+o to
+expand)
+
+  Task launched in background. I will notify you once Claude Code completes the implementation.
+
+────────────────────────────────────────────────────────────
+> While that's going, we imported a table from a csv a while ago containing many identified foreground
+  galaxy and galaxy cluster candidates. These were not identified in our previous search of survey data.
+  I wonder if you could delegate the exploration of this to claude code as well to figure out why our
+  previous queries of survey data missed this candidates.
+
+43.0k in | 2.9k out | 2.2k thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Compare the search criteri...) (ctrl+o to
+expand)
+
+  I have launched a second background task for Claude Code to investigate the missing foreground
+  candidates.
+
+  I will notify you as soon as either of the background tasks (the burst energy calculation or the
+  foreground candidate search gap investigation) completes.
+
+12.3k in | 672 out | 280 thinking
+● ManageTask(Task: f7a3e5da-da44-40d2-96b6-d9d8285dcab4/task-80) (ctrl+o to expand)
+
+  Task 60 (Burst energies) completed successfully!
+
+  Calculations have been verified (numerical closed-form vs quadrature agreement, and by-hand re-
+  derivation checks) and saved:
+
+  • Results: burst_energies.json
+  • LaTeX table and subsection for paper: burst_energies.tex
+
+  I am waiting for Task 80 (foreground candidate search gaps) to finish.
+
+────────────────────────────────────────────────────────────
+> Was code written for these calculations?
+
+2.1k in | 283 out | 203 thinking
+● ManageTask(Task: f7a3e5da-da44-40d2-96b6-d9d8285dcab4/task-80) (ctrl+o to expand)
+
+  Yes. The script calculate_burst_energies.py was written.
+
+  Key operations:
+
+  1. Loads coordinates/redshifts from config.py.
+  2. **Computes
+
+    D (z)
+     L
+
+  ** using config.py.
+  3. Retrieves joint fit parameters (c₀, γ) per band.
+  4. Calculates analytical integrals for power-laws over CHIME (0.4 -- 0.8  GHz) and DSA (1.31 --
+  1.50  GHz) bands:
+
+    def band_integral(c0: float, gamma: float, nu_ref: float, nu1: float, nu2: float) -> float:
+        if abs(gamma + 1.0) < 1e-9:
+            return c0 * nu_ref * np.log(nu2 / nu1)
+        g = gamma + 1.0
+        return c0 * nu_ref / g * ((nu2 / nu_ref) ** g - (nu1 / nu_ref) ** g)
+
+  5. Applies unit conversions (1  Jy·ms·Hz = 10⁻²⁹  J·m⁻²) and outputs JSON and LaTeX files.
+
+────────────────────────────────────────────────────────────
+> where are these scripts located? write out the full filepath strings
+
+
+  • Script: calculate_burst_energies.py
+  • JSON Results: burst_energies.json
+  • LaTeX Output: burst_energies.tex
+
+● Read(/Users/jakobfaber/.gemini/antigravit.../.system_generated/tasks/task-80.log) (ctrl+o to expand)
+
+────────────────────────────────────────────────────────────
+> continue
+
+4.0k in | 198 out | 101 thinking
+● Bash(python scratch/codetection/why_missed.py) (ctrl+o to expand)
+
+  The missing foreground candidate investigation has completed.
+
+  ### Location
+
+  • Script: why_missed.py
+
+  ### Findings
+
+  Of the 49 candidates in foreground.csv, 0 are recoverable under current pipeline settings:
+
+  1. Impact Parameter Gate (>100  kpc): 45/49 candidates fail because they exceed the pipeline's
+  search radius limit ( DEFAULT_IMPACT_KPC = 100.0  in config.py). For example, all 15 Wen+2024
+  clusters lie at 2 -- 5  Mpc.
+  2. Unsearched Catalogs (33/49): PS1-STRM (18 candidates) and Wen+2024 (15 candidates) are not in
+  the query list. PS1 is only used to enrich photometry.
+  3. Background Objects (12/49): 12 candidates have
+
+    z     ≥ z
+     phot    host
+
+  (flagged  ZPHOT_GE_ZHOST ) and are background systems.
+  4. Actionable: Adding PS1-STRM to search engines would recover 3 candidates (under Zach, Oran,
+  Freya) within 100  kpc.
+
+────────────────────────────────────────────────────────────
+> The Galaxy Cluster Impact Parameter matters in a different way as compared to the Foreground Galaxy
+  Impact Parameters. The Galaxy Clusters impact the dispersion measure budget significantly. Intervening
+  galaxies, not clusters, don't really do that and are more relevant to potential scattering.
+
+  Agree. Physics dictates different search scales:
+
+  • Galaxy Clusters: Large intracluster medium (ICM) gas envelopes contribute significantly to DM
+  budget even at large impact parameters (b sim 1 -- 5  Mpc or b/R₅₀₀ sim 1).
+  • Foreground Galaxies: Small-scale, dense ISM/CGM screens (b < 100  kpc) are required to produce
+  observable scattering.
+  • Pipeline Adjustment: Cluster searches need a wider radius (sim 5  Mpc) for DM modeling, while
+  keeping galaxy searches compact for scattering screen localization.
+
+────────────────────────────────────────────────────────────
+> Hence, setting the same upper limit on the impact parameter that is relevant for both is wrong.
+
+  Correct. Using a single  DEFAULT_IMPACT_KPC = 100.0  in config.py is physically incorrect.
+
+  Proposed fix:
+
+  • Galaxies (Scattering): Maintain b ≤ 100  kpc.
+  • Clusters (DM Budget): Increase limit to b ≤ 5  Mpc (or search out to 10 × R₅₀₀) to avoid missing
+  DM contributions.
+
+────────────────────────────────────────────────────────────
+> Thanks, Sid.
+
+────────────────────────────────────────────────────────────
+> Fix it.
+
+25.9k in | 6.1k out | 5.3k thinking
+● Bash(claude --model claude-opus-4-8 --effort xhigh -p "Implement separate impact ...) (ctrl+o to
+expand)
+
+  Task delegated to Claude Code in background. I will notify you when the fix is complete and
+  verified.
+
+● Bash(git diff) (ctrl+o to expand)
+
+  The fix has been implemented and verified.
+
+  ### Location of Changes
+
+  • Config: config.py ( DEFAULT_CLUSTER_IMPACT_KPC = 5000.0  added).
+  • Search Logic: search.py (updated search logic and masking).
+  • Tests: test_search_pipeline.py ( test_foreground_mask_applies_cluster_impact_threshold  added).
+
+  ### Implementation Details
+
+  1. Masking:  _foreground_mask  now detects clusters (via NED/SDSS type classification like  GClstr
+  or  ClG ) and applies  cluster_impact_kpc  (5000  kpc), while regular galaxies use  impact_kpc
+  (100  kpc).
+  2. Search Radius:  run_search  queries with the larger radius, capped at exactly
+
+       ∘
+    2.0
+
+  to prevent Vizier timeouts at very low redshifts.
+  3. Verification: All 55 tests in the test suite pass, confirming correct classification filtering.
+```
+
+---
+
+Simplify it for me. What's the deal with the calibration? Minimize cognitive load, please.
+
+---
+
+Okay, so it sounds like in order to actually get to any sort of quoted energy or quotable energy, we need to look more into how we can actually extract units that agree from these data. That seems like it would require digging into the actual telescope backends. Is that true? Or is the approach different from that?
+
+---
+
+The CHIME for B catalog quotes per-burst fluence in Jy ms, but these bursts aren't published in that catalog.
+
+---
+
+The CHIME/FRB catalog quotes per-burst fluence in Jy ms, but these bursts aren't published in that catalog.
+
+---
+
+This is going to require some prior art read-con. We're going to have to look at older CHIME instrumentation papers or recent CHIME publications that maybe do something similar to this. Perhaps the catalog paper is a good reference for that, actually. I think we need to do the same for the DSA. Do you agree?
+
+---
+
+This is going to require some prior art recon. We're going to have to look at older CHIME instrumentation papers or recent CHIME publications that maybe do something similar to this. Perhaps the catalog paper is a good reference for that, actually. I think we need to do the same for the DSA. Do you agree?
+
+---
+
+Use SciX if arxiv is kicking you off
+
+---
+
+/ai-research-workflows:plan
+
+---
+
+Build your workflow from here using /ai-research-workflows
+
+---
+
+Build your workflow from here using /ai-research-workflows and /boris and /ponytail
+
+---
+
+Before we commit, let's see if we can fix the blocker: (a) The dsa110 primary beam model exists on h17, and (b) the CHIME/FRB beam model might exist somewhere on arc/CANFAR.
+
+---
+
+That's an approximate beam model, I just downloaded the correct one in ~/Downloads/ locally, see: DSA110_beam_1.h5 and to visualize it visualize_dsa110_beam_pattern.py
+
+---
+
+/ai-research-workflows:researching pull a CHIME singlebeam h5 and inspect its flux units
+
+---
+
+Acronyms:
+CHIME — Canadian Hydrogen Intensity Mapping Experiment
+HDF5 — Hierarchical Data Format version 5
+
+On `h17`, the baseband analysis Docker image is already pulled as:
+
+`chimefrb/baseband-analysis:latest`
+
+Current digest:
+
+`sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41`
+
+The fresh CANFAR source snapshot is here:
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/baseband-analysis-canfar-src`
+
+There are wrapper scripts here:
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_shell.sh`
+
+`/data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_python.sh`
+
+Use it from `h17` like:
+
+```bash
+cd /data/research/astrophysics/frbs/chime-dsa-codetections
+
+./bin/baseband_analysis_shell.sh
+```
+
+or run Python directly inside the container with:
+
+```bash
+./bin/baseband_analysis_python.sh - <<'PY'
+from baseband_analysis.core.bbdata import BBData
+
+path = "/data/chime_singlebeam/singlebeam_210456524.h5"
+bb = BBData.from_file(path)
+print(bb["tiedbeam_baseband"].shape, bb["tiedbeam_baseband"].dtype)
+PY
+```
+
+Inside the container, the working data root is mounted as `/data`, so the singlebeam files are visible at:
+
+```text
+/data/chime_singlebeam/singlebeam_210456524.h5
+/data/chime_singlebeam/singlebeam_215063905.h5
+/data/chime_singlebeam/singlebeam_224263996.h5
+/data/chime_singlebeam/singlebeam_252069198.h5
+/data/chime_singlebeam/singlebeam_253635173.h5
+/data/chime_singlebeam/singlebeam_274819243.h5
+/data/chime_singlebeam/singlebeam_278720455.h5
+/data/chime_singlebeam/singlebeam_311723353.h5
+/data/chime_singlebeam/singlebeam_318353610.h5
+/data/chime_singlebeam/singlebeam_354049284.h5
+/data/chime_singlebeam/singlebeam_356959136.h5
+/data/chime_singlebeam/singlebeam_362593221.h5
+```
+
+The host-side path for those same files is:
+
+```text
+/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/
+```
+
+I just rechecked the image, wrappers, source snapshot, and all 12 `.h5` files on `h17`.
+
+---
+
+Reviewed, go ahead and plan the radiometer flux-cal step.
+
+---
+
+Execute: /ai-research-workflows:implementing-plans 
+
+On the pointing-Dec item, I couldn't find stored info in the filterbank files but I was able to query our detection logs and I've compiled the pointings of the primary beam for each event into this csv, labeled "RA ibeam" and "Dec ibeam": "~/Downloads/CHIME_DSA Codetections - DSA Primary Beam Pointings - Sheet1.csv"
+
+---
+
+Build a physics-based justification for estimator choice and then do the rigorous calibrated refit
+
+---
+
+proceed
+
+---
+
+<task-notification>
+<task-id>biw35l3ad</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/biw35l3ad.output</output-file>
+<status>completed</status>
+<summary>Background command "Search arc subdirs + h17 for CHIME npy" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Just verified, looks great. How much of this have you written up into the documentation within the repo or the Faber2026 manuscript /submodule?
+
+---
+
+Yes, wire it into Faber2026.
+
+---
+
+1. Approved, commit this on feature/burst-energetics
+2. Yes add on implement-radiometer-flux-cal.md closeout to feature/radiometer-flux-cal
+
+---
+
+Confirmed, run validation pass, route to /ai-research-workflows:validating-implementations
+
+---
+
+Affirmative, run that validation pass and route to /ai-research-workflows:validating-implementations
+
+---
+
+<task-notification>
+<task-id>wxqh4t4wq</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/wxqh4t4wq.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Validate the radiometer flux-cal implementation against its plan (re-run + review + adversarial)" completed</summary>
+<result>{"verify":[{"items":[{"label":"tests/test_flux_cal.py — all 10 tests","command":"env -i HOME=/Users/jakobfaber PATH=... conda run -n flits python -m pytest tests/test_flux_cal.py -v","passed":true,"expected":"all tests pass, catalog cross-checks not skipped (data present)","actual":"10/10 passed, 0 skipped; both catalog tests ran against real npy (npy_exists=True)","evidence":"test_sigma_jy_analytic..test_dsa_sefd_csv_present_and_sane all PASSED; part of '19 passed in 29.72s'"},{"label":"tests/test_burst_energies_fluxcal.py — all 4 tests","command":"...pytest tests/test_burst_energies_fluxcal.py -v","passed":true,"expected":"all pass","actual":"4/4 passed (test_dsa_calibrated_but_gate_closed, test_both_bands_emit, test_mixed_scalar_and_fluxcal_opens_gate, test_dsa_burst_config_resolves)","evidence":"all 4 PASSED in the combined '19 passed' run"},{"label":"tests/test_chime_beam.py — all 5 tests","command":"...pytest tests/test_chime_beam.py -v","passed":true,"expected":"all pass","actual":"5/5 passed (gain_boresight, half_power_at_fwhm_over_2, is_chromatic, sigma_jy_matches_radiometer, sefd_derivation_and_csv)","evidence":"all 5 PASSED in the combined '19 passed' run"},{"label":"NEW test test_both_bands_emit exists AND passes","command":"...pytest tests/test_burst_energies_fluxcal.py::test_both_bands_emit -v","passed":true,"expected":"exists and passes","actual":"present in test_burst_energies_fluxcal.py and PASSED","evidence":"tests/test_burst_energies_fluxcal.py::test_both_bands_emit PASSED [63%]"},{"label":"NEW test test_joint_band_fluence_matches_catalog_scale exists, passes, NOT skipped","command":"...pytest tests/test_flux_cal.py::test_joint_band_fluence_matches_catalog_scale -v","passed":true,"expected":"passes, must NOT skip (data is present)","actual":"present in test_flux_cal.py and PASSED, not skipped — _band_burst_config npy exists for all 3 bursts; ratios within (1/3,3) band","evidence":"test_joint_band_fluence_matches_catalog_scale PASSED [47%]; ratios joint zach=1.268 whitney=2.154 oran=0.990 (cat 16.2/26.2/13.2 Jy*ms). dsa_band ratios zach=2.161 whitney=2.169 oran=0.899 (npy_exists=True all)"}],"summary":"Ran the three flux-cal test files in conda env flits on branch feature/radiometer-flux-cal @ e81244f. Result: 19 passed, 0 failed, 0 skipped (29.72s). Both required new tests exist and PASS: test_both_bands_emit (test_burst_energies_fluxcal.py) and test_joint_band_fluence_matches_catalog_scale (test_flux_cal.py). The catalog cross-checks were NOT skipped — DSA npy data is staged (npy_exists=True for zach/whitney/oran), so the data setup is correct. Catalog (Law+2024, Jy*ms): zach 16.2, whitney 26.2, oran 13.2. Asserted gate: 1/3 &lt; band_avg/catalog &lt; 3. Measured band_avg/catalog ratios — dsa_band_fluence: zach 2.161, whitney 2.169, oran 0.899; joint_band_fluence: zach 1.268, whitney 2.154, oran 0.990. All within band. No discrepancies between the closeout's claims and observed behavior. (Benign matplotlibrc parse warning printed but does not affect tests.)","_label":"tests"},{"summary":"Both self-checks pass with exit 0 and print their expected 'self-check OK' lines. flux_cal.py --check confirms radiometer noise + flat-band integral against analytic oracles. calculate_burst_energies.py --check confirms integral/quadrature, energy oracle, k-correction, and gate (with a non-fatal matplotlibrc parse warning on stderr unrelated to the check logic). Worktree on feature/radiometer-flux-cal @ e81244f. Note: untracked data/chime symlink present (separate lane, left untouched).","items":[{"label":"flux_cal.py self-check","command":"env -i HOME=/Users/jakobfaber PATH=... conda run -n flits python analysis/flux_cal.py --check","passed":true,"expected":"prints a 'self-check OK' line, exit 0","actual":"printed 'self-check OK: radiometer noise + flat-band integral match analytic oracles', exit 0","evidence":"self-check OK: radiometer noise + flat-band integral match analytic oracles\nEXIT=0"},{"label":"calculate_burst_energies.py self-check","command":"env -i HOME=/Users/jakobfaber PATH=... conda run -n flits python analysis/calculate_burst_energies.py --check","passed":true,"expected":"prints a 'self-check OK' line, exit 0","actual":"printed 'self-check OK: integral matches quadrature; energy oracle, k-correction, and gate exact', exit 0 (non-fatal matplotlibrc warning on stderr)","evidence":"Bad value in file 'matplotlibrc'... (non-fatal)\nself-check OK: integral matches quadrature; energy oracle, k-correction, and gate exact\nEXIT=0"}],"_label":"self-checks"},{"summary":"All four validation checks pass on branch feature/radiometer-flux-cal @ e81244f. ruff reports \"All checks passed!\" for analysis/flux_cal.py and analysis/chime_beam.py; all five required files exist; burst_energies.tex has NO 'calibration pending' marker and contains a populated table with 8 E_iso rows. Relevant paths: analysis/flux_cal.py, analysis/chime_beam.py, analysis/burst_energies/{dsa_sefd,dsa_pointing,chime_sefd}.csv, analysis/burst_energies/burst_energies.tex.","items":[{"label":"ruff lint clean on flux_cal.py and chime_beam.py","command":"env -i HOME=/Users/jakobfaber PATH=... /opt/anaconda3/bin/conda run -n flits ruff check analysis/flux_cal.py analysis/chime_beam.py","passed":true,"expected":"All checks passed!","actual":"All checks passed!","evidence":"All checks passed!"},{"label":"Required files exist (flux_cal.py, chime_beam.py, dsa_sefd.csv, dsa_pointing.csv, chime_sefd.csv)","command":"for f in analysis/flux_cal.py analysis/chime_beam.py analysis/burst_energies/dsa_sefd.csv analysis/burst_energies/dsa_pointing.csv analysis/burst_energies/chime_sefd.csv; do test -f $f &amp;&amp; echo EXISTS || echo MISSING; done","passed":true,"expected":"all 5 EXISTS","actual":"all 5 EXISTS","evidence":"EXISTS: analysis/flux_cal.py\nEXISTS: analysis/chime_beam.py\nEXISTS: analysis/burst_energies/dsa_sefd.csv\nEXISTS: analysis/burst_energies/dsa_pointing.csv\nEXISTS: analysis/burst_energies/chime_sefd.csv"},{"label":"'calibration pending' absent from burst_energies.tex","command":"grep -n 'calibration pending' analysis/burst_energies/burst_energies.tex","passed":true,"expected":"ABSENT (no matches)","actual":"0 matches, grep exit=1","evidence":"0 matches for 'calibration pending'\nexit=1"},{"label":"burst_energies.tex contains tabular/table with E_iso rows","command":"grep -nE 'tabular|begin\\{table\\}|E_iso' analysis/burst_energies/burst_energies.tex; sed -n '33,60p' burst_energies.tex","passed":true,"expected":"a table/tabular env with populated E_iso rows","actual":"\\begin{table} at L33, \\begin{tabular}{lccccc} at L44, E_{\\mathrm{iso}} column header, 8 data rows (Chromatica..Zach) each with E_iso value","evidence":"Burst &amp; z &amp; D_L &amp; gamma_C &amp; gamma_D &amp; E_{iso} [erg]; rows e.g. Zach ... (4.60 +/- 1.84)x10^38; 8 bursts total"}],"_label":"lint+files+stub"},{"items":[{"label":"Script runs and emits JSON for all 8 bursts","command":"conda run -n flits python analysis/calculate_burst_energies.py","passed":true,"expected":"8 bursts written to burst_energies.json with E_iso_erg and E_iso_erg_err","actual":"Ran clean (only cosmetic matplotlibrc warning); printed 8-row table; wrote burst_energies.json and burst_energies.tex (energy table)","evidence":"N = 8 bursts. Skipped: placeholder z=1.0 (freya/mahi/johndoeii) and casey. Wrote .../burst_energies.json; Wrote .../burst_energies.tex (energy table)"},{"label":"(a) Every E_iso in 1e38..1e41 erg; flag wilhelm if &gt;1e41","command":"python -c read burst_energies.json, check 1e38&lt;=E_iso&lt;=1e41","passed":false,"expected":"All 8 E_iso within [1e38, 1e41]","actual":"7/8 pass. wilhelm = 1.1146e41 erg EXCEEDS 1e41 (in[1e38,1e41]=False). All others in range. whitney 7.24e40 is the next-highest but in range.","evidence":"chromatica 1.7314e+39 True; hamilton 6.7115e+39 True; isha 4.2043e+40 True; oran 4.3041e+40 True; phineas 1.8484e+40 True; whitney 7.2353e+40 True; wilhelm 1.1146e+41 False (&gt;1e41); zach 4
+... (truncated 31561 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/wxqh4t4wq.output)</result>
+<usage><agent_count>13</agent_count><subagent_tokens>1031839</subagent_tokens><tool_uses>166</tool_uses><duration_ms>437690</duration_ms></usage>
+</task-notification>
+
+---
+
+Re follow-ups:
+- agreed, sources without well-constrained redshifts should be properly scoped.
+- approved: if rebasing cluster-catalog onto radiometer-flux-cal is useful or appropriate, do it
+- approved: commit & push & open PRs & oversee their successful review and merge to main
+- approved: run the Faber2026 bibcheck
+
+---
+
+<task-notification>
+<task-id>bhdmdbn4i</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/bhdmdbn4i.output</output-file>
+<status>completed</status>
+<summary>Background command "Watch FLITS PR checks to completion" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+sweep
+
+---
+
+What's next?
+
+---
+
+Tackle all 4 using /ai-research-workflows workflows, as well as /boris and /ponytail
+
+---
+
+Take on the deferred items usine /ai-research-workflows workflows. Use /boris, /ponytail and ultracode where warranted.
+
+---
+
+<task-notification>
+<task-id>wp7ymijqu</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/wp7ymijqu.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Research the state of the deferred manuscript items (observations.tex, budget.tex DM-budget numbers, manuscript TNS map, wilhelm stale comment)" completed</summary>
+<result>{"obs":{"available_facts":["12 co-detected bursts with nickname, TNS, MJD, DM: full table in toa.tex:78-89 (Zach FRB 20220207C 59617.809 DM 262.37; Whitney FRB 20220310F 59648.242 DM 462.17; Oran FRB 20220506D 59705.597 DM 396.88; Isha FRB 20221113A 59896.387 DM 411.57; Wilhelm FRB 20221203A 59916.002 DM 602.35; Phineas FRB 20230307A 60010.379 DM 610.27; Freya FRB 20230325A 60028.072 DM 912.40; Johndoeii FRB 20230814B 60170.361 DM 696.51; Hamilton FRB 20230913A 60200.207 DM 518.80; Mahi FRB 20240119A 60331.104 DM 960.13; Chromatica FRB 20240203A 60343.832 DM 272.66; Casey FRB 20240229A 60369.371 DM 491.21). TNS names cross-checked against dsa110-FLITS/scratch/codetection/bursts.csv:2-13.","Two facilities + frequency coverage: CHIME/FRB 400-800 MHz, DSA-110 ~1.4 GHz; wide ~1 GHz baseline. Stated in toa.tex:7-10 and intro/budget. DSA scattering band in budget.tex jointfit text is 1.2-1.5 GHz (intro.tex TODO / budget.tex:133).","DSA-110 1.4 GHz scattering measurements per burst (the section's named deliverable): dsa110-FLITS/scratch/codetection/bursts.csv:2-13 gives gamma_1p4ghz_mhz (the DSA-resolved 1.4 GHz scattering / decorrelation-bandwidth proxy) with errors, the NE2001 prediction gamma_1p4ghz_ne2001_mhz, and tau_1ghz_ms with asymmetric errors for all 12. E.g. zach gamma=0.731+/-0.044 MHz (NE2001 0.778), tau_1ghz=0.276 (+0.012/-0.002) ms; wilhelm gamma=0.121+/-0.027 MHz (NE2001 0.630, ~5x below), tau_1ghz=0.307 (+0.049/-0.136) ms; phineas gamma=4.25+/-0.14; casey tau_1ghz=0.023 (+0.204/-0.004) ms.","Per-burst tau_obs quality flags from dsa110-FLITS/results/sightline_dm_scattering_budget.csv: Wilhelm FAIL (chi2_red=1.4, row 6), Freya FAIL (chi2_red=3.9, row 8), Casey FAIL (chi2_red=69.2, row 12); these tau values WITHHELD. Echoed in docs/codetection-science-plan.md:37 (3 fits FAIL: casey, freya, wilhelm).","alpha rails at upper bound 6.0 (-&gt; upper limits) for chromatica, freya, hamilton, mahi (scattering weak/unresolved): docs/codetection-science-plan.md:40.","Foreground search summary (already in budget.tex:57-63): 49 candidates, 29 confirmed foreground, 7 refuted/background, 13 inconclusive. Verified by parsing dsa110-FLITS/scratch/codetection/foreground_catalog.csv: 49 rows, Counter(confirmed=29, refuted=7, inconclusive=13); 34 halos + 15 clusters; 9 distinct bursts only.","Foreground search covers only 9/12 sightlines (the 3 with no candidates: isha, johndoeii, mahi). foreground_catalog.csv distinct bursts = {casey, chromatica, freya, hamilton, oran, phineas, whitney, wilhelm, zach}; corroborated by docs/codetection-science-plan.md:37 (host search 9/12).","Only 1 of 15 clusters has impact inside its R500: phineas cluster J115120.4+714435 at b/R500=0.83 (foreground_catalog.csv row, b_over_r500=0.83). Matches budget.tex:60-62 ('only one of the 15 clusters... inside its own R500').","Impact parameters per candidate: foreground_catalog.csv impact_kpc column (e.g. zach halo 75.9 kpc; whitney halo 103-184 kpc; casey halo 12.2-281 kpc) and b_over_r500 for clusters; also tabulated in PAPER foreground_table.tex (col b and b/R500).","Photometric/spectroscopic redshifts + sources per candidate: foreground_catalog.csv redshift, redshift_err, redshift_source columns (DESI spec, LS/Zhou phot, PS1-STRM phot, NED). Survey provenance: DESI Legacy DR9 / Zhou+2021 photo-z, DESI DR1 spec-z, NED, PS1-STRM (budget.tex:48-52; foreground_table.tex caption).","Host redshifts (spectroscopic) for 9/12: zach 0.043, whitney 0.479, oran 0.3005, isha 0.2505, wilhelm 0.51, phineas 0.271, hamilton 0.3024, chromatica 0.074, casey 0.287 (budget CSV z_frb col + bursts.csv z_spec). 3 hosts have placeholder z=1.0 (freya, mahi, johndoeii): sightline_dm_scattering_budget.csv z_is_placeholder=True (rows 8,10,13); docs/codetection-science-plan.md:37.","TOA co-detection verification result available for context: residuals mean 2.42 ms, std 3.06 ms, median 1.88 ms; uncorrelated with DM (r=0.14, p=0.67); DM range 262-959 pc/cm^3 (toa.tex:36-49). This is the toa.tex subsection that observations.tex already \\input's.","dsa110-FLITS pipeline reference for reproducibility: budget.tex:75 already cites '\\texttt{dsa110-FLITS} pipeline (\\texttt{pipeline/})'. The OO orchestrator is scattering/pipeline/ (docs/codetection-science-plan.md:19-20). DATA_SOURCES.md documents the 24 npy spectra (12 CHIME + 12 DSA), shape DSA (6144,2500), CHIME (1024,32000), external on CANFAR arc.","Sample tiering language exists: GOLD/SILVER tiered scope, report all 12 with per-burst constraint level (docs/codetection-science-plan.md:12, Decision 4).","Galactic latitude / sky location per burst available: sightline_dm_scattering_budget.csv l_deg,b_deg cols; bursts.csv localization (RA/Dec sexagesimal). Mid-|b| sightlines with reliable NE2025 floor: zach, wilhelm, hamilton (budget.tex:111-114)."],"missing":["Baseband morphologies / sub-burst structure descriptions: NO per-burst morphology data anywhere in repo (rg 'baseband|morpholog|sub-burst|subcomponent' over docs/scratch/configs returns nothing; raw npy are external on CANFAR arc, not loadable here). The TODO names 'baseband morphologies' but only the multi-vs-single-component distinction is available, and that lives in budget.tex:188-206 (multicomp method) + results.tex:9-15 (zach multi-component alpha) -- not as a per-burst morphology catalog.","Host stellar masses: ABSENT for FRB hosts. rg 'stellar.?mass|log.?mstar|m_star|logmstar' finds nothing. The only logM in repo (sightline_dm_scattering_budget.csv best_logM, foreground sheets) is the INTERVENING-galaxy halo mass used for the CGM DM model, mostly 'assumed' (=10.0) confidence, NOT host stellar masses. The TODO's 'stellar masses' (host) cannot be written from repo data.","Intervening-candidate stellar masses (per the TODO 'stellar masses per sightline'): only halo log-mass proxies exist (best_logM), labeled assumed/measured confidence in budget CSV; no true stellar-mass photometry table. Most are 'assumed'=10.0 (rows in sightline_dm_scattering_budget.csv).","TNS-name/MJD inconsistencies to resolve before tabulating: bursts.csv assigns FRB 20230814B+mjd 60369.37 to johndoeII but toa.tex/bursts.yaml johndoeii is mjd 60170.361 (60369.371 is Casey's MJD in toa.tex). bursts.csv mahi=FRB 20240119A mjd 60200.207 but toa.tex Mahi mjd=60331.104 (60200.207 is Hamilton's MJD in toa.tex). These TNS&lt;-&gt;MJD&lt;-&gt;nickname rows are internally contradictory across sources; the correct TNS names for isha/johndoeii/mahi must be confirmed (likely a swap in bursts.csv) before publication.","Per-burst PASS/MARGINAL/FAIL validation flags for all 12 in one place: only 3 FAIL flags surfaced (wilhelm/freya/casey); the budget CSV tau_obs_quality is blank for most rows because tau_obs was not populated there. A complete per-burst scattering quality table is not assembled in repo (docs/codetection-science-plan.md:37 says 11/12 joint fits, scintillation Dnu only 3/12).","Whether the DSA 1.4 GHz 'scattering' to report in observations is tau or the scintillation decorrelation bandwidth gamma/Dnu: bursts.csv gamma_1p4ghz is a decorrelation-bandwidth-like quantity, the budget/results sections frame the headline as tau_1ghz + alpha. Which DSA-1.4GHz number observations.tex should headline (vs deferring tau/alpha to results.tex) is a structuring decision, not a data gap."],"outline":["Para 1 - The sample (opening of sec:obs, before the \\input{toa.tex}): introduce the 12 CHIME/FRB-DSA-110 co-detected bursts as the sample. State the defining asset (same burst seen at 400-800 MHz and ~1.4 GHz, ~1 GHz lever arm), the DM range 262-960 pc/cm^3, the MJD span (2022-02 to 2024-02, MJD 59617-60369), and that all 12 are listed with nickname&lt;-&gt;TNS&lt;-&gt;MJD&lt;-&gt;DM in Table~\\ref{tab:toa}. Note the tiered GOLD/SILVER reporting (all 12 reported at a per-burst constraint level). Facts: toa.tex:78-89, bursts.csv:2-13, codetection-science-plan.md:12. Do NOT redo the DM-budget decomposition (budget.tex owns it).","Para 2 - Data and the 
+... (truncated 17416 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/wp7ymijqu.output)</result>
+<usage><agent_count>4</agent_count><subagent_tokens>308796</subagent_tokens><tool_uses>66</tool_uses><duration_ms>203421</duration_ms></usage>
+</task-notification>
+
+---
+
+I think, regarding the intro and abstract, we can defer until all of our analysis is complete and all of the rest of the sections are filled in. I think we can do both of those last.
+
+---
+
+I think, regarding the intro and abstract, we can defer until all of our analysis is complete and all of the rest of the sections are filled in. I think we can do both of those last.
+
+For #1 and #2, push both and open PRs. Then oversee the successful review and merge to main for both.
+
+---
+
+<task-notification>
+<task-id>b71qqbiln</task-id>
+<tool-use-id>toolu_017gqiJM1u3fSPENY3aGT3RY</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/b71qqbiln.output</output-file>
+<status>completed</status>
+<summary>Background command "Watch FLITS CI to completion, then report both PR final states" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+yes, delete the remote merged branches
+
+---
+
+what's the issue with the MJD's and data integrity?
+
+---
+
+Run the looup
+
+---
+
+Run the lookup
+
+---
+
+both
+
+---
+
+<task-notification>
+<task-id>wa31fi5cl</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/wa31fi5cl.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Adversarially verify the bursts.csv MJD/TNS fix and the manuscript nickname-&gt;TNS sweep" completed</summary>
+<result>[{"ok":false,"artifact":"Audit of the nickname→TNS sweep across sections/observations.tex, sections/results.tex, sections/toa.tex, sections/budget.tex, budget_table.tex, foreground_table.tex in /Users/jakobfaber/Developer/overleaf/Faber2026 (git diff vs main).\n\nMAPPING (all 12 correct): zach→FRB 20220207C, whitney→FRB 20220310F, oran→FRB 20220506D, isha→FRB 20221113A, wilhelm→FRB 20221203A, phineas→FRB 20230307A, freya→FRB 20230325A, johndoeii→FRB 20230814A, hamilton→FRB 20230913A, mahi→FRB 20240122A, chromatica→FRB 20240203A, casey→FRB 20240229A. Every removed nickname maps to exactly the authoritative TNS name; no wrong TNS, typo, or transposition.\n\nPOINT 3 (corrected designations): mahi→FRB 20240122A (NOT 20240119A) OK and johndoeii→FRB 20230814A (NOT 20230814B) OK — both landed correctly.\n\nPOINT 4 (data-row integrity, cross-checked vs results/sightline_dm_scattering_budget.md and scratch/codetection/bursts.csv):\n - budget_table.tex FRB 20240122A (mahi): \\nodata z placeholder, DM_obs 960, DM_MW 171, regime none OK.\n - budget_table.tex FRB 20230814A (johndoeii): DM_obs 696, DM_MW 145, interior/assumed, tau 0.23 OK.\n - toa.tex FRB 20240122A: DM 960.13, MJD 60331.104 (matches mahi) OK; FRB 20230814A: DM 696.51, MJD 60170.361 (matches johndoeii) OK; all 12 DM/MJD rows align with bursts.csv.\n - foreground_table.tex: each TNS-labeled row keeps its own foreground entries (mahi has 0 foregrounds in CSV and correctly appears in no foreground row). Rows match CSV foreground counts.\n No row was shifted onto another burst's data.\n\nPOINT 2 (false positives): No TNS name landed on a LaTeX command, a \\ref label, a column header, or an unrelated word. Graphics filenames wilhelm_scint_dnud_ne2025 (budget.tex:79) and wilhelm_pbf_evidence (budget.tex:177) were correctly left untouched. The comment results.tex:58 deliberately documents \"(internal nickname: zach)\" as provenance — intentional, not a missed substitution.\n\nPOINT 5 (no nickname remains): Confirmed in diff context. The only surviving nickname tokens are the two intentional cases above (provenance comment + two figure-asset filenames).\n\nDEFECTS FOUND: 3 doubled-prefix artifacts in sections/budget.tex. The source already carried an \"FRB~\" prefix on the nickname (FRB~wilhelm), and the sweep replaced only the nickname, yielding \"FRB~FRB 20221203A\" at lines 81, 126, 178. Data is correct; this is a rendered-text/caption formatting defect.","issues":[{"severity":"major","detail":"sections/budget.tex:81 — doubled FRB prefix. Source was \"FRB~wilhelm.\"; the sweep replaced only the nickname, producing \"FRB~FRB 20221203A. DSA-resolved $\\Delta\\nu_d\\approx0.13$...\". Renders as \"FRB FRB 20221203A\" in the figure caption.","suggested_fix":"Replace \"FRB~FRB 20221203A\" with \"FRB~20221203A\" (drop the redundant inner \"FRB \"), giving rendered text \"FRB 20221203A\"."},{"severity":"major","detail":"sections/budget.tex:126 — doubled FRB prefix. Source was \"prototype sightline FRB~wilhelm,\"; now reads \"prototype sightline FRB~FRB 20221203A, and Figure~\\ref{fig:codetection_excess}...\".","suggested_fix":"Replace \"FRB~FRB 20221203A\" with \"FRB~20221203A\"."},{"severity":"major","detail":"sections/budget.tex:178 — doubled FRB prefix in \\caption. Source was \"Band-dependent PBF preference for FRB~wilhelm.\"; now \"...preference for FRB~FRB 20221203A. \\emph{Left:}...\".","suggested_fix":"Replace \"FRB~FRB 20221203A\" with \"FRB~20221203A\"."}]},{"artifact":"Audited /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scratch/codetection/bursts.csv against all 5 checks using astropy Time (conda env `flits`). The fix is fully correct.\n\nCHECK 1 — mjd-&gt;UTC date == TNS-name date, all 12 rows PASS:\n  zach       59617.8085 -&gt; 2022-02-07 == 20220207 OK\n  whitney    59648.2417 -&gt; 2022-03-10 == 20220310 OK\n  oran       59705.5970 -&gt; 2022-05-06 == 20220506 OK\n  isha       59896.3865 -&gt; 2022-11-13 == 20221113 OK\n  wilhelm    59916.0018 -&gt; 2022-12-03 == 20221203 OK\n  phineas    60010.3789 -&gt; 2023-03-07 == 20230307 OK\n  freya      60028.0717 -&gt; 2023-03-25 == 20230325 OK\n  johndoeII  60170.3609 -&gt; 2023-08-14 == 20230814 OK\n  hamilton   60200.2072 -&gt; 2023-09-13 == 20230913 OK\n  mahi       60331.1043 -&gt; 2024-01-22 == 20240122 OK (T=02:30:09 UTC, 24s off TNS 02:30:33)\n  chromatica 60343.8318 -&gt; 2024-02-03 == 20240203 OK\n  casey      60369.3710 -&gt; 2024-02-29 == 20240229 OK\n  The cyclic mjd rotation on the bottom 5 rows is fully un-rotated; every date now matches its own name.\n\nCHECK 2 — corrected names present: mahi=FRB 20240122A OK, johndoeII=FRB 20230814A OK. Neither 20240119A nor 20230814B remains (both absent). PASS.\n\nCHECK 3 — the 5 mjd values across {johndoeII,hamilton,mahi,chromatica,casey} are an exact permutation of the original five. sorted(orig)==sorted(post)=True; missing=∅, invented=∅; count=5. No MJD invented, dropped, or numerically altered. PASS.\n\nCHECK 4 — science columns undisturbed: mahi z_spec blank, ra=39.7665 dec=71.0178611111, gamma=0.33955, tau=0.208; hamilton z_spec=0.3024. PASS.\n\nCHECK 5 — mahi name/date/position triangulate to FRB 20240122A. Row ra/dec (02h39m03.96s +71d01m04.3s) sits 4.24 arcmin from the prompt's coarse TNS cone-search coords (02:38:28.8 +71:04:12); date and time-of-day match. This separation is expected (precise CHIME baseband position vs rounded TNS discovery coords), not a fix defect. The CSV has no DM column (gamma_1p4ghz / tau_1ghz are scattering observables), so DM 959.58 is corroborated via the name/date/time identification rather than a numeric field. PASS.\n\nConclusion: fix is fully correct. ok=true.","ok":true,"issues":[]}]</result>
+<usage><agent_count>2</agent_count><subagent_tokens>132037</subagent_tokens><tool_uses>18</tool_uses><duration_ms>113665</duration_ms></usage>
+</task-notification>
+
+---
+
+push + PR + merge for both
+
+---
+
+<task-notification>
+<task-id>bh24mredu</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/ac2a9913-fd5b-4f77-94f2-94af3daf53d7/tasks/bh24mredu.output</output-file>
+<status>completed</status>
+<summary>Background command "Watch FLITS #25 CI, report both PR final states" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+yes
+
+---
+
+If you have access to the Google Sheet, do you think you could fix it?
