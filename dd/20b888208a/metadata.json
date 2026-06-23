@@ -3,7 +3,7 @@
   "checkpoint_id": "dd20b888208a",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 15,
+  "checkpoints_count": 18,
   "files_touched": [
     "galaxies/v2_0/engines_extra.py",
     "galaxies/v2_0/test_engines_extra.py"
@@ -20,13 +20,19 @@
       "transcript": "/dd/20b888208a/1/full.jsonl",
       "content_hash": "/dd/20b888208a/1/content_hash.txt",
       "prompt": "/dd/20b888208a/1/prompt.txt"
+    },
+    {
+      "metadata": "/dd/20b888208a/2/metadata.json",
+      "transcript": "/dd/20b888208a/2/full.jsonl",
+      "content_hash": "/dd/20b888208a/2/content_hash.txt",
+      "prompt": "/dd/20b888208a/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 272596,
-    "cache_creation_tokens": 5126583,
-    "cache_read_tokens": 185649835,
-    "output_tokens": 1245812,
-    "api_call_count": 842
+    "input_tokens": 323153,
+    "cache_creation_tokens": 5339694,
+    "cache_read_tokens": 194710812,
+    "output_tokens": 1327913,
+    "api_call_count": 880
   }
 }
