@@ -3,7 +3,7 @@
   "checkpoint_id": "3276ec12527c",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 2,
+  "checkpoints_count": 4,
   "files_touched": [
     "galaxies/v2_0/scattering_predict.py",
     "galaxies/v2_0/test_scattering_predict.py"
@@ -20,13 +20,19 @@
       "transcript": "/32/76ec12527c/1/full.jsonl",
       "content_hash": "/32/76ec12527c/1/content_hash.txt",
       "prompt": ""
+    },
+    {
+      "metadata": "/32/76ec12527c/2/metadata.json",
+      "transcript": "/32/76ec12527c/2/full.jsonl",
+      "content_hash": "/32/76ec12527c/2/content_hash.txt",
+      "prompt": "/32/76ec12527c/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 918,
-    "cache_creation_tokens": 74770,
-    "cache_read_tokens": 6041276,
-    "output_tokens": 60212,
-    "api_call_count": 19
+    "input_tokens": 103019,
+    "cache_creation_tokens": 1403220,
+    "cache_read_tokens": 70618675,
+    "output_tokens": 588305,
+    "api_call_count": 326
   }
 }
