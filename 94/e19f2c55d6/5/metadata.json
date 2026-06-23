@@ -1,0 +1,58 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "94e19f2c55d6",
+  "session_id": "c1651240-9262-48ae-aef0-281d2eff3ef9",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-23T03:28:55.30122Z",
+  "branch": "fix/issue-37-per-band-dt-min",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    ".agents/plan-dt-min-per-band.md",
+    ".agents/research-multicomponent-joint-evidence.md"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "1e6905889385",
+  "token_usage": {
+    "input_tokens": 21209,
+    "cache_creation_tokens": 108404,
+    "cache_read_tokens": 1710097,
+    "output_tokens": 24325,
+    "api_call_count": 19
+  },
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-23T03:28:55.244427Z",
+    "agent_lines": 238,
+    "agent_removed": 0,
+    "human_added": 83,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 321,
+    "total_lines_changed": 321,
+    "agent_percentage": 74.14330218068535,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 233,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/research-multicomponent-joint-evidence.md": 233
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}

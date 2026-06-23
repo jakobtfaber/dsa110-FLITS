@@ -1,0 +1,1 @@
+Please read the handoff prompt in /Users/jakobfaber/.gemini/antigravity-cli/brain/f7a3e5da-da44-40d2-96b6-d9d8285dcab4/handoff_burst_energy.md and implement the burst isotropic equivalent energy calculation script and output results.
