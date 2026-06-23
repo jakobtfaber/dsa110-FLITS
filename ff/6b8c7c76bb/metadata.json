@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "ff6b8c7c76bb",
+  "strategy": "manual-commit",
+  "branch": "fix/ne2025-test-mwprop-importorskip",
+  "checkpoints_count": 0,
+  "files_touched": [
+    "tests/test_ne2025_floor.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/ff/6b8c7c76bb/0/metadata.json",
+      "transcript": "/ff/6b8c7c76bb/0/full.jsonl",
+      "content_hash": "/ff/6b8c7c76bb/0/content_hash.txt",
+      "prompt": "/ff/6b8c7c76bb/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 274,
+    "cache_creation_tokens": 13280,
+    "cache_read_tokens": 2177277,
+    "output_tokens": 10778,
+    "api_call_count": 8
+  }
+}
