@@ -128,6 +128,26 @@ def test_dsa_fluence_matches_catalog_scale():
         assert 1.0 / 3 < band_avg / f_cat < 3.0, (nick, band_avg, f_cat)
 
 
+def test_joint_band_fluence_matches_catalog_scale():
+    # the model-based DSA fluence actually used for E_iso (joint c0/gamma, measured beam,
+    # coherent-beam SEFD, /noise_std bandpass-unit correction over the fit's valid channels) must
+    # land within ~3x of the Law+2024 catalog. Guards the c0/noise_std correction (without it the
+    # bandpass-unit c0 reads ~15-25x low) and the valid-channel mask (without it RFI channels with
+    # noise_std~0 blow the integral up by orders of magnitude).
+    import pytest
+
+    from analysis.flux_cal import _band_burst_config, joint_band_fluence_jy_ms_hz
+
+    CATALOG = {"zach": 16.2, "whitney": 26.2, "oran": 13.2}  # Law+2024 (arXiv:2307.03344) Table 1
+    band_hz = 1.499e9 - 1.311e9
+    for nick, f_cat in CATALOG.items():
+        npy, _, _, _ = _band_burst_config(nick, "D")
+        if not npy.exists():
+            pytest.skip(f"{npy.name} not staged (data/dsa/ external)")
+        band_avg = joint_band_fluence_jy_ms_hz(nick, "D") / band_hz
+        assert 1.0 / 3 < band_avg / f_cat < 3.0, (nick, band_avg, f_cat)
+
+
 def test_dsa_sefd_csv_present_and_sane():
     import csv
     from pathlib import Path

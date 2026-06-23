@@ -182,6 +182,119 @@ def dsa_band_fluence_jy_ms_hz(nick):
     return calibrated_band_integral_jy_ms_hz(sn_int, sigma_jy, freq_hz, dt_ms)
 
 
+def _band_burst_config(nick, band):
+    """(npy_path, f_factor, t_factor, telescope) from the band's batch config (band 'C'|'D')."""
+    from pathlib import Path
+
+    import yaml
+
+    tel = {"C": "chime", "D": "dsa"}[band]
+    cfg = Path(__file__).resolve().parents[1] / "configs" / "batch" / tel / f"{nick}_{tel}.yaml"
+    if not cfg.exists():
+        raise FileNotFoundError(f"{cfg} missing -- no {tel} batch config for {nick}")
+    c = yaml.safe_load(cfg.read_text())
+    return (
+        (cfg.parent / c["path"]).resolve(),
+        int(c.get("f_factor", 1)),
+        int(c.get("t_factor", 1)),
+        tel,
+    )
+
+
+def joint_c0_gamma(nick, band):
+    """(c0, gamma, c0_frac_err) for a band from the joint fit JSON (band 'C'|'D').
+
+    c0_frac_err is the mean of the asymmetric 16/84 half-widths over the median -- the statistical
+    amplitude (hence fluence) uncertainty that propagates into the energy.
+    """
+    import json
+    from pathlib import Path
+
+    p = (
+        Path(__file__).resolve().parents[1]
+        / "analysis"
+        / "scattering-refit-2026-06"
+        / "joint_json"
+        / f"{nick}_joint_fit.json"
+    )
+    if not p.exists():
+        raise FileNotFoundError(f"{p} missing -- no joint fit for {nick}")
+    pct = json.loads(p.read_text())["percentiles"]
+    e = pct[f"c0_{band}"]
+    c0 = e["median"]
+    frac = 0.5 * (e["err_plus"] + e["err_minus"]) / c0 if c0 else float("nan")
+    return c0, pct[f"gamma_{band}"]["median"], frac
+
+
+def _band_noise_grid(npy, telescope, f_factor, t_factor):
+    """(freq_hz, noise_std, dt_ms, dnu_hz, valid) loaded exactly as the joint fit did (crop, pad 0.5).
+
+    Matching onpulse_pad_factor=0.5 is essential: c0 is in the joint fit's bandpass-normalized data
+    units, so the per-channel noise_std used to convert it to S/N must come from that same window.
+    `valid` is the per-channel mask the fit actually used: RFI-masked channels have noise_std ~ 0 and
+    must be excluded (else c0/noise_std explodes), so the integral runs over the SAME channels as the fit.
+    """
+    import sys
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(repo / "scattering"))
+    from scat_analysis.config_utils import load_telescope_block
+    from scat_analysis.pipeline.io import BurstDataset
+
+    tel = load_telescope_block(str(repo / "scattering" / "configs" / "telescopes.yaml"), telescope)
+    ds = BurstDataset(
+        npy,
+        npy,
+        telescope=tel,
+        f_factor=f_factor,
+        t_factor=t_factor,
+        onpulse_crop=True,
+        onpulse_pad_factor=0.5,
+    )
+    m = ds.model
+    ns = m.noise_std
+    if m.valid is not None:
+        valid = m.valid if m.valid.ndim == 1 else np.any(m.valid, axis=1)
+    else:
+        valid = np.isfinite(ns) & (ns > 0)
+    valid = valid & np.isfinite(ns) & (ns > 1e-6 * np.nanmedian(ns[valid]))  # drop masked channels
+    return m.freq * 1e9, ns, ds.dt_ms, ds.df_MHz * 1e6, valid
+
+
+def joint_band_fluence_jy_ms_hz(nick, band):
+    """Model-based calibrated band fluence [Jy*ms*Hz] from the joint fit (band 'C'|'D').
+
+        F = int sigma_S(nu) * [ c0 (nu/ref)^gamma / noise_std(nu) ] dnu.
+
+    The bracket is int(S/N) dt per channel: int(model)dt = c0 for the area-conserving scattering
+    kernel (verified -- tail-complete, no on-pulse window to tune), and dividing by the joint fit's
+    per-channel noise_std converts its bandpass-normalized c0 to S/N units (noise_std ~ 0.04, not 1).
+    sigma_S is the DSA measured-beam or CHIME documented-cylinder-beam radiometer noise (n_pol=2).
+    """
+    npy, ff, tf, tel = _band_burst_config(nick, band)
+    if not npy.exists():
+        raise FileNotFoundError(f"{npy} not materialized -- stage the {tel} .npy under data/{tel}/")
+    c0, gamma, _frac = joint_c0_gamma(nick, band)
+    freq_hz, noise_std, dt_ms, dnu_hz, valid = _band_noise_grid(npy, tel, ff, tf)
+    ref = np.median(freq_hz)  # the fit references c0 to the median of the FULL channel grid
+    fz, ns = freq_hz[valid], noise_std[valid]  # integrate over the channels the fit used
+    amp_sn = c0 * (fz / ref) ** gamma / ns  # int(S/N) dt per valid channel [S/N*ms]
+    if band == "D":
+        from analysis.dsa_beam import beam_gain
+
+        _mjd, _ra, dec = burst_epoch_position(nick)
+        theta, phi = dsa_beam_offset(dec, dsa_pointing_dec(nick))
+        sigma_jy = dsa_sigma_jy(
+            fz, dnu_hz, load_dsa_sefd_beam(nick), dt_ms / 1e3, theta, phi, beam_gain
+        )
+    else:  # CHIME baseband: beam formed at the source -> G ~ 1
+        from analysis.chime_beam import chime_sigma_jy, load_chime_sefd
+
+        sigma_jy = chime_sigma_jy(fz, dnu_hz, load_chime_sefd(), dt_ms / 1e3, g=1.0)
+    return float(np.trapezoid(sigma_jy * amp_sn, fz))
+
+
 def _check() -> None:
     # 1. radiometer noise vs analytic: 2000/sqrt(2*1e6*1e-3) == sqrt(2000); G=0.5 doubles it
     s = radiometer_sigma_jy(2000.0, 2, 1e6, 1e-3, 1.0)
