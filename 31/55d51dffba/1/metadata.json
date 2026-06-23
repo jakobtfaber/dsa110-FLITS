@@ -3,20 +3,21 @@
   "checkpoint_id": "3155d51dffba",
   "session_id": "ac2a9913-fd5b-4f77-94f2-94af3daf53d7",
   "strategy": "manual-commit",
-  "created_at": "2026-06-23T06:13:22.749405Z",
+  "created_at": "2026-06-23T06:14:50.62137Z",
   "branch": "feature/radiometer-flux-cal",
   "checkpoints_count": 1,
-  "save_step_count": 1,
   "files_touched": [],
   "agent": "Claude Code",
   "model": "claude-opus-4-8[1m]",
   "turn_id": "cc3f73d89127",
+  "checkpoint_transcript_start": 2884,
+  "transcript_lines_at_start": 2884,
   "token_usage": {
-    "input_tokens": 114115,
-    "cache_creation_tokens": 1963235,
-    "cache_read_tokens": 68163784,
-    "output_tokens": 547553,
-    "api_call_count": 317
+    "input_tokens": 8,
+    "cache_creation_tokens": 4433,
+    "cache_read_tokens": 1361862,
+    "output_tokens": 2638,
+    "api_call_count": 4
   },
   "skill_events_version": 1,
   "skill_events": [
