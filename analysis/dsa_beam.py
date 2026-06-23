@@ -26,12 +26,31 @@ burst's epoch. See analysis/burst_energies/CALIBRATION_REVIEW.md.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import numpy as np
 
-# External cube (~345 MB, gitignored); override via telescopes.yaml `beam_model_h5`.
-DEFAULT_BEAM = Path.home() / "Downloads" / "DSA110_beam_1.h5"
+
+def _default_beam() -> Path:
+    """First existing of $FLITS_DSA_BEAM, repo data/DSA110_beam_1.h5, ~/Downloads (back-compat).
+
+    The cube is ~345 MB and gitignored; the canonical stable location is the repo's data/ dir.
+    Returns the canonical path even when absent so callers get a clear, repo-relative error.
+    """
+    repo = Path(__file__).resolve().parents[1]
+    canonical = repo / "data" / "DSA110_beam_1.h5"
+    for p in (
+        os.environ.get("FLITS_DSA_BEAM"),
+        canonical,
+        Path.home() / "Downloads" / "DSA110_beam_1.h5",
+    ):
+        if p and Path(p).exists():
+            return Path(p)
+    return canonical
+
+
+DEFAULT_BEAM = _default_beam()
 
 
 def load_power_beam(path: str | Path = DEFAULT_BEAM):
