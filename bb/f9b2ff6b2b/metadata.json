@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "bbf9b2ff6b2b",
+  "strategy": "manual-commit",
+  "branch": "feat/codetection-association-significance",
+  "checkpoints_count": 0,
+  "files_touched": [
+    ".agents/implement-codetection-association-significance.md",
+    ".agents/plan-codetection-association-significance.md",
+    "docs/codetection-science-plan.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bb/f9b2ff6b2b/0/metadata.json",
+      "transcript": "/bb/f9b2ff6b2b/0/full.jsonl",
+      "content_hash": "/bb/f9b2ff6b2b/0/content_hash.txt",
+      "prompt": ""
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 278,
+    "cache_creation_tokens": 11438,
+    "cache_read_tokens": 3875643,
+    "output_tokens": 7083,
+    "api_call_count": 10
+  }
+}
