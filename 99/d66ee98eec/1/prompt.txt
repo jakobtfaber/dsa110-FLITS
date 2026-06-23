@@ -94,3 +94,7 @@ Would it be better to run this on hpcc?
 ---
 
 How far along is the local processess?
+
+---
+
+Yes, post result as PR #11 commend and flip docs
