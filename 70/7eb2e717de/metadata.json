@@ -3,7 +3,7 @@
   "checkpoint_id": "707eb2e717de",
   "strategy": "manual-commit",
   "branch": "feature/radiometer-flux-cal",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "docs/entire-tracing-checkpoints.md"
   ],
@@ -19,6 +19,12 @@
       "transcript": "/70/7eb2e717de/1/full.jsonl",
       "content_hash": "/70/7eb2e717de/1/content_hash.txt",
       "prompt": "/70/7eb2e717de/1/prompt.txt"
+    },
+    {
+      "metadata": "/70/7eb2e717de/2/metadata.json",
+      "transcript": "/70/7eb2e717de/2/full.jsonl",
+      "content_hash": "/70/7eb2e717de/2/content_hash.txt",
+      "prompt": "/70/7eb2e717de/2/prompt.txt"
     }
   ],
   "token_usage": {
