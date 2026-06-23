@@ -27,7 +27,7 @@ Scoping the most-interesting science extractable from the 12 CHIME/DSA co-detect
 | `flits/batch/` | Multi-burst runner → SQLite, joint τ–Δν, export | Partial (scint config-gen + τ(ν) placeholders) |
 | `flits/fitting/`, `orchestration/` | Validation thresholds; Maistro provenance | Mature |
 | `galaxies/v2_0/` | Foreground search + **mNFW CGM DM+τ budget** | Mature — most complete science surface |
-| `crossmatching/` | CHIME↔DSA TOA + geometric-delay co-detection | **Stub / aspirational** |
+| `crossmatching/` | CHIME↔DSA TOA + geometric-delay co-detection; **association significance** (`association.py`, pillars 1–4) | TOA + chance-coincidence pillar implemented & tested (`association_report.json`); pillars 2/4 (independent CHIME DM / localization) wired but await CHIME-side data |
 | `dispersion/dmphasev2.py` | DM-phase coherence estimator | Partial, standalone |
 
 ## B. The sample (ground truth)
