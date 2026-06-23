@@ -271,3 +271,11 @@ Run cleanup.
 ---
 
 What's next?
+
+---
+
+Proceed with #1
+
+---
+
+Tackle all 5 using /ai-research-workflows workflows, as well as /boris and /ponytail

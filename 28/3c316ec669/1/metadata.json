@@ -180,6 +180,37 @@
         "label": "Skill: ai-research-workflows:research",
         "default_collapsed": true
       }
+    },
+    {
+      "id": "claude-skill-toolu_019mn9R7t5ru5sjC3bvzUU8J",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "02e4da79b642",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 4692,
+        "end": 4693,
+        "entry_ids": [
+          "8e9b8339-c9cd-424a-bba4-2ea9987646a4"
+        ],
+        "tool_use_id": "toolu_019mn9R7t5ru5sjC3bvzUU8J"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_019mn9R7t5ru5sjC3bvzUU8J"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: boris",
+        "default_collapsed": true
+      }
     }
   ],
   "session_metrics": {
