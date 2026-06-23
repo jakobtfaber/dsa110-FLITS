@@ -1,0 +1,5 @@
+/ai-research-workflows:researching
+
+---
+
+Ok - run this way.

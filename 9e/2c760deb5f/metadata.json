@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "9e2c760deb5f",
+  "strategy": "manual-commit",
+  "branch": "feature/radiometer-flux-cal",
+  "checkpoints_count": 6,
+  "files_touched": [
+    "analysis/burst_energies/CALIBRATION_REVIEW.md",
+    "analysis/burst_energies/refit_calibrated.manifest.json",
+    "analysis/burst_energies/refit_calibrated.py",
+    "analysis/burst_energies/refit_calibrated.review.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/9e/2c760deb5f/0/metadata.json",
+      "transcript": "/9e/2c760deb5f/0/full.jsonl",
+      "content_hash": "/9e/2c760deb5f/0/content_hash.txt",
+      "prompt": "/9e/2c760deb5f/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 23798,
+    "cache_creation_tokens": 373815,
+    "cache_read_tokens": 4147803,
+    "output_tokens": 28193,
+    "api_call_count": 33
+  }
+}
