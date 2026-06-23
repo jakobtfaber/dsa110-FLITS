@@ -3,7 +3,7 @@
   "checkpoint_id": "94e19f2c55d6",
   "strategy": "manual-commit",
   "branch": "fix/issue-37-per-band-dt-min",
-  "checkpoints_count": 4,
+  "checkpoints_count": 8,
   "files_touched": [
     ".agents/implement-dt-min-per-band.md",
     ".agents/plan-dt-min-per-band.md",
@@ -23,6 +23,12 @@
       "transcript": "/94/e19f2c55d6/1/full.jsonl",
       "content_hash": "/94/e19f2c55d6/1/content_hash.txt",
       "prompt": "/94/e19f2c55d6/1/prompt.txt"
+    },
+    {
+      "metadata": "/94/e19f2c55d6/2/metadata.json",
+      "transcript": "/94/e19f2c55d6/2/full.jsonl",
+      "content_hash": "/94/e19f2c55d6/2/content_hash.txt",
+      "prompt": "/94/e19f2c55d6/2/prompt.txt"
     }
   ],
   "token_usage": {
