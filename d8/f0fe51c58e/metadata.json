@@ -3,7 +3,7 @@
   "checkpoint_id": "d8f0fe51c58e",
   "strategy": "manual-commit",
   "branch": "docs/research-joint-fit-state",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     ".agents/research-joint-fit-state.md"
   ],
@@ -13,13 +13,19 @@
       "transcript": "/d8/f0fe51c58e/0/full.jsonl",
       "content_hash": "/d8/f0fe51c58e/0/content_hash.txt",
       "prompt": "/d8/f0fe51c58e/0/prompt.txt"
+    },
+    {
+      "metadata": "/d8/f0fe51c58e/1/metadata.json",
+      "transcript": "/d8/f0fe51c58e/1/full.jsonl",
+      "content_hash": "/d8/f0fe51c58e/1/content_hash.txt",
+      "prompt": "/d8/f0fe51c58e/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 36214,
-    "cache_creation_tokens": 555256,
-    "cache_read_tokens": 31869480,
-    "output_tokens": 192693,
-    "api_call_count": 141
+    "input_tokens": 149512,
+    "cache_creation_tokens": 2476872,
+    "cache_read_tokens": 94635764,
+    "output_tokens": 705242,
+    "api_call_count": 441
   }
 }
