@@ -1,0 +1,26 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "dba36dfc9cbf",
+  "strategy": "manual-commit",
+  "branch": "feature/cluster-catalog-engine",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "results/phineas_galaxies.csv",
+    "results/whitney_galaxies.csv"
+  ],
+  "sessions": [
+    {
+      "metadata": "/db/a36dfc9cbf/0/metadata.json",
+      "transcript": "/db/a36dfc9cbf/0/full.jsonl",
+      "content_hash": "/db/a36dfc9cbf/0/content_hash.txt",
+      "prompt": "/db/a36dfc9cbf/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 104875,
+    "cache_creation_tokens": 2514179,
+    "cache_read_tokens": 84992622,
+    "output_tokens": 505325,
+    "api_call_count": 393
+  }
+}
