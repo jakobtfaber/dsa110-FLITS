@@ -1,0 +1,146 @@
+You are working on h17. Re-do the CHIME singlebeam TOA extraction for the CHIME-DSA co-detection sample and verify the previously obtained notebook-derived timing results.
+
+Context:
+- Data root on h17:
+  /data/research/astrophysics/frbs/chime-dsa-codetections
+- CHIME singlebeam HDF5 files:
+  /data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam/*.h5
+- There should be 12 files.
+- Use the CANFAR-pulled baseband_analysis environment/image. Do not trust or import any pre-existing baseband-analysis checkout already on h17 unless it is explicitly the fresh CANFAR source snapshot under this project root.
+- Docker image previously pulled:
+  chimefrb/baseband-analysis:latest
+  expected digest:
+  chimefrb/baseband-analysis@sha256:f510909d892d0d5224c982c590cbe80967a49a59b79c396ab72bb710105c4c41
+- Wrapper scripts, if present:
+  /data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_python.sh
+  /data/research/astrophysics/frbs/chime-dsa-codetections/bin/baseband_analysis_shell.sh
+
+Known file structure:
+- The CHIME files are readable with:
+  from baseband_analysis.core.bbdata import BBData
+  bb = BBData.from_file(path)
+- Relevant datasets observed:
+  tiedbeam_baseband: complex64, shape roughly (n_freq, 2, n_time)
+  tiedbeam_power: float32, same shape
+  time0: structured timing array with fpga_count, ctime, ctime_offset
+  first_packet_recv_time: float64
+- Do not assume the dataset is named "baseband"; it is named "tiedbeam_baseband" in these files.
+
+Goal:
+Reproduce the CHIME TOA extraction from the singlebeam HDF5 files and compare the derived CHIME TOAs against the notebook-derived 400 MHz CHIME TOAs used by the crossmatching code/results. The purpose is verification and provenance, not adding a joint likelihood, clock model, or hypothesis test.
+
+Repository/results to compare against:
+- Find the FLITS repo on h17, likely:
+  /home/jfaber/flits/dsa110-FLITS
+- The notebook-derived crossmatch result file should be:
+  crossmatching/toa_crossmatch_results.json
+- Also look for any crossmatching fixture added for notebook reproduction, likely under:
+  tests/fixtures/
+  or
+  crossmatching/
+- If paths differ, locate with:
+  find /home/jfaber -path '*dsa110-FLITS*' -type d 2>/dev/null
+  find /home/jfaber -name 'toa_crossmatch_results.json' 2>/dev/null
+
+Tasks:
+1. Verify the runtime and data inventory:
+   - Confirm there are 12 CHIME singlebeam HDF5 files.
+   - Confirm the Docker image digest actually matches the CANFAR-pulled image.
+   - Confirm all 12 files expose tiedbeam_baseband, tiedbeam_power, time0, and first_packet_recv_time.
+   - Record each file name, event_id, shape, dtype, event_date, delta_time, and any timing attrs.
+
+2. Build a narrow extraction script under the project data root or repo, for example:
+   /data/research/astrophysics/frbs/chime-dsa-codetections/scripts/extract_chime_singlebeam_toas.py
+   The script should:
+   - open each file with the CANFAR baseband_analysis image/environment;
+   - derive an intensity/power time series from tiedbeam_power and/or abs(tiedbeam_baseband)**2;
+   - handle masked/NaN samples explicitly;
+   - use the file timing metadata, especially time0, first_packet_recv_time, delta_time, and event_date, to convert the peak sample/window into an absolute CHIME TOA;
+   - where DM correction is required, shift to the same 400 MHz reference convention as the notebook results;
+   - write a compact output file with one row per burst/event.
+
+3. Compare against the previous notebook-derived results:
+   - Load crossmatching/toa_crossmatch_results.json.
+   - For each burst/event, compare the newly extracted CHIME 400 MHz TOA to the serialized notebook CHIME 400 MHz TOA used in the crossmatch result or fixture.
+   - Report residuals in ms.
+   - Also verify whether using the newly extracted CHIME TOA would reproduce measured_offset_ms in the existing JSON, holding the DSA curated timing fixed.
+   - Do not silently update the golden JSON. This is a verification pass.
+
+4. Produce diagnostic artifacts:
+   - For each burst, save a small diagnostic plot showing:
+     - dedispersed or reference-frequency-aligned intensity profile if implemented;
+     - selected peak/TOA marker;
+     - window used for peak fitting or centroiding;
+     - enough labels to identify event_id/file.
+   - Save plots under:
+     /data/research/astrophysics/frbs/chime-dsa-codetections/diagnostics/chime_singlebeam_toa/
+   - Save machine-readable results, for example:
+     /data/research/astrophysics/frbs/chime-dsa-codetections/results/chime_singlebeam_toa_reextract.json
+     /data/research/astrophysics/frbs/chime-dsa-codetections/results/chime_singlebeam_toa_reextract.csv
+
+5. Be explicit about method:
+   - State whether the TOA is peak sample, fitted Gaussian peak, matched-filter peak, centroid, or another estimator.
+   - State whether the profile came from tiedbeam_power or tiedbeam_baseband.
+   - State whether any dedispersion was applied, and what DM/reference frequency convention was used.
+   - State whether the result is directly comparable to the notebook’s serialized 400 MHz TOA.
+   - If exact reproduction is blocked by missing notebook logic, identify the missing assumption precisely.
+
+Acceptance criteria:
+- The report must distinguish these cases:
+  - HDF5 read verified;
+  - timing metadata interpreted;
+  - TOA extracted;
+  - TOA matched notebook value within tolerance;
+  - TOA mismatch diagnosed.
+- The output must include exact commands run, image digest, input file list, output paths, and residual table.
+- Do not claim success from a plot alone or from being able to open the files. Success means extracted TOAs numerically compare to the notebook-derived CHIME 400 MHz TOAs.
+- Do not modify crossmatching/toa_crossmatch_results.json unless explicitly instructed after the verification report.
+
+Useful starting commands:
+
+ROOT=/data/research/astrophysics/frbs/chime-dsa-codetections
+
+find "$ROOT/chime_singlebeam" -maxdepth 1 -type f -name '*.h5' | sort | wc -l
+
+docker image inspect chimefrb/baseband-analysis:latest \
+  --format '{{.Id}} {{index .RepoDigests 0}} {{.Size}}'
+
+"$ROOT/bin/baseband_analysis_python.sh" -c '
+from baseband_analysis.core.bbdata import BBData
+from pathlib import Path
+root = Path("/data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam")
+for p in sorted(root.glob("*.h5")):
+    bb = BBData.from_file(str(p))
+    x = bb["tiedbeam_baseband"]
+    power = bb["tiedbeam_power"]
+    print(p.name, "event_id=", bb.attrs.get("event_id"), "event_date=", bb.attrs.get("event_date"), "delta_time=", bb.attrs.get("delta_time"), "baseband=", tuple(x.shape), x.dtype, "power=", tuple(power.shape), power.dtype)
+'
+
+Be careful:
+- Full BBData loading may be slow. It is acceptable to use h5py for fast metadata and small-slice checks, but use baseband_analysis/BBData for the actual interpretation path if the notebook did.
+- Avoid routing data through the Mac. All work should stay on h17.
+- Do not use h17’s stale baseband_analysis source checkout. Use the CANFAR-pulled Docker image/source.
+
+---
+
+<task-notification>
+<task-id>blxy11525</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/blxy11525.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for extraction to fully finish" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Reconcile now instead of filing the issue.
+
+---
+
+<task-notification>
+<task-id>btg1b3u0y</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/btg1b3u0y.output</output-file>
+<status>completed</status>
+<summary>Background command "Wait for module check and show result" completed (exit code 0)</summary>
+</task-notification>
