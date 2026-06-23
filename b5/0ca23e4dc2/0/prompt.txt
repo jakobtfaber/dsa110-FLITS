@@ -1,0 +1,21 @@
+<task-notification>
+<task-id>b4i44t78s</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b4i44t78s.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll PR #19 CI until Python checks resolve" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>b9wq8tcnz</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/tmp/claude-1000/REDACTED/7718779b-4573-47bb-82a9-eca51458ccfd/tasks/b9wq8tcnz.output</output-file>
+<status>completed</status>
+<summary>Background command "Confirm change on main and wait for main CI" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Great, let's continue on.
