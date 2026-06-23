@@ -472,3 +472,7 @@ On the pointing-Dec item, I couldn't find stored info in the filterbank files bu
 ---
 
 Build a physics-based justification for estimator choice and then do the rigorous calibrated refit
+
+---
+
+proceed
