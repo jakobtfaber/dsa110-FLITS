@@ -191,6 +191,7 @@ def build_association_report(
                     dm_dsa=dm,
                     dm_dsa_err=row.get("dm_uncertainty"),
                 ),
+                "dm_confidence": ci.get("dm_confidence"),  # figure-review: real/marginal/noise
                 "position": position_agreement(
                     row.get("source_coord"),
                     ci.get("chime_ra_deg"),

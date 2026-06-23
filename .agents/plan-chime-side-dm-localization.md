@@ -2,7 +2,7 @@
 
 ---
 **Date:** 2026-06-23
-**Status:** Phases 1 + 3-wiring done; Phase 2 docker run in progress
+**Status:** Phases 1-3 done (3 real / 8 marginal / 1 noise DM; 12/12 positions); Phase 4 next
 **Research:** [research-chime-side-dm-localization.md](research-chime-side-dm-localization.md)
 **Branch:** `feat/chime-side-dm-localization` (NOT main)
 ---
@@ -73,7 +73,7 @@ Settles the estimator mechanics (grid/window) against a known answer before any 
 ## Phase 2 — CHIME-side extraction (docker, h17, under the data root)
 Produces `crossmatching/chime_side_inputs.json` (committed to the repo) + diagnostic figures.
 
-- [ ] **2.1** Write `/data/research/astrophysics/frbs/chime-dsa-codetections/scripts/extract_chime_side_inputs.py` (NOT in the repo tree; mirrors `extract_chime_singlebeam_toas.py`). Per burst keyed by `burst_inputs.json`:
+- [x] **2.1** Write `/data/research/astrophysics/frbs/chime-dsa-codetections/scripts/extract_chime_side_inputs.py` (NOT in the repo tree; mirrors `extract_chime_singlebeam_toas.py`). Per burst keyed by `burst_inputs.json`:
   - read `tiedbeam_locations` ra/dec (h5py, first row) → `chime_ra_deg, chime_dec_deg`;
   - `BBData.from_file`; `coherent_dedisp(bb, DM_c, time_shift=False)`; build `I = |X|²+|Y|²` `(nfreq,ntime)`; transpose to `(ntime,nfreq)`; ascending-freq order;
   - `grid = arange(DM_c-3, DM_c+3, 0.05)`; `DMPhaseEstimator(I, freqs_asc, dt=delta_time, grid, ref="top", n_boot=200, random_state=0)` → `dm_chime, dm_chime_err`;
@@ -81,8 +81,8 @@ Produces `crossmatching/chime_side_inputs.json` (committed to the repo) + diagno
   - collect `{name, chime_id, dm_dsa, dm_chime, dm_chime_err, chime_ra_deg, chime_dec_deg, method, dm_grid_span, n_boot}`.
   - Make `dispersion/dmphasev2.py` importable in the container (PYTHONPATH to a copy of the module, or vendor the single file next to the script — it only needs numpy/scipy + `flits.common.constants.K_DM`; if `flits` isn't importable in-image, inline `K_DM = 4.148808e3`).
   - Write `figures.manifest.json` next to the PNGs (per-figure stated expectation: "DM-structure curve peaks within grid near DM_c; dedispersed burst vertical").
-- [ ] **2.2** Run `bin/baseband_analysis_python.sh scripts/extract_chime_side_inputs.py`; copy the resulting `chime_side_inputs.json` into the repo at `crossmatching/chime_side_inputs.json`.
-- [ ] **2.3** **Figure-review gate:** Read every `diagnostics/chime_side_dm/*.png` (dispatch `figure-reviewer`), write `figures.review.json` with per-figure verdicts. A DM is not validated until its curve is looked at; flag any burst whose structure-max rails to a grid edge or has a flat/multi-modal curve (→ widen grid or mark low-confidence).
+- [x] **2.2** Run `bin/baseband_analysis_python.sh scripts/extract_chime_side_inputs.py`; copy the resulting `chime_side_inputs.json` into the repo at `crossmatching/chime_side_inputs.json`.
+- [x] **2.3** **Figure-review gate:** Read every `diagnostics/chime_side_dm/*.png` (dispatch `figure-reviewer`), write `figures.review.json` with per-figure verdicts. A DM is not validated until its curve is looked at; flag any burst whose structure-max rails to a grid edge or has a flat/multi-modal curve (→ widen grid or mark low-confidence).
 
 **Automated verification:** `crossmatching/chime_side_inputs.json` exists with 12 rows, each with finite `dm_chime>0`, `dm_chime_err>0`, and `chime_ra_deg/chime_dec_deg`. **Manual:** figure-review verdicts written; no un-reviewed manifest.
 
@@ -112,7 +112,7 @@ Produces `crossmatching/chime_side_inputs.json` (committed to the repo) + diagno
   - add `"position": position_agreement(row["source_coord"], ci.chime_ra_deg, ci.chime_dec_deg, chime_radius_deg)`;
   - extend `inputs` with `chime_dm_method="DM-phase structure-max (dmphasev2)"`, `chime_localization_radius_deg`, `chime_localization_note="tiedbeam pointing; no multi-beam error ellipse (Michilli+2021 sub-arcmin assumed)"`.
   - `main()` passes `chime_inputs_path = here/"chime_side_inputs.json"` when present.
-- [ ] **3.4** `pytest tests/test_association.py tests/test_dmphase_recovery.py -q` → all pass; `ruff check/format`. Regenerate `python -m crossmatching.association`; confirm 12 bursts now carry real pillar-2/4 values and `git status` shows golden clean.
+- [x] **3.4** `pytest tests/test_association.py tests/test_dmphase_recovery.py -q` → all pass; `ruff check/format`. Regenerate `python -m crossmatching.association`; confirm 12 bursts now carry real pillar-2/4 values and `git status` shows golden clean.
 
 **Automated verification:** full association + dmphase tests pass; ruff clean; report has non-null pillar-2/4 for all 12; `git status --porcelain crossmatching/toa_crossmatch_results.json` empty.
 
