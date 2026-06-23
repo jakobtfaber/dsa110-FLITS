@@ -1,0 +1,62 @@
+"""CHIME-DSA co-detection association significance (pillars 1-4).
+
+Adds the rigorous apparatus the bare temporal-consistency test lacks, as pure functions
+with explicit inputs (mirrors crossmatching/toa_crossmatch.py). Assembled by
+``build_association_report`` into ``association_report.json`` — the golden
+``toa_crossmatch_results.json`` is never touched. See
+``.agents/research-codetection-validation-rigor.md`` and
+``.agents/experiment-chance-coincidence-falsealarm.md``.
+
+Pillar 1 — chance-coincidence probability (analytic Poisson; experiment-validated):
+the expected number of unrelated CHIME FRBs falling in a burst's (position x time x DM)
+window, ``mu = R_sr_s * Omega_win * 2*dt * f_DM``; ``P = 1 - exp(-mu)``.
+"""
+
+from __future__ import annotations
+
+import math
+
+# CHIME/FRB Catalogue 1 (Amiri et al. 2021, ApJS 257, 59): ~525 FRBs sky^-1 day^-1 above 5 Jy ms.
+R_SKY_PER_DAY_CENTRAL = 525.0
+FULL_SKY_SR = 4.0 * math.pi
+SECONDS_PER_DAY = 86400.0
+DEG2_PER_SR = (180.0 / math.pi) ** 2
+
+# CHIME extragalactic-DM distribution, modelled log-normal (median 500, sigma_ln 0.7).
+# Assumption (catalogue file not on h17); shared by analytic + MC so it cancels in their ratio.
+DM_MEDIAN, DM_SIGMA_LN = 500.0, 0.7
+
+# Baseline coincidence windows: deliberately generous (chance-maximising) -> conservative P.
+OMEGA_WIN_BASELINE_DEG2 = math.pi * 0.5**2  # 0.5 deg radius disk ~ 0.785 deg^2
+DT_BASELINE_S, DDM_BASELINE = 1.0, 5.0
+
+
+def _r_sr_s(rate_per_day: float) -> float:
+    """FRB rate per steradian per second from an all-sky per-day rate."""
+    return rate_per_day / FULL_SKY_SR / SECONDS_PER_DAY
+
+
+def f_dm(
+    dm: float, half_width: float, *, dm_median: float = DM_MEDIAN, dm_sigma_ln: float = DM_SIGMA_LN
+) -> float:
+    """P(random CHIME DM within +/- half_width of ``dm``), local-density approximation."""
+    z = (math.log(dm) - math.log(dm_median)) / dm_sigma_ln
+    pdf = math.exp(-0.5 * z * z) / (dm * dm_sigma_ln * math.sqrt(2.0 * math.pi))
+    return min(1.0, pdf * 2.0 * half_width)
+
+
+def chance_mu(
+    dm: float, *, rate_per_day: float, omega_win_deg2: float, dt_s: float, ddm: float
+) -> float:
+    """Expected number of unrelated CHIME FRBs in the (position x time x DM) window."""
+    return _r_sr_s(rate_per_day) * (omega_win_deg2 / DEG2_PER_SR) * (2.0 * dt_s) * f_dm(dm, ddm)
+
+
+def chance_probability(dm: float, **kw) -> float:
+    """Poisson P(>=1 chance association) = 1 - exp(-mu)."""
+    return 1.0 - math.exp(-chance_mu(dm, **kw))
+
+
+def expected_chance_associations(dms, **kw) -> float:
+    """Sample-level expected chance count = sum of per-burst mu."""
+    return sum(chance_mu(d, **kw) for d in dms)
