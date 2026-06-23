@@ -24,3 +24,23 @@ def test_band_integral_flat_oracle():
     i_band = calibrated_band_integral_jy_ms_hz(sn_integrated, sigma_jy, freq_hz, dt_ms)
     oracle = 3.0 * 5.0 * dt_ms * (freq_hz[-1] - freq_hz[0])
     assert abs(i_band - oracle) / oracle < 1e-9
+
+
+def test_sn_spectrum_synthetic(tmp_path):
+    # synthetic (n_freq, n_time) S/N data: unit noise + a centred Gaussian pulse on every channel
+    from analysis.flux_cal import sn_spectrum_from_npy
+
+    rng = np.random.default_rng(0)
+    nf, nt = 64, 512
+    t = np.arange(nt)
+    prof = np.exp(-0.5 * ((t - nt // 2) / 4.0) ** 2)
+    data = rng.standard_normal((nf, nt)) + 8.0 * prof[None, :]  # S/N peak ~8
+    p = tmp_path / "synth.npy"
+    np.save(p, data)
+    freq_hz, sn_int, dt_ms, dnu_hz = sn_spectrum_from_npy(
+        p, telescope="dsa", f_factor=1, t_factor=1
+    )
+    assert sn_int.shape == (nf,)
+    assert np.all(np.isfinite(sn_int))
+    assert np.median(sn_int) > 5.0  # integrated on-pulse S/N well above zero
+    assert freq_hz[0] < freq_hz[-1] and dt_ms > 0 and dnu_hz > 0

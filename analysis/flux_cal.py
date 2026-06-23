@@ -41,6 +41,39 @@ def calibrated_band_integral_jy_ms_hz(sn_integrated, sigma_jy, freq_hz, dt_ms):
     return float(np.trapezoid(chan_fluence_jy_ms, freq_hz))  # [Jy*ms*Hz]
 
 
+def sn_spectrum_from_npy(inpath, telescope, f_factor=1, t_factor=1, onpulse_thresh=3.0):
+    """Per-channel on-pulse S/N spectrum from a burst .npy via the FLITS loader.
+
+    Returns (freq_hz ascending, sn_integrated [per channel, sum over on-pulse of data/noise_std],
+    dt_ms, dnu_hz). BurstDataset z-scores each channel (io.py:131-146), so model.data is already
+    S/N; dividing by the full-window per-channel noise makes the unit explicit and robust to the
+    downsample rescaling.
+    """
+    import sys
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(repo / "scattering"))  # io.py uses package-relative imports (..burstfit)
+    from scat_analysis.config_utils import load_telescope_block
+    from scat_analysis.pipeline.io import BurstDataset
+
+    tel = load_telescope_block(str(repo / "scattering" / "configs" / "telescopes.yaml"), telescope)
+    ds = BurstDataset(
+        inpath,
+        inpath,
+        telescope=tel,
+        f_factor=f_factor,
+        t_factor=t_factor,
+        onpulse_crop=True,
+        onpulse_thresh=onpulse_thresh,
+    )
+    m = ds.model
+    noise = np.clip(m.noise_std, 1e-9, None)  # per-channel full-window noise (n_freq,)
+    sn = m.data / noise[:, None]  # (n_freq, n_time_onpulse) signal-to-noise
+    sn_integrated = np.nansum(sn, axis=1)  # sum over the cropped on-pulse window
+    return m.freq * 1e9, sn_integrated, ds.dt_ms, ds.df_MHz * 1e6
+
+
 def _check() -> None:
     # 1. radiometer noise vs analytic: 2000/sqrt(2*1e6*1e-3) == sqrt(2000); G=0.5 doubles it
     s = radiometer_sigma_jy(2000.0, 2, 1e6, 1e-3, 1.0)
