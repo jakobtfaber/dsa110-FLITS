@@ -130,6 +130,20 @@ def dsa_pointing_dec(nick):
     return float(_csv_lookup("dsa_pointing.csv", nick, val_col="pointing_dec_deg"))
 
 
+# DSA-110 formed its FRB detection beam by coherently combining 48 antennas in 2022
+# (Law et al. 2024, arXiv:2307.03344). The dsa110-rt SEFD store is PER-BASELINE (~per-element;
+# estimate_sefd.py:compute_sefd_per_baseline), so the coherent-beam SEFD is SEFD_element / N_ant.
+# Cross-check: this beam SEFD (~167 Jy) reproduces the catalog fluences (16.2/26.2/13.2 Jy*ms for
+# zach/whitney/oran) to within the ~2x boxcar-vs-full-integral estimator difference; the empirical
+# matched-filter anchor is ~234 Jy (=> effective N_eff~34, ~70% beamforming efficiency).
+DSA_N_ANT = 48
+
+
+def load_dsa_sefd_beam(nick):
+    """Coherent-beam SEFD [Jy] = per-element dashboard SEFD / N_ant (the detection beam)."""
+    return load_dsa_sefd(nick) / DSA_N_ANT
+
+
 def _dsa_burst_config(nick):
     """(npy_path, f_factor, t_factor) from configs/batch/dsa/<nick>_dsa.yaml (the fit's own binning)."""
     from pathlib import Path
@@ -147,9 +161,10 @@ def dsa_band_fluence_jy_ms_hz(nick):
     """Calibrated DSA-band fluence integral [Jy*ms*Hz] for a burst (Phases 2-3 composed).
 
     Loads the burst .npy via its batch config (same f/t binning the joint fit used), turns the
-    per-channel on-pulse S/N spectrum into Jy with sigma_S(nu)=SEFD/(sqrt(2*dnu*dt)*G(theta,nu)),
-    and integrates over the DSA band. Raises FileNotFoundError if the .npy is not staged locally
-    (data/dsa/ is external -- iacobus:burst_npys).
+    per-channel on-pulse S/N spectrum into Jy with sigma_S(nu)=SEFD_beam/(sqrt(2*dnu*dt)*G(theta,nu)),
+    and integrates over the DSA band. SEFD_beam is the COHERENT-beam SEFD (per-element / N_ant);
+    using the per-element SEFD directly over-estimates the fluence by ~N_ant. Raises
+    FileNotFoundError if the .npy is not staged locally (data/dsa/ is external -- iacobus:burst_npys).
     """
     from analysis.dsa_beam import beam_gain
 
@@ -162,7 +177,7 @@ def dsa_band_fluence_jy_ms_hz(nick):
     _mjd, _ra, dec_src = burst_epoch_position(nick)
     theta, phi = dsa_beam_offset(dec_src, dsa_pointing_dec(nick))
     sigma_jy = dsa_sigma_jy(
-        freq_hz, dnu_hz, load_dsa_sefd(nick), dt_ms / 1e3, theta, phi, beam_gain
+        freq_hz, dnu_hz, load_dsa_sefd_beam(nick), dt_ms / 1e3, theta, phi, beam_gain
     )
     return calibrated_band_integral_jy_ms_hz(sn_int, sigma_jy, freq_hz, dt_ms)
 

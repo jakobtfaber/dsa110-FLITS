@@ -202,3 +202,37 @@ A concurrent agent reworked the foreground/DM-budget search (`scratch/codetectio
 `DEFAULT_CLUSTER_IMPACT_KPC = 5000` split from the 100 kpc galaxy gate). Physics is sound
 (clusters contribute DM at Mpc impact; galaxies need <100 kpc for scattering) and the user
 validated it — out of scope for this energetics review.
+
+## Absolute-scale audit (2026-06-23) — DSA coherent-beam SEFD + estimator caveat
+
+After wiring the per-channel radiometer calibration (Phase 5), the first DSA fluences were
+~100x too high (band-avg 218-6860 Jy*ms vs published tens of Jy*ms). Audited against Law et al.
+2024 (DSA First FRB & Host Catalog, arXiv:2307.03344, Table 1), cross-matched by detection S/N:
+
+| burst | catalog FRB | Heimdall S/N | catalog fluence | first code | ratio |
+|---|---|---|---|---|---|
+| zach    | FRB 20220207C | 60.0 | 16.2 Jy*ms | 1680 | 104x |
+| whitney | FRB 20220310F | 68.4 | 26.2 Jy*ms | 2728 | 104x |
+| oran    | FRB 20220506D | 48.9 | 13.2 Jy*ms |  570 |  43x |
+
+**Two distinct errors found:**
+
+1. **Wrong SEFD (dominant, ~N_ant).** `sigma_S` used the dsa110-rt dashboard SEFD (~8016 Jy),
+   which `estimate_sefd.py` computes **per baseline** (`compute_sefd_per_baseline`) — i.e. the
+   ~per-**element** SEFD. The `cntr_bpc` arrays are the **coherent detection beam** (Law+2024:
+   **48 antennas** combined), whose SEFD = SEFD_element / N_ant. Fix:
+   `flux_cal.load_dsa_sefd_beam = load_dsa_sefd / DSA_N_ANT` (N_ant=48 -> ~167 Jy). This collapses
+   the ~100x. The empirical matched-filter anchor is ~234 Jy (single value reproduces all three
+   catalog fluences exactly via `F=(S/N)*SEFD*sqrt(W)/sqrt(n_pol*dnu)`), implying N_eff~34
+   (~70% beamforming efficiency vs the nominal 48).
+
+2. **Estimator difference (residual ~1-3x, burst-dependent).** With the beam SEFD the fluences are
+   physical (4.6-143 Jy*ms) but still differ from the catalog by a burst-dependent factor
+   (oran 0.90x, whitney/zach ~2.2x). This is **not** a window/crop bug: oran and whitney are both
+   compact (>=95% of flux within +-0.5 ms) yet differ 2.4x. The cause is that the per-channel
+   **linear band integral** `int S dt dnu` (the true fluence) and the catalog **boxcar
+   matched-filter** fluence are *different estimators*; for peaked/structured bursts they diverge
+   by the burst structure factor. The shape/slope (gamma_D) result is scale-independent and
+   unaffected; the absolute energy is not, so this estimator reconciliation is tracked before any
+   E_iso ships. (TNS-suffix note: the local detection log lists ...207A/310A/506A; the catalog/TNS
+   list ...207C/310F/506D — same bursts by S/N, local suffix likely wrong.)

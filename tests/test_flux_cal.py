@@ -108,6 +108,26 @@ def test_dsa_pointing_csv_and_offsets():
         assert 0.0 <= theta < 5.0 and phi == 0.0, (n, theta)  # inside the primary beam
 
 
+def test_dsa_fluence_matches_catalog_scale():
+    # absolute-scale gate: with the coherent-beam SEFD (per-element / N_ant), the calibrated
+    # band-avg fluences must land near the Law+2024 catalog values (16.2/26.2/13.2 Jy*ms). They
+    # differ by up to ~2x because the per-channel linear integral and the catalog boxcar
+    # matched-filter are different fluence estimators -- so the gate is a factor-of-3 sanity band,
+    # not equality. Guards against re-introducing the per-element-SEFD ~100x error.
+    import pytest
+
+    from analysis.flux_cal import _dsa_burst_config, dsa_band_fluence_jy_ms_hz
+
+    CATALOG = {"zach": 16.2, "whitney": 26.2, "oran": 13.2}  # Law+2024 (arXiv:2307.03344) Table 1
+    band_hz = 1.499e9 - 1.311e9
+    for nick, f_cat in CATALOG.items():
+        npy, _, _ = _dsa_burst_config(nick)
+        if not npy.exists():
+            pytest.skip(f"{npy.name} not staged (data/dsa/ external)")
+        band_avg = dsa_band_fluence_jy_ms_hz(nick) / band_hz
+        assert 1.0 / 3 < band_avg / f_cat < 3.0, (nick, band_avg, f_cat)
+
+
 def test_dsa_sefd_csv_present_and_sane():
     import csv
     from pathlib import Path
