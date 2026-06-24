@@ -105,3 +105,87 @@ Another agent of mine that was running and just finished returned the following 
 
   Note: feature/cluster-catalog-engine is unpushed and now well behind main — readying it (rebase + its WIP) is a separate effort whenever
   you want #2/#5 on main.
+
+---
+
+So what should we do?
+
+---
+
+Would you be able to hand this to the Galaxy agent?
+
+---
+
+Run a fresh worktree-isolated subagent under your supervision.
+
+---
+
+Run a fresh worktree-isolated subagent under your supervision. I don't know if the Galaxy agent isn't touching the galaxies lane, though.
+
+---
+
+<task-notification>
+<task-id>aba0094bff939a565</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/7e1f56a5-8913-49fd-8915-1c7d5ad6e747/tasks/aba0094bff939a565.output</output-file>
+<status>completed</status>
+<summary>Agent "Reconcile foreground galaxy adjudication" finished</summary>
+<note>A task-notification fires each time this agent stops with no live background children of its own. The user can send it another message and resume it, so the same task-id may notify more than once.</note>
+<result>Reconciliation complete. Deliverable below.
+
+## Per-sightline adjudication table
+
+| Candidate | Catalog | z_gal | e_z / spec | Δv (km/s) | impact (kpc) | Verdict | Reason |
+|---|---|---|---|---|---|---|---|
+| Wilhelm-a | VII/292/north (photo) | 0.46000 | e_zphot 0.057 | +9927 | 32.3 | **KEEP** | photo-z point estimate firmly &lt; z_frb (0.51); z+e=0.517 only marginally over, impact CGM-scale corroborates |
+| Wilhelm-b | VII/292/north (photo) | 0.46000 | e_zphot 0.057 | +9927 | 38.2 | **KEEP** | same; CGM-scale impact |
+| Zach-a | VII/291/glade (spec) | 0.04068 | spec (0.015 floor) | +667 | 19.4 | **KEEP** | Δv=667 &gt; 500 km/s → clean foreground |
+| Zach-b | VII/291/glade (spec) | 0.04274 | spec (0.015 floor) | +76 | 24.1 | **DROP-ambiguous** | \|Δv\|=76 &lt; 500 km/s → host-velocity / group-member ambiguity |
+| Hamilton-a | VII/292/north (photo) | 0.22200 | e_zphot 0.057 | +18507 | 35.5 | **KEEP** | confident: z+e=0.279 &lt; z_frb 0.3024 (the one the blanket cap wrongly dropped) |
+| Chromatica-a | VII/291/glade (spec) | 0.07639 | spec (0.015 floor) | −666 | 53.3 | **DROP-background** | z_gal 0.0764 ≥ z_frb 0.074 |
+| Chromatica-b | VII/291/glade (spec) | 0.07639 | spec (0.015 floor) | −666 | 73.1 | **DROP-background** | z_gal ≥ z_frb |
+
+## Reconciled foreground counts
+- **Wilhelm: 2/2 kept** · **Zach: 1/2 kept** · **Hamilton: 1/1 kept** · **Chromatica: 0/2 kept**
+
+## Provenance of the counts
+Fallback adjudication: the real (worktree) `_foreground_mask` was applied directly to the existing manuscript candidate rows (`overleaf/Faber2026/pipeline/results/&lt;name&gt;_galaxies.csv`, read-only). **Not a fresh extra-engine network search** — but this is the actual production code path, not a re-derivation, so it equals what `search.py` would commit for these candidates.
+
+## Manuscript numbers that WOULD change (vs current 2/2/1/2)
+- **Zach: 2 → 1** (drop the Δv=76 km/s host-ambiguous neighbour)
+- **Chromatica: 2 → 0** (both candidates are background, z_gal=0.0764 &gt; z_frb=0.074)
+- Wilhelm (2) and Hamilton (1) are unchanged.
+- I did **not** edit the manuscript.
+
+## Provenance block (for human-gated propagation)
+- **Branch:** `reconcile/foreground-adjudication`
+- **Worktree:** `/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.claude/worktrees/agent-aba0094bff939a565`
+- **Adjudication commit:** `a58f2066e52ad2e5b2add754faece07266da1e51`
+- **Baseline-sync commit (below it):** `3313f72bb9a6a7446458a3e3a27941fa28f9c902` — pure tree-sync of `galaxies/v2_0/` from the `feature/cluster-catalog-engine` tip `ea91839` (my worktree's HEAD `cc64b7b` predated both the cluster engine and the e753bb6 cap, so I synced the real code path first, then applied the fix on top as a clean diff).
+- **Config used:** `FOREGROUND_AMBIGUITY_KMS=500.0`, `FOREGROUND_PHOTOZ_FLOOR=0.01`, `z_eps=0.01`, `impact_kpc=100.0`; spec-z catalogs `("ned","vii/291","glade","sdss","desi_dr1")`, photo-z `("vii/292",)`.
+- **Exact run command (reconciliation):** `PYTHONPATH=&lt;worktree&gt; /Users/jakobfaber/.conda/envs/flits/bin/python` applying `galaxies.v2_0.search._foreground_mask(df, z_frb, z_eps=0.01, impact_kpc=100.0)` to each manuscript CSV. (PYTHONPATH must point at the worktree — the editable `galaxies` install otherwise resolves to the main checkout's config.)
+- **Preferred fresh re-run (for the human, network-bound):** in this worktree, set `ENABLE_EXTRA_ENGINES=True` in `galaxies/v2_0/config.py`, then `python -m galaxies.v2_0.search --impact_kpc 100` writing to the worktree's `results/`.
+
+## Git diff summary
+```
+ galaxies/v2_0/config.py               | 18 +++++++---
+ galaxies/v2_0/search.py               | 64 +++++++++++++++++++++++++++--------
+ galaxies/v2_0/test_search_pipeline.py | 48 +++++++++++++++++++-------
+ 3 files changed, 99 insertions(+), 31 deletions(-)
+```
+Key change: `_foreground_mask` replaces the blanket `MAX_PHOTOZ_Z_ERR` capped-2σ test with per-catalog classification → spec-z adjudicated by velocity offset `dv = c·(z_frb−z)/(1+z_frb) ≥ 500 km/s` (one test handling both background dv&lt;0 and host-ambiguity), photo-z kept iff the point estimate is `floor ≤ z &lt; z_frb+z_eps` (error never rescues a background point estimate). The `MAX_PHOTOZ_Z_ERR` constant was removed; `FOREGROUND_PHOTOZ_FLOOR` retained.
+
+## Tests
+- `pytest galaxies/v2_0/test_search_pipeline.py` → **15 passed**
+- `pytest galaxies/` → **116 passed** (1 pre-existing unrelated SyntaxWarning)
+- Two tests that encoded the old 2σ-rescue policy were rewritten to the new point-estimate + background-leak-reject policy; added a spec-z velocity-offset test reproducing the real Zach/Chromatica rows.
+
+## Notes / minor caveats
+- The manuscript CSVs label GLADE+ as `VII/291/glade` (old table name) while current config uses `VII/291/gladep`; my `SPEC_Z_CATALOG_SUBSTRINGS` matches both, so classification is robust to the rename — verified in the run output.
+- 4 pre-existing `ruff` B023 errors in `run_search` (loop-variable `coord` in a lambda, lines 195/299/360) exist on the baseline and are outside my changed region — left untouched (minimal-diff).
+- **Zach threshold sensitivity:** Zach-a sits at Δv=667 km/s, above the 500 km/s window. If the PI prefers a wider ambiguity window (e.g. 700 km/s ≈ "few hundred km/s" read loosely), Zach would go 0/2 instead of 1/2. The 500 km/s value (upper edge of typical group dispersions) is exposed as `FOREGROUND_AMBIGUITY_KMS` for easy tuning. **This is the one adjudication where the count is threshold-sensitive — flagging for PI confirmation.**
+
+**No blockers.** No push/PR/merge/rebase performed; manuscript and main checkout were read-only; all writes confined to the worktree. Shared-state propagation (merging this into `feature/cluster-catalog-engine` and re-running the committed search) is left for human gating.</result>
+<usage><subagent_tokens>142184</subagent_tokens><tool_uses>45</tool_uses><duration_ms>598467</duration_ms></usage>
+<worktree><worktreePath>/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.claude/worktrees/agent-aba0094bff939a565</worktreePath><worktreeBranch>worktree-agent-aba0094bff939a565</worktreeBranch></worktree>
+</task-notification>
