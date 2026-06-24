@@ -375,3 +375,15 @@ Reduce the cognitive load and take over from here.
 ---
 
 /ask-matt docs/rse/specs/decision-map-manuscript-completion.md
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable
+  state and this session to a close --- make decisions wisely and autonomously
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable
+  state and this session to a close --- make decisions wisely and autonomously
+
+Run a /grill-with-docs but have @"astronomy-astrophysics-expert (agent)" and @"scientific-python-development:scientific-docs-architect (agent)" and @"scientific-python-development:scientific-python-expert (agent)" all collectively answer as a group unless it's impossible for them to do so
