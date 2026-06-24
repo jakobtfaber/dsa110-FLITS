@@ -1,0 +1,184 @@
+Review a bug fix + adjudicate its git placement in dsa110-FLITS. Be decisive.
+
+BUG (confirmed on real data): in scintillation/scint_analysis/analysis.py, analyze_scintillation_from_acfs's
+success branch built a per-component tuple `component_params` but NEVER appended it to `params_per_comp`
+(only the fail branch appended `{}`). The downstream consumer expects per-sub-band DICTS keyed
+bw/mod/bw_err/mod_err/finite_err/gof, so real subband_measurements were ALWAYS empty (and the power-law ODR
+ran on empty arrays -> garbage bw_at_ref = ref_freq^4). _fit_acf_models only yields single-component models
+(lor/gauss/lor_gen/power), so num_comps is always 1 on this path.
+
+FIX (diff below): drop the tuple, build the consumer-contract dict, append to params_per_comp[0], pad any
+extra components with {} for index alignment. finite_err set to nan because the finite-scintle error is
+already folded into bw_err via the weighted ACF fit (calculate_acf builds it into acf_err) -- putting it in
+finite_err too would double-count in the consumer's quadrature.
+
+VALIDATION on real data (casey_chime, full pipeline): BEFORE subband_measurements=0, modulation_attached=False;
+AFTER subband_measurements=4, modulation_attached=True. New regression test (synthetic Lorentzian through the
+real function) + full scint suite: 82 passed.
+
+PLACEMENT: this fix belongs logically on PR #54 branch `pr/scint-pipeline-wiring` (off origin/main; it carries
+30662b1 the interpretation wiring + c50d5b3 the floor wiring). The fix makes #54's wiring non-no-op on real
+output. Alternative: separate branch/PR.
+
+ADJUDICATE (1-2 sentences each):
+(a) Is the fix CORRECT? Any case where params_per_comp[0] is wrong (e.g. num_comps could exceed 1 on this path)?
+(b) Is finite_err=nan the right call vs computing a finite-scintle bandwidth error here?
+(c) Does the fix belong as a 3rd commit on pr/scint-pipeline-wiring (amend PR #54), or its own PR? Decide.
+(d) Any risk the loop `for comp_list in params_per_comp[1:]` interacts badly with the fail-branch append?
+
+--- DIFF ---
+diff --git a/scintillation/scint_analysis/analysis.py b/scintillation/scint_analysis/analysis.py
+index b8f0564..07682bc 100644
+--- a/scintillation/scint_analysis/analysis.py
++++ b/scintillation/scint_analysis/analysis.py
+@@ -1386,8 +1386,6 @@ def analyze_scintillation_from_acfs(acf_results, config):
+             param = p.get(param_name)
+             return param.stderr if param is not None and param.stderr is not None else np.nan
+ 
+-        component_params = []
+-
+         # Handle different model types
+         if "power" in best_model_name:
+             # Power-law model: C(Δν) = c · |Δν|^n
+@@ -1402,7 +1400,6 @@ def analyze_scintillation_from_acfs(acf_results, config):
+             # Use c as proxy for "bandwidth scale" and set modulation to NaN
+             bw, bw_err = c_val, c_err
+             mod, mod_err = np.nan, np.nan  # Power-law has no modulation index
+-            component_params.append((bw, mod, bw_err, mod_err))
+ 
+         elif "lor_gen" in best_model_name or "gen" in best_model_name:
+             # Generalized Lorentzian: has gamma, alpha, m
+@@ -1410,7 +1407,6 @@ def analyze_scintillation_from_acfs(acf_results, config):
+             bw, bw_err = get_bw_params(f"{prefix}gamma", False)
+             mod = p[f"{prefix}m"].value
+             mod_err = get_mod_err(f"{prefix}m")
+-            component_params.append((bw, mod, bw_err, mod_err))
+ 
+         else:
+             # Standard Lorentzian or Gaussian
+@@ -1420,7 +1416,26 @@ def analyze_scintillation_from_acfs(acf_results, config):
+             bw, bw_err = get_bw_params(f"{prefix}{p_root}", is_gauss)
+             mod = p[f"{prefix}m"].value
+             mod_err = get_mod_err(f"{prefix}m")
+-            component_params.append((bw, mod, bw_err, mod_err))
++
++        # Append this sub-band's measurement as the dict contract the power-law
++        # consumer below expects (keys bw/mod/bw_err/mod_err/finite_err/gof).
++        # _fit_acf_models only yields single-component models, so the measured
++        # bandwidth lands in component 0; any extra components (never hit on this
++        # path) get {} to keep per-sub-band index alignment with the fail branch.
++        measurement = {
++            "bw": bw,
++            "mod": mod,
++            "bw_err": bw_err,
++            "mod_err": mod_err,
++            # finite-scintle error is already folded into bw_err via the weighted
++            # ACF fit (calculate_acf builds it into acf_err); keep nan here so the
++            # consumer's quadrature sum does not double-count it.
++            "finite_err": np.nan,
++            "gof": gof_metrics,
++        }
++        params_per_comp[0].append(measurement)
++        for comp_list in params_per_comp[1:]:
++            comp_list.append({})
+ 
+     final_results = {"best_model": best_model_name, "components": {}}
+     all_powerlaw_fits = {}
+diff --git a/scintillation/scint_analysis/tests/test_acf_extraction.py b/scintillation/scint_analysis/tests/test_acf_extraction.py
+new file mode 100644
+index 0000000..c5e1f84
+--- /dev/null
++++ b/scintillation/scint_analysis/tests/test_acf_extraction.py
+@@ -0,0 +1,92 @@
++"""Regression for the ``analyze_scintillation_from_acfs`` sub-band extraction bug.
++
++The success branch built per-component tuples but never appended them to
++``params_per_comp`` (only the *fail* branch appended ``{}``), so the downstream
++consumer — which expects per-sub-band **dicts** keyed ``bw/mod/bw_err/mod_err/
++finite_err/gof`` — always saw empty ``subband_measurements`` and ran its
++power-law ODR on empty arrays. Confirmed on real data (casey_chime): 0 -> 4
++measurements once fixed.
++
++Driven on a synthetic high-S/N single Lorentzian ACF through the *real*
++``analyze_scintillation_from_acfs`` (raw burst spectra are gitignored, see
++DATA_SOURCES.md). The pre-fix code returns an empty ``subband_measurements``
++here; the fixed code returns one dict per sub-band.
++"""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++
++_test_dir = Path(__file__).parent
++sys.path.insert(0, str(_test_dir.parent.parent.parent))  # FLITS root
++sys.path.insert(0, str(_test_dir.parent.parent))  # scintillation dir
++
++import numpy as np
++
++from scint_analysis.analysis import analyze_scintillation_from_acfs, lorentzian_component
++
++
++def _lorentzian_acf_results(n_sub=3, m=0.8, gamma0=0.12, ref_freq=600.0):
++    """Synthetic acf_results: one clean Lorentzian scintle per sub-band, gamma
++    scaling ~ nu^4 (scattering). High S/N so a Lorentzian wins BIC."""
++    freqs = np.linspace(450.0, 750.0, n_sub)
++    chan_width = 0.02  # MHz
++    n_chan = 256
++    lags = np.arange(-n_chan, n_chan + 1) * chan_width  # symmetric, lag 0 centred
++    out = {
++        "subband_acfs": [],
++        "subband_lags_mhz": [],
++        "subband_center_freqs_mhz": [],
++        "subband_channel_widths_mhz": [],
++        "subband_num_channels": [],
++        "noise_template": [None] * n_sub,
++        "sigma_self_mhz": None,
++    }
++    rng = np.random.default_rng(0)
++    for f in freqs:
++        gamma = gamma0 * (f / ref_freq) ** 4  # scintillation bandwidth grows with nu
++        acf = lorentzian_component(lags, gamma, m) + rng.normal(0, 1e-3, lags.size)
++        out["subband_acfs"].append(acf)
++        out["subband_lags_mhz"].append(lags)
++        out["subband_center_freqs_mhz"].append(float(f))
++        out["subband_channel_widths_mhz"].append(chan_width)
++        out["subband_num_channels"].append(n_chan)
++    return out, freqs, m
++
++
++def test_subband_measurements_populated():
++    acf_results, freqs, m_inj = _lorentzian_acf_results()
++    config = {"analysis": {"fitting": {"fit_lagrange_mhz": 1.0, "reference_frequency_mhz": 600.0}}}
++
++    final_results, _all_fits, _pl = analyze_scintillation_from_acfs(acf_results, config)
++
++    comp = final_results["components"]["scint_scale"]
++    sm = comp["subband_measurements"]
++
++    # The bug: this list was always empty. Fixed: one dict per sub-band.
++    assert len(sm) == len(freqs), f"expected {len(freqs)} measurements, got {len(sm)}"
++    for meas in sm:
++        assert isinstance(meas, dict)
++        assert set(meas) >= {"bw", "mod", "bw_err", "mod_err", "finite_err", "gof"}
++        assert np.isfinite(meas["bw"]) and meas["bw"] > 0
++
++
++def test_modulation_recovered_for_lorentzian():
++    """When a Lorentzian wins, the recovered modulation index tracks the
++    injected m (the per-sub-band ``mod`` is no longer silently dropped)."""
++    acf_results, _freqs, m_inj = _lorentzian_acf_results(m=0.8)
++    config = {"analysis": {"fitting": {"fit_lagrange_mhz": 1.0, "reference_frequency_mhz": 600.0}}}
++
++    final_results, _all_fits, _pl = analyze_scintillation_from_acfs(acf_results, config)
++    sm = final_results["components"]["scint_scale"]["subband_measurements"]
++
++    mods = np.array([s["mod"] for s in sm], dtype=float)
++    if np.isfinite(mods).any():  # Lorentzian/Gaussian branch (power-law has m=nan)
++        assert abs(np.nanmedian(mods) - m_inj) < 0.15
++
++
++if __name__ == "__main__":
++    test_subband_measurements_populated()
++    test_modulation_recovered_for_lorentzian()
++    print("ok")
