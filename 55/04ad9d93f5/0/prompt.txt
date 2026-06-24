@@ -1,0 +1,77 @@
+You are reviewing work that another AI agent (Devin) just completed in this repository (dsa110-FLITS). Your job is to verify the implementation is correct and report any issues. Do NOT modify any files —
+  │   read-only review.
+  │   ## Context
+  │   Devin vendored content from the upstream repo at /Users/jakobfaber/Developer/repos/github.com/uw-ssec/rse-plugins into this FLITS repo, wrote FLITS-aware command wrappers, documented the vendoring in
+  │   CLAUDE.md, and wrote a holoviz evaluation doc. Your task is to verify all of this is correct.
+  │   ## Work items to verify
+  │   ### 1. Vendored files (content fidelity + placement)
+  │   Verify these vendored files exist and their content matches the upstream source byte-for-byte (or notes any deliberate adjustments):
+  │   - .claude/agents/astronomy-astrophysics-expert.md  (upstream: rse-plugins/plugins/scientific-domain-applications/agents/astronomy-astrophysics-expert.md)
+  │   - .claude/skills/xarray-for-multidimensional-data/SKILL.md  (upstream: .../skills/xarray-for-multidimensional-data/SKILL.md)
+  │   - .claude/skills/validating-implementations/SKILL.md  (upstream: plugins/ai-research-workflows/skills/validating-implementations/SKILL.md)
+  │   - .claude/skills/validating-implementations/references/report-templates.md  (upstream references/report-templates.md)
+  │   - .claude/skills/hardening-research-code/SKILL.md  (upstream .../hardening-research-code/SKILL.md)
+  │   - .claude/skills/ensuring-reproducibility/SKILL.md  (upstream .../ensuring-reproducibility/SKILL.md)
+  │   Also verify the same four skills are mirrored under .agents/skills/ (matching the existing .agents/skills/entire convention).
+  │   Use `diff` against the upstream paths to confirm content fidelity. Report any drift.
+  │   ### 2. Command wrappers (correctness of FLITS-aware edits)
+  │   Devin WROTE (not copied) these three command wrappers, adjusting the upstream versions to reference local vendored skill paths instead of the ai-research-workflows plugin namespace:
+  │   - .claude/commands/validate.md
+  │   - .claude/commands/harden.md
+  │   - .claude/commands/reproduce.md
+  │   Upstream originals for comparison: rse-plugins/plugins/ai-research-workflows/commands/{validate,harden,reproduce}.md
+  │   Verify:
+  │   - Each wrapper correctly points to the vendored skill path (.claude/skills/<name>/SKILL.md)
+  │   - The FLITS-specific additions are accurate against the actual repo state. Specifically check these claims against the real files:
+  │     - validate.md claims the fit gates live in .cursor/rules/AGENT_CONFIGURATION_FLITS.md with Level 1 (convergence + physical bounds 0.0001<tau<100ms, 1.5<alpha<6.0, Jacobian cond<1e6), Level 2 (chi2_red
+  │   0.8-1.5 good / >3 or <0.3 fail, R2 >0.85, Durbin-Watson ~2), Level 3 (tau*dnu in [0.1,2.0], alpha~4.0 Kolmogorov). Verify these thresholds match the actual file.
+  │     - validate.md claims a figure-review stop gate at .claude/hooks/figure-review-gate.sh. Verify it exists.
+  │     - harden.md claims the canonical physics kernel is scattering/scat_analysis/burstfit.py and flits/ wraps it. Verify against the repo.
+  │     - reproduce.md claims provenance anchors exist: codetections_manifest.yaml, data-manifest.csv, DATA_LOCATIONS.md, DATA_SOURCES.md, configs/bursts.yaml, environment.yml, uv.lock. Verify each exists. Also
+  │   verify the claim that burst_metadata lives in scattering.scat_analysis.burst_metadata.
+  │   ### 3. CLAUDE.md documentation
+  │   A new section "Vendored RSE-Plugins (uw-ssec/rse-plugins)" was appended to CLAUDE.md. Verify:
+  │   - It accurately describes what was vendored and where
+  │   - The upstream sync paths are correct
+  │   - The note about /prior-art not shipping upstream is accurate (check rse-plugins/plugins/ai-research-workflows/commands/ and skills/ for any prior-art command or researching-prior-art skill — confirm
+  │   absence)
+  │   - The instruction to remove vendored copies when going live with /plugin marketplace add is sound
+  │   ### 4. Holoviz evaluation doc
+  │   docs/agents/holoviz-eval.md was written. Verify its technical claims against the repo:
+  │   - flits/batch/results_db.py has scattering_results and scintillation_results tables with the columns claimed
+  │   - flits/batch/summary_plots.py exists and uses matplotlib (not holoviz)
+  │   - The claim that the batch DB is ~24 rows (12 bursts x 2 telescopes) — check if any SQLite DB exists under results/ or elsewhere and its row count
+  │   - The claim that per-fit JSON has goodness_of_fit with chi2_reduced, r_squared, residual_autocorr, durbin_watson, normality_pvalue, and convergence.ncall — verify against an actual *_fit_results.json file
+  │   in results/bursts/
+  │   - The recommended pyproject.toml extra does NOT already exist (check pyproject.toml for an exploratory extra)
+  │   ### 5. Consistency with existing FLITS conventions
+  │   - The repo already had .claude/agents/ (entire-search.md, figure-reviewer.md, fit-validation.md) and .claude/skills/entire/. Verify the new files follow the same format conventions (frontmatter,
+  │   structure).
+  │   - Check .claude/settings.json to see if commands dir is recognized / if the new commands need registration. Report whether the commands will actually be invocable.
+  │   ## Output format
+  │   Produce a structured report:
+  │   - For each work item: PASS / FAIL / PARTIAL with specific evidence (file paths, diff results, line numbers)
+  │   - A "Issues found" section listing anything incorrect, drift, or inaccurate claims — each with severity (Critical / Important / Minor)
+  │   - A "Verified accurate" section listing claims that checked out
+  │   - A final overall verdict
+  │   Be thorough and skeptical. Read the actual files; do not trust this prompt assertions.
+
+---
+
+Correct the CLAUDE.md line now
+
+---
+
+Does the excess silent attribution figure require a fix?
+
+---
+
+Does the excess sightline attribution figure require a fix?
+
+---
+
+Investigate
+
+---
+
+I believe the extra engine search we run is already being done by another agent. See if you can verify whether or not this is the case.
