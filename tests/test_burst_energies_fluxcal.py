@@ -56,16 +56,29 @@ def test_dsa_burst_config_resolves():
     assert f_factor == 384 and t_factor == 2
 
 
-def test_fail_gated_joint_fits_excluded_from_eiso():
-    # Trust boundary: a joint fit the committed-fit quality gate marks FAIL
-    # (prior-railed / unphysical shared alpha) must not flow into E_iso. Wired to
-    # the #34 *_joint_gate.json sidecars. Reads JSON only -> data-independent.
+def test_energy_gate_is_alpha_independent():
+    # Trust boundary (ADR-0003/0004; 3-expert panel 2026-06-24). E_iso is
+    # alpha-INDEPENDENT: band_integral uses only per-band c0/gamma + band edges, so
+    # energy citability must NOT gate on the scattering joint-fit quality_flag (the
+    # shared-alpha L1 verdict). The gate is on the energy's OWN inputs: a fit is kept
+    # iff its per-band c0/gamma are finite and c0 > 0; quality_flag rides along as an
+    # informational column. Reads JSON only -> data-independent.
     flags = E.load_gate_flags()
-    kept = set(E.load_joint_params())
+    params = E.load_joint_params()
+    kept = set(params)
     live_fail = {b for b, f in flags.items() if f == "FAIL"}
     assert live_fail, "no live FAIL verdict to exercise the gate"
-    assert not (live_fail & kept), f"FAIL joint fit leaked into E_iso: {sorted(live_fail & kept)}"
-    assert all(flags.get(b) != "FAIL" for b in kept)
+    # decouple is real: at least one FAIL-flagged burst is retained (physical c0/gamma)
+    assert live_fail & kept, (
+        "expected FAIL-but-physical bursts retained for E_iso (energy is alpha-independent), "
+        f"but every FAIL burst was dropped: live_fail={sorted(live_fail)}"
+    )
+    # the actual gate: every kept burst has physical energy inputs, and quality_flag
+    # is metadata only (never the exclusion criterion)
+    for nick, p in params.items():
+        assert all(np.isfinite(p[k]) for k in ("c0_C", "gamma_C", "c0_D", "gamma_D")), nick
+        assert p["c0_C"] > 0 and p["c0_D"] > 0, f"non-physical c0 kept: {nick}"
+        assert p["quality_flag"] == flags.get(nick)
 
 
 def test_z_provenance_flags_unpublished_hosts():
