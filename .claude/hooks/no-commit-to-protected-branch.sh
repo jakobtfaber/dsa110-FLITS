@@ -11,15 +11,41 @@
 set -uo pipefail
 
 payload="$(cat)"
-cmd="$(printf '%s' "$payload" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("tool_input",{}).get("command",""))' 2>/dev/null || true)"
 
-# Only real commits matter. Substring match is intentional (ponytail): the branch
-# check below is the actual gate, so a stray "git commit" in some other command is
-# harmless unless we are genuinely on a protected branch.
-case "$cmd" in
-  *"git commit"*) ;;
-  *) exit 0 ;;
-esac
+# Detect a real `git commit` invocation, token-aware: find a `git` token, skip
+# git's global options (and the values of -C/-c/--git-dir/...), and require the
+# subcommand to be exactly `commit`. This catches `git -C <path> commit` and
+# `git -c k=v commit` (forms the agent actually emits) while NOT matching
+# `git commit-graph`, `git log --grep=...commit`, etc. Any python/parse failure
+# prints nothing -> treated as not-a-commit -> fail open (a guard must never
+# wedge unrelated Bash calls).
+cmd_is_commit="$(printf '%s' "$payload" | python3 -c '
+import json, shlex, sys
+try:
+    cmd = json.load(sys.stdin).get("tool_input", {}).get("command", "")
+    toks = shlex.split(cmd, comments=False)
+except Exception:
+    print("0"); sys.exit(0)
+val_opts = {"-C", "-c", "--git-dir", "--work-tree", "--namespace",
+            "--super-prefix", "--exec-path"}
+i = 0
+while i < len(toks):
+    if toks[i] == "git":
+        j = i + 1
+        while j < len(toks):
+            t = toks[j]
+            if t in val_opts:
+                j += 2
+            elif t.startswith("-"):
+                j += 1
+            else:
+                break
+        if j < len(toks) and toks[j] == "commit":
+            print("1"); sys.exit(0)
+    i += 1
+print("0")
+' 2>/dev/null || true)"
+[ "$cmd_is_commit" = "1" ] || exit 0
 
 branch="$(git symbolic-ref --short HEAD 2>/dev/null || true)"
 [ -z "$branch" ] && exit 0  # detached HEAD / not a repo -> fail open
