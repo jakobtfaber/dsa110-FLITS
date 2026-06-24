@@ -4,9 +4,15 @@ FLITS fit-quality contract, reusing the authoritative classify_fit_quality.
 Reads joint_json/{burst}_joint_fit.json + the paired {burst}_joint_ppc.json,
 applies Level-1 physical bounds + prior-rail detection, Level-2 reduced-chi2
 (classify_fit_quality, worst of the two bands), and Level-3 alpha-physics, then
-writes joint_gate_verdicts.{csv,md} and a per-burst {burst}_joint_gate.json (in
-*_fit_results.json shape) for the fit-verify workflow. tau x dnu (Level-3) is not
-evaluable here -- no per-sightline scintillation bandwidth -- so it is reported N/A.
+writes joint_gate_verdicts.{csv,md} and a per-burst {burst}_joint_gate.json
+(mirroring the *_fit_results.json field shape). These are standalone verdict
+artifacts -- the fit-verify workflow globs *_fit_results.json, so it does NOT
+auto-discover these *_joint_gate.json files. tau x dnu (Level-3) is not evaluable
+here -- no per-sightline scintillation bandwidth -- so it is reported N/A.
+
+Level-1 here is the physical-bounds + prior-rail subset of the contract; the
+optimizer-convergence / Jacobian-conditioning Level-1 gates do not map to these
+nested-sampling fits (no Jacobian; convergence is proxied by log_evidence_err).
 """
 
 import csv
@@ -43,12 +49,15 @@ def gate_one(burst, fit, ppc):
         l1_fail.append(f"tau={tau:.4g}ms outside ({TAU_MIN},{TAU_MAX})")
     l1 = "FAIL" if l1_fail else "PASS"
 
-    # Level 2 -- reduced chi2 per band via the runtime classifier, worst of two
-    if ppc is None:
-        cc = cd = None
-        l2, l2_note = "MARGINAL", "no PPC (chi2 unknown)"
+    # Level 2 -- reduced chi2 per band via the runtime classifier, worst of two.
+    # A missing PPC, or a present-but-incomplete one (a chi2_* key absent), is
+    # treated the same: chi2 unknown -> MARGINAL, rather than crashing the run.
+    cc = ppc.get("chi2_chime") if ppc else None
+    cd = ppc.get("chi2_dsa") if ppc else None
+    if cc is None or cd is None:
+        note = "no PPC (chi2 unknown)" if ppc is None else "incomplete PPC (chi2 missing)"
+        l2, l2_note = "MARGINAL", note
     else:
-        cc, cd = ppc.get("chi2_chime"), ppc.get("chi2_dsa")
         fc = classify_fit_quality(cc)[0]
         fd = classify_fit_quality(cd)[0]
         l2 = _worst(fc, fd)

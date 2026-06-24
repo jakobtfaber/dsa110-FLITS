@@ -60,3 +60,9 @@ def test_no_rail_when_interior():
 def test_missing_ppc_is_marginal_unknown_l2():
     v = gate_one("x", _fit(4.0), None)
     assert v["final"] == "MARGINAL" and "chi2" in v["reason"].lower()
+
+
+def test_incomplete_ppc_is_marginal_not_crash():
+    # PPC present but missing a chi2_* key -> unknown chi2 (MARGINAL), not a format crash.
+    v = gate_one("x", _fit(4.0), {"chi2_chime": 1.0})  # chi2_dsa absent
+    assert v["final"] == "MARGINAL" and "incomplete" in v["reason"].lower()
