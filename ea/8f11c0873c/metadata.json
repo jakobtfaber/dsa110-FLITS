@@ -3,8 +3,10 @@
   "checkpoint_id": "ea8f11c0873c",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 7,
-  "files_touched": null,
+  "checkpoints_count": 11,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py"
+  ],
   "sessions": [
     {
       "metadata": "/ea/8f11c0873c/0/metadata.json",
@@ -17,13 +19,19 @@
       "transcript": "/ea/8f11c0873c/1/full.jsonl",
       "content_hash": "/ea/8f11c0873c/1/content_hash.txt",
       "prompt": "/ea/8f11c0873c/1/prompt.txt"
+    },
+    {
+      "metadata": "/ea/8f11c0873c/2/metadata.json",
+      "transcript": "/ea/8f11c0873c/2/full.jsonl",
+      "content_hash": "/ea/8f11c0873c/2/content_hash.txt",
+      "prompt": "/ea/8f11c0873c/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 69902,
-    "cache_creation_tokens": 1018155,
-    "cache_read_tokens": 47665270,
-    "output_tokens": 392988,
-    "api_call_count": 242
+    "input_tokens": 74214,
+    "cache_creation_tokens": 1102881,
+    "cache_read_tokens": 55991514,
+    "output_tokens": 453862,
+    "api_call_count": 287
   }
 }
