@@ -3,7 +3,7 @@
   "checkpoint_id": "6632c83f0f9c",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 18,
+  "checkpoints_count": 19,
   "files_touched": [
     "docs/rse/specs/decision-map-manuscript-completion.md"
   ],
@@ -31,6 +31,12 @@
       "transcript": "/66/32c83f0f9c/3/full.jsonl",
       "content_hash": "/66/32c83f0f9c/3/content_hash.txt",
       "prompt": "/66/32c83f0f9c/3/prompt.txt"
+    },
+    {
+      "metadata": "/66/32c83f0f9c/4/metadata.json",
+      "transcript": "/66/32c83f0f9c/4/full.jsonl",
+      "content_hash": "/66/32c83f0f9c/4/content_hash.txt",
+      "prompt": "/66/32c83f0f9c/4/prompt.txt"
     }
   ],
   "token_usage": {
