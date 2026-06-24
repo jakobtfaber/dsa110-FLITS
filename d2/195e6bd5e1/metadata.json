@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "d2195e6bd5e1",
+  "strategy": "manual-commit",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "scintillation/scint_analysis/pipeline.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d2/195e6bd5e1/0/metadata.json",
+      "transcript": "/d2/195e6bd5e1/0/full.jsonl",
+      "content_hash": "/d2/195e6bd5e1/0/content_hash.txt",
+      "prompt": "/d2/195e6bd5e1/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 62490,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 347648,
+    "output_tokens": 4259,
+    "api_call_count": 8
+  }
+}
