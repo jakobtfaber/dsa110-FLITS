@@ -1,0 +1,243 @@
+No feedback right now. proceed with /ai-research-workflows:implementing-plans to execute.
+
+---
+
+run full regeneration now
+
+---
+
+Is the search still running?
+
+---
+
+As of June 23, 2026 at 10:58 AM Pacific, NED appears to be up.
+
+  I checked:
+
+  - https://ned.ipac.caltech.edu/ returned HTTP 200 OK.
+  - The current NED API endpoint returned a valid VOTable response for M31:
+    https://ned.ipac.caltech.edu/NED::API/OverviewOfObject?TARGET=m31
+
+  - That response reported:
+      - QUERY_STATUS="OK"
+      - RECORDS_AVAILABLE=1
+      - RECORDS_RETURNED=1
+      - QUERY_TIME=20260623T175827Z
+
+  So the homepage and a live object-query API path are both responding. NED’s
+  own site also says the newer NED::API endpoints are the current programmatic
+  interface, while legacy APIs are deprecated and do not include data ingested
+  after January 2026: https://ned.ipac.caltech.edu/ and
+  https://ned.ipac.caltech.edu/Docs%3A%3AAPI/
+
+---
+
+Is there something other than Astral Query that we can use to query NED?
+
+---
+
+Is there something other than astroquery that we can use to query NED?
+
+---
+
+<task-notification>
+<task-id>bpyhev52c</task-id>
+<tool-use-id>toolu_01SdWzEtAKK8RxQ87fjjncoR</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/bpyhev52c.output</output-file>
+<status>completed</status>
+<summary>Background command "NED TAP large-cone (1deg, 2deg) sync feasibility at Zach" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Agreed, green light to build it given. kill it, TDD build NedTapEngine (async pyvo TAP → name/ra/dec/z/classification), swap it into run_search, then run the full NED-inclusive regen.
+
+---
+
+<task-notification>
+<task-id>bvbbyzg2n</task-id>
+<tool-use-id>toolu_01GmW9kvWuRvoHPGnckcYJMv</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/bvbbyzg2n.output</output-file>
+<status>completed</status>
+<summary>Background command "Live NedTapEngine async smoke (Coma + Zach 2deg)" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>bzs2ldbwc</task-id>
+<tool-use-id>toolu_018H1cEynueQXcNfny7BU828</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/bzs2ldbwc.output</output-file>
+<status>completed</status>
+<summary>Background command "Characterize NED sync TAP timing vs radius" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>be03m12ip</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/be03m12ip.output</output-file>
+<status>completed</status>
+<summary>Background command "Run full NED-inclusive regen into scratch" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+still clean?
+
+---
+
+<task-notification>
+<task-id>be7hw3pr2</task-id>
+<tool-use-id>toolu_01PKs11rV6VaWKgENSQa3ZRT</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/be7hw3pr2.output</output-file>
+<status>completed</status>
+<summary>Background command "Show leftover + relaunch full regen with fix" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+So which sightlines have foreground galaxies for sure?
+
+---
+
+I don't think splitting host region versus true intervening based on impact parameter makes the most sense. I would sooner do that based on redshift. Because I think I trust the spectroscopic follow-up that was done that identified the host galaxy, probably more so than just querying these catalogs, if that makes sense.
+
+---
+
+When you say "stars inflate intervening DM", you don't mean astrophysical objects right? You mean the star symobl?
+
+---
+
+You're saying some of the object we identified as foreground galaxy candidates are actually just stars?
+
+---
+
+Oh my gosh yes remove those --- how did we miss that?
+
+---
+
+<task-notification>
+<task-id>bhp7g4wix</task-id>
+<tool-use-id>toolu_011MEL1U6TSBJkJZZEEwtifx</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/bhp7g4wix.output</output-file>
+<status>completed</status>
+<summary>Background command "Regen chunk 1 (~540s)" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+<task-notification>
+<task-id>bfjcqsdje</task-id>
+<tool-use-id>toolu_01SUmyjUxVJqkZkdeZBadBTj</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/bfjcqsdje.output</output-file>
+<status>completed</status>
+<summary>Background command "Regen chunk 2" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Do we have a standardized way yet to generate figures showing the presence of both foreground galaxies and foreground galaxy clusters along each of these headlines?
+
+---
+
+Do we have a standardized way yet to generate figures showing the presence of both foreground galaxies and foreground galaxy clusters along each of these sightlines?
+
+---
+
+<task-notification>
+<task-id>wrrwizjqn</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/wrrwizjqn.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Audit whether the repo has a standardized way to plot foreground galaxies + galaxy clusters per sightline" completed</summary>
+<result>{"verdict":"Confirmed: GClstr rows have no mass/radius columns (all-blank tails) and impacts ~600–4500 kpc. And no figure module references cluster/classification at all. Verdict is settled.\n\nNO — there is no standardized way to generate a figure showing BOTH foreground galaxies AND clusters as distinct objects along a sightline. (PARTIAL only in the weak sense that one aggregate budget chart can *carry* a cluster bar, but no cluster currently renders and it is not object-level.)\n\n(2) Relevant figure tooling that exists\n\nTrue object-level per-sightline diagrams (galaxies ONLY — no cluster awareness):\n- `galaxies/v2_0/plotting.py:141` `plot_sightline` — per-FRB on-sky map: FRB star at center, foreground galaxies by RA/Dec offset (arcmin), z-colored, with 100/250/500 kpc impact circles. Reads no `classification`; draws no clusters.\n- `galaxies/v2_0/generate_galaxy_plots.py:213` `make_sightline_fig` → writes `{name}_sightline.png` (`:494`) — side-on comoving-distance (Mpc) vs impact b (kpc), each galaxy with R200 halo shading, z colorbar. Halos only, galaxy-only.\n- `galaxies/v2_0/generate_galaxy_plots.py:264` `make_mass_profile_fig` → `{name}_mass_profile.png` (`:500`) — NFW M(&lt;r) per galaxy halo.\n- `generate_cgm_plots.py` (`:524`, `:107`) — per-target CGM τ / covering-fraction / MgII / WISE diagnostics, galaxy-only.\n\nAggregate (NOT object-level — keep separate):\n- `galaxies/v2_0/sightline_budget.py:819` `make_budget_figure` — two-panel bar chart over all 12 sightlines: stacked DM budget (MW ISM/halo, cosmic, intervening CGM, host) + predicted-vs-measured τ. This is DM *attribution*, not a spatial/object diagram. Cluster ICM DM would fold silently into the \"intervening CGM\" bar; it does not draw clusters as discrete objects. Verified: no `cluster`/`classification` token anywhere in this file.\n\nRuled out: `crossmatching/plotting.py:170,244` (TOA-timing only); `scratch/codetection/run_nedtap_regen.py:48` and `regen_resumable.py:74` are thin drivers that just call `make_budget_figure` (no plotting of their own); the `galaxies/dr8_*`, `tarrio_ps1_photz`, `wise-ps1-strm` prep dirs write CSVs only (zero matplotlib).\n\n(3) The gap\nNo single generator draws both galaxies and clusters as distinct annotated objects for one sightline. The spatial diagrams (`plot_sightline`, `make_sightline_fig`) are galaxy-only and filter to galaxy-style data; the only figure that even *mentions* both populations (`make_budget_figure`) is a non-spatial DM bar chart. Across all four figure-bearing modules, `cluster`/`classification`/`object_type` returns zero hits — the `classification` column never propagates into any plot.\n\n(4) Is there even cluster data to plot? Effectively NO.\n- Clusters live only as `classification='GClstr'` rows co-mingled in `{name}_galaxies.csv` (no standalone cluster CSV): casey 3, phineas 9, whitney 4, isha 0 (16 total, all `catalog=NED`).\n- Verified directly: every GClstr row's mass/radius tail is blank — no `m500_msun`, `r500_kpc`, `r200`, or any mass column exists in the promoted CSVs. Impacts are ~614–4500 kpc (mostly &gt;2000 kpc).\n- These are NED *label* leakage, not intercepts: the massed path (`ClusterEngine`, `engines_extra.py:256` → PSZ2/MCXC via `config.py` `CLUSTER_VIZIER_CATALOGS`) produces m500/r500 rows, but the r200 cut (`search.py:80`, `CLUSTER_R200_FACTOR=2.0`) drops every one — **0 clusters within 2·r200 on all 12 sightlines**. The unmassed NED rows survive only via the 5000 kpc fallback (`DEFAULT_CLUSTER_IMPACT_KPC`, `config.py:10`). DM budget attributes 100% of intervening DM to galaxies (`best_mass_source = glade_catalog/ps1_taylor/assumed`), never a cluster.\n- So a \"cluster\" panel would today be bare distant points with no radius/mass — scientifically a \"no clusters intercept\" statement, not a depiction.\n\n(5) Minimal build if you want it\nDon't add a new module: extend `make_sightline_fig` (`generate_galaxy_plots.py:213`) and/or `plot_sightline` (`plotting.py:141`) to read the existing `classification` column and overplot `_CLUSTER_RE`-matched rows (`search.py:37`) with a distinct marker — one new branch keyed on classification, no new file. But this is moot until the data exists: first re-run the search retaining `ClusterEngine`'s massed PSZ2/MCXC output (m500/r500) into the promoted `{name}_galaxies.csv` (currently dropped by the 2·r200 cut at `search.py:80`), since with the present promoted data the cluster layer would be empty or unsizable on all 12 sightlines."}</result>
+<usage><agent_count>4</agent_count><subagent_tokens>333438</subagent_tokens><tool_uses>54</tool_uses><duration_ms>226425</duration_ms></usage>
+</task-notification>
+
+---
+
+List all remaining open items from this session.
+
+---
+
+Implement a policy that sessions shall not be completed while deferred tasks still exist, provided that they can be executed or implemented by said agent.
+
+---
+
+Any other policies you think would help the agents to add
+
+---
+
+Check the agent-policy-recommendations workflow (run wf_49e9ee12-25a); if done, report the kept policies.
+
+---
+
+<task-notification>
+<task-id>w2m1d1zoc</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/w2m1d1zoc.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Map existing agent-governance, mine real failure modes, propose + adversarially prune new agent policies for dsa110-FLITS" completed</summary>
+<result>{"proposed_count":12,"kept_count":3,"killed_count":9,"kept":[{"name":"no-commit-to-main guard","net_value":"high","problem":"Nothing mechanically prevents an agent commit landing directly on main/master. The push-gate (oneway-guard) only classifies push/merge, not the commit, and is log-only here. Branch hygiene is prose-only.","minimal_form":"Two-line total, split across the two paths that can commit: (1) PreToolUse Bash hook guarding the AGENT — `case \"$CMD\" in *\"git commit\"*) [ \"$(git symbolic-ref --short HEAD 2&gt;/dev/null)\" = main ] || [ \"$(git symbolic-ref --short HEAD 2&gt;/dev/null)\" = master ] &amp;&amp; { echo \"refuse: commit on protected branch; branch first\" &gt;&amp;2; exit 2; };; esac`, fail-open if git/HEAD absent (skip --amend-detection — not worth the regex). (2) The higher-value half: prepend one guard line to commit-claude-md.sh so the auto-committer (the actual past offender, which the PreToolUse hook can't see) also refuses on main: `b=$(git symbolic-ref --short HEAD 2&gt;/dev/null); case \"$b\" in main|master) exit 0;; esac`. Ship (2) regardless; (2) alone already closes the documented failure, (1) covers the agent path going forward.","enforcement_type":"pretooluse-hook","friction":"low","would_have_caught":"Yes — origin/main contains multiple single-parent, non-PR direct commits that violate the repo's clean PR-merge flow: a2333b5 / 42803fd / a5c499a all \"docs(claude): auto-commit CLAUDE.md\" landing straight on main (the commit-claude-md.sh hook firing while HEAD=main), plus eed6f04 \"WIP snapshot (mac): ... preserved after concurrent-session clobber\". These are exactly direct-to-protected-branch commits the policy targets. (Verified via `git rev-list --parents`: a2333b5 has one parent = non-merge; the surrounding #15–#29 are all PR merges.)","evidence":"Map area 'Agent Process Discipline', gap 'No enforce of branch naming hygiene' (severity low) + gap 'Push-gate is LOG-ONLY by default' (severity medium). Confirmed: no .git/hooks/pre-commit exists (ls .git/hooks showed none non-sample), oneway-guard only matches git push / gh pr merge."},{"name":"MCMC seed determinism guard","net_value":"medium","problem":"emcee walker init and DM-refinement bootstrap use np.random with no seed; posteriors (tau/alpha errors) are non-reproducible and the seed is never logged. A re-run cannot regenerate published error bars.","minimal_form":"Drop the grep/lint check entirely. Keep ONE pytest (test_sampler_seeded, in the existing scat test dir so CI already runs it): build a small FRBModel on a synthetic spectrum, run FRBFitter twice with the same explicit seed, assert the posterior medians AND errors for tau_1ghz/alpha are bit-identical, and assert two DIFFERENT seeds differ. To make it pass, thread a single np.random.Generator (or int seed) through FRBFitter once — use it for _init_walkers (replace np.random.normal at :1044 with rng.normal) and pass it to emcee via run_mcmc(..., rng=...) — and write that seed into safe_results so a re-run is recoverable. That is the whole guard: one behavioral round-trip test + a 3-line plumbing change; no separate provenance Stop-hook rule, no grep. Defer/skip the DM-bootstrap claim (its RNG is in the DMphase dependency; either seed it at the call site if the API allows or document it as a known non-determinism, but do not pretend an in-repo check covers it).","enforcement_type":"ci","friction":"medium","would_have_caught":"Yes — concretely: any attempt to regenerate published tau_1ghz_err / alpha_err for an already-fit burst (e.g. the 'zach' multi-component fit defended by verify_zach_c2.py with a large ΔlnZ claim) cannot reproduce the same posterior percentiles, because both walker init (burstfit.py:1044) and emcee's run_mcmc (:1094) draw from an unseeded global np.random and no seed is stored in safe_results (pipeline/core.py build_safe_results omits it). A determinism test that fits a tiny fixture twice with the same seed and asserts identical medians/errors would fail today, exposing that the error bars in committed *_fit_results.json are non-regenerable. The candidate's own grep-form, by contrast, would NOT catch this (wrong RNG surface, incoherent kwarg).","evidence":"Map area 'Data Integrity', high-severity gap 'MCMC walker initialization is non-deterministic' (burstfit.py:1044 np.random.normal, no seed; results_db stores no seed) + medium gap 'DM refinement is not deterministic' (n_bootstrap=200, no seed). "},{"name":"frequency-orientation self-check at load","net_value":"medium","problem":"Loader flips to ascending purely on the freq_descending flag with no verification against the data; a pre-flipped .npy double-flips silently, corrupting every tau(nu)/alpha fit. This already happened once (CHIME axis bug) and the contract calls frequency-ascending an invariant.","minimal_form":"Drop the runtime data-derived assertion and provenance flag entirely (infeasible for DSA per c66358a; bandpass signal destroyed by per-channel z-score in io.py:_bandpass_correct). Keep ONLY a single pytest that feeds a synthetic descending array (row 0 = f_max) through BurstDataset with telescope.freq_descending=true and asserts data[0] corresponds to f_min after load (flipped exactly once), plus the converse (freq_descending=false leaves an ascending array unflipped). Tests the flip logic, not physical orientation. ~10 lines, one test file, no runtime cost, lands in the existing pytest/CI suite. This guards the recurrence risk (double-flip) without the false confidence of an undecidable physical check.","enforcement_type":"ci","friction":"low","would_have_caught":"A double-flip regression: someone sets freq_descending: true on an already-ascending .npy, or flips the flag during a refactor of io.py:68-69, so np.flipud runs an even/wrong number of times and tau(nu) fits backwards again — the exact class of corruption as commit c66358a. The round-trip test (descending synthetic array must end ascending exactly once) fails loudly on this. NOTE: it would NOT catch a genuinely mis-oriented physical file whose flag is also wrong — that case is author-confirmed undecidable from DSA data, which is why the candidate's runtime assertion is infeasible, not just over-built.","evidence":"Map area 'FLITS codebase', high-severity gap 'Frequency axis orientation not standardized at load time' citing commit c66358a (CHIME descending corrupted every tau/alpha fit) + 'Data Integrity' high gap 'Frequency ascending/descending orientation NOT verified at load time' (io.py:64-69 flips on flag, no inverse check). Confirmed io.py:68-69 `if flip_freq or freq_descending: raw = np.flipud(raw)` with no data-derived check."}],"killed":[{"name":"results-provenance stamp gate","why":"Kill the Stop-hook mechanism; the underlying problem is real but the gate is the wrong layer and toothless as scoped. Confirmed in code: build_safe_results (scattering/scat_analysis/pipeline/core.py:70-79) returns only {best_model, best_params, best_params_percentiles, param_names, goodness_of_fit, dm_init, convergence, all_results} — no data_path/sha256/git_commit/outer_trim/f_factor/t_factor/likelihood/mcmc_seed. So the reproducibility gap is genuine. But the entire reproducibility value lives in the ~10-line helper change the candidate bundles in; the Stop hook on top of it is redundant and net-negative for three reasons. (a) Redundant-by-construction: if the helper always stamps provenance, the hook can never fire — every JSON has the block. The hook only earns its keep when the helper is broken/bypassed, and then a key-PRESENCE check is cargo-cult: it verifies a git_commit KEY exists, not that the value is the real commit, the real file sha256, or the actual RNG seed used (MCMC has no seed at all today — burstfit.py:1044 np.random.normal unseeded — so the hook would pass a literal None/placeholder and call it provenance). Shape != truth, and shape is already guaranteed at the source. (b) Wrong production path: fit JSONs are overwhelmingly produced by flits
+... (truncated 14834 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/w2m1d1zoc.output)</result>
+<usage><agent_count>18</agent_count><subagent_tokens>1430011</subagent_tokens><tool_uses>330</tool_uses><duration_ms>627543</duration_ms></usage>
+</task-notification>
+
+---
+
+Check the agent-policy-recommendations workflow (run wf_49e9ee12-25a); if done, report the kept policies.
+
+---
+
+Approved. Implement number one.
+
+---
+
+What about policies to improve the efficacy and accuracy of agentic behavior and implementations?
+
+---
+
+<task-notification>
+<task-id>wj58abz0o</task-id>
+<tool-use-id>toolu_011aCpxuuBX6Y8tQWrtkkV7V</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/wj58abz0o.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Map existing efficacy/accuracy practices, mine real inaccurate/wasteful agent behavior, propose + adversarially prune POSITIVE practice policies for dsa110-FLITS" completed</summary>
+<result>{"proposed_count":12,"kept_count":0,"killed_count":12,"kept":[],"killed":[{"name":"claim-to-artifact binding for numeric claims in docs/tex","real_behavior_change":false,"why":"As specified, the policy is opt-in and bypassable, which makes it feel-good/unenforceable for its stated purpose. The CI test only checks numeric claims that already carry a hand-typed `&lt;!-- src: path#field --&gt;` token; an agent writing prose can simply omit the token and pass. Today ZERO such tokens exist (`rg -c \"src:\"` across .md/.tex = 0), so the gate would enforce nothing on the very claims it targets, while imposing per-claim annotation friction on an 87KB external preprint (papers/nimmo2025_preprint.md, an upstream `manyfold` commit, not a generated artifact). Worse, the two flagship sources it names are deliberately quarantined: burst_energies.tex emits NO numbers (header: \"flux calibration pending -- no energy table emitted\"), burst_energies.json is `calibrated: false`, and CALIBRATION_REVIEW.md's c0_C/c0_D table exists precisely to argue those numbers are incommensurable and must NOT be cited as physical fluences. Binding prose to those artifacts locks the repo to numbers it has intentionally gated. The candidate's own \"gold standard\" precedent (refit_calibrated.manifest.json) is programmatic regeneration (option a), which needs no new token or test; the genuinely new mechanism (option b token + CI) is the weak, unenforceable half. The high-severity repo failures (1000x K_DM unit bug, per-element SEFD, descending-freq axis, wrong Vizier IDs) were all caught by code-level tests, none would have been prevented by claim-to-artifact tokens. Redundancy with the existing verify_*.py family (verify_paper_prose, verify_final, verify_crosscheck, verify_validation, etc.) is partial but real for the only narrow case that is actually enforceable."},{"name":"regenerated artifacts must be byte-derivable, not hand-edited","real_behavior_change":true,"why":"The named problem is real and recurrent (drift catch-up commits 4aa5297 'Regenerate budget table artifact', db0a672 'Fix stale fiducial z', 2413ef9 'fix stale line anchors'), and the policy does change behavior (re-run+diff vs hand-edit). But the proposed byte-diff CI mechanism is unworkable here on three independent grounds: (1) The trigger header `generated_by: &lt;path&gt;` does not exist in the repo — actual headers are `% Auto-generated by &lt;path&gt;` (burst_energies.tex) and JSON `\\\"generated_by\\\"` (manifests); as written the test matches zero files. (2) Byte-equality is the wrong oracle for the highest-value targets: refit_calibrated.py runs emcee MCMC (5000 steps × N bursts) per call — a CI byte-diff re-runs minutes of MCMC and asserts bit-identical output, flaky across numpy/BLAS even with seed=0; joint_fit_summary.md's source is uncommitted machine-local scratch (~/Developer/scratch/...), unreproducible in CI by construction; sightline_budget.py needs pygedm (the `galactic` extra requiring a manual macOS build) and is not in the base CI matrix; burst_energies.tex is currently a stub with no table emitted. (3) Net-negative friction: an MCMC/dep-gated byte-diff-or-block gate is a flaky-test factory that blocks PRs on FP/version drift unrelated to staleness, training agents to bypass it. Partial redundancy too: figure-review gate covers the visual subset and refit_calibrated.manifest.json already records generated_by+seed."},{"name":"verification test must be independent of the implementation it tests","real_behavior_change":false,"why":"KILL — redundant + self-contradicted. (1) Redundant: the vendored `hardening-research-code` skill (.claude/skills/hardening-research-code/SKILL.md), already wrapped by `/harden`, opens with an \"Iron Law\" — \"Pinning the current outputs proves only that behavior hasn't changed, not that it is right... never label outputs verified until checked against an INDEPENDENT reference (analytic limit, reference implementation, published result, or invariant)\" — and has dedicated \"Property / invariant checks\" and \"Correctness criteria\" sections. That IS the candidate policy. The repo also already practices it: tests/test_flux_cal.py:25 hand-computes `oracle = 3.0*5.0*dt_ms*(freq_hz[-1]-freq_hz[0])` and asserts to 1e-9. (2) The candidate's headline mechanism is contradicted by its own cited fix. The fixed test in cb7ece9 imports `K_DM` from `flits.common.constants` — the SAME module dmphasev2.py:6 imports it from — and its docstring states outright \"the SAME constant the estimator uses.\" So the actual fix did NOT introduce a `tests/_oracles.py` literals module, and the \"import truth from a literals module, never from production\" convention is fictional and would not have helped (a hand-typed literal can be wrong identically). What actually caught the bug was the behavioral assertion `flat_ratio &gt; 2.0` (the coherence curve must peak) — i.e. the existing skill's invariant/property check, not constant-independence. (3) The real failure was a skill-APPLICATION gap (the agent who wrote the original blind test had the Iron Law available and didn't apply it), not a skill-CONTENT gap; more prose in the same skill doesn't change that. (4) Unenforceable: checklist prose + a \"one-line convention,\" admittedly \"not covered by pytest strict config\" — an agent can claim independence without it being true."},{"name":"live-confirm external catalog/SEFD identifiers, never trust a name","real_behavior_change":false,"why":"Kill on multiple independent grounds. (a) Infeasible half: the SEFD-CSV staleness check is unbuildable as specified — fetch_dsa_sefd.py (read this session) runs `ssh h23` to a private internal host, so CI cannot re-run it, and an mtime comparison between dsa_sefd.csv and the fetch script is meaningless because git does not preserve mtimes (checkout order, not staleness, determines them). (b) Feel-good/unenforceable half: a grep-for-`live-confirmed`-comment linter asserts a comment string EXISTS, not that any query ran or that the ID is correct; an agent satisfies it by typing the comment. It cannot detect the actual historical bugs, which were WRONG IDs (`VII/291/glade`, `.../A124/mcxc2`), not missing annotations. (c) Redundant: the repo already responded to these bugs the right way — galaxies/v2_0/test_engines.py:18 `test_glade_catalog_id_is_gladep` pins the exact expected ID deterministically and offline; that is the behavior-changing guard and it already exists for the case that mattered. (d) Net-negative friction: the only part that actually detects a wrong ID is a live Vizier.find_catalogs/query at CI time, which reintroduces network flakiness and nondeterminism — the very problem the existing _retry() backoff (commit 12a929e) exists to suppress. Live confirmation is a fix-TIME action; once the correct ID is pinned in a test, re-querying it every CI run buys nothing."},{"name":"regression-guard fits before+after a physics-kernel change","real_behavior_change":true,"why":"The underlying gap is real (no kernel-physics regression baseline; fit-verify only judges current JSONs), but the candidate's mechanism is broken AS SPECIFIED and rests on a false dependency. It claims to 'reuse the round-1-decided MCMC-seed guard' and to diff numeric fit outputs (chi2_red, tau_1ghz, alpha) against a committed golden JSON. That seed guard does NOT exist: FRBFitter.__init__ (burstfit.py:966) takes no seed/rng param and _init_walkers (line 1044) calls bare np.random.normal, so a full-MCMC golden numeric diff is non-deterministic and will flake CI — net-negative friction. The repo's own closest test, test_sim_fit_roundtrip.py, explicitly refuses quantitative recovery assertions for exactly this stochasticity reason. Default n_steps=1000 emcee also makes a real fit a slow, ill-suited CI test. Crucially, every kernel-physics bug the policy cites (1000x DM unit bug cb7ece9, delta_dm smearing f128c62, descending-freq flip c66358a) was caught by DETERMINISTIC tests on the physics funct
+... (truncated 14218 chars, full result in /private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/3af9f603-f1ee-4a00-b691-0e66b3030165/tasks/wj58abz0o.output)</result>
+<usage><agent_count>18</agent_count><subagent_tokens>1471106</subagent_tokens><tool_uses>309</tool_uses><duration_ms>573258</duration_ms></usage>
+</task-notification>
+
+---
+
+Check the agent-efficacy-policies workflow (run wf_01a7884e-6a4); if done, report the kept practice policies.
+
+---
+
+yes fix both
+
+---
+
+Proceed with follow-up.
+
+---
+
+Are we ready to close the session or do we have remaining open tasks to address?
+
+---
+
+/ai-research-workflows:validating-implementations
+
+---
+
+PUsh now
+
+---
+
+Continue
+
+---
+
+Continue
