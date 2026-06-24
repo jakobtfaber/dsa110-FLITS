@@ -709,3 +709,7 @@ Do you mean `hpcc`?
 ---
 
 You drive hpcc-run, start by verifying everything is configured and oriented the way you expect it to be?
+
+---
+
+Provide me with a slide deck that I can just click through. Even better, if you could give me a way to draw or circle the different components so that you can see them, that would be awesome. Just indicate them in some way, like a pointer or an arrow, whatever thing you can think of that allows me to not only show you how many suburbs there are but roughly where I see them. I think that would be most beneficial to you.
