@@ -81,6 +81,42 @@ def test_energy_gate_is_alpha_independent():
         assert p["quality_flag"] == flags.get(nick)
 
 
+def test_gate_drops_nonphysical_and_skips_amplitudeless(tmp_path, monkeypatch):
+    # The live sidecars are all physical, so --check / the test above never hit the
+    # drop or skip branches. Synthetic fits exercise them directly: a FAIL-but-physical
+    # fit is KEPT (quality_flag is metadata, not an exclusion); c0<=0 or non-finite is
+    # DROPPED; a fit with no per-band c0/gamma keys (all-exp/scattering-only) is SKIPPED.
+    import json
+
+    def _fit(burst, c0c=1.0, gc=-3.0, c0d=1.0, gd=-3.0, ampless=False):
+        pct = (
+            {}
+            if ampless
+            else {
+                "c0_C": {"median": c0c},
+                "gamma_C": {"median": gc},
+                "c0_D": {"median": c0d},
+                "gamma_D": {"median": gd},
+            }
+        )
+        return {"burst": burst, "percentiles": pct}
+
+    fits = {
+        "keepfail": _fit("keepfail"),  # physical -> kept even though flagged FAIL
+        "dropneg": _fit("dropneg", c0c=-1.0),  # c0 <= 0 -> dropped
+        "dropnan": _fit("dropnan", gd=float("nan")),  # non-finite -> dropped
+        "skipnoamp": _fit("skipnoamp", ampless=True),  # no c0/gamma -> skipped
+    }
+    for nick, d in fits.items():
+        (tmp_path / f"{nick}_joint_fit.json").write_text(json.dumps(d))
+    monkeypatch.setattr(E, "JOINT_DIR", tmp_path)
+    monkeypatch.setattr(E, "load_gate_flags", lambda: {"keepfail": "FAIL"})
+
+    kept = E.load_joint_params()
+    assert set(kept) == {"keepfail"}, f"expected only the physical fit kept, got {sorted(kept)}"
+    assert kept["keepfail"]["quality_flag"] == "FAIL"  # FAIL retained as metadata
+
+
 def test_z_provenance_flags_unpublished_hosts():
     # every E_iso host has a redshift-provenance entry; only hamilton/chromatica are provisional
     # (no published host paper). Guards against silently presenting an unpublished z as catalog spec.

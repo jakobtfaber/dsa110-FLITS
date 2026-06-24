@@ -26,10 +26,14 @@ telescope's SEFD + beam response at the burst position). Until then it reports t
 band fluence integrals in native units, flagged uncalibrated, and writes a
 "pending calibration" LaTeX stub rather than a publishable table of fake erg.
 
-A second trust boundary gates fit QUALITY: a joint fit the committed-fit quality
-gate marks FAIL (prior-railed / unphysical shared alpha; see the *_joint_gate.json
-sidecars from gate_joint_committed.py) had its per-band c0/gamma fit under a wrong
-alpha, so it is dropped here rather than allowed to flow into E_iso.
+A second trust boundary gates the energy's OWN inputs, NOT scattering quality:
+E_iso is alpha-independent, so a joint fit the committed-fit quality gate marks
+FAIL (prior-railed / unphysical shared alpha; see the *_joint_gate.json sidecars
+from gate_joint_committed.py) is still used IF its per-band c0/gamma are physical
+(finite, c0>0) -- the FAIL verdict is the shared-alpha judgement, which the energy
+does not depend on. Only fits with missing or non-physical c0/gamma are dropped;
+the quality_flag rides along as an informational column (ADR-0003/0004; 3-expert
+panel 2026-06-24).
 
 The (1+z) bandwidth k-correction (Zhang 2018) is applied by default; the
 no-k-correction value is tabulated alongside so the manuscript can state the
@@ -165,7 +169,7 @@ def load_joint_params() -> dict[str, dict]:
     per fit + in the provenance sidecar.
     """
     flags = load_gate_flags()
-    out, dropped = {}, []
+    out, dropped, skipped = {}, [], []
     for p in sorted(JOINT_DIR.glob("*_joint_fit.json")):
         d = json.loads(p.read_text())
         pct = d["percentiles"]
@@ -173,7 +177,8 @@ def load_joint_params() -> dict[str, dict]:
         try:
             params = {k: pct[k]["median"] for k in ("c0_C", "gamma_C", "c0_D", "gamma_D")}
         except KeyError:
-            continue  # not a per-band-amplitude fit; skip
+            skipped.append(nick)  # no per-band amplitude (all-exp/scattering-only or schema shift)
+            continue
         physical = (
             all(np.isfinite(v) for v in params.values())
             and params["c0_C"] > 0
@@ -188,8 +193,14 @@ def load_joint_params() -> dict[str, dict]:
         out[nick] = params
     if dropped:
         print(
-            f"[gate] dropped {len(dropped)} fit(s) with missing/non-physical c0/gamma "
-            f"from E_iso: {', '.join(sorted(dropped))}",
+            f"[gate] dropped {len(dropped)} fit(s) with non-physical c0/gamma "
+            f"(non-finite or c0<=0) from E_iso: {', '.join(sorted(dropped))}",
+            file=sys.stderr,
+        )
+    if skipped:
+        print(
+            f"[gate] skipped {len(skipped)} fit(s) with no per-band c0/gamma "
+            f"(all-exp/scattering-only or schema shift): {', '.join(sorted(skipped))}",
             file=sys.stderr,
         )
     return out
@@ -475,20 +486,29 @@ def _check() -> None:
 
 def _provenance(rows: list[dict]) -> dict:
     """Audit record of WHAT produced this energy table, so a stale/wrong input can be
-    caught (the sci-python review found the table previously stamped none)."""
+    caught (the sci-python review found the table previously stamped none). git_sha is
+    best-effort HEAD at generation; git_dirty flags an uncommitted producing tree, and
+    the per-input sha256 census pins reproducibility independent of the commit."""
+    import hashlib
     import subprocess
 
-    try:
-        sha = subprocess.run(
-            ["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout.strip()
-    except Exception:
-        sha = "unknown"
+    def _git(*args) -> str:
+        try:
+            return subprocess.run(
+                ["git", "-C", str(REPO), *args], capture_output=True, text=True, check=True
+            ).stdout.strip()
+        except Exception:
+            return ""
+
+    sha = _git("rev-parse", "--short", "HEAD") or "unknown"
+    inputs = {
+        p.name: hashlib.sha256(p.read_bytes()).hexdigest()[:16]
+        for p in sorted(JOINT_DIR.glob("*_joint_fit.json"))
+        + sorted(JOINT_DIR.glob("*_joint_gate.json"))
+    }
     return {
         "git_sha": sha,
+        "git_dirty": bool(_git("status", "--porcelain")),
         "n_bursts": len(rows),
         "gate_policy": (
             "E_iso is alpha-independent; energy gates on spec-z + calibrated fluence + physical "
@@ -497,10 +517,13 @@ def _provenance(rows: list[dict]) -> dict:
         ),
         "c0gamma_pbf": {r["burst"]: r.get("c0gamma_pbf") for r in rows},
         "quality_flag": {r["burst"]: r.get("quality_flag") for r in rows},
+        "inputs_sha256": inputs,
         "note": (
-            "all-exp campaign fits scattering only (no c0/gamma; verified local+HPCC 2026-06-24); "
-            "c0/gamma are from the committed mixed-legacy-PBF joint fits, which is correct because "
-            "the energy does not use the PBF alpha."
+            "git_sha is HEAD at generation; if git_dirty, the producing tree had uncommitted "
+            "changes -- trust inputs_sha256 (the consumed joint_fit/gate JSONs) for exact "
+            "reproducibility. all-exp campaign fits scattering only (no c0/gamma; verified "
+            "local+HPCC 2026-06-24); c0/gamma are from the committed mixed-legacy-PBF joint fits, "
+            "which is correct because the energy does not use the PBF alpha."
         ),
     }
 
