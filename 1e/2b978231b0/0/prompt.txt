@@ -1,0 +1,5 @@
+@agent-astronomy-astrophysics-expert Review the work being done in this repo to ensure it is physically and astrophysically valid
+
+---
+
+I want you to fix all of these. Use rse-plugins to do so.

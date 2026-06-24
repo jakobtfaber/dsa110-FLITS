@@ -1,0 +1,70 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1e2b978231b0",
+  "session_id": "062ce024-8032-4ac6-882e-e6ee9b5aed19",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T03:25:37.025772Z",
+  "branch": "feature/cluster-catalog-engine",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "9ae7b718eb83",
+  "token_usage": {
+    "input_tokens": 31131,
+    "cache_creation_tokens": 434910,
+    "cache_read_tokens": 14728589,
+    "output_tokens": 96383,
+    "api_call_count": 72
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01LfJ1mxZ3AyGvr3npgxpY6j",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "harden"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "9ae7b718eb83",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 71,
+        "end": 72,
+        "entry_ids": [
+          "8fc11cbd-580c-4eb8-8c17-709626613e30"
+        ],
+        "tool_use_id": "toolu_01LfJ1mxZ3AyGvr3npgxpY6j"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LfJ1mxZ3AyGvr3npgxpY6j"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: harden",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 8147,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
