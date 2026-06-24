@@ -1,0 +1,134 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "4fa4e236e5b9",
+  "session_id": "062ce024-8032-4ac6-882e-e6ee9b5aed19",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T03:58:45.179466Z",
+  "branch": "feature/cluster-catalog-engine",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "analysis/burst_energies/burst_energies.json",
+    "analysis/calculate_burst_energies.py",
+    "analysis/scattering-refit-2026-06/joint_json/chromatica_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/freya_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/hamilton_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/isha_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/johndoeII_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/mahi_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/oran_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/phineas_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/whitney_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/wilhelm_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/zach_joint_fit.json",
+    "analysis/scattering-refit-2026-06/lorentzian_fit_fig.py",
+    "analysis/scattering-refit-2026-06/multiscale_fit.py",
+    "analysis/scattering-refit-2026-06/regate_joint_json.py",
+    "analysis/scattering-refit-2026-06/run_joint_fit.py",
+    "analysis/scattering-refit-2026-06/scint_acf.py",
+    "analysis/scattering-refit-2026-06/scint_evidence.py",
+    "galaxies/v2_0/config.py",
+    "galaxies/v2_0/scattering_predict.py",
+    "galaxies/v2_0/test_scattering_predict.py",
+    "results/sightline_budget_sensitivity_summary.md",
+    "results/sightline_dm_scattering_budget.md",
+    "scattering/scat_analysis/burstfit_joint.py",
+    "tests/test_joint_quality_flag.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "b14025f03f02",
+  "token_usage": {
+    "input_tokens": 32475,
+    "cache_creation_tokens": 766571,
+    "cache_read_tokens": 22448549,
+    "output_tokens": 122064,
+    "api_call_count": 99
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01LfJ1mxZ3AyGvr3npgxpY6j",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "harden"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "b14025f03f02",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 71,
+        "end": 72,
+        "entry_ids": [
+          "8fc11cbd-580c-4eb8-8c17-709626613e30"
+        ],
+        "tool_use_id": "toolu_01LfJ1mxZ3AyGvr3npgxpY6j"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01LfJ1mxZ3AyGvr3npgxpY6j"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: harden",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 4
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T03:58:45.126924Z",
+    "agent_lines": 550,
+    "agent_removed": 203,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 550,
+    "total_lines_changed": 753,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 8772,
+      "agent_lines_removed": 203,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 8772,
+      "agent_lines_removed": 203,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
