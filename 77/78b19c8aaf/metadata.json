@@ -3,7 +3,7 @@
   "checkpoint_id": "7778b19c8aaf",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 8,
+  "checkpoints_count": 6,
   "files_touched": [
     "analysis/build_manuscript.py",
     "analysis/manuscript.tex",
@@ -47,11 +47,11 @@
     }
   ],
   "token_usage": {
-    "input_tokens": 341452,
-    "cache_creation_tokens": 6608076,
-    "cache_read_tokens": 230078000,
-    "output_tokens": 1538099,
-    "api_call_count": 1100
+    "input_tokens": 341722,
+    "cache_creation_tokens": 6618449,
+    "cache_read_tokens": 231796922,
+    "output_tokens": 1544658,
+    "api_call_count": 1106
   },
   "combined_attribution": {
     "calculated_at": "2026-06-24T10:49:18.918525Z",
