@@ -1,0 +1,180 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "6c58351e1a84",
+  "session_id": "02981995-7383-484b-a695-5d943aa0e4e8",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T19:26:19.290071Z",
+  "branch": "main",
+  "checkpoints_count": 13,
+  "save_step_count": 13,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "19e52e1ab9ff",
+  "checkpoint_transcript_start": 2009,
+  "transcript_lines_at_start": 2009,
+  "token_usage": {
+    "input_tokens": 50350,
+    "cache_creation_tokens": 702304,
+    "cache_read_tokens": 39586755,
+    "output_tokens": 224935,
+    "api_call_count": 171
+  },
+  "session_metrics": {
+    "turn_count": 26
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 116,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37401,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/burst_energies/burst_energies.json": 54,
+        "analysis/burst_energies/burst_energies.provenance.json": 26,
+        "analysis/burst_energies/burst_energies.tex": 2,
+        "analysis/calculate_burst_energies.py": 33
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 27,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37490,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/burst_energies/burst_energies.provenance.json": 26
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 17,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37516,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "logs/codex-energies-landing.json": 16
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 17,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37516,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "logs/codex-energies-landing.json": 16
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 29,
+      "user_lines_removed": 8,
+      "agent_lines_added": 37540,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/scheduled_tasks.lock": 1
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 29,
+      "user_lines_removed": 8,
+      "agent_lines_added": 37846,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/scheduled_tasks.lock": 1
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 29,
+      "user_lines_removed": 8,
+      "agent_lines_added": 37846,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/scheduled_tasks.lock": 1
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 29,
+      "user_lines_removed": 8,
+      "agent_lines_added": 37846,
+      "agent_lines_removed": 20,
+      "user_added_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/scheduled_tasks.lock": 1
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 22,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37874,
+      "agent_lines_removed": 28,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "logs/codex-pr59-review.json": 21
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37895,
+      "agent_lines_removed": 28,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
