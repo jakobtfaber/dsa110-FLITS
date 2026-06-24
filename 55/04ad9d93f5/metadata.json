@@ -3,7 +3,7 @@
   "checkpoint_id": "5504ad9d93f5",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 1,
+  "checkpoints_count": 3,
   "files_touched": [
     "analysis/scattering-refit-2026-06/run_joint_fit.py",
     "galaxies/v2_0/attribute_excess.py",
@@ -15,13 +15,19 @@
       "transcript": "/55/04ad9d93f5/0/full.jsonl",
       "content_hash": "/55/04ad9d93f5/0/content_hash.txt",
       "prompt": "/55/04ad9d93f5/0/prompt.txt"
+    },
+    {
+      "metadata": "/55/04ad9d93f5/1/metadata.json",
+      "transcript": "/55/04ad9d93f5/1/full.jsonl",
+      "content_hash": "/55/04ad9d93f5/1/content_hash.txt",
+      "prompt": "/55/04ad9d93f5/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 25308,
-    "cache_creation_tokens": 144186,
-    "cache_read_tokens": 3906212,
-    "output_tokens": 43593,
-    "api_call_count": 36
+    "input_tokens": 25445,
+    "cache_creation_tokens": 147714,
+    "cache_read_tokens": 5286776,
+    "output_tokens": 45697,
+    "api_call_count": 40
   }
 }
