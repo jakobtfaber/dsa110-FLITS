@@ -1,0 +1,55 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "7778b19c8aaf",
+  "session_id": "2fb68760-7c2e-4584-ac25-fadd9a8c6453",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T10:49:02.818897Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 2,
+  "save_step_count": 3,
+  "files_touched": [
+    "results/figures.manifest.json",
+    "results/figures.review.json"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "a9f1d38e9ca2",
+  "token_usage": {
+    "input_tokens": 27858,
+    "cache_creation_tokens": 232924,
+    "cache_read_tokens": 8988241,
+    "output_tokens": 111104,
+    "api_call_count": 61
+  },
+  "session_metrics": {
+    "turn_count": 11
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T10:49:02.777953Z",
+    "agent_lines": 26,
+    "agent_removed": 0,
+    "human_added": 10680,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 10708,
+    "total_lines_changed": 10748,
+    "agent_percentage": 0.24190547078526237,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
