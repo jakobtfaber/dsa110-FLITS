@@ -347,3 +347,11 @@ Fork A is already done I believe actually, see: analysis/scattering-refit-2026-0
 <status>completed</status>
 <summary>Background command "Background monitor for phineas job completion" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+monitor and then pull
+
+---
+
+hold off while other lane finishes scattering sicence. yes I want the FLITS scop doc and ALLEXP edits committed
