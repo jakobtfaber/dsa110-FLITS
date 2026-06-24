@@ -76,7 +76,11 @@ def _excess_tau_ms(name: str, budget_df: pd.DataFrame | None) -> float:
     """
     if budget_df is None:
         return math.nan
-    row = budget_df[budget_df["name"].astype(str).str.lower() == name.lower()]
+    # The budget CSV emits TNS designations (#26); match on nickname OR its TNS name.
+    from scattering.scat_analysis.burst_metadata import load_tns_name
+
+    keys = {name.lower(), load_tns_name(name).lower()}
+    row = budget_df[budget_df["name"].astype(str).str.lower().isin(keys)]
     if row.empty:
         return math.nan
     return sb._f(row.iloc[0].get("tau_obs_ms"))
@@ -140,7 +144,7 @@ def make_figure(attr_df: pd.DataFrame, budget_df: pd.DataFrame | None = None):
     systems in committed catalog" message instead of an empty axis.
     """
     fig, axes = plt.subplots(2, 2, figsize=(11, 8), dpi=150, facecolor=sb.BG_LIGHT)
-    for ax, name in zip(axes.flat, EXCESS_SIGHTLINES):
+    for ax, name in zip(axes.flat, EXCESS_SIGHTLINES, strict=True):  # 2x2 axes == 4 sightlines
         ax.set_facecolor(sb.BG_LIGHT)
         sub = attr_df[attr_df["sightline"] == name] if len(attr_df) else attr_df
         tau_obs = _excess_tau_ms(name, budget_df)
