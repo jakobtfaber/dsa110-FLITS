@@ -71,3 +71,7 @@ How long will the re-fit take?
 ---
 
 Can we make it less than 5 minutes
+
+---
+
+Is Hamilton unconstrained because of the burst complexity in the chime band?
