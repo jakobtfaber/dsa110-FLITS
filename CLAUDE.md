@@ -50,7 +50,7 @@ Three analysis surfaces plus a shared package. The **canonical physics kernel** 
 
 ### Data & metadata
 - Raw data: `.npy`, shape `(n_freq, n_time)`, **frequency standardized to ascending** on load (`BurstDataset`). Large `.npy` are gitignored / external — see `DATA_LOCATIONS.md`, `DATA_SOURCES.md`, `data-manifest.csv`, `codetections_manifest.yaml`.
-- Burst registry: `configs/bursts.yaml` (source of truth) + `chimedsa_burst_specs.csv` (nickname↔TNS). Internal **nicknames** (`casey`, `freya`) key filenames/configs; **TNS names** (`FRB 20240229A`) are for publication. Convert via `scattering.scat_analysis.burst_metadata`.
+- Burst registry: `configs/bursts.yaml` (source of truth for burst *properties*) + `scattering/scat_analysis/burst_metadata.py::_FALLBACK_TNS` (canonical nickname↔TNS map, SSOT — see `docs/adr/0002-canonical-burst-naming.md`; `chimedsa_burst_specs.csv` is gitignored/absent, **not** the registry). Internal **nicknames** (`casey`, `freya`) key filenames/configs; **TNS names** (`FRB 20240229A`) are for publication. Convert via `scattering.scat_analysis.burst_metadata`.
 - Results: JSON (`best_params`, `best_key`, `goodness_of_fit`, `chain_stats`); batch results also in a SQLite DB.
 
 ## Fit validation is mandatory (do not rationalize fits)
