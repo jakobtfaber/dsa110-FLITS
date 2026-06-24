@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "d57d84c4c0a0",
+  "strategy": "manual-commit",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/_ladder.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/test_s2verdict.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/d5/7d84c4c0a0/0/metadata.json",
+      "transcript": "/d5/7d84c4c0a0/0/full.jsonl",
+      "content_hash": "/d5/7d84c4c0a0/0/content_hash.txt",
+      "prompt": "/d5/7d84c4c0a0/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 31450,
+    "cache_creation_tokens": 449478,
+    "cache_read_tokens": 13413447,
+    "output_tokens": 116711,
+    "api_call_count": 79
+  }
+}
