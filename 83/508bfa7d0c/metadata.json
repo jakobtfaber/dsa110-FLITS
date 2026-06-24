@@ -3,7 +3,7 @@
   "checkpoint_id": "83508bfa7d0c",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "analysis/scattering-refit-2026-06/gate_joint_committed.py",
     "analysis/scattering-refit-2026-06/test_gate_joint_committed.py",
@@ -15,13 +15,19 @@
       "transcript": "/83/508bfa7d0c/0/full.jsonl",
       "content_hash": "/83/508bfa7d0c/0/content_hash.txt",
       "prompt": "/83/508bfa7d0c/0/prompt.txt"
+    },
+    {
+      "metadata": "/83/508bfa7d0c/1/metadata.json",
+      "transcript": "/83/508bfa7d0c/1/full.jsonl",
+      "content_hash": "/83/508bfa7d0c/1/content_hash.txt",
+      "prompt": "/83/508bfa7d0c/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 61963,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 331264,
-    "output_tokens": 5415,
-    "api_call_count": 8
+    "input_tokens": 117886,
+    "cache_creation_tokens": 635282,
+    "cache_read_tokens": 26243676,
+    "output_tokens": 202204,
+    "api_call_count": 135
   }
 }
