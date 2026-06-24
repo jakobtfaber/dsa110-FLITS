@@ -1,0 +1,25 @@
+CONFIRM or REJECT the scope of the FLITS #4 "canonical all-exp citable-α lock", with file:line / number evidence. Read-only; do not edit. NOTE: the shared working tree is currently on a CONCURRENT agent's branch (fix/issue-4-n1-commensurable, HEAD a76ca5e), which does NOT contain my ADR-0004 policy commit 279f4c6 (that lives on feat/scint-pipeline-wiring). So the working-tree gate_joint_committed.py shows the OLD ALPHA_MIN=1.5 — ignore that; my policy commit set it to 1.0. Adjudicate the DECISION, not the tree state.
+
+BACKGROUND. ADR-0003: canonical α come from ALL-EXP (single-exp PBF both bands) joint fits; mixed-PBF α superseded. ADR-0004: gate floor 1.5→1.0; reclassify 1.0≤α<2.0 as sub-Kolmogorov L3 MARGINAL; hard FAIL below 1.0. Policy code landed (279f4c6); verdict regen deliberately held.
+
+THE CANONICAL ALL-EXP FREE-FIT TABLE (HPCC, all sampled alpha_bounds=[1.5,6.0]):
+  casey sharedzeta α=2.396; chromatica sharedzeta α=3.286; freya sharedzeta α=4.356;
+  hamilton sharedzeta α=1.504 (PINNED at 1.5 floor); isha C2D1 α=5.481; johndoeII C2D1 α=1.573 (near floor);
+  mahi C1D1 α=3.166; oran C2D1 α=2.662; phineas C3D3 α=3.426; wilhelm sharedzeta α=2.558;
+  zach C1D1 α=3.319 (lnZ 32962) vs zach C2D3 (lnZ 35694, but 3rd comp prior-driven per fixed-s² sign-flip test);
+  whitney(local) C2D2 α≈5.116 (real 2-comp, lnZ 4992) vs C2D1 (lnZ 2204).
+
+THREE EXPERT SUBAGENTS (scientific-python, astrophysics, docs-architect) UNANIMOUSLY CONCLUDED:
+1. #4 CANNOT be locked mechanically. hamilton (1.504) and johndoeII (1.573) are FLOOR-RAILED at the [1.5,6.0] prior — a sampler with floor 1.5 cannot produce α<1.5 by construction, so their values are truncation artifacts. ADR-0004 cites johndoeII α≈1.37 from a DIFFERENT [1.0,6.0] fit, not the canonical [1.5,6.0] all-exp fit. Re-fitting hamilton/johndoeII at [1.0,6.0] is a HARD PREREQUISITE before their α is citable.
+2. hamilton is likely UNCONSTRAINED: its two existing [1.0,6.0] fits land at α=5.99 and α=1.006 (straddle the whole prior) → no information → no citable α even after re-fit.
+3. zach canonical = C1D1 α=3.319; C2D3 rejected (3rd component prior-driven, ΔlnZ sign-flips +1443/−759/−0.4 across s²). Missing C2D2 free-fit does NOT block this (rejection needs only the C2D3-vs-C2D2 ladder, which exists).
+4. oran (all-exp 2.66) and whitney (all-exp 5.12) are NOT sub-Kolmogorov — ADR-0004's "Consequences" text listing oran 1.44 / whitney 1.46 as sub-K uses SUPERSEDED mixed-PBF values (contradicts ADR-0003). johndoeII is the ONLY genuine sub-K candidate, citable-MARGINAL with a mandatory flag, and only at [1.0,6.0].
+5. Per-burst: OBJECTIVE now = casey, chromatica, freya, mahi, wilhelm, zach(C1D1), oran, whitney(C2D2). NEEDS-REFIT[1.0,6.0] = hamilton, johndoeII. NEEDS-DECISION (unrun s²-ladder multiplicity) = oran/phineas/isha C/D component counts not yet validated.
+6. Doc reconciliation: ADR-0004 is an immutable historical record → LEAVE it. The one live forward-looking surface carrying the stale sub-K claim is docs/rse/specs/decision-map-manuscript-completion.md:155-156 ("oran 1.44, whitney-single 1.46 … sit in the 1.0–2.0 MARGINAL band"). Correct THAT to mirror the already-correct .agents/deferred-tasks.md:26 language (oran true ≈2.66, whitney ≈5.12, NOT sub-K; johndoeII the only sub-K candidate). CONTEXT.md, plan-manuscript-completion.md, codetection-science-plan.md, and the Faber2026 manuscript carry NO stale per-burst sub-K assertion (manuscript count-free gating held).
+
+CONFIRM (with evidence) or REJECT each:
+A. Is #4 genuinely BLOCKED on a [1.0,6.0] re-fit campaign for hamilton + johndoeII (and the unrun s²-ladders for oran/phineas/isha multiplicity), i.e. NOT lockable from current [1.5,6.0] data? Or is there a defensible way to lock it now (e.g. grade the floor-railed bursts as rail-MARGINAL/excluded and proceed with the 8 objective bursts)?
+B. Is the single agent-doable, data-independent action this turn correctly identified as: fix decision-map-manuscript-completion.md:155-156 stale sub-K claim, leave ADR-0004 immutable, do NOT regen verdicts, do NOT touch energies/manuscript? Anything else agent-doable now without the re-fit?
+C. Is launching the [1.0,6.0] re-fit campaign on HPCC the correct UNBLOCK for #4, and is that a compute action that should be SURFACED to the user (not fired autonomously) given it is a multi-hour nested-sampling job + a science decision on hamilton/zach? Or is it routine enough to launch?
+D. Any flaw in the experts' unanimous reasoning? Particularly: is it ever valid to cite a floor-railed [1.5,6.0] α as a measurement, or to keep zach C2D3 on its higher raw lnZ? Steelman the dissent if any exists.
+Be decisive on A and C — those set what I do next.
