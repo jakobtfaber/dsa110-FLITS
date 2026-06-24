@@ -79,3 +79,7 @@ yes, open PR and oversee its successful review and merge into main
 ---
 
 So... what now?
+
+---
+
+go with #1, then a workflow over #2's candidates so each gets verified in parallel rather than one-by-one
