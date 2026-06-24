@@ -37,3 +37,7 @@ here maybe? h17:/data/jfaber/upchan_codetections/
 ---
 
 Look on CANFAR to see if the data are there
+
+---
+
+start that now.
