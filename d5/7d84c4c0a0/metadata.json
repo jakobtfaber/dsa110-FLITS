@@ -3,7 +3,7 @@
   "checkpoint_id": "d57d84c4c0a0",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 11,
+  "checkpoints_count": 13,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/_ladder.py",
     "analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py",
@@ -39,6 +39,12 @@
       "transcript": "/d5/7d84c4c0a0/3/full.jsonl",
       "content_hash": "/d5/7d84c4c0a0/3/content_hash.txt",
       "prompt": "/d5/7d84c4c0a0/3/prompt.txt"
+    },
+    {
+      "metadata": "/d5/7d84c4c0a0/4/metadata.json",
+      "transcript": "/d5/7d84c4c0a0/4/full.jsonl",
+      "content_hash": "/d5/7d84c4c0a0/4/content_hash.txt",
+      "prompt": "/d5/7d84c4c0a0/4/prompt.txt"
     }
   ],
   "token_usage": {

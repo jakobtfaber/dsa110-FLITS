@@ -1,0 +1,47 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "d57d84c4c0a0",
+  "session_id": "d836e440-34bd-488c-b2bb-76d0a63894c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T15:53:07.957885Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/_ladder.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/test_s2verdict.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-100_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-10_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-1_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-100_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-10_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-1_pbf-exp-exp.json"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "8e267e668de0",
+  "checkpoint_transcript_start": 579,
+  "transcript_lines_at_start": 579,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T15:53:07.905614Z",
+    "agent_lines": 1012,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1012,
+    "total_lines_changed": 1012,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
+}
