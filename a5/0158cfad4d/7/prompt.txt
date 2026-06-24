@@ -39,3 +39,11 @@ are the "faithful figures + assembler" new versions of what exists in dsa_figs/ 
 ---
 
 Is there any reason not to overwrite dsa_figs/ ?
+
+---
+
+Do both:
+- Settle #1 (base v sharedzeta)
+- Fix #2 (display full window)
+
+Use @"astronomy-astrophysics-expert (agent)" , @"scientific-python-development:scientific-docs-architect (agent)" , @"scientific-python-development:scientific-python-expert (agent)" , /ai-research-workflows:implement , /boris , /ponytail:ponytail
