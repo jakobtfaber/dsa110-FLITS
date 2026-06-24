@@ -3,7 +3,7 @@
   "checkpoint_id": "4cf48eb1ce33",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 10,
+  "checkpoints_count": 17,
   "files_touched": null,
   "sessions": [
     {
@@ -23,13 +23,19 @@
       "transcript": "/4c/f48eb1ce33/2/full.jsonl",
       "content_hash": "/4c/f48eb1ce33/2/content_hash.txt",
       "prompt": "/4c/f48eb1ce33/2/prompt.txt"
+    },
+    {
+      "metadata": "/4c/f48eb1ce33/3/metadata.json",
+      "transcript": "/4c/f48eb1ce33/3/full.jsonl",
+      "content_hash": "/4c/f48eb1ce33/3/content_hash.txt",
+      "prompt": "/4c/f48eb1ce33/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 379359,
-    "cache_creation_tokens": 8094088,
-    "cache_read_tokens": 268335484,
-    "output_tokens": 1769142,
-    "api_call_count": 1256
+    "input_tokens": 379877,
+    "cache_creation_tokens": 8103201,
+    "cache_read_tokens": 269169158,
+    "output_tokens": 1772829,
+    "api_call_count": 1259
   }
 }
