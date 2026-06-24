@@ -144,13 +144,25 @@ def load_gate_flags() -> dict[str, str]:
 
 
 def load_joint_params() -> dict[str, dict]:
-    """nickname (lowercased) -> {c0_C, gamma_C, c0_D, gamma_D, quality_flag} medians.
+    """nickname (lowercased) -> {c0_C, gamma_C, c0_D, gamma_D, quality_flag, pbf} medians.
 
-    Trust boundary: a joint fit the quality gate marks FAIL has a prior-railed or
-    unphysical shared alpha, so its per-band c0/gamma were fit UNDER that wrong
-    alpha and must not flow into E_iso (a railed fit is not a measurement). FAIL
-    fits are dropped here (logged); a fit with no gate sidecar keeps quality_flag
-    None and is retained (un-stamped legacy fit -> do not assume FAIL).
+    Trust boundary (ADR-0003/0004; 3-expert panel 2026-06-24). E_iso is
+    alpha-INDEPENDENT: ``band_integral`` uses only c0/gamma and the band edges, and
+    the absolute scale is a per-channel radiometer integral -- alpha appears nowhere
+    in the energy. So energy citability must NOT gate on the scattering joint-fit
+    FAIL, which is the shared-alpha L1 verdict; doing so deletes a valid energy over
+    a scattering-physics judgement that the energy does not depend on. (oran/whitney
+    FAIL only on the *superseded* mixed-PBF alpha + the *retired* 1.5 floor, yet have
+    physical, rail-free c0/gamma.) We therefore gate on the energy's OWN inputs: a
+    fit is dropped iff its per-band c0/gamma are missing or non-physical (non-finite,
+    or c0 <= 0). The scattering quality_flag is carried through as an INFORMATIONAL
+    column, not an exclusion.
+
+    c0/gamma come from the committed joint fits (mixed-legacy PBF: pbf_C/pbf_D
+    absent). The all-exp campaign fits scattering only and produces NO c0/gamma
+    (verified 2026-06-24, local + HPCC), and since E_iso is alpha-independent the
+    mixed-PBF c0/gamma are the correct amplitude inputs; the PBF family is stamped
+    per fit + in the provenance sidecar.
     """
     flags = load_gate_flags()
     out, dropped = {}, []
@@ -162,14 +174,22 @@ def load_joint_params() -> dict[str, dict]:
             params = {k: pct[k]["median"] for k in ("c0_C", "gamma_C", "c0_D", "gamma_D")}
         except KeyError:
             continue  # not a per-band-amplitude fit; skip
-        if flags.get(nick) == "FAIL":
+        physical = (
+            all(np.isfinite(v) for v in params.values())
+            and params["c0_C"] > 0
+            and params["c0_D"] > 0
+        )
+        if not physical:
             dropped.append(nick)
             continue
         params["quality_flag"] = flags.get(nick)
+        pc, pd = d.get("pbf_C"), d.get("pbf_D")
+        params["pbf"] = "all-exp" if (pc == "exp" and pd == "exp") else "mixed-legacy"
         out[nick] = params
     if dropped:
         print(
-            f"[gate] refused {len(dropped)} FAIL joint fit(s) from E_iso: {', '.join(sorted(dropped))}",
+            f"[gate] dropped {len(dropped)} fit(s) with missing/non-physical c0/gamma "
+            f"from E_iso: {', '.join(sorted(dropped))}",
             file=sys.stderr,
         )
     return out
@@ -228,6 +248,7 @@ def compute(scales: dict[str, float | str | None] | None = None) -> list[dict]:
             "I_DSA_native_ms_Hz": I_D,
             "calibrated": calibrated,
             "quality_flag": fp.get("quality_flag"),
+            "c0gamma_pbf": fp.get("pbf"),
             "z_src": Z_PROVENANCE.get(nick, ("unknown", ""))[0],
         }
         if I_C_jy is not None:
@@ -429,15 +450,59 @@ def _check() -> None:
         "telescopes.yaml: calibrate both bands or neither"
     )
 
-    # 4. quality trust boundary: a FAIL-gated joint fit must never reach E_iso
+    # 4. energy trust boundary (ADR-0003/0004; 3-expert panel 2026-06-24): E_iso is
+    #    alpha-independent, so a scattering-FAIL fit with PHYSICAL c0/gamma is now
+    #    RETAINED (energy gates on its own inputs, not the shared-alpha verdict);
+    #    only missing/non-physical c0/gamma are refused.
     flags = load_gate_flags()
-    kept = set(load_joint_params())
+    fits = load_joint_params()
     live_fail = {b for b, f in flags.items() if f == "FAIL"}
-    assert live_fail, "no live FAIL verdict to exercise the trust boundary"
-    assert not (live_fail & kept), f"FAIL joint fit leaked into E_iso: {sorted(live_fail & kept)}"
-    print(
-        "self-check OK: integral matches quadrature; energy oracle, k-correction, and both gates exact"
+    assert live_fail, "no live FAIL verdict to exercise the boundary"
+    assert live_fail & set(fits), (
+        "alpha-FAIL fits with valid c0/gamma must now be retained, not gated on alpha"
     )
+    assert all(
+        np.isfinite([f["c0_C"], f["gamma_C"], f["c0_D"], f["gamma_D"]]).all()
+        and f["c0_C"] > 0
+        and f["c0_D"] > 0
+        for f in fits.values()
+    ), "a kept fit has non-physical c0/gamma"
+    print(
+        "self-check OK: integral matches quadrature; energy oracle, k-correction, "
+        "calibration gate, and the alpha-independent c0/gamma boundary all hold"
+    )
+
+
+def _provenance(rows: list[dict]) -> dict:
+    """Audit record of WHAT produced this energy table, so a stale/wrong input can be
+    caught (the sci-python review found the table previously stamped none)."""
+    import subprocess
+
+    try:
+        sha = subprocess.run(
+            ["git", "-C", str(REPO), "rev-parse", "--short", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except Exception:
+        sha = "unknown"
+    return {
+        "git_sha": sha,
+        "n_bursts": len(rows),
+        "gate_policy": (
+            "E_iso is alpha-independent; energy gates on spec-z + calibrated fluence + physical "
+            "(finite, c0>0) per-band c0/gamma. The scattering joint-fit FAIL verdict is "
+            "INFORMATIONAL, not an energy exclusion (ADR-0003/0004, 3-expert panel 2026-06-24)."
+        ),
+        "c0gamma_pbf": {r["burst"]: r.get("c0gamma_pbf") for r in rows},
+        "quality_flag": {r["burst"]: r.get("quality_flag") for r in rows},
+        "note": (
+            "all-exp campaign fits scattering only (no c0/gamma; verified local+HPCC 2026-06-24); "
+            "c0/gamma are from the committed mixed-legacy-PBF joint fits, which is correct because "
+            "the energy does not use the PBF alpha."
+        ),
+    }
 
 
 def main() -> None:
@@ -451,6 +516,7 @@ def main() -> None:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "burst_energies.json").write_text(json.dumps(rows, indent=2))
+    (OUT_DIR / "burst_energies.provenance.json").write_text(json.dumps(_provenance(rows), indent=2))
     calibrated = rows[0]["calibrated"]
     tex = latex_section(rows) if calibrated else latex_pending()
     (OUT_DIR / "burst_energies.tex").write_text(tex)

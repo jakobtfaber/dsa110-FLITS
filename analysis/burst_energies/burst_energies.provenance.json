@@ -1,0 +1,26 @@
+{
+  "git_sha": "6a66b237",
+  "n_bursts": 8,
+  "gate_policy": "E_iso is alpha-independent; energy gates on spec-z + calibrated fluence + physical (finite, c0>0) per-band c0/gamma. The scattering joint-fit FAIL verdict is INFORMATIONAL, not an energy exclusion (ADR-0003/0004, 3-expert panel 2026-06-24).",
+  "c0gamma_pbf": {
+    "chromatica": "mixed-legacy",
+    "hamilton": "mixed-legacy",
+    "isha": "mixed-legacy",
+    "oran": "mixed-legacy",
+    "phineas": "mixed-legacy",
+    "whitney": "mixed-legacy",
+    "wilhelm": "mixed-legacy",
+    "zach": "mixed-legacy"
+  },
+  "quality_flag": {
+    "chromatica": "MARGINAL",
+    "hamilton": "MARGINAL",
+    "isha": "MARGINAL",
+    "oran": "FAIL",
+    "phineas": "MARGINAL",
+    "whitney": "FAIL",
+    "wilhelm": "MARGINAL",
+    "zach": "MARGINAL"
+  },
+  "note": "all-exp campaign fits scattering only (no c0/gamma; verified local+HPCC 2026-06-24); c0/gamma are from the committed mixed-legacy-PBF joint fits, which is correct because the energy does not use the PBF alpha."
+}
