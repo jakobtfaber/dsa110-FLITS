@@ -484,3 +484,7 @@ Handle pr #47 and main checkout fix/issue-4-n1-commensurable in the same way now
 <status>completed</status>
 <summary>Background command "Dispatch Codex to adjudicate #47 + fix/issue-4 (read-only)" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+When will fix/issue-4 be ready to PR/merge ?
