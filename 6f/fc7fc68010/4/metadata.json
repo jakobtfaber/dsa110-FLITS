@@ -1,0 +1,171 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "6ffc7fc68010",
+  "session_id": "e2067f89-1873-4de7-b000-412b5afb8b93",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T14:55:22.701175Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 3,
+  "save_step_count": 3,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "9335ec443db5",
+  "checkpoint_transcript_start": 479,
+  "transcript_lines_at_start": 479,
+  "token_usage": {
+    "input_tokens": 1603,
+    "cache_creation_tokens": 43811,
+    "cache_read_tokens": 6104030,
+    "output_tokens": 27538,
+    "api_call_count": 26
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-boris-2026-06-24T14:26:11.490737Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "51a10b21778d",
+      "timestamp": "2026-06-24T14:26:11.490737Z",
+      "native": {
+        "command": "/boris"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/boris",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:handoff-2026-06-24T14:51:18.587381Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:handoff"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "9335ec443db5",
+      "timestamp": "2026-06-24T14:51:18.587381Z",
+      "native": {
+        "command": "/ai-research-workflows:handoff"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:handoff",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_013W2P9fjqyEXG5u9K4dwG8f",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:using-research-workflows"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "9335ec443db5",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 92,
+        "end": 93,
+        "entry_ids": [
+          "2b81fd6c-5f34-46ac-b2ce-6d5d2fe400df"
+        ],
+        "tool_use_id": "toolu_013W2P9fjqyEXG5u9K4dwG8f"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_013W2P9fjqyEXG5u9K4dwG8f"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:using-research-workflows",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_017SdMAcRgwKTdudHFAfzCyW",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:creating-handoffs"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "9335ec443db5",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 643,
+        "end": 644,
+        "entry_ids": [
+          "76a0f791-27a6-4141-800b-571302cc956a"
+        ],
+        "tool_use_id": "toolu_017SdMAcRgwKTdudHFAfzCyW"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_017SdMAcRgwKTdudHFAfzCyW"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:creating-handoffs",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 5
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 36073,
+      "agent_lines_removed": 4,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 36216,
+      "agent_lines_removed": 5,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
