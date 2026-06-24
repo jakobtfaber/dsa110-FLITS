@@ -1,0 +1,12 @@
+Independently verify whether this file is safe to DELETE: scattering/scat_analysis/validation_thresholds.py
+
+It appears to be a pure re-export shim: `from flits.fitting.VALIDATION_THRESHOLDS import *`.
+
+I claim it is dead: zero importers, no unique content, safe to delete (the canonical source is flits/fitting/VALIDATION_THRESHOLDS.py). Try to REFUTE this. Check exhaustively, do not trust my claim:
+1. Any static import of the module path 'scattering.scat_analysis.validation_thresholds' (absolute or relative 'from .validation_thresholds') anywhere — code, tests, notebooks.
+2. Any dynamic/string reference: importlib, __import__, getattr, pkg_resources, entry_points/console_scripts in pyproject.toml, plugin registries, config YAML/JSON.
+3. Any re-export through scattering/scat_analysis/__init__.py (e.g. 'from . import *' or explicit) that would expose it as public API.
+4. Whether the file has ANY content/symbol not already provided by flits.fitting.VALIDATION_THRESHOLDS (i.e. is it truly a no-op shim).
+5. Whether the two threshold sources could legitimately DIVERGE (e.g. one defines names the other doesn't) such that the shim is masking a difference.
+
+Output a one-paragraph verdict line starting with exactly 'VERDICT: SAFE_TO_DELETE' or 'VERDICT: NOT_SAFE', followed by the concrete evidence (grep results, file contents) you based it on. Read-only; do not modify anything.
