@@ -269,3 +269,8 @@ which branches were the changes pushed to in both repos?
 ---
 
 Yes.
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable
+  state and this session to a close --- make decisions wisely and autonomously
