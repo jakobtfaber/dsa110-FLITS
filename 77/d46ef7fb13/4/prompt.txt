@@ -1,0 +1,46 @@
+Take over from the agent running on h17 and start by reading the handoff on h17: `h17:/home/ubuntu/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/outputs/handoff_manuscript-figures_2026-06-24/HANDOFF.md`
+
+---
+
+You have the go ahead, and please proceed autonomously from here following /ai-research-workflows
+
+---
+
+merge now
+
+---
+
+yes
+
+---
+
+yes, open pr
+
+---
+
+review and merge
+
+---
+
+/boris and /ask-matt --- what should I do here?
+
+---
+
+yes
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable
+  state and this session to a close --- make decisions wisely and autonomously
+
+---
+
+Propose a solution to your caveat @"scientific-python-development:scientific-docs-architect (agent)"
+
+---
+
+Propose a solution to your caveat @"scientific-python-development:scientific-python-expert (agent)"
+
+---
+
+/ai-research-workflows:handoff
