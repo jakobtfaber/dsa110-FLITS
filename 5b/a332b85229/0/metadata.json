@@ -3,7 +3,7 @@
   "checkpoint_id": "5ba332b85229",
   "session_id": "019efad9-bed0-7a40-8cde-cc5d1e25a4b2",
   "strategy": "manual-commit",
-  "created_at": "2026-06-24T18:27:46.636342Z",
+  "created_at": "2026-06-24T18:30:58.944215Z",
   "branch": "feat/scint-multicomponent-select",
   "checkpoints_count": 1,
   "files_touched": [
@@ -14,32 +14,18 @@
   "agent": "Codex",
   "model": "gpt-5.5",
   "turn_id": "21f28faed559",
-  "token_usage": {
-    "input_tokens": 54318,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 144384,
-    "output_tokens": 2118,
-    "api_call_count": 4
-  },
+  "checkpoint_transcript_start": 59,
+  "transcript_lines_at_start": 59,
   "initial_attribution": {
-    "calculated_at": "2026-06-24T18:27:46.605436Z",
-    "agent_lines": 71,
-    "agent_removed": 4,
+    "calculated_at": "2026-06-24T18:30:58.923426Z",
+    "agent_lines": 10,
+    "agent_removed": 7,
     "human_added": 0,
     "human_modified": 0,
     "human_removed": 0,
-    "total_committed": 71,
-    "total_lines_changed": 75,
+    "total_committed": 10,
+    "total_lines_changed": 17,
     "agent_percentage": 100,
     "metric_version": 2
-  },
-  "prompt_attributions": [
-    {
-      "checkpoint_number": 1,
-      "user_lines_added": 0,
-      "user_lines_removed": 0,
-      "agent_lines_added": 0,
-      "agent_lines_removed": 0
-    }
-  ]
+  }
 }
