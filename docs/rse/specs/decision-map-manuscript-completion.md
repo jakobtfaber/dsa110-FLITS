@@ -149,13 +149,18 @@ is un-railed at *both* prior bounds, PBF-insensitive (|Δα|≤0.1), its compone
 count is confirmed (#3), and its FINAL verdict is PASS or flagged MARGINAL under
 the L1 floor-1.0 policy ([ADR-0004](../../adr/0004-l1-sub-kolmogorov-alpha-floor.md))
 — **not** the mixed-PBF `joint_fit_summary` set of 3, and **not** "figure-green".
-johndoeII enters as a flagged sub-Kolmogorov MARGINAL; zach is **withheld** (#5).
-The exact roster/count stays **unquoted in the manuscript** until the deferred
-all-exp regeneration lands (`gate_joint_committed.py` `ALPHA_MIN` 1.5→1.0 + full
-verdict regen), because three candidate α (oran 1.44, whitney-single 1.46,
-johndoeII 1.37) sit in the new 1.0–2.0 MARGINAL band whose FINAL verdicts must be
-*regenerated*, not asserted from superseded mixed-PBF output. PR #9 text stays
-count-free — correct as written.
+johndoeII is the **sole** sub-Kolmogorov *candidate* (pending its canonical
+[1.0,6.0] all-exp re-fit — see below); zach is **withheld** (#5).
+The exact roster/count stays **unquoted in the manuscript** until the canonical
+all-exp citable set is locked. The blocker is **not** a re-grade: the all-exp
+campaign was sampled at the OLD prior floor `[1.5,6.0]`, so hamilton (1.504) and
+johndoeII (1.573) **rail the floor** — their sub-Kolmogorov α cannot be recovered
+by lowering `ALPHA_MIN` and re-running the gate; they need a **[1.0,6.0] re-fit**.
+Of the three α once cited as sub-K candidates, only **johndoeII** (≈1.37 at
+[1.0,6.0]) is genuine; **oran 1.44** and **whitney-single 1.46** are **superseded
+mixed-PBF** values whose canonical all-exp counterparts (oran C2D1 ≈2.66, whitney
+C2D2 ≈5.12) are **not** in the 1.0–2.0 band at all ([ADR-0003](../../adr/0003-single-exponential-pbf.md)).
+PR #9 text stays count-free — correct as written.
 
 ---
 
