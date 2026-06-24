@@ -3,7 +3,7 @@
   "checkpoint_id": "d017a6bb5640",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 10,
+  "checkpoints_count": 14,
   "files_touched": [
     "results/casey_galaxies.csv",
     "results/phineas_galaxies.csv",
@@ -30,13 +30,19 @@
       "transcript": "/d0/17a6bb5640/2/full.jsonl",
       "content_hash": "/d0/17a6bb5640/2/content_hash.txt",
       "prompt": "/d0/17a6bb5640/2/prompt.txt"
+    },
+    {
+      "metadata": "/d0/17a6bb5640/3/metadata.json",
+      "transcript": "/d0/17a6bb5640/3/full.jsonl",
+      "content_hash": "/d0/17a6bb5640/3/content_hash.txt",
+      "prompt": "/d0/17a6bb5640/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 265395,
-    "cache_creation_tokens": 5394515,
-    "cache_read_tokens": 180700414,
-    "output_tokens": 1286951,
-    "api_call_count": 849
+    "input_tokens": 265397,
+    "cache_creation_tokens": 5399654,
+    "cache_read_tokens": 180829357,
+    "output_tokens": 1291110,
+    "api_call_count": 850
   }
 }
