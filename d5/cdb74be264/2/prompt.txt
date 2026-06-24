@@ -17,3 +17,7 @@ Otherwise, it looks good. Once you've added the point above, proceed with /ai-re
 ---
 
 Take on manual verification + branch disposition + push
+
+---
+
+fyi: You have access to the ACF data
