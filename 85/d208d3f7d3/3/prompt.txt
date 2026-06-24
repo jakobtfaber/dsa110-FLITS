@@ -1,0 +1,168 @@
+Pick up from previous session:
+---
+⏺ Done — faster delivered:
+
+  - 6 high rungs now at 32 cores (nproc=32 confirmed in headers, not just allocated) — ~4× the pool → roughly halved walltime. Wired
+  run_joint.sbatch so pool tracks the allocation (8-core backup kept).
+  - whitney resolved → single-component. Fixed-s2 grid flipped sign with the prior scale (−5.3 / +1.7 / −4.6), centered ~0 → the
+
+  - 6 high rungs now at 32 cores (nproc=32 confirmed in headers, not just allocated) — ~4× the pool → roughly halved walltime. Wired
+  run_joint.sbatch so pool tracks the allocation (8-core backup kept).
+  - whitney resolved → single-component. Fixed-s2 grid flipped sign with the prior scale (−5.3 / +1.7 / −4.6), centered ~0 → the
+  visually-marked 2nd component isn't statistically real. Profile-Z's +1.5 was the artifact. Also functionally proved --gain-s2 works.
+  rigorous way.
+
+  18 jobs running/queued; fresh poller will report the full ladder + fixed-s2 verdicts on drain (~30–60 min). Net component picture firming
+  up: whitney drops to single (visual overturned by evidence), isha/oran gain a component (evidence over visual) — the disagreements all
+  resolve toward the Bayes factor.
+
+✻ Cooked for 4m 35s · 2 shells still running
+
+⏺ Background command "Background-poll the 6 high-rung resubmissions" completed (exit code 0)
+
+⏺ That notification is the old poll (by1mjab8a) firing — it was watching the now-cancelled 8-core jobs, so its result is stale (those job
+  IDs no longer exist). The live poller is bx1sstu3x. Ignoring the stale one; quick live check that the 32-core jobs are progressing:
+
+---
+
+hamilton/whitney/johndoeII fail completely? or just for multi-component?
+
+---
+
+have Codex take a look
+
+---
+
+<task-notification>
+<task-id>b1zqetxes</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/b1zqetxes.output</output-file>
+<status>completed</status>
+<summary>Background command "Run Codex audit in background" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Launch fixed-s2 grids for oran/isha/mahi/zach on the cluster
+
+---
+
+how are the 30 jobs going?
+
+---
+
+Show me figures
+
+---
+
+I want to see the actual modeled bursts v the data
+
+---
+
+what about the 2D models?
+
+---
+
+How does the game marginal reconstruction work? Is it just a weighting per channel that's imposed after the fit?
+
+---
+
+also for bursts like whitney here, where the DSA data is surrounded by massive amounts of noise, cropping it would make the fit so much better, and would also make the two components distinguishable: [Image #3]
+
+---
+
+also, the CHIME data for whitney is weirdly downsampled, more than is needed
+
+---
+
+yes, but stick to single-burst runs for right now - start with whitney right now and let's get that right
+
+---
+
+yes, but stick to single-burst runs for right now - start with whitney right now and let's get that right. then open the figure for me so I can inspect it
+
+---
+
+and?
+
+---
+
+Would it go faster if we ran it locally?
+
+---
+
+uyes
+
+---
+
+yes pip install and run whiteny here
+
+---
+
+<task-notification>
+<task-id>baljw1w8x</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/baljw1w8x.output</output-file>
+<status>completed</status>
+<summary>Background command "Run whitney_fine C2D1 fit locally" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+why not maintain 1024 CHIME channels? is there there a harm?
+
+---
+
+did the 64 chan run finish?
+
+---
+
+<task-notification>
+<task-id>byk3jq9g4</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/byk3jq9g4.output</output-file>
+<status>completed</status>
+<summary>Background command "Run whitney_fine C2D2 fit locally" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+so whitney is consistent with Kolmogorov?
+
+---
+
+<task-notification>
+<task-id>bulfseqph</task-id>
+<tool-use-id>toolu_0124KDU6ffqS6du9acxeUoVQ</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bulfseqph.output</output-file>
+<status>failed</status>
+<summary>Background command "Poll for whitney_fine fit completion" failed with exit code 1</summary>
+</task-notification>
+
+---
+
+are we still fitting an exp-modified Gaussian or is this for a power-law PBF?
+
+---
+
+but we can't have different PBFs between CHIME and DSA for the same burst --- it's the same burst!
+
+---
+
+we should absolutely be tracking the PBF used so we don't have to repeat!
+
+---
+
+<task-notification>
+<task-id>bs7879m7h</task-id>
+<tool-use-id>toolu_01J6LTv41rD95WpCVFLtr5zp</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bs7879m7h.output</output-file>
+<status>completed</status>
+<summary>Background command "Run consistent-PBF whitney C2D2 (all-exp then all-powerlaw)" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+yes apply the PBF tracking mirror over SSH
+
+does PBF only rail when it's power-law?

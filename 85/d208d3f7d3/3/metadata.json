@@ -1,0 +1,98 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "85d208d3f7d3",
+  "session_id": "fd6e62fe-81a0-4203-b863-f5b990ccbc15",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T07:36:35.475539Z",
+  "branch": "feat/burst-energies-regen",
+  "checkpoints_count": 4,
+  "save_step_count": 4,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "analysis/burst_energies/burst_energies.json",
+    "analysis/burst_energies/burst_energies.tex"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "f89cf29402a9",
+  "checkpoint_transcript_start": 1716,
+  "transcript_lines_at_start": 1716,
+  "token_usage": {
+    "input_tokens": 2678,
+    "cache_creation_tokens": 66337,
+    "cache_read_tokens": 5505650,
+    "output_tokens": 47972,
+    "api_call_count": 33
+  },
+  "session_metrics": {
+    "turn_count": 29
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T07:36:35.251065Z",
+    "agent_lines": 14,
+    "agent_removed": 46,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 14,
+    "total_lines_changed": 60,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18187,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 298,
+      "user_lines_removed": 69,
+      "agent_lines_added": 18309,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2.json": 69,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2_pbf-powerlaw-powerlaw.json": 116,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2_pbfpw.json": 112
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2.json": 69
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18446,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 117,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18460,
+      "agent_lines_removed": 46,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2_pbf-exp-exp.json": 116
+      }
+    }
+  ]
+}

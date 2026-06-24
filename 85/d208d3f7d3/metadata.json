@@ -3,7 +3,7 @@
   "checkpoint_id": "85d208d3f7d3",
   "strategy": "manual-commit",
   "branch": "feat/burst-energies-regen",
-  "checkpoints_count": 3,
+  "checkpoints_count": 7,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "analysis/burst_energies/burst_energies.json",
@@ -27,13 +27,19 @@
       "transcript": "/85/d208d3f7d3/2/full.jsonl",
       "content_hash": "/85/d208d3f7d3/2/content_hash.txt",
       "prompt": "/85/d208d3f7d3/2/prompt.txt"
+    },
+    {
+      "metadata": "/85/d208d3f7d3/3/metadata.json",
+      "transcript": "/85/d208d3f7d3/3/full.jsonl",
+      "content_hash": "/85/d208d3f7d3/3/content_hash.txt",
+      "prompt": "/85/d208d3f7d3/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 341409,
-    "cache_creation_tokens": 5810290,
-    "cache_read_tokens": 187018329,
-    "output_tokens": 1160101,
-    "api_call_count": 900
+    "input_tokens": 344087,
+    "cache_creation_tokens": 5876627,
+    "cache_read_tokens": 192523979,
+    "output_tokens": 1208073,
+    "api_call_count": 933
   }
 }
