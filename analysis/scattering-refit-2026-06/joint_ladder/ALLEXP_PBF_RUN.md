@@ -99,20 +99,29 @@ not across the column.)
   campaign.** zach is the marquee profile-bias case; the mixed-PBF C2D3 value (2.41)
   that the manuscript cites as "hidden component biases α low" is **PBF-confounded**.
   Under the physical all-exp PBF the multi-component α is 4.59, i.e. ABOVE the
-  single-component mixed value (3.32) — the claimed bias direction does not survive
-  and may reverse. **Before any publication claim:** (i) get the single-component
-  all-exp zach α to re-establish the bias direction cleanly under one PBF, and (ii)
-  run the fixed-s2 grid to confirm C2D3 is still favored under all-exp (the component
-  count rested on profiled-only lnZ). Treat zach like mahi/whitney — needs re-prep,
+  single-component mixed value (3.32) — the claimed bias direction does not survive.
+  **Settled (job 64539614):** the single-component all-exp α = **3.319** ≈ the
+  single-component mixed 3.32, so under one physical PBF modeling components *raises*
+  α (3.319 → 4.59), the reverse of the mixed-PBF artifact (3.32 → 2.41). **Still
+  required before any publication claim:** run the fixed-s2 grid to confirm C2D3 is
+  still favored under all-exp (the component count rested on profiled-only lnZ).
+  Treat zach like mahi/whitney — needs re-prep,
   not a value swap. Result JSON on `hpcc:/central/scratch/jfaber/flits-runs/data/joint/zach_joint_fit_C2D3_pbf-exp-exp.json` (pull to repo).
 - **phineas (C3D3) COMPLETED** (job 64538743): all-exp α = **3.426 ± 0.05**
   (un-railed) vs mixed 3.33 — Δα +0.096, **PBF-robust**. Joins the trustworthy
   group; no follow-up needed.
-- **zach single-component all-exp SUBMITTED** (job **64539614**, C1D1
-  `--force-multi`, all-exp) to settle the bias direction: if single-comp all-exp α
-  is *above* the C2D3 value 4.59, the profile-bias thesis survives (modeling
-  components still lowers α, just from a higher base); if *below*, the mixed-PBF
-  result reversed it. Pending.
+- **zach single-component all-exp COMPLETED** (job **64539614**, C1D1
+  `--force-multi`, all-exp): α = **3.319 ± 0.013** (un-railed), essentially
+  identical to the single-component *mixed* value 3.32 (Δα = −0.001). This
+  settles the direction: **the PBF is immaterial for zach's single-component
+  fit** (3.32 either PBF), but the *multiplicity correction* flips sign with the
+  PBF — under mixed it lowers α (3.32 → 2.41), under the physical all-exp it
+  *raises* α (3.319 → 4.59). The marquee "hidden component biases α high, true
+  value lower" thesis is therefore a **mixed-PBF artifact**: under the physical
+  PBF the bias direction reverses. zach cannot be cited for profile bias in
+  either direction until the fixed-s2 grid confirms C2D3 is still favored under
+  all-exp (the component count rested on profiled-only lnZ). JSONs pulled to
+  `allexp_json/zach_joint_fit_{C1D1,C2D3}_pbf-exp-exp.json`.
 - All 12 bursts now have a completed all-exp fit. The all-exp α for the seven
   well-constrained bursts (freya, casey, chromatica, wilhelm, oran, whitney,
   phineas) become the canonical ladder values, and the manuscript's PBF section
@@ -124,7 +133,10 @@ not across the column.)
 The physical all-exp PBF **confirms seven well-constrained bursts** (freya, casey,
 chromatica, wilhelm, oran, whitney, phineas; |Δα| ≤ 0.1) — these are publishable.
 **Five block the ladder:** **zach** (Δα +2.18, the marquee profile-bias number was
-PBF-confounded — bias direction under re-test, job 64539614), **mahi** (Δα −0.63,
+PBF-confounded — single-comp all-exp α = 3.319 ≈ single-comp mixed 3.32, so the
+multiplicity correction *reverses* sign with the PBF and the "biases high" thesis
+does not survive; needs the all-exp fixed-s2 component-count check before any
+claim), **mahi** (Δα −0.63,
 wide/floor), **isha** (wide/upper), and **johndoeII**, **hamilton** (hard-railed at
 1.5). The dominant lesson: the PBF systematic is negligible for clean,
 well-constrained sightlines but can dominate α (zach, mahi) for the marginal ones,
