@@ -225,3 +225,7 @@ Proceed with follow-up.
 ---
 
 Are we ready to close the session or do we have remaining open tasks to address?
+
+---
+
+/ai-research-workflows:validating-implementations
