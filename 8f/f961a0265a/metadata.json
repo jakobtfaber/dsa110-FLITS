@@ -3,21 +3,29 @@
   "checkpoint_id": "8ff961a0265a",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 2,
-  "files_touched": null,
+  "checkpoints_count": 6,
+  "files_touched": [
+    "galaxies/v2_0/plotting.py"
+  ],
   "sessions": [
     {
       "metadata": "/8f/f961a0265a/0/metadata.json",
       "transcript": "/8f/f961a0265a/0/full.jsonl",
       "content_hash": "/8f/f961a0265a/0/content_hash.txt",
       "prompt": "/8f/f961a0265a/0/prompt.txt"
+    },
+    {
+      "metadata": "/8f/f961a0265a/1/metadata.json",
+      "transcript": "/8f/f961a0265a/1/full.jsonl",
+      "content_hash": "/8f/f961a0265a/1/content_hash.txt",
+      "prompt": "/8f/f961a0265a/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 562,
-    "cache_creation_tokens": 66504,
-    "cache_read_tokens": 5658739,
-    "output_tokens": 40393,
-    "api_call_count": 23
+    "input_tokens": 23109,
+    "cache_creation_tokens": 575885,
+    "cache_read_tokens": 9503334,
+    "output_tokens": 57789,
+    "api_call_count": 42
   }
 }
