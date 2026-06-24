@@ -1,0 +1,39 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "77d46ef7fb13",
+  "session_id": "d836e440-34bd-488c-b2bb-76d0a63894c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T14:59:59.819392Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".agents/deferred-tasks.md"
+  ],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "8e267e668de0",
+  "checkpoint_transcript_start": 222,
+  "transcript_lines_at_start": 222,
+  "token_usage": {
+    "input_tokens": 143,
+    "cache_creation_tokens": 15091,
+    "cache_read_tokens": 919950,
+    "output_tokens": 11167,
+    "api_call_count": 7
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T14:59:59.785098Z",
+    "agent_lines": 12,
+    "agent_removed": 1,
+    "human_added": 408,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 420,
+    "total_lines_changed": 422,
+    "agent_percentage": 3.080568720379147,
+    "metric_version": 2
+  }
+}
