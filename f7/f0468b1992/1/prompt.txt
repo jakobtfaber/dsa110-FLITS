@@ -55,3 +55,7 @@ You are reviewing work that another AI agent (Devin) just completed in this repo
   │   - A "Verified accurate" section listing claims that checked out
   │   - A final overall verdict
   │   Be thorough and skeptical. Read the actual files; do not trust this prompt assertions.
+
+---
+
+Correct the CLAUDE.md line now
