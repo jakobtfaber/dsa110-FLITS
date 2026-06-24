@@ -23,3 +23,7 @@ Make yolo the default for when other agents or Codex itself call/orchestra Codex
 ---
 
 Propagate. Don't let chezmoi overwrite this.
+
+---
+
+push
