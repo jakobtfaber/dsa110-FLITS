@@ -15,18 +15,23 @@ from galaxies.v2_0.search import (
 )
 
 
-def test_foreground_mask_uses_two_sigma_photo_z_error():
+def test_foreground_mask_photoz_point_estimate_not_rescued_by_error():
+    # Per-sightline adjudication (PI decision): a DESI VII/292 photo-z is foreground
+    # iff its POINT ESTIMATE is below z_frb. The 1-sigma error never rescues a
+    # background point estimate (the old capped-2-sigma cut did). z=0.46 < z_frb is
+    # kept even though z+e_zphot > z_frb (Wilhelm); z=0.545 > z_frb is dropped.
     df = pd.DataFrame(
         {
-            "z": [0.545, 0.610, 0.545],
-            "z_phot_err": [0.057, 0.057, math.nan],
-            "impact_kpc": [50.0, 50.0, 50.0],
+            "z": [0.46, 0.545],
+            "e_zphot": [0.057, 0.057],
+            "catalog": ["VII/292/north", "VII/292/north"],
+            "impact_kpc": [35.0, 35.0],
         }
     )
 
-    mask = _foreground_mask(df, z_frb=0.479, z_eps=0.01, impact_kpc=100.0)
+    mask = _foreground_mask(df, z_frb=0.510, z_eps=0.01, impact_kpc=100.0)
 
-    assert mask.tolist() == [True, False, False]
+    assert mask.tolist() == [True, False]
 
 
 def test_foreground_mask_drops_photoz_floor_keeps_spec_lowz():
@@ -43,19 +48,38 @@ def test_foreground_mask_drops_photoz_floor_keeps_spec_lowz():
     assert mask.tolist() == [False, True, True]
 
 
-def test_foreground_mask_caps_photoz_error_against_background_leak():
-    # A z=0.9 galaxy behind a z=0.27 FRB carries an absurd e_zphot (sigma=1.0) that
-    # would pass an uncapped 2-sigma cut; capping the error rejects it. A genuine
-    # boundary photo-z (z=0.30, small error) is still rescued as foreground.
+def test_foreground_mask_photoz_background_leak_rejected():
+    # A z=0.9 DESI photo-z behind a z=0.27 FRB carries an absurd e_zphot (sigma=1.0)
+    # that the old capped-2-sigma cut would rescue; the point-estimate rule rejects
+    # it outright. A genuine foreground photo-z (z=0.20) is kept.
     df = pd.DataFrame(
         {
-            "z": [0.90, 0.30],
-            "z_phot_err": [1.0, 0.04],
+            "z": [0.90, 0.20],
+            "e_zphot": [1.0, 0.04],
+            "catalog": ["VII/292/north", "VII/292/north"],
             "impact_kpc": [50.0, 50.0],
         }
     )
     mask = _foreground_mask(df, z_frb=0.27, z_eps=0.01, impact_kpc=100.0)
     assert mask.tolist() == [False, True]
+
+
+def test_foreground_mask_specz_velocity_offset_adjudication():
+    # Spec-z (GLADE+) rows are adjudicated by velocity offset, NOT the photo-z error
+    # path, even though GLADE+ carries a generic 0.015 z-error floor. Reproduces the
+    # Zach sightline (z_frb=0.043): the dv=667 km/s neighbour is a clean foreground;
+    # the dv=76 km/s neighbour is host-velocity ambiguous and dropped; a background
+    # spec-z (Chromatica-like, z>z_frb) is dropped.
+    df = pd.DataFrame(
+        {
+            "z": [0.04068, 0.042735, 0.0764],
+            "z_phot_err": [0.015, 0.015, 0.015],
+            "catalog": ["VII/291/gladep", "VII/291/gladep", "VII/291/gladep"],
+            "impact_kpc": [19.0, 24.0, 53.0],
+        }
+    )
+    mask = _foreground_mask(df, z_frb=0.043, z_eps=0.01, impact_kpc=100.0)
+    assert mask.tolist() == [True, False, False]
 
 
 def test_foreground_mask_applies_cluster_impact_threshold():

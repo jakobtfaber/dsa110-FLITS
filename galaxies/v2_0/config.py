@@ -17,11 +17,19 @@ MIN_Z_SEARCH = 0.005  # Minimum redshift cutoff to avoid infinite search cone
 # carrying a photo-z error; spec-z catalogs (NED, GLADE+) are exempt so genuine
 # nearby galaxies (e.g. UGC 06371, z=0.009) survive.
 FOREGROUND_PHOTOZ_FLOOR = 0.01
-# Cap on the photo-z 1-sigma used in the foreground buffer. DESI floor/leak rows
-# carry absurd e_zphot (sigma_z = 0.4-1.7) that let any background galaxy pass the
-# 2-sigma cut; capping at a realistic Legacy scatter stops z>z_FRB leakage while
-# keeping genuine boundary photo-z galaxies.
-MAX_PHOTOZ_Z_ERR = 0.05
+# Velocity-offset window (km/s) below which a spec-z neighbour is host/local
+# ambiguous, not a clean foreground. dv = c*(z_frb - z_gal)/(1 + z_frb); a galaxy
+# inside this window sits at the host's recession velocity (group member / host
+# peculiar velocity ~200-500 km/s) and cannot be cleanly attributed as an
+# intervening system. Set at the upper edge of typical group dispersions.
+FOREGROUND_AMBIGUITY_KMS = 500.0
+SPEED_OF_LIGHT_KMS = 299792.458
+# Spec-z catalogs: redshift is spectroscopic / distance-derived, so any z_err they
+# carry (e.g. GLADE+'s generic 0.015 floor) is NOT a per-object photo-z and must
+# not gate via the photo-z error path. Matched on the `catalog` column substring;
+# DESI VII/292/north is the lone photo-z catalog.
+SPEC_Z_CATALOG_SUBSTRINGS = ("ned", "vii/291", "glade", "sdss", "desi_dr1")
+PHOTO_Z_CATALOG_SUBSTRINGS = ("vii/292",)
 MAX_SEARCH_RADIUS_DEG = (
     2.0  # Cap angular query radius (low-z clusters otherwise blow up Vizier query cones)
 )

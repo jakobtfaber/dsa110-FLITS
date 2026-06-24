@@ -18,10 +18,13 @@ from .config import (
     DEFAULT_Z_EPS,
     ENABLE_CLUSTER_ENGINE,
     ENABLE_EXTRA_ENGINES,
+    FOREGROUND_AMBIGUITY_KMS,
     FOREGROUND_PHOTOZ_FLOOR,
-    MAX_PHOTOZ_Z_ERR,
     MAX_SEARCH_RADIUS_DEG,
     MIN_Z_SEARCH,
+    PHOTO_Z_CATALOG_SUBSTRINGS,
+    SPEC_Z_CATALOG_SUBSTRINGS,
+    SPEED_OF_LIGHT_KMS,
     TARGETS,
     VIZIER_CATALOGS,
 )
@@ -65,29 +68,62 @@ def _foreground_mask(
     z_eps: float,
     impact_kpc: float,
     cluster_impact_kpc: float = DEFAULT_CLUSTER_IMPACT_KPC,
-    n_sigma: float = 2.0,
     photoz_floor: float = FOREGROUND_PHOTOZ_FLOOR,
-    max_photoz_err: float = MAX_PHOTOZ_Z_ERR,
+    ambiguity_kms: float = FOREGROUND_AMBIGUITY_KMS,
 ) -> pd.Series:
+    """Per-row foreground mask via per-catalog adjudication (PI decision, not a
+    blanket photo-z-error cap).
+
+    Each row is classified spec-z vs photo-z by its ``catalog`` (spec-z catalogs
+    carry no per-object photo-z; GLADE+'s generic 0.015 z-error is a floor, not a
+    measurement, so it must not be run through the photo-z path). The rules:
+
+    - Background reject (both classes): a galaxy at ``z >= z_frb`` cannot be
+      foreground. For spec-z this is subsumed by the velocity-offset test below.
+    - Spec-z (NED, GLADE+, SDSS, DESI DR1): foreground iff the recession-velocity
+      offset dv = c*(z_frb - z)/(1 + z_frb) clears ``ambiguity_kms``. A neighbour
+      inside that window sits at the host's velocity (group member / host peculiar
+      velocity) and is host/local-ambiguous, not a clean intervening system.
+    - Photo-z (DESI VII/292): foreground iff the *point estimate* is a credible
+      foreground (``photoz_floor <= z < z_frb + z_eps``). The photo-z 1-sigma does
+      NOT rescue a background point estimate (the old capped-2-sigma cut did, which
+      let z > z_frb leak through); impact_kpc/r_vir corroborate marginal cases.
+    """
     z = pd.to_numeric(df["z"], errors="coerce")
     impact = pd.to_numeric(df["impact_kpc"], errors="coerce")
-    z_err = _first_available_numeric(df, PHOTO_Z_ERROR_COLUMNS)
-    has_z_err = z_err.notna() & (z_err > 0.0)
     z_limit = z_frb + z_eps
 
-    # Spec-z rows (no photo-z error: NED, GLADE+) use a plain z < z_limit with no
-    # floor, so genuine nearby spec galaxies (e.g. UGC 06371, z=0.009) survive.
-    spec_foreground = ~has_z_err & (z < z_limit)
-    # Photo-z rows (DESI VII/292): require a credible floor (drops the z~0 photo-z
-    # pile-up) and a 2-sigma lower bound below z_limit computed with the error
-    # CAPPED — DESI floor/leak rows carry sigma_z = 0.4-1.7 that would otherwise
-    # rescue any background galaxy as "foreground".
-    z_err_capped = z_err.clip(upper=max_photoz_err)
-    photo_foreground = has_z_err & (z >= photoz_floor) & ((z - n_sigma * z_err_capped) < z_limit)
+    catalog = (
+        df["catalog"].astype(str).str.lower()
+        if "catalog" in df.columns
+        else pd.Series("", index=df.index)
+    )
+    is_photoz = _catalog_matches(catalog, PHOTO_Z_CATALOG_SUBSTRINGS)
+    is_specz = _catalog_matches(catalog, SPEC_Z_CATALOG_SUBSTRINGS)
+    # Rows with no recognised catalog: a positive per-object z-error means photo-z,
+    # otherwise treat as spec-z (preserves the no-catalog cluster/spec test rows).
+    z_err = _first_available_numeric(df, PHOTO_Z_ERROR_COLUMNS)
+    unlabelled = ~is_photoz & ~is_specz
+    is_photoz = is_photoz | (unlabelled & z_err.notna() & (z_err > 0.0))
+    is_specz = is_specz | (unlabelled & ~(z_err.notna() & (z_err > 0.0)))
+
+    # Spec-z velocity-offset adjudication (drops background dv<0 and host-ambiguous
+    # |dv|<ambiguity in one test).
+    dv_kms = SPEED_OF_LIGHT_KMS * (z_frb - z) / (1.0 + z_frb)
+    spec_foreground = is_specz & (dv_kms >= ambiguity_kms)
+    # Photo-z: credible-floor point estimate strictly in the foreground.
+    photo_foreground = is_photoz & (z >= photoz_floor) & (z < z_limit)
     foreground = spec_foreground | photo_foreground
     # Clusters get a mass-scaled r200 impact limit; galaxies keep impact_kpc.
     impact_limit = _cluster_impact_limit_kpc(df, impact_kpc, fallback_kpc=cluster_impact_kpc)
     return foreground & (impact <= impact_limit)
+
+
+def _catalog_matches(catalog: pd.Series, substrings: tuple[str, ...]) -> pd.Series:
+    matched = pd.Series(False, index=catalog.index)
+    for sub in substrings:
+        matched = matched | catalog.str.contains(sub, regex=False)
+    return matched
 
 
 def _cluster_impact_limit_kpc(
