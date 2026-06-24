@@ -3,7 +3,7 @@
   "checkpoint_id": "20097234d4d7",
   "strategy": "manual-commit",
   "branch": "fix/issue-4-n1-commensurable",
-  "checkpoints_count": 4,
+  "checkpoints_count": 5,
   "files_touched": [
     "tests/test_issue4_commensurable.py"
   ],
@@ -31,13 +31,19 @@
       "transcript": "/20/097234d4d7/3/full.jsonl",
       "content_hash": "/20/097234d4d7/3/content_hash.txt",
       "prompt": "/20/097234d4d7/3/prompt.txt"
+    },
+    {
+      "metadata": "/20/097234d4d7/4/metadata.json",
+      "transcript": "/20/097234d4d7/4/full.jsonl",
+      "content_hash": "/20/097234d4d7/4/content_hash.txt",
+      "prompt": "/20/097234d4d7/4/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 159336,
-    "cache_creation_tokens": 490674,
-    "cache_read_tokens": 16645723,
-    "output_tokens": 152364,
-    "api_call_count": 100
+    "input_tokens": 191701,
+    "cache_creation_tokens": 655581,
+    "cache_read_tokens": 22762254,
+    "output_tokens": 205765,
+    "api_call_count": 124
   }
 }
