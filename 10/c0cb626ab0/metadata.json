@@ -1,0 +1,56 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "10c0cb626ab0",
+  "strategy": "manual-commit",
+  "branch": "feat/joint-fit-gate",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_gate_verdicts.md",
+    "analysis/scattering-refit-2026-06/joint_json/chromatica_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/chromatica_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/freya_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/freya_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/hamilton_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/hamilton_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/isha_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/isha_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/johndoeII_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/johndoeII_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/johndoeII_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/mahi_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/mahi_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/mahi_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/oran_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/oran_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/oran_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/phineas_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/phineas_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/phineas_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/whitney_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/whitney_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/whitney_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/wilhelm_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/wilhelm_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_json/wilhelm_joint_ppc.json",
+    "analysis/scattering-refit-2026-06/joint_json/zach_joint_fit.json",
+    "analysis/scattering-refit-2026-06/joint_json/zach_joint_gate.json",
+    "analysis/scattering-refit-2026-06/joint_ppc.py",
+    "analysis/scattering-refit-2026-06/run_joint_fit.py",
+    "docs/entire-tracing-checkpoints.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/10/c0cb626ab0/0/metadata.json",
+      "transcript": "/10/c0cb626ab0/0/full.jsonl",
+      "content_hash": "/10/c0cb626ab0/0/content_hash.txt",
+      "prompt": "/10/c0cb626ab0/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 51642,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 700800,
+    "output_tokens": 7514,
+    "api_call_count": 13
+  }
+}

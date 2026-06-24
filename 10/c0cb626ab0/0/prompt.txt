@@ -1,0 +1,20 @@
+TASK: land the active joint-fit-gate lane as a DRAFT PR. Work ONLY in the git worktree at /Users/jakobfaber/Developer/scratch/worktrees/flits-gate (branch feat/joint-fit-gate). Use `git -C /Users/jakobfaber/Developer/scratch/worktrees/flits-gate ...` for all git ops. Do NOT touch any other worktree, branch, or lane. A recovery snapshot already exists at /Users/jakobfaber/Developer/scratch/worktrees/flits-gate-preserve/ (tracked.patch + untracked.tgz) — do not delete it.
+
+STATE: branch feat/joint-fit-gate at 069f987, 1 ahead / 22 behind origin/main, 41 dirty entries (regenerated joint scattering fit/gate artifacts under analysis/scattering-refit-2026-06/ + docs/entire-tracing-checkpoints.md). No open PR.
+
+DO, in order:
+1. COMMIT the regen. Stage the regen artifacts (analysis/scattering-refit-2026-06/ and docs/entire-tracing-checkpoints.md; include any other dirty tracked+untracked files that are clearly part of the gate regeneration — inspect first). Commit message: "chore(gate): regenerate committed joint-fit gate artifacts (Phase 1)". Do NOT stage anything outside this lane.
+2. REBASE onto origin/main. `git -C <wt> fetch origin` then `git -C <wt> rebase origin/main`. IF CONFLICTS: run `git -C <wt> rebase --abort`, leave the branch at its committed (un-rebased) state, and record that a manual rebase is needed — do NOT force-resolve conflicts.
+3. PUSH + DRAFT PR. Attempt `git -C <wt> push -u origin feat/joint-fit-gate` then `gh pr create --base main --head feat/joint-fit-gate --draft --title "..." --body "..."`. If the sandbox blocks network (likely), DO NOT fail — instead emit the EXACT push command, the exact `gh pr create` command, and the full PR body text you composed, for the orchestrator to run under its approval gate.
+
+HARD CONSTRAINTS:
+- The PR MUST be --draft. This lane includes lowering the joint-gate alpha hard-FAIL floor 1.5->1.0 (ADR-0004), a science-contract change. It MUST stay draft until the alpha-floor change is validated against burstfit.py's authoritative alpha/physics gates AND the diagnostic-figure review gate. Say this explicitly in the PR body.
+- Do NOT edit any science or code to make a failing fit PASS. Land the regen exactly as it is.
+- If the worktree's dirty set changed since this state (another writer touched it), STOP and report instead of committing.
+
+OUTPUT (concise):
+COMMIT: <sha + headline, or why not>
+REBASE: <clean | aborted-conflicts (list files) | n/a>
+PUSH: <done | blocked -> exact command>
+PR: <url | blocked -> exact `gh pr create` command + full --body text>
+NOTES: <anything the orchestrator must finish>
