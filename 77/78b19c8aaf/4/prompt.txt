@@ -27,3 +27,8 @@ review and merge
 ---
 
 yes
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable
+  state and this session to a close --- make decisions wisely and autonomously
