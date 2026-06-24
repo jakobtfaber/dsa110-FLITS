@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "7bc2630773b7",
+  "strategy": "manual-commit",
+  "branch": "chore/rm-validation-thresholds-shim",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "scattering/scat_analysis/validation_thresholds.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/7b/c2630773b7/0/metadata.json",
+      "transcript": "/7b/c2630773b7/0/full.jsonl",
+      "content_hash": "/7b/c2630773b7/0/content_hash.txt",
+      "prompt": "/7b/c2630773b7/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 252551,
+    "cache_creation_tokens": 5757731,
+    "cache_read_tokens": 182317104,
+    "output_tokens": 1118029,
+    "api_call_count": 859
+  }
+}
