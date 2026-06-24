@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "83508bfa7d0c",
+  "strategy": "manual-commit",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/gate_joint_committed.py",
+    "analysis/scattering-refit-2026-06/test_gate_joint_committed.py",
+    "flits/fitting/VALIDATION_THRESHOLDS.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/83/508bfa7d0c/0/metadata.json",
+      "transcript": "/83/508bfa7d0c/0/full.jsonl",
+      "content_hash": "/83/508bfa7d0c/0/content_hash.txt",
+      "prompt": "/83/508bfa7d0c/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 61963,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 331264,
+    "output_tokens": 5415,
+    "api_call_count": 8
+  }
+}

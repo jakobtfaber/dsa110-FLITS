@@ -1,0 +1,25 @@
+You are the DECIDER for two open PRs in the FLITS repo (FRB scattering analysis). Make a clear call on each; another agent will execute your decision. Read-only — inspect with git/gh and file reads, do not edit. Repo cwd is FLITS root. You MAY read the PRs via `gh pr view`, files via the worktree, and the canonical decision records in docs/adr/0002..0004 and docs/rse/specs/decision-map-manuscript-completion.md (these are merged to main and are authoritative).
+
+CONTEXT (verified):
+- #49 (head figures/vector-clean, base main, 14 files): MERGEABLE, all 5 checks pass, NO blocking review (only a Claude placeholder comment; no Codex findings). Disjoint file set from #47 (no conflict). +10687 lines dominated by one committed generated vector figure chime_subband_compare.svg (10432 lines) + manuscript.html. Repo convention is to commit vector SVG figures.
+- #47 (head feat/figure-vector, base main, 9 files): MERGEABLE, checks pass, but Codex left 4 unresolved P1 review comments:
+  P1.1 results/sightline_dm_scattering_budget.md:5 — every row now DM_MW=40 (fixed halo prior); modeled NE2001 Galactic disk DM dropped — regression.
+  P1.2 LADDER_SUMMARY.md:152 — stale zach blocker: propagates the REJECTED profiled C2D3 +2.18 shift and counts zach among 5 ladder blockers. ADR-0003 (authoritative): zach C2D3 rejected by fixed-s2 grid (rescue fails) -> single-component all-exp alpha=3.319 is the citable value; zach withheld only as a profile-bias demonstrator.
+  P1.3 LADDER_SUMMARY.md:147 — declares all-exp fits canonical on |dalpha|<=0.1 without the repo-required diagnostic-figure review.
+  P1.4 LADDER_SUMMARY.md:119 — says whitney drops to single, contradicting the CONFIRMED 2nd DSA component (dlnZ +2706/+2683/+2671). ADR-0003 (authoritative): whitney's 2nd component is real.
+- feat/figure-vector is a separate active lane (not authored by the executor); a concurrent Codex session may currently be touching the related joint-fit-gate lane. Pushing to feat/figure-vector risks colliding with that lane's owner. The executor owns the zach/whitney science (ADR-0003) so P1.2/P1.4 are squarely reconcilable; P1.1 (NE2001 DM) and P1.3 (figure-review gating) are figures/budget-pipeline concerns.
+- Merges/pushes are one-way doors; the executor will run them under an interactive approval gate.
+
+DECIDE (be decisive, no hedging):
+1) DECISION_49 = MERGE or HOLD. One-line why. If MERGE, give exact command (squash, repo convention) and whether to delete the head branch (note: is figures/vector-clean checked out in any worktree? if unknown, say "no --delete-branch unless worktree-free").
+2) DECISION_47 = SELF_FIX or CODEX_ADDRESS or LEAVE. One-line why grounded in: are the P1s real, who owns the fix, and the separate-lane collision risk of pushing to feat/figure-vector.
+   - If SELF_FIX: list the exact edits per P1 (which are doable from ADR-0003 alone = P1.2,P1.4 vs which need pipeline regeneration = P1.1 NE2001 DM, P1.3 figure review), and whether to do them on feat/figure-vector directly or on a fresh branch.
+   - If CODEX_ADDRESS: give the exact PR comment text to post ("@codex ...").
+   - If LEAVE: say what to report to the lane owner.
+
+Output ONLY:
+DECISION_49: <MERGE|HOLD> — <why>
+ACTION_49: <exact commands or "none">
+DECISION_47: <SELF_FIX|CODEX_ADDRESS|LEAVE> — <why>
+ACTION_47: <exact edits/commands/comment text>
+RISK_NOTES: <any collision/irreversibility flags the executor must heed>
