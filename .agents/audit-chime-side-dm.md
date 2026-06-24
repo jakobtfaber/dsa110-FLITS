@@ -44,6 +44,64 @@ Re-derive on `baseband_analysis` proper dedispersion; do not hand-roll inter-cha
 - **P4 — re-extract all 12 + figure-review from scratch + re-validate**; only then un-null the DMs that
   genuinely peak, and re-assess which co-detections yield a real CHIME structure-DM.
 
+## Expert methodology verdict (2026-06-24, astronomy-astrophysics-expert) — METHOD PIVOT
+After P1 (bug fix) + P2 prototype: with proper `coherent_dedisp` and the fixed estimator, zach's
+structure-max curve is flat_ratio ≈ 1.97–2.27 across windows ±4/±12/±30 ms (synthetic sharp-structure
+control gives 48.5). Verdict:
+- **flat_ratio ~2 = NON-detection of structure, NOT a wrong DM.** Structure-max (DM_phase; Seymour/
+  Michilli/Hessels+2019) measures DM curvature only from unresolved temporal sub-structure; a smooth,
+  scattered, low-S/N (~3–11) blob has none, so the curve is flat by construction even at the correct DM.
+  Structure-max is the WRONG primary tool for these CHIME singlebeam bursts.
+- **Circularity is real:** dedispersing at DM_DSA then fitting a tiny reference-centered residual (≈0) is
+  mostly a windowing artifact, not an independent confirmation. The defensible statement is an EXCLUSION
+  from a WIDE, reference-independent DM search, not "δ_DM≈0".
+- **Right estimator is already in the repo:** `burstfit.py` M2/M3 forward-fit (DM `delta_dm` + scattering
+  `tau_1ghz` fitted jointly), which is scattering-aware (removes the S/N-DM scattering bias) and works on
+  smooth bursts. Use a wide flat DM prior (±20–50 pc/cm³), report the marginalised DM posterior, σ =
+  σ_stat ⊕ σ_scat (DM shift τ-free vs τ-fixed). Run the repo PASS/MARGINAL/FAIL gates.
+- **Per-burst outcome, not global:** bursts whose posterior is tight enough → report DM±σ + |ΔDM| 95%
+  exclusion (support Pillar 2). Bursts too low-S/N → "CHIME singlebeam does not independently constrain
+  DM" (lean on Pillar 4 position). Keep structure-max only as a secondary cross-check gated on a
+  null-based ≥5σ peak significance (phase-scramble / off-pulse null), NOT a flat_ratio number.
+- **Caveat to confirm:** what DM the baseband was coherently dedispersed at vs what we re-dedisperse at —
+  `delta_dm` is only meaningful relative to a known reference; intra-channel coherent smearing at the
+  wrong DM is not undone by an incoherent re-trial.
+
+### Revised plan (supersedes P2–P4 above)
+- **P2′** — drop structure-max as primary. Prototype a `burstfit` M2/M3 fit of the CHIME band-collapsed
+  (or 2-D) burst for zach over a WIDE reference-independent DM prior; confirm a marginalised DM posterior
+  + validation PASS.
+- **P3′** — define the agreement test (pre-registered): |DM_CHIME−DM_DSA|/σ_CHIME < 2 AND a stated |ΔDM|
+  95% exclusion; classify each burst constrains / does-not-constrain.
+- **P4′** — fit all 12, validate each, report the honest split; un-null only the bursts that constrain DM.
+
+## Custom DM tool (user directive 2026-06-24: "rewrite into a custom tool that works 100%")
+Built `dispersion/chime_dm.py` — a clean-room, telescope-agnostic, pure numpy/scipy DM estimator
+(no flits deps → runs in the baseband docker image and host). Method = the textbook scattering-aware
+DM measurement, NOT structure-max:
+1. **wide incoherent DM search** (reference-independent) → band-collapsed peak-S/N coarse DM that can
+   be far from `dm_ref` (so a real offset is FOUND → de-circularises the agreement test);
+2. **scatter-corrected arrival-time regression**: per sub-band fit an exponentially-modified Gaussian
+   (Gaussian ⊗ one-sided exp(−t/τ)); the Gaussian centre `t0` is the scattering-DECONVOLVED arrival
+   time → weighted linear fit of `t0` vs `K_DM·(ν⁻²−ν_ref⁻²)`; slope = residual DM, covariance×χ²_red
+   = honest σ_DM. Few sub-bands / large σ → `constrains_dm=False` (no fabricated value).
+
+**Validation (`tests/test_chime_dm.py`, 12 tests, independent numerical injector):** known-DM recovery
+in BOTH CHIME (400–800) and DSA (1281–1531) bands across τ∈{0,2,5 ms}; wide-search recovers a +30
+offset (de-circularisation); non-detection floor flagged at S/N~1; DSA σ_DM > CHIME σ_DM (narrow-band
+lever arm); σ calibrated (pull scatter < 3). **Real DSA data:** phineas_dsa (6144×5121, DM 610.274) →
+S/N 140, 7/8 sub-bands, **DM = 610.206 ± 0.006, constrains_dm=True** — recovers the catalogue DM.
+
+**σ caveat (expert):** the reported σ is statistical (χ²_red-inflated). The 0.07 pc/cm³ phineas offset
+is physically negligible but ~10σ on σ_stat alone — so the **agreement test (in association.py) must
+apply a physical tolerance floor (~1 pc/cm³)**, not the raw pull. Tool reports the honest statistical
+measurement; the floor lives in the pillar-2 agreement logic.
+
+### Remaining (P4″)
+Docker-extract all 12 CHIME singlebeam bursts with `chime_dm.measure_dm` (coherent_dedisp at the DSA DM
+→ measure), classify constrains/does-not-constrain, wire the agreement test with the physical floor,
+regenerate the report, un-null only the bursts that constrain DM, PR to main.
+
 ## Provenance
 Prior (retracted) numbers live in git (PR #29, commit cc64b7b) and off-repo at
 `/data/.../results/chime_side_inputs.json`. Diagnostic: `scripts/diag_dedisp.py`,
