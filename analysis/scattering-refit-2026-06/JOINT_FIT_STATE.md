@@ -76,3 +76,43 @@ Best joint-fit candidates (both bands clean M3 detections): oran, johndoeII, wil
   3. delta_dm feeds arrival-time delay (burstfit.py:528-532) but NOT intra-channel smearing (uses fixed dm_init, :535,:477-481). CHIME delta_dm=4.7 => unmodelled smearing absorbed by zeta/tau => LIVE alpha-corruption channel.
 - Pre-believe-alpha<4 checklist: fix DM units; per-channel posterior-predictive (no single band dominating); retry shared zeta + fixed delta_dm; channel jackknife/RFI sensitivity (16 ch); synthetic injection through same preprocessing; multi-seed/nlive, tighter dlogz (0.5 coarse).
 - See SCINT_INTEGRATION_PLAN.md: scint alpha_Dnu is the independent adjudicator. wilhelm has BOTH-band scint -> immediate cross-check of alpha_tau=2.53.
+
+## HAMILTON — α NON-IDENTIFIABLE (2026-06-24): EXCLUDED FROM CITABLE-α SUB-SAMPLE ONLY
+**Scope of exclusion.** hamilton (FRB 20230913A) is dropped from the **scattering-index (α)
+sub-sample only** — its joint fit yields no identifiable α. It REMAINS in every other
+sub-sample: the 12-sightline co-detection set, the timing/association result (clean
+co-detection, chance-coincidence P≈4.8e-9, position sep 0.013°), and the DM-budget / CGM
+sightline attribution. Not a whole-analysis exclusion.
+
+**Symptom.** α is rail-pinned, not measured. Across the CHIME component ladder C1D1→C5D1
+the evidence climbs (lnZ 15298→19858→20178→20458→20414 — the data clearly want ~4 CHIME
+components) but **α never moves**: 1.504 / 1.503 / 1.508 / 1.505 / 1.505 (err ±0.003-0.013),
+hard against the prior floor. Re-opening the floor to [1.0,6.0] does not free it — it goes
+**bimodal**: α=1.006 + τ₁GHz=0.098 ms vs α=5.99 + τ₁GHz=0.005 ms. Two modes = the textbook
+τ–α(–ζ) degeneracy (strong-scattering-flat-slope vs weak-scattering-steep-slope). Holds
+under either PBF; the canonical all-exp shared-ζ C1D1 gives the same 1.504±0.007 pinning.
+
+**Root cause — unresolved CHIME↔DSA component correspondence (information limit, not sampling).**
+C4D1: the 4 CHIME components sit at t0 = 11.592 / 11.917 / 12.102 / 12.612 ms (span **1.02 ms**)
+with **heterogeneous** intrinsic widths ζ = 0.026 / 0.025 / 0.001 / 0.454 ms; DSA shows a
+single component. The DSA arrival is good to only **±2.42 ms** (DM-uncertainty-dominated,
+`crossmatching/toa_crossmatch_results.json`) — i.e. **2.4× the entire CHIME complex span** —
+so the DSA burst's timing cannot identify which CHIME sub-component it is. And the DSA
+scattering tail τ_DSA = τ₁GHz·(1.35 GHz)^-α ≈ 0.03 ms is comparable to that width spread, so
+the correspondence choice flips the DSA pulse's intrinsic-vs-scattering split:
+ - DSA ↔ the wide comp (ζ=0.454): width is intrinsic, τ_DSA→0 ⇒ steep α (5.99 mode).
+ - DSA ↔ a narrow comp (ζ≈0.025≈τ_DSA): width is mostly scattering ⇒ flat α (1.006 mode).
+The two α modes ARE the two correspondence assignments. The joint model has no term pairing
+a DSA component to a CHIME component (`burstfit_joint.py`: per-band independent t0_Ci/zeta_Ci
+and t0_Dj/zeta_Dj; only τ,α and the shared ζ(ν) law tie the bands), and the shared-ζ power
+law cannot represent four widths spanning 0.001–0.454 ms — so collapsing CHIME to one blended
+width and extrapolating to the DSA band hands the lone DSA component an arbitrary intrinsic
+width. The data carry no information to break this, so no re-fit at any nlive/dlogz/bound
+recovers α.
+
+**Decision.** hamilton → no citable α; list it in the manuscript α sub-sample exclusions with
+the one-line reason "scattering index non-identifiable: single DSA component cannot be
+associated with a specific CHIME sub-component (DSA timing 2.42 ms > 1.02 ms CHIME span),
+leaving the intrinsic-width/scattering split — hence α — degenerate." (3 expert subagents +
+Codex gpt-5.5 high concur; the [1.0,6.0] re-fit on the campaign is therefore NOT needed for
+hamilton — its non-identifiability is already established here.)
