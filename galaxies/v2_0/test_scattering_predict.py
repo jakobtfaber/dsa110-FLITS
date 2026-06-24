@@ -197,7 +197,7 @@ def test_dm_cluster_beta_model_matches_analytic_projection_untruncated():
 def test_dm_cluster_beta_model_zero_beyond_truncation():
     m500, z = 5.0e14, 0.25
     r500 = sp.r_delta_kpc(m500, z, 500)
-    assert sp.dm_cluster_beta_model(m500, z, 1.54 * r500 + 1.0) == 0.0
+    assert sp.dm_cluster_beta_model(m500, z, 1.48 * r500 + 1.0) == 0.0  # default trunc = 1.48 R500
     assert sp.dm_cluster_beta_model(-1.0, z, 100.0) == 0.0
 
 
