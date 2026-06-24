@@ -3,7 +3,7 @@
   "checkpoint_id": "767526dbffd6",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 1,
+  "checkpoints_count": 2,
   "files_touched": [
     "galaxies/v2_0/generate_galaxy_plots.py",
     "galaxies/v2_0/plotting.py"
@@ -14,13 +14,19 @@
       "transcript": "/76/7526dbffd6/0/full.jsonl",
       "content_hash": "/76/7526dbffd6/0/content_hash.txt",
       "prompt": "/76/7526dbffd6/0/prompt.txt"
+    },
+    {
+      "metadata": "/76/7526dbffd6/1/metadata.json",
+      "transcript": "/76/7526dbffd6/1/full.jsonl",
+      "content_hash": "/76/7526dbffd6/1/content_hash.txt",
+      "prompt": "/76/7526dbffd6/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 26449,
-    "cache_creation_tokens": 181855,
-    "cache_read_tokens": 5654662,
-    "output_tokens": 74828,
-    "api_call_count": 46
+    "input_tokens": 199716,
+    "cache_creation_tokens": 4044590,
+    "cache_read_tokens": 135119205,
+    "output_tokens": 851981,
+    "api_call_count": 657
   }
 }
