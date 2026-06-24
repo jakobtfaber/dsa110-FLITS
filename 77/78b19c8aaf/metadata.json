@@ -3,7 +3,7 @@
   "checkpoint_id": "7778b19c8aaf",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 4,
+  "checkpoints_count": 7,
   "files_touched": [
     "analysis/build_manuscript.py",
     "analysis/manuscript.tex",
@@ -32,13 +32,19 @@
       "transcript": "/77/78b19c8aaf/1/full.jsonl",
       "content_hash": "/77/78b19c8aaf/1/content_hash.txt",
       "prompt": "/77/78b19c8aaf/1/prompt.txt"
+    },
+    {
+      "metadata": "/77/78b19c8aaf/2/metadata.json",
+      "transcript": "/77/78b19c8aaf/2/full.jsonl",
+      "content_hash": "/77/78b19c8aaf/2/content_hash.txt",
+      "prompt": "/77/78b19c8aaf/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 341303,
-    "cache_creation_tokens": 6586966,
-    "cache_read_tokens": 227936499,
-    "output_tokens": 1520381,
-    "api_call_count": 1090
+    "input_tokens": 341452,
+    "cache_creation_tokens": 6608076,
+    "cache_read_tokens": 230078000,
+    "output_tokens": 1538099,
+    "api_call_count": 1100
   }
 }
