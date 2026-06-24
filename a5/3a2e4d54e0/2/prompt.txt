@@ -22,3 +22,7 @@ or
 ---
 
 commit all
+
+---
+
+push both
