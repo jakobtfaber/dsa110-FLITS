@@ -3,7 +3,7 @@
   "checkpoint_id": "9c18adaae36c",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 3,
+  "checkpoints_count": 6,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/ALLEXP_PBF_RUN.md",
     "analysis/scattering-refit-2026-06/joint_ladder/LADDER_SUMMARY.md",
@@ -21,13 +21,19 @@
       "transcript": "/9c/18adaae36c/0/full.jsonl",
       "content_hash": "/9c/18adaae36c/0/content_hash.txt",
       "prompt": "/9c/18adaae36c/0/prompt.txt"
+    },
+    {
+      "metadata": "/9c/18adaae36c/1/metadata.json",
+      "transcript": "/9c/18adaae36c/1/full.jsonl",
+      "content_hash": "/9c/18adaae36c/1/content_hash.txt",
+      "prompt": "/9c/18adaae36c/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 313164,
-    "cache_creation_tokens": 6341022,
-    "cache_read_tokens": 216645856,
-    "output_tokens": 1401368,
-    "api_call_count": 1021
+    "input_tokens": 382913,
+    "cache_creation_tokens": 7503762,
+    "cache_read_tokens": 256220390,
+    "output_tokens": 1694672,
+    "api_call_count": 1254
   }
 }

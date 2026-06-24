@@ -1,0 +1,95 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "9c18adaae36c",
+  "session_id": "42953396-6c21-4964-a0fd-c0a2bdffe411",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T10:44:58.148368Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/ALLEXP_PBF_RUN.md",
+    "analysis/scattering-refit-2026-06/joint_ladder/LADDER_SUMMARY.md",
+    "analysis/scattering-refit-2026-06/joint_ladder/allexp_json/zach_joint_fit_C1D1_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/allexp_json/zach_joint_fit_C2D3_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/local_runs/fig_alpha_pbf_systematic.py",
+    "analysis/scattering-refit-2026-06/local_runs/fig_whitney_multiplicity.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "29bed6e774fe",
+  "token_usage": {
+    "input_tokens": 69749,
+    "cache_creation_tokens": 1162740,
+    "cache_read_tokens": 39574534,
+    "output_tokens": 293304,
+    "api_call_count": 233
+  },
+  "session_metrics": {
+    "turn_count": 3
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T10:44:58.042972Z",
+    "agent_lines": 196,
+    "agent_removed": 0,
+    "human_added": 4,
+    "human_modified": 9,
+    "human_removed": 0,
+    "total_committed": 209,
+    "total_lines_changed": 1161,
+    "agent_percentage": 16.881998277347115,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 3539,
+      "user_lines_removed": 0,
+      "agent_lines_added": 16012,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/scheduled_tasks.lock": 1,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 14,
+      "user_lines_removed": 9,
+      "agent_lines_added": 19837,
+      "agent_lines_removed": 5,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/joint_ladder/LADDER_SUMMARY.md": 13
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/joint_ladder/LADDER_SUMMARY.md": 9
+      }
+    }
+  ]
+}
