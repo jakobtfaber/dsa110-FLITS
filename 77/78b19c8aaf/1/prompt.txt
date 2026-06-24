@@ -367,3 +367,11 @@ The Zach rescue has been settled. I want you to handle the review and merge auto
 ---
 
 Reduce the cognitive load and take over from here.
+
+---
+
+@/Users/jakobfaber/.claude/skills/decision-mapping/
+
+---
+
+/ask-matt docs/rse/specs/decision-map-manuscript-completion.md

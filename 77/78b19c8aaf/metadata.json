@@ -6,11 +6,8 @@
   "checkpoints_count": 6,
   "files_touched": [
     "analysis/build_manuscript.py",
-    "analysis/manuscript.tex",
-    "analysis/manuscript_figures.html",
     "analysis/scattering-refit-2026-06/_figsave.py",
     "analysis/scattering-refit-2026-06/chime_subband/chime_subband.tex",
-    "analysis/scattering-refit-2026-06/chime_subband/chime_subband_compare.svg",
     "analysis/scattering-refit-2026-06/chime_subband/figures.manifest.json",
     "analysis/scattering-refit-2026-06/chime_subband/figures.review.json",
     "analysis/scattering-refit-2026-06/chime_subband_compare.py",
@@ -47,11 +44,11 @@
     }
   ],
   "token_usage": {
-    "input_tokens": 341722,
-    "cache_creation_tokens": 6618449,
-    "cache_read_tokens": 231796922,
-    "output_tokens": 1544658,
-    "api_call_count": 1106
+    "input_tokens": 343788,
+    "cache_creation_tokens": 6918320,
+    "cache_read_tokens": 233639727,
+    "output_tokens": 1566476,
+    "api_call_count": 1113
   },
   "combined_attribution": {
     "calculated_at": "2026-06-24T10:59:34.73651Z",
