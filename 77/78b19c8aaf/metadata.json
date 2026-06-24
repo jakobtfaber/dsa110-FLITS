@@ -3,7 +3,7 @@
   "checkpoint_id": "7778b19c8aaf",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 7,
+  "checkpoints_count": 8,
   "files_touched": [
     "analysis/build_manuscript.py",
     "analysis/manuscript.tex",
@@ -38,6 +38,12 @@
       "transcript": "/77/78b19c8aaf/2/full.jsonl",
       "content_hash": "/77/78b19c8aaf/2/content_hash.txt",
       "prompt": "/77/78b19c8aaf/2/prompt.txt"
+    },
+    {
+      "metadata": "/77/78b19c8aaf/3/metadata.json",
+      "transcript": "/77/78b19c8aaf/3/full.jsonl",
+      "content_hash": "/77/78b19c8aaf/3/content_hash.txt",
+      "prompt": "/77/78b19c8aaf/3/prompt.txt"
     }
   ],
   "token_usage": {
