@@ -1,0 +1,24 @@
+Read-only audit. Two git worktrees of the FLITS repo (FRB scattering analysis) need dispositioning per a separate-lane git-hygiene taxonomy. For EACH worktree, classify it and give concrete actionable steps + safety flags. Verify the stated facts yourself with `git -C <path> ...` (read-only) before proposing.
+
+WORKTREE 1: /Users/jakobfaber/Developer/scratch/worktrees/flits-gate
+- branch feat/joint-fit-gate, HEAD 069f987, 1 commit ahead / 22 behind origin/main
+- 41 dirty files (modified analysis/scattering-refit-2026-06/joint_json/*.json and joint_gate_verdicts.md)
+- no open PR; 1 unmerged unique commit: "069f987 Gate committed joint scattering fits against the runtime quality contract (Phase 1)"
+
+WORKTREE 2: /Users/jakobfaber/Developer/scratch/worktrees/flits-iso
+- detached HEAD at 15bca07 (= PR #50, already an ancestor of origin/main after a merge earlier today)
+- 0 ahead / 1 behind origin/main; only dirty file docs/entire-tracing-checkpoints.md (auto-generated checkpoint trace)
+
+TAXONOMY (classify each as exactly one):
+- separate-active: unrelated but intentional/in-flight -> PRESERVE, report exact path+branch+status, propose how to land it
+- separate-stale: removable ONLY with full proof — clean worktree AND no open PR (gh pr list --head <branch>) AND no unmerged unique delta (git cherry -v origin/main <branch> shows only '-')
+- ambiguous: ownership/readiness not cheaply provable -> leave untouched, decision pending
+Destructive ops default OFF; never discard dirty work.
+
+For EACH worktree output exactly:
+  CLASSIFICATION: <one>
+  WHY: <2-3 lines grounded in the git facts you verified>
+  ACTIONABLE STEPS: <exact ordered commands>
+  SAFETY FLAGS: <what could lose work; which steps are destructive>
+
+Special attention: flits-gate has 41 dirty files that look like active joint-fit-gate regeneration (it relates to lowering an alpha gate floor 1.5->1.0 in gate_joint_committed.py). Do NOT propose anything that risks those 41 files. Propose the safest path to either commit+PR that lane or stash/preserve it. Be concrete and terse. End with a one-line PRIORITY recommendation (which worktree to act on first and why).
