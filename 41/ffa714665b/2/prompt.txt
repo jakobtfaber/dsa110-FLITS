@@ -433,3 +433,7 @@ Commit the campaign and open a PR, and then oversee the successful review and me
 ---
 
 Commit the campaign and open a PR, and then oversee the successful review and merging into main.
+
+---
+
+ready it if you think it's in a state to be pushed
