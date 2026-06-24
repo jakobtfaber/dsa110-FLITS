@@ -191,7 +191,7 @@ def main():
         "burst": a.burst,
         "marginalize_gain": bool(a.marginalize_gain),
         "marginalize_gain_gp": bool(a.marginalize_gain_gp),
-        "shared_zeta": bool(a.shared_zeta),
+        "shared_zeta": bool(a.shared_zeta) and not multi,  # shared zeta is a no-op for multi
         "alpha": {"median": a_m, "err_minus": a_lo, "err_plus": a_hi},
         "tau_1ghz": {"median": t_m, "err_minus": t_lo, "err_plus": t_hi},
         "log_evidence": res["log_evidence"],

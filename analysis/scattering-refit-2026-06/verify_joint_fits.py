@@ -61,7 +61,7 @@ for b in BURSTS:
         f"{b:12s} {'yes':5s} {('yes' if hass else 'NO'):4s} {astr:20s} "
         f"{ddmc:+8.1f} {ddmd:+8.1f} {zc:6.2f} {zd:6.2f} {lnz:10.1f} {','.join(flags)}"
     )
-    if flags:
+    if [f for f in flags if f != "shared"]:  # "shared" is informational, not a pathology
         nflag += 1
 
 print()
