@@ -3,7 +3,7 @@
   "checkpoint_id": "6ffc7fc68010",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 3,
+  "checkpoints_count": 4,
   "files_touched": [
     "CLAUDE.md"
   ],
@@ -19,6 +19,12 @@
       "transcript": "/6f/fc7fc68010/1/full.jsonl",
       "content_hash": "/6f/fc7fc68010/1/content_hash.txt",
       "prompt": "/6f/fc7fc68010/1/prompt.txt"
+    },
+    {
+      "metadata": "/6f/fc7fc68010/2/metadata.json",
+      "transcript": "/6f/fc7fc68010/2/full.jsonl",
+      "content_hash": "/6f/fc7fc68010/2/content_hash.txt",
+      "prompt": "/6f/fc7fc68010/2/prompt.txt"
     }
   ],
   "token_usage": {
