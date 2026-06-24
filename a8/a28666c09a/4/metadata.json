@@ -1,0 +1,139 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "a8a28666c09a",
+  "session_id": "d836e440-34bd-488c-b2bb-76d0a63894c9",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T17:52:31.381083Z",
+  "branch": "pr/acf-revalidation",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "7e98dff2ff3c",
+  "token_usage": {
+    "input_tokens": 82544,
+    "cache_creation_tokens": 1389881,
+    "cache_read_tokens": 42124849,
+    "output_tokens": 354941,
+    "api_call_count": 199
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "claude-skill-toolu_01RJGj9vPW8vcbPXrxFN8JUQ",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ponytail:ponytail"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "7e98dff2ff3c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 637,
+        "end": 638,
+        "entry_ids": [
+          "cee65207-d352-4cbd-ad5a-7f3c1d08f7c7"
+        ],
+        "tool_use_id": "toolu_01RJGj9vPW8vcbPXrxFN8JUQ"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01RJGj9vPW8vcbPXrxFN8JUQ"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ponytail:ponytail",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01C9MPm1jHKwEPoYPhq5ioDo",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "7e98dff2ff3c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 638,
+        "end": 639,
+        "entry_ids": [
+          "c58be695-ad32-4832-962c-5362b650336b"
+        ],
+        "tool_use_id": "toolu_01C9MPm1jHKwEPoYPhq5ioDo"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01C9MPm1jHKwEPoYPhq5ioDo"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: boris",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_01Tc9g3c8MkQqQLCW9hLhhN6",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:implement"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "7e98dff2ff3c",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 639,
+        "end": 640,
+        "entry_ids": [
+          "16f91dd2-aa6d-485f-815e-f108f255fb68"
+        ],
+        "tool_use_id": "toolu_01Tc9g3c8MkQqQLCW9hLhhN6"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_01Tc9g3c8MkQqQLCW9hLhhN6"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:implement",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 10
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38144,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
