@@ -159,3 +159,7 @@ Do we have a standardized way yet to generate figures showing the presence of bo
 ---
 
 List all remaining open items from this session.
+
+---
+
+Implement a policy that sessions shall not be completed while deferred tasks still exist, provided that they can be executed or implemented by said agent.
