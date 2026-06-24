@@ -1,19 +1,52 @@
 """Main pipeline for finding foreground galaxies."""
 
-import os
 import math
+import os
+import re
+
+import astropy.units as u
 import pandas as pd
 from astropy.coordinates import SkyCoord
-import astropy.units as u
-from .config import TARGETS, DEFAULT_IMPACT_KPC, VIZIER_CATALOGS, DEFAULT_Z_EPS, MIN_Z_SEARCH, ENABLE_EXTRA_ENGINES
-from .utils import parse_coord, get_angular_radius, calculate_impact_parameter
-from .engines import NedEngine, VizierEngine, query_ps1_gi_mags
-from .engines_extra import DesiDr1Engine
+
+from . import scattering_predict as scat
 from .build_unified import build_for_target
+from .config import (
+    CLUSTER_M500_TO_M200,
+    CLUSTER_R200_FACTOR,
+    DEFAULT_CLUSTER_IMPACT_KPC,
+    DEFAULT_IMPACT_KPC,
+    DEFAULT_Z_EPS,
+    ENABLE_CLUSTER_ENGINE,
+    ENABLE_EXTRA_ENGINES,
+    FOREGROUND_PHOTOZ_FLOOR,
+    MAX_PHOTOZ_Z_ERR,
+    MAX_SEARCH_RADIUS_DEG,
+    MIN_Z_SEARCH,
+    TARGETS,
+    VIZIER_CATALOGS,
+)
+from .engines import VizierEngine, query_ps1_gi_mags
+from .engines_extra import ClusterEngine, DesiDr1Engine, NedTapEngine
+from .utils import calculate_impact_parameter, get_angular_radius, parse_coord
 
 PHOTO_Z_ERROR_COLUMNS = ("z_phot_err", "e_zphot", "z_best_err")
 DUPLICATE_SEPARATION = 10.0 * u.arcsec
 DUPLICATE_REDSHIFT_TOLERANCE = 0.02
+
+# Columns that may carry an object classification (NED 'Type', SDSS 'class'/'cl').
+CLASSIFICATION_COLUMNS = ("classification", "Type", "class", "cl", "otype")
+# Galaxy-cluster classifications: NED 'GClstr', SDSS/SIMBAD 'ClG', bare 'Cl', 'cluster'.
+_CLUSTER_RE = re.compile(r"cluster|gclstr|clg|^cl\b", re.IGNORECASE)
+
+
+def _cluster_mask(df: pd.DataFrame) -> pd.Series:
+    """Per-row True where a classification column marks the object a galaxy cluster."""
+    is_cluster = pd.Series(False, index=df.index)
+    for column in CLASSIFICATION_COLUMNS:
+        if column not in df.columns:
+            continue
+        is_cluster = is_cluster | df[column].astype(str).str.contains(_CLUSTER_RE)
+    return is_cluster
 
 
 def _first_available_numeric(df: pd.DataFrame, columns: tuple[str, ...]) -> pd.Series:
@@ -31,7 +64,10 @@ def _foreground_mask(
     z_frb: float,
     z_eps: float,
     impact_kpc: float,
+    cluster_impact_kpc: float = DEFAULT_CLUSTER_IMPACT_KPC,
     n_sigma: float = 2.0,
+    photoz_floor: float = FOREGROUND_PHOTOZ_FLOOR,
+    max_photoz_err: float = MAX_PHOTOZ_Z_ERR,
 ) -> pd.Series:
     z = pd.to_numeric(df["z"], errors="coerce")
     impact = pd.to_numeric(df["impact_kpc"], errors="coerce")
@@ -39,8 +75,50 @@ def _foreground_mask(
     has_z_err = z_err.notna() & (z_err > 0.0)
     z_limit = z_frb + z_eps
 
-    foreground = (z < z_limit) | (has_z_err & ((z - n_sigma * z_err) < z_limit))
-    return foreground & (impact <= impact_kpc)
+    # Spec-z rows (no photo-z error: NED, GLADE+) use a plain z < z_limit with no
+    # floor, so genuine nearby spec galaxies (e.g. UGC 06371, z=0.009) survive.
+    spec_foreground = ~has_z_err & (z < z_limit)
+    # Photo-z rows (DESI VII/292): require a credible floor (drops the z~0 photo-z
+    # pile-up) and a 2-sigma lower bound below z_limit computed with the error
+    # CAPPED — DESI floor/leak rows carry sigma_z = 0.4-1.7 that would otherwise
+    # rescue any background galaxy as "foreground".
+    z_err_capped = z_err.clip(upper=max_photoz_err)
+    photo_foreground = has_z_err & (z >= photoz_floor) & ((z - n_sigma * z_err_capped) < z_limit)
+    foreground = spec_foreground | photo_foreground
+    # Clusters get a mass-scaled r200 impact limit; galaxies keep impact_kpc.
+    impact_limit = _cluster_impact_limit_kpc(df, impact_kpc, fallback_kpc=cluster_impact_kpc)
+    return foreground & (impact <= impact_limit)
+
+
+def _cluster_impact_limit_kpc(
+    df: pd.DataFrame,
+    impact_kpc: float,
+    r200_factor: float = CLUSTER_R200_FACTOR,
+    fallback_kpc: float = DEFAULT_CLUSTER_IMPACT_KPC,
+) -> pd.Series:
+    """Per-row impact limit (kpc).
+
+    Galaxies keep ``impact_kpc``. A cluster row with a catalog M500 gets
+    ``r200_factor * r200`` (r200 from M200 = CLUSTER_M500_TO_M200 * M500); a cluster
+    row without a catalog mass (e.g. NED-Type only) falls back to ``fallback_kpc``.
+    """
+    limit = pd.Series(float(impact_kpc), index=df.index, dtype="float64")
+    is_cluster = _cluster_mask(df)
+    m500 = (
+        pd.to_numeric(df["m500_msun"], errors="coerce")
+        if "m500_msun" in df.columns
+        else pd.Series(math.nan, index=df.index)
+    )
+    z = pd.to_numeric(df["z"], errors="coerce")
+    for i in df.index[is_cluster]:
+        mi = m500.get(i, math.nan)
+        zi = z.get(i, math.nan)
+        if pd.notna(mi) and mi > 0.0 and pd.notna(zi) and zi > 0.0:
+            r200 = scat.r_delta_kpc(CLUSTER_M500_TO_M200 * float(mi), float(zi), 200)
+            limit.at[i] = r200_factor * r200 if math.isfinite(r200) else fallback_kpc
+        else:
+            limit.at[i] = fallback_kpc
+    return limit
 
 
 def _redshift_error(row: pd.Series) -> float:
@@ -137,10 +215,12 @@ def _enrich_with_ps1_photometry(matches: pd.DataFrame) -> pd.DataFrame:
     if matches.empty:
         return matches
 
-    g_out = pd.to_numeric(matches.get("gmag", pd.Series(index=matches.index, dtype="float64")),
-                          errors="coerce").to_numpy(dtype="float64", copy=True)
-    i_out = pd.to_numeric(matches.get("imag", pd.Series(index=matches.index, dtype="float64")),
-                          errors="coerce").to_numpy(dtype="float64", copy=True)
+    g_out = pd.to_numeric(
+        matches.get("gmag", pd.Series(index=matches.index, dtype="float64")), errors="coerce"
+    ).to_numpy(dtype="float64", copy=True)
+    i_out = pd.to_numeric(
+        matches.get("imag", pd.Series(index=matches.index, dtype="float64")), errors="coerce"
+    ).to_numpy(dtype="float64", copy=True)
     sep_out = pd.Series(math.nan, index=matches.index, dtype="float64").to_numpy(copy=True)
 
     n_filled = 0
@@ -168,27 +248,42 @@ def _enrich_with_ps1_photometry(matches: pd.DataFrame) -> pd.DataFrame:
     return matches
 
 
-def run_search(impact_kpc: float = DEFAULT_IMPACT_KPC, output_dir: str = "results", z_eps: float = DEFAULT_Z_EPS, build_unified: bool = False):
+def run_search(
+    impact_kpc: float = DEFAULT_IMPACT_KPC,
+    output_dir: str = "results",
+    z_eps: float = DEFAULT_Z_EPS,
+    build_unified: bool = False,
+    cluster_impact_kpc: float = DEFAULT_CLUSTER_IMPACT_KPC,
+):
     """Run the galaxy search for all targets."""
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-        
-    engines = [NedEngine()]
+
+    engines = [NedTapEngine()]
     for cat_name, cat_id in VIZIER_CATALOGS.items():
         engines.append(VizierEngine(cat_id))
     if ENABLE_EXTRA_ENGINES:
         # Opt-in DESI DR1 zpix spec-z engine. Covers only 3/12 targets
         # (Whitney/Phineas/Casey); returns empty elsewhere and degrades gracefully.
         engines.append(DesiDr1Engine())
-    
+    if ENABLE_CLUSTER_ENGINE:
+        # All-sky cluster catalogs (PSZ2 + MCXC/MCXC-II) supply M500/R500 so the
+        # r200-relative impact cut and beta-model ICM DM have catalog masses.
+        engines.append(ClusterEngine())
+
     summary_data = []
-    
+
     for i, (name, ra_str, dec_str, z_frb) in enumerate(TARGETS):
-        print(f"Processing {name} (Target {i+1}): {ra_str}, {dec_str} (z={z_frb})")
+        print(f"Processing {name} (Target {i + 1}): {ra_str}, {dec_str} (z={z_frb})")
         coord = parse_coord(ra_str, dec_str)
-        # Use MIN_Z_SEARCH to capture low-z foreground galaxies with larger angular separation
-        radius = get_angular_radius(min(z_frb, MIN_Z_SEARCH), impact_kpc)
-        
+        # Query the larger of the two impact limits (clusters reach out to ~5 Mpc).
+        # Use MIN_Z_SEARCH to capture low-z foreground at larger angular separation, and
+        # cap the cone at MAX_SEARCH_RADIUS_DEG so low-z clusters don't time out Vizier.
+        radius = min(
+            get_angular_radius(min(z_frb, MIN_Z_SEARCH), max(impact_kpc, cluster_impact_kpc)),
+            MAX_SEARCH_RADIUS_DEG * u.deg,
+        )
+
         target_matches = []
         for engine in engines:
             df = engine.query(coord, radius)
@@ -201,44 +296,52 @@ def run_search(impact_kpc: float = DEFAULT_IMPACT_KPC, output_dir: str = "result
                         cat_label = k
                         break
                 engine_name = f"VizierEngine({cat_label})"
-                
+
             if not df.empty:
                 print(f"    {engine_name} returned {len(df)} raw results.")
                 # Ensure we have ra, dec, z
-                if 'ra' not in df.columns or 'dec' not in df.columns or 'z' not in df.columns:
+                if "ra" not in df.columns or "dec" not in df.columns or "z" not in df.columns:
                     # Try to find them case-insensitively
                     col_map = {c.lower(): c for c in df.columns}
-                    if 'ra' in col_map: df['ra'] = df[col_map['ra']]
-                    if 'dec' in col_map: df['dec'] = df[col_map['dec']]
-                    if 'z' in col_map: df['z'] = df[col_map['z']]
+                    if "ra" in col_map:
+                        df["ra"] = df[col_map["ra"]]
+                    if "dec" in col_map:
+                        df["dec"] = df[col_map["dec"]]
+                    if "z" in col_map:
+                        df["z"] = df[col_map["z"]]
 
-                if 'ra' in df.columns and 'dec' in df.columns and 'z' in df.columns:
+                if "ra" in df.columns and "dec" in df.columns and "z" in df.columns:
                     # Drop rows with NaN in critical columns
                     raw_count = len(df)
-                    df = df.dropna(subset=['ra', 'dec', 'z'])
+                    df = df.dropna(subset=["ra", "dec", "z"])
                     with_z_count = len(df)
-                    if df.empty: 
+                    if df.empty:
                         print(f"      {engine_name}: 0/{raw_count} results have redshifts.")
                         continue
 
-                    df['impact_kpc'] = df.apply(
+                    df["impact_kpc"] = df.apply(
                         lambda row: calculate_impact_parameter(
-                            row['ra'], row['dec'], row['z'], coord.ra.deg, coord.dec.deg
-                        ), axis=1
+                            row["ra"], row["dec"], row["z"], coord.ra.deg, coord.dec.deg
+                        ),
+                        axis=1,
                     )
                     # Filter for foreground (with buffer) and impact parameter.
-                    df_filtered = df[_foreground_mask(df, z_frb, z_eps, impact_kpc)]
+                    df_filtered = df[
+                        _foreground_mask(df, z_frb, z_eps, impact_kpc, cluster_impact_kpc)
+                    ]
                     if not df_filtered.empty:
                         target_matches.append(df_filtered)
-                        print(f"      {engine_name}: Found {len(df_filtered)} matches (from {with_z_count} with z).")
+                        print(
+                            f"      {engine_name}: Found {len(df_filtered)} matches (from {with_z_count} with z)."
+                        )
                     else:
                         print(f"      {engine_name}: 0 matches (from {with_z_count} with z).")
             else:
                 print(f"    {engine_name} returned 0 results.")
-        
+
         if target_matches:
             all_matches = pd.concat(target_matches, ignore_index=True)
-            
+
             all_matches = _deduplicate_matches(all_matches)
 
             # Backfill stellar-mass photometry from PS1 for catalogs that lack it
@@ -251,34 +354,44 @@ def run_search(impact_kpc: float = DEFAULT_IMPACT_KPC, output_dir: str = "result
             if build_unified:
                 # Opt-in: derive the {name.lower()}_unified.csv alongside the galaxies CSV.
                 build_for_target(name, ra_str, dec_str, z_frb, results_dir=output_dir)
-            summary_data.append({
-                'name': name,
-                'target_id': i+1,
-                'ra': ra_str,
-                'dec': dec_str,
-                'z_frb': z_frb,
-                'num_galaxies': len(all_matches)
-            })
+            summary_data.append(
+                {
+                    "name": name,
+                    "target_id": i + 1,
+                    "ra": ra_str,
+                    "dec": dec_str,
+                    "z_frb": z_frb,
+                    "num_galaxies": len(all_matches),
+                }
+            )
         else:
             print("  No foreground galaxies found.")
-            summary_data.append({
-                'name': name,
-                'target_id': i+1,
-                'ra': ra_str,
-                'dec': dec_str,
-                'z_frb': z_frb,
-                'num_galaxies': 0
-            })
-            
+            summary_data.append(
+                {
+                    "name": name,
+                    "target_id": i + 1,
+                    "ra": ra_str,
+                    "dec": dec_str,
+                    "z_frb": z_frb,
+                    "num_galaxies": 0,
+                }
+            )
+
     summary_df = pd.DataFrame(summary_data)
     summary_path = os.path.abspath(os.path.join(output_dir, "search_summary.csv"))
     summary_df.to_csv(summary_path, index=False)
     print(f"\nSearch complete. Summary saved to {summary_path}")
 
+
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Search for foreground galaxies around FRB targets.")
-    parser.add_argument("--impact_kpc", type=float, default=100.0, help="Maximum impact parameter in kpc.")
+
+    parser = argparse.ArgumentParser(
+        description="Search for foreground galaxies around FRB targets."
+    )
+    parser.add_argument(
+        "--impact_kpc", type=float, default=100.0, help="Maximum impact parameter in kpc."
+    )
     args = parser.parse_args()
-    
+
     run_search(impact_kpc=args.impact_kpc)
