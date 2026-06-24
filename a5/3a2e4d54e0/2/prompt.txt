@@ -1,0 +1,24 @@
+I keep noticied certain failures in session star hooks:
+
+---
+
+Listed 1 directory (ctrl+o to expand)
+  ⎿  PreToolUse:Bash hook error
+  ⎿  Failed with non-blocking status code: /Users/jakobfaber/.claude/hooks/chezmoi-guard/chezmoi-guard.sh: line 38: File: unbound variable
+
+
+or
+
+  ⎿  SessionStart:startup hook error
+  ⎿  Failed with non-blocking status code: /Users/jakobfaber/.claude/hooks/machine-banner/machine-banner.sh: line 13: File: unbound variable
+  ⎿  SessionStart:startup hook error
+  ⎿  Failed with non-blocking status code: /Users/jakobfaber/.local/bin/claude-session-banner.sh: line 29: File: unbound variable
+  ⎿  SessionStart:startup says:
+
+     Entire CLI will link this conversation to your next commit.
+       3 other active conversation(s) in this workspace will also be included.
+       Use 'entire status' for more information.
+
+---
+
+commit all
