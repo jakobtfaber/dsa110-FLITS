@@ -705,3 +705,7 @@ Just quickly - what do you need arc and/or h23 scratch for again?
 ---
 
 Do you mean `hpcc`?
+
+---
+
+You drive hpcc-run, start by verifying everything is configured and oriented the way you expect it to be?
