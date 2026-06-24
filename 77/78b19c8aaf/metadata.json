@@ -3,7 +3,7 @@
   "checkpoint_id": "7778b19c8aaf",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 7,
+  "checkpoints_count": 9,
   "files_touched": [
     "analysis/build_manuscript.py",
     "analysis/scattering-refit-2026-06/_figsave.py",
@@ -41,14 +41,20 @@
       "transcript": "/77/78b19c8aaf/3/full.jsonl",
       "content_hash": "/77/78b19c8aaf/3/content_hash.txt",
       "prompt": "/77/78b19c8aaf/3/prompt.txt"
+    },
+    {
+      "metadata": "/77/78b19c8aaf/4/metadata.json",
+      "transcript": "/77/78b19c8aaf/4/full.jsonl",
+      "content_hash": "/77/78b19c8aaf/4/content_hash.txt",
+      "prompt": "/77/78b19c8aaf/4/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 415023,
-    "cache_creation_tokens": 8437908,
-    "cache_read_tokens": 277675845,
-    "output_tokens": 1894468,
-    "api_call_count": 1365
+    "input_tokens": 442911,
+    "cache_creation_tokens": 8808952,
+    "cache_read_tokens": 283860032,
+    "output_tokens": 1965300,
+    "api_call_count": 1416
   },
   "combined_attribution": {
     "calculated_at": "2026-06-24T10:59:34.73651Z",

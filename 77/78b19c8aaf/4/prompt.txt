@@ -1,0 +1,29 @@
+Take over from the agent running on h17 and start by reading the handoff on h17: `h17:/home/ubuntu/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/outputs/handoff_manuscript-figures_2026-06-24/HANDOFF.md`
+
+---
+
+You have the go ahead, and please proceed autonomously from here following /ai-research-workflows
+
+---
+
+merge now
+
+---
+
+yes
+
+---
+
+yes, open pr
+
+---
+
+review and merge
+
+---
+
+/boris and /ask-matt --- what should I do here?
+
+---
+
+yes
