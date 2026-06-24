@@ -1,0 +1,25 @@
+confirm upstream origin/main
+
+---
+
+Locate the specified default configuration for burning headless Codex agents.
+
+---
+
+Locate the specified default configuration for running headless Codex agents.
+
+---
+
+it's not strictly enforced anywhere in a json or toml?
+
+---
+
+Can you set as the default in the .codex/config.toml also "--dangerously-bypass-approvals-and-sandbox"
+
+---
+
+Make yolo the default for when other agents or Codex itself call/orchestra Codex agents headlessly.
+
+---
+
+Propagate. Don't let chezmoi overwrite this.
