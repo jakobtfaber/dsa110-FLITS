@@ -1,0 +1,189 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "d5cdb74be264",
+  "session_id": "370d2d4d-f54b-47a1-9bac-3d06ba51d427",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T17:16:48.507618Z",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 2,
+  "save_step_count": 2,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/_ppc_montage_allexp.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/_tau_ladder_allexp.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "a3cca74d84a8",
+  "checkpoint_transcript_start": 1482,
+  "transcript_lines_at_start": 1482,
+  "token_usage": {
+    "input_tokens": 757,
+    "cache_creation_tokens": 144346,
+    "cache_read_tokens": 2333921,
+    "output_tokens": 11304,
+    "api_call_count": 18
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:researching-2026-06-24T14:47:50.009315Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:researching"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "30244d42e7bd",
+      "timestamp": "2026-06-24T14:47:50.009315Z",
+      "native": {
+        "command": "/ai-research-workflows:researching"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:researching",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:researching-2026-06-24T14:48:32.458931Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:researching"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "8a6b23d40116",
+      "timestamp": "2026-06-24T14:48:32.458931Z",
+      "native": {
+        "command": "/ai-research-workflows:researching"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:researching",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:planning-implementations-2026-06-24T15:01:50.194457Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:planning-implementations"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "7e8a96844db6",
+      "timestamp": "2026-06-24T15:01:50.194457Z",
+      "native": {
+        "command": "/ai-research-workflows:planning-implementations"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:planning-implementations",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ai-research-workflows:iterating-plans-2026-06-24T15:33:19.294565Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ai-research-workflows:iterating-plans"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "228a24fb0e5f",
+      "timestamp": "2026-06-24T15:33:19.294565Z",
+      "native": {
+        "command": "/ai-research-workflows:iterating-plans"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ai-research-workflows:iterating-plans",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "claude-skill-toolu_016fqnL1ZMe4YbXMn6KpodvF",
+      "event_type": "tool_invocation",
+      "skill": {
+        "name": "ai-research-workflows:implementing-plans"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "skill_tool_use",
+        "confidence": "explicit"
+      },
+      "turn_id": "a3cca74d84a8",
+      "transcript_anchor": {
+        "unit": "line",
+        "start": 462,
+        "end": 463,
+        "entry_ids": [
+          "22a4ad3e-b353-46fa-a90f-c8012894ea14"
+        ],
+        "tool_use_id": "toolu_016fqnL1ZMe4YbXMn6KpodvF"
+      },
+      "native": {
+        "tool_name": "Skill",
+        "tool_use_id": "toolu_016fqnL1ZMe4YbXMn6KpodvF"
+      },
+      "collapse": {
+        "target": "tool_pair",
+        "label": "Skill: ai-research-workflows:implementing-plans",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 7
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T17:16:48.411374Z",
+    "agent_lines": 256,
+    "agent_removed": 0,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 256,
+    "total_lines_changed": 256,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37793,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}

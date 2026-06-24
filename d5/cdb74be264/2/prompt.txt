@@ -1,0 +1,19 @@
+/ai-research-workflows:researching
+
+---
+
+/ai-research-workflows:researching identify work that appears to be incomplete
+
+---
+
+/ai-research-workflows:planning-implementations
+
+---
+
+/ai-research-workflows:iterating-plans For the ACF / scintillation bandwidth analysis, please try and follow the methods of Nimmo and Pleunis et al. 2025 as closely as you can. This is already partially reflected in some of the ACF analysis jupyter notebooks we had drafted from before (also on arc/CANFAR), though their organization leaves something to be desired.
+
+Otherwise, it looks good. Once you've added the point above, proceed with /ai-research-workflows:implementing-plans . As before, use Codex to review your work, debug, and run sanity-checks.
+
+---
+
+Take on manual verification + branch disposition + push
