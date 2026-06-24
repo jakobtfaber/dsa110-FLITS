@@ -3,7 +3,7 @@
   "checkpoint_id": "d5cdb74be264",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 6,
+  "checkpoints_count": 8,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/_ppc_montage_allexp.py",
     "analysis/scattering-refit-2026-06/joint_ladder/_tau_ladder_allexp.py"
@@ -26,13 +26,19 @@
       "transcript": "/d5/cdb74be264/2/full.jsonl",
       "content_hash": "/d5/cdb74be264/2/content_hash.txt",
       "prompt": "/d5/cdb74be264/2/prompt.txt"
+    },
+    {
+      "metadata": "/d5/cdb74be264/3/metadata.json",
+      "transcript": "/d5/cdb74be264/3/full.jsonl",
+      "content_hash": "/d5/cdb74be264/3/content_hash.txt",
+      "prompt": "/d5/cdb74be264/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 104217,
-    "cache_creation_tokens": 1313600,
-    "cache_read_tokens": 46521148,
-    "output_tokens": 365071,
-    "api_call_count": 270
+    "input_tokens": 530412,
+    "cache_creation_tokens": 8790324,
+    "cache_read_tokens": 297432573,
+    "output_tokens": 2046694,
+    "api_call_count": 1457
   }
 }
