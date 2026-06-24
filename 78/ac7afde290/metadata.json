@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "78ac7afde290",
+  "strategy": "manual-commit",
+  "branch": "feat/chime-side-dm-localization",
+  "checkpoints_count": 4,
+  "files_touched": [
+    ".agents/implement-chime-side-dm-localization.md",
+    "crossmatching/association_report.json",
+    "crossmatching/chime_side_inputs.json",
+    "tests/test_association.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/78/ac7afde290/0/metadata.json",
+      "transcript": "/78/ac7afde290/0/full.jsonl",
+      "content_hash": "/78/ac7afde290/0/content_hash.txt",
+      "prompt": "/78/ac7afde290/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 99542,
+    "cache_creation_tokens": 2224704,
+    "cache_read_tokens": 100620466,
+    "output_tokens": 507662,
+    "api_call_count": 468
+  }
+}
