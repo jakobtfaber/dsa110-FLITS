@@ -7,3 +7,7 @@ I want you to fix all of these. Use rse-plugins to do so.
 ---
 
 Ready to close?
+
+---
+
+Yes, commit
