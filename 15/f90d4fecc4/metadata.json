@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "15f90d4fecc4",
+  "strategy": "manual-commit",
+  "branch": "rebuild-chime-side-dm",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "tests/test_dmphase_recovery.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/15/f90d4fecc4/0/metadata.json",
+      "transcript": "/15/f90d4fecc4/0/full.jsonl",
+      "content_hash": "/15/f90d4fecc4/0/content_hash.txt",
+      "prompt": "/15/f90d4fecc4/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 101217,
+    "cache_creation_tokens": 2308640,
+    "cache_read_tokens": 109790820,
+    "output_tokens": 578986,
+    "api_call_count": 522
+  }
+}
