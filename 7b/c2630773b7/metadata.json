@@ -3,7 +3,7 @@
   "checkpoint_id": "7bc2630773b7",
   "strategy": "manual-commit",
   "branch": "chore/rm-validation-thresholds-shim",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "scattering/scat_analysis/validation_thresholds.py"
   ],
@@ -19,6 +19,12 @@
       "transcript": "/7b/c2630773b7/1/full.jsonl",
       "content_hash": "/7b/c2630773b7/1/content_hash.txt",
       "prompt": "/7b/c2630773b7/1/prompt.txt"
+    },
+    {
+      "metadata": "/7b/c2630773b7/2/metadata.json",
+      "transcript": "/7b/c2630773b7/2/full.jsonl",
+      "content_hash": "/7b/c2630773b7/2/content_hash.txt",
+      "prompt": "/7b/c2630773b7/2/prompt.txt"
     }
   ],
   "token_usage": {
