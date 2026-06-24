@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "3b2064bd72cd",
+  "strategy": "manual-commit",
+  "branch": "fix/suspend-chime-dm-pending-audit",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "crossmatching/association.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/3b/2064bd72cd/0/metadata.json",
+      "transcript": "/3b/2064bd72cd/0/full.jsonl",
+      "content_hash": "/3b/2064bd72cd/0/content_hash.txt",
+      "prompt": "/3b/2064bd72cd/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 100550,
+    "cache_creation_tokens": 2280326,
+    "cache_read_tokens": 105861523,
+    "output_tokens": 555000,
+    "api_call_count": 502
+  }
+}
