@@ -1,0 +1,54 @@
+You are confirming (or pushing back on) a prioritization decision for the FLITS repo
+(Fitting Likelihoods In Time-Frequency Spectra — FRB scattering/scintillation fitting,
+feeding a manuscript "Faber2026"). Read-only audit; do not edit files. Repo cwd is the
+FLITS root (branch feat/figure-vector).
+
+THREE specialist agents (a scientific-Python/RSE expert, a research-docs architect, and
+an astrophysics expert) were each asked "what should we work on next?" Their convergent,
+agent-executable, reversible recommendation — my synthesized DECISION — is:
+
+  NEXT TASK: Eliminate the ADR-0003 reproducibility hazard in
+  analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py (and _ladder.py):
+  add a fail-safe guard that REFUSES to adjudicate across mixed-PBF and all-exponential-PBF
+  joint-fit JSONs (e.g. assert the fit's pbf_C/pbf_D are both 'exp'), and repoint the
+  default file selection off the stale mixed-PBF *_s2-*.json onto the canonical all-exp grids.
+  Rationale: all three agents flagged this file; the astro expert verified that running
+  _s2verdict.py as-is produces the OPPOSITE, WRONG component-count verdict for the burst
+  "zach" (mixed-PBF -> C2D3 "REAL", alpha=2.41; all-exp -> C2D3 rejected, single-component
+  alpha=3.319), and zach is the manuscript's marquee profile-bias demonstrator. It is
+  executable now WITHOUT the HPCC data, and is reversible local work.
+
+  PAIRED (same session, cheap, reversible): reconcile ~5 confirmed-stale doc references
+  (docs/codetection-science-plan.md:27/51/55, docs/rse/specs/plan-manuscript-completion.md:71,
+  analysis/scattering-refit-2026-06/JOINT_FIT_STATE.md:60, docs/architecture/inventory.md:261-264)
+  that describe already-resolved code stubs as still-open.
+
+  EXPLICITLY NOT NOW: the HPCC zach all-exp s2-grid pull (needs cluster access, @human);
+  the ADR-0004 alpha-floor 1.5->1.0 regeneration (gated on that grid + review); committing
+  the ~150-file joint_ladder/ lane (gated on the hazard fix + a #47/#49 branch-hygiene call);
+  any edit to the separate Faber2026 manuscript repo (one-way). Write a regression test for
+  GitHub issue #4 (reversible) but leave `gh issue close` to the user.
+
+  NOTE the RSE agent's correction: GitHub issues #4 (cross-N evidence commensurability) and
+  #5 (per-band dt_min) are ALREADY FIXED in tracked code on main (force_multi in 75a917c,
+  per-band dt_min in 3e45712); _s2verdict.py does NOT implement #4 (the earlier survey was
+  stale on this point).
+
+YOUR JOB — be a skeptical reviewer, not a rubber stamp:
+1. Independently verify the core technical claim by reading the actual files:
+   - analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py and _ladder.py — does it
+     glob/select mixed-PBF *_s2-*.json by default? Is there a real risk it mixes incompatible
+     PBF families when computing cross-N Bayes factors?
+   - Spot-check the zach JSONs in analysis/scattering-refit-2026-06/joint_ladder/ (e.g.
+     zach_joint_fit_C2D3*.json, the *_s2-*.json variants, and any all-exp grid) for the
+     alpha values and lnZ, to confirm whether mixed vs all-exp really flips the verdict.
+   - docs/adr/0003*.md and docs/adr/0004*.md if present.
+2. Confirm or challenge: is the s2verdict hazard fix genuinely the right NEXT action, or is
+   there a higher-leverage / lower-risk agent-executable item the three agents (and I) missed?
+3. Sanity-check the "NOT NOW" gating: is anything I deferred actually safe to do now, or is
+   anything I included actually gated/unsafe?
+4. Flag any way the proposed guard could be wrong (e.g. the JSONs don't record pbf_C/pbf_D
+   the way I assume, so the assert can't be written as described).
+
+Output a concise verdict: CONFIRM / CONFIRM-WITH-CHANGES / REJECT, then bullet points with
+file:line evidence for anything you verified or dispute. Do not write any files.
