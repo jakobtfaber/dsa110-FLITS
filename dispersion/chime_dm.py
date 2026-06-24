@@ -50,9 +50,24 @@ def exgauss(t, t0, sigma, tau, amp, base):
 
 
 def _dedisperse(wf, freqs, dt, ddm, nu_ref):
-    """Incoherently shift each channel by the dispersive delay of a residual DM ``ddm``."""
+    """Incoherently shift each channel by the dispersive delay of a residual DM ``ddm``.
+
+    Zero-fills the shifted-in edge (does NOT wrap): a short recording window (e.g. a ~143 ms CHIME
+    singlebeam) would otherwise wrap a large shift back into the burst and fake an alignment.
+    """
     shifts = np.round(K_DM * ddm * (1.0 / freqs**2 - 1.0 / nu_ref**2) / dt).astype(int)
-    return np.array([np.roll(wf[j], -shifts[j]) for j in range(freqs.size)])
+    out = np.zeros_like(wf)
+    n = wf.shape[1]
+    for j, s in enumerate(shifts):
+        if abs(s) >= n:
+            continue
+        if s > 0:
+            out[j, : n - s] = wf[j, s:]
+        elif s < 0:
+            out[j, -s:] = wf[j, : n + s]
+        else:
+            out[j] = wf[j]
+    return out
 
 
 def _coarse_dm(wf, freqs, dt, nu_ref, dm_window, dm_step):
@@ -116,7 +131,7 @@ def measure_dm(
     Returns a dict: dm, dm_err (None if unconstrained), constrains_dm, reason, coarse_dm,
     n_good_subbands, snr, plus per-subband (freq, t0, t0_err, snr) and the coarse S/N(DM) curve.
     """
-    wf = np.asarray(wf, float)
+    wf = np.nan_to_num(np.asarray(wf, float))  # masked/NaN channels -> 0 (real data has them)
     freqs = np.asarray(freqs, float)
     order = np.argsort(freqs)
     wf, freqs = wf[order], freqs[order]

@@ -97,10 +97,72 @@ is physically negligible but ~10σ on σ_stat alone — so the **agreement test 
 apply a physical tolerance floor (~1 pc/cm³)**, not the raw pull. Tool reports the honest statistical
 measurement; the floor lives in the pillar-2 agreement logic.
 
-### Remaining (P4″)
-Docker-extract all 12 CHIME singlebeam bursts with `chime_dm.measure_dm` (coherent_dedisp at the DSA DM
-→ measure), classify constrains/does-not-constrain, wire the agreement test with the physical floor,
-regenerate the report, un-null only the bursts that constrain DM, PR to main.
+### P4″ result (2026-06-23): clean split, custom tool (arrival-regression)
+All 12 docker-extracted (`results/chime_dm_v2.json`, figures reviewed `diagnostics/chime_dm_v2/`).
+**Clean discriminator on sub-band count (perfect gap, 8 vs ≤5):**
+- **5 reliable** (8 sub-bands @ S/N≥4): zach, casey, freya, hamilton, chromatica — sharp coarse S/N
+  peak AT the DSA DM, ΔDM −0.86…+0.04, regression lands on DSA. Genuine independent constraint.
+- **6 scatter-biased** (3–5 sub-bands): whitney, oran, isha, wilhelm, phineas, johndoeII — broad coarse
+  S/N peak offset +4–5 high, regression ΔDM +0.81…+3.46 with over-confident σ. The +offset is the
+  scattering S/N–DM bias (over-dedispersing aligns the asymmetric tail), NOT a real CHIME–DSA
+  disagreement (co-detection ⇒ one DM; phineas DSA-side recovered catalogue DM to −0.07 while CHIME
+  reads +3.1). Instrumental.
+- **1 unconstrained**: mahi (2 sub-bands).
+
+### v3 (user recipe: crop → S/N-max → preliminary-correction → DM-phase fine-tune) — NEGATIVE
+Tested whitney+oran (`diagnostics/chime_dm_v3/`). A fixed ~44 ms crop PARTIALLY de-biases the S/N-max
+(~2 of ~4 pc/cm³ toward DSA) via zero-fill leverage, but a ~+2 residual persists and the +2 incoherent
+dedispersion zero-fills the bottom half of the band (78 ms sweep), halving the lever arm. DM-phase then
+returns a single-bin delta spike at the seed DM (self-alignment artifact, flat_ratio 23–29 but zero
+independent info — circular). DM-phase cannot break the scattering degeneracy on sub-structure-less
+bursts. Recipe documented as a negative result.
+
+### P5 — coherent trial-DM likelihood envelope (expert-endorsed 2026-06-23, astronomy-astrophysics-expert)
+The S/N-max/arrival-regression/structure-max failures are intrinsic to faint scatter-broadened
+morphology. Right estimator: go back to the BASEBAND, `coherent_dedisp(bb, DM_k)` over a trial-DM grid
+(intra-channel correct, FULL band — coherent dedisp is a phase rotation, no zero-fill, restores the
+lever arm), and at each trial forward-fit a scattering-aware 2-D template with a SHARED arrival time
+(α fixed = 4; τ(ν)=τ_1ghz·(ν/1GHz)⁻⁴; per-channel amplitude marginalised in closed form). The χ²(DM)
+envelope is the DM likelihood: min → DM, Δχ²=1 (rescaled) half-width → honest σ that goes WIDE when the
+burst doesn't constrain — so the over-confidence pathology cannot recur.
+- **Independence/circularity:** DM enters only as the grid axis + flat prior; the data are NOT
+  conditioned on dm_dsa (each trial re-dedisperses baseband from scratch).
+- **Claim:** bright bursts → DM ± σ; faint bursts → EXCLUSION `|ΔDM| < X at 95%` (not a point estimate).
+  Pillar 2 reframed "independent measurement" → "independent consistency/exclusion test."
+- **Pre-registered criterion:** σ_CHIME = 68% half-width of the rescaled χ²(DM) envelope. Constrains iff
+  σ_CHIME ≤ 1 pc/cm³ AND single well-defined min passing GoF gates (χ²_red 0.8–1.5, Durbin–Watson on
+  2-D residuals, τ within ~OOM of NE2025). Else exclusion if 95% interval excludes |ΔDM|>X (X < the
+  ~5–10 pc/cm³ unrelated-source scale). Else "does not constrain" → Pillar 4.
+- **Selection legitimacy:** bright/faint split is the outcome-independent sub-band-survival threshold,
+  fixed before DM is seen → not DM-selection bias. Report Pillar-2 availability as a per-burst table
+  column; never drop a burst because its DM "looked wrong".
+
+Tools (off-repo audit artifacts, `/data/.../scripts/`): `dm_envelope.py` (coherent χ² envelope, FFT-shift
+fast path) + `extract_chime_dm_v4_envelope.py`; `extract_chime_dm_v4b_regression.py` (coherent-once
+arrival regression). Not shipped in-repo — the envelope's bootstrap σ proved finicky (per-sample χ²
+overcounts → absurdly tight; sub-band bootstrap with a frozen template → too wide), so v4/v4b served as
+CONFIRMATION, not the production estimator.
+
+### v4/v4b result (2026-06-24): faint bursts are GENUINE non-detections
+- **v4 coherent envelope (zach control):** DM point 261.3 (matches v2 261.5) — the coherent FFT-shift
+  machinery works; only the σ estimator was unreliable.
+- **v4b coherent arrival-regression, S/N-max SEED REMOVED:** zach (bright) → 261.55 ± 0.02, consistent
+  with v2. **phineas (the v2 +3.1 case) → "does not constrain" (2 sub-bands), NOT +3.1.** Removing the
+  incoherent S/N-max seed does not rescue the faint bursts — it correctly reports them as non-detections.
+- **Convergence (5 methods): structure-max (flat), S/N-max+regression (+3 bias), crop+DM-phase (spike),
+  coherent envelope, coherent regression — all agree faint scatter-broadened CHIME singlebeam bursts do
+  not carry enough information to pin DM.** The v2 "+2–3 biased" tier is therefore reclassified as
+  non-detections (the most defensible Pillar-2 form), not biased measurements.
+
+## LANDED (2026-06-24, PR feat/custom-dm-tool → main)
+Per-burst split, multi-method confirmed:
+- **5 constrain DM** (8 sub-bands @ S/N≥4, v2 arrival regression `chime_dm.measure_dm`): zach 261.51±0.03,
+  casey 491.17±0.001, freya 912.26±0.03, hamilton 518.84±0.03, chromatica 272.32±0.53 — all consistent
+  with DSA within the **1 pc/cm³ physical agreement floor** (`association.dm_agreement(dm_floor=1.0)`).
+- **7 do not** (whitney, oran, isha, wilhelm, phineas, johndoeII scatter-limited; mahi 2 sub-bands):
+  `dm_chime=null`, `dm_confidence=unconstrained` → lean on Pillar 4 (position).
+- `crossmatching/chime_side_inputs.json` un-nulled for the 5; `association_report.json` regenerated
+  (`dm_active=5/12`); `test_association.py` updated (floor + 5/12 active).
 
 ## Provenance
 Prior (retracted) numbers live in git (PR #29, commit cc64b7b) and off-repo at
