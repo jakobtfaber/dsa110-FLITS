@@ -1,13 +1,13 @@
 {
   "burst": "oran",
-  "chi2_reduced": 1.114588234933634,
-  "chi2_chime": 1.114588234933634,
-  "chi2_dsa": 1.0585731843999537,
-  "tau": 0.49717824655913273,
-  "alpha": 1.4387843929577984,
+  "chi2_reduced": 4.636927355594075,
+  "chi2_chime": 1.126466548479672,
+  "chi2_dsa": 4.636927355594075,
+  "tau": 5.236572985675853,
+  "alpha": 5.7444708802900015,
   "alpha_railed": false,
-  "quality_flag": "FAIL",
+  "quality_flag": "MARGINAL",
   "notes": [
-    "L1 alpha=1.439 outside (1.5,6.0)"
+    "L2 chi2_C=1.13(PASS) chi2_D=4.64(MARGINAL); L3 alpha=5.74 off Kolmogorov"
   ]
 }

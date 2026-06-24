@@ -2,16 +2,16 @@
 
 | burst | alpha | rail | tau | chi2_chime | chi2_dsa | l1 | l2 | l3 | tau_dnu | final | reason |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| chromatica | 5.999 | True | 0.025 | None | None | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 no PPC (chi2 unknown); L3 alpha=6.00 off Kolmogorov |
-| freya | 5.995 | True | 0.049 | None | None | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 no PPC (chi2 unknown); L3 alpha=6.00 off Kolmogorov |
-| hamilton | 5.990 | True | 0.005 | None | None | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 no PPC (chi2 unknown); L3 alpha=5.99 off Kolmogorov |
-| isha | 4.961 | False | 0.347 | None | None | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 no PPC (chi2 unknown); L3 alpha=4.96 off Kolmogorov |
-| johndoeII | 1.373 | False | 0.852 | 1.142 | 1.030 | FAIL | PASS | FAIL | N/A (no dnu_d) | FAIL | L1 alpha=1.373 outside (1.5,6.0) |
-| mahi | 5.530 | False | 0.095 | 1.052 | 1.080 | PASS | PASS | MARGINAL | N/A (no dnu_d) | MARGINAL | L3 alpha=5.53 off Kolmogorov |
-| oran | 1.439 | False | 0.497 | 1.115 | 1.059 | FAIL | PASS | FAIL | N/A (no dnu_d) | FAIL | L1 alpha=1.439 outside (1.5,6.0) |
-| phineas | 3.578 | False | 0.322 | 1.202 | 2.018 | PASS | MARGINAL | PASS | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.20(PASS) chi2_D=2.02(MARGINAL) |
-| whitney | 1.458 | False | 0.486 | 1.153 | 1.676 | FAIL | MARGINAL | FAIL | N/A (no dnu_d) | FAIL | L1 alpha=1.458 outside (1.5,6.0) |
-| wilhelm | 2.706 | False | 0.261 | 1.713 | 1.296 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.71(MARGINAL) chi2_D=1.30(PASS); L3 alpha=2.71 off Kolmogorov |
-| zach | 3.663 | False | 0.322 | None | None | PASS | MARGINAL | PASS | N/A (no dnu_d) | MARGINAL | L2 no PPC (chi2 unknown) |
+| chromatica | 3.285 | False | 0.196 | 1.136 | 1.156 | PASS | PASS | MARGINAL | N/A (no dnu_d) | MARGINAL | L3 alpha=3.28 off Kolmogorov |
+| freya | 4.356 | False | 0.119 | 1.299 | 1.033 | PASS | PASS | PASS | N/A (no dnu_d) | PASS | all levels pass |
+| hamilton | 1.504 | True | 0.079 | 3.674 | 1.222 | PASS | MARGINAL | FAIL | N/A (no dnu_d) | FAIL | L3 alpha=1.50 unphysical |
+| isha | 5.813 | False | 0.106 | 1.442 | 3.643 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.44(PASS) chi2_D=3.64(MARGINAL); L3 alpha=5.81 off Kolmogorov |
+| johndoeII | 1.503 | True | 0.727 | 1.213 | 1.402 | PASS | PASS | FAIL | N/A (no dnu_d) | FAIL | L3 alpha=1.50 unphysical |
+| mahi | 3.304 | False | 1.974 | 1.128 | 3.700 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.13(PASS) chi2_D=3.70(MARGINAL); L3 alpha=3.30 off Kolmogorov |
+| oran | 5.744 | False | 5.237 | 1.126 | 4.637 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.13(PASS) chi2_D=4.64(MARGINAL); L3 alpha=5.74 off Kolmogorov |
+| phineas | 4.079 | False | 0.407 | 1.110 | 2.186 | PASS | MARGINAL | PASS | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.11(PASS) chi2_D=2.19(MARGINAL) |
+| whitney | 1.514 | True | 0.491 | 1.144 | 1.414 | PASS | PASS | FAIL | N/A (no dnu_d) | FAIL | L3 alpha=1.51 unphysical |
+| wilhelm | 2.558 | False | 0.251 | 1.139 | 4.546 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.14(PASS) chi2_D=4.55(MARGINAL); L3 alpha=2.56 off Kolmogorov |
+| zach | 2.999 | False | 0.476 | 1.885 | 1.350 | PASS | MARGINAL | MARGINAL | N/A (no dnu_d) | MARGINAL | L2 chi2_C=1.88(MARGINAL) chi2_D=1.35(PASS); L3 alpha=3.00 off Kolmogorov |
 
-**11 fits**: 0 PASS / 8 MARGINAL / 3 FAIL.
+**11 fits**: 1 PASS / 7 MARGINAL / 3 FAIL.

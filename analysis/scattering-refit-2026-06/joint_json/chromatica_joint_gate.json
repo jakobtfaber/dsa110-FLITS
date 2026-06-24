@@ -1,13 +1,13 @@
 {
   "burst": "chromatica",
-  "chi2_reduced": null,
-  "chi2_chime": null,
-  "chi2_dsa": null,
-  "tau": 0.02494037761763325,
-  "alpha": 5.998641181041451,
-  "alpha_railed": true,
+  "chi2_reduced": 1.1563840268482357,
+  "chi2_chime": 1.1355793532912266,
+  "chi2_dsa": 1.1563840268482357,
+  "tau": 0.19572567007896322,
+  "alpha": 3.284821805761527,
+  "alpha_railed": false,
   "quality_flag": "MARGINAL",
   "notes": [
-    "L2 no PPC (chi2 unknown); L3 alpha=6.00 off Kolmogorov"
+    "L3 alpha=3.28 off Kolmogorov"
   ]
 }

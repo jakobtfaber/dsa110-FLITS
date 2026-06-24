@@ -10,29 +10,41 @@ bands, not a measurement.
 
   python joint_ppc.py <burst>
 """
-import json, os, sys
+
+import json
+import os
+import sys
+
 import numpy as np
 
 REPO = os.environ.get("FLITS_REPO", "/home/jfaber/flits/dsa110-FLITS")
 RUNS = os.environ.get("FLITS_RUNS", "/central/scratch/jfaber/flits-runs")
+SUF = os.environ.get("FLITS_FIT_SUFFIX", "")  # e.g. "_sharedzeta" to PPC the shared-zeta variant
 sys.path.insert(0, f"{REPO}/scattering")
-import yaml
 import matplotlib
+import yaml
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from scat_analysis.burstfit import FRBParams
 from scat_analysis.config_utils import load_telescope_block
 from scat_analysis.pipeline.io import BurstDataset
-from scat_analysis.burstfit import FRBParams
 
 
 def prepare(cfg_path, name, outdir):
     cfg = yaml.safe_load(open(cfg_path))
     tel = load_telescope_block(cfg["telcfg_path"], cfg["telescope"])
-    ds = BurstDataset(cfg["path"], outdir, name=name, telescope=tel,
-                      f_factor=int(cfg["f_factor"]), t_factor=int(cfg["t_factor"]),
-                      outer_trim=float(cfg.get("outer_trim", 0.15)),
-                      onpulse_crop=os.environ.get("FLITS_ONPULSE_CROP", "1") == "1",
-                      onpulse_pad_factor=float(os.environ.get("FLITS_ONPULSE_PAD", "0.5")))
+    ds = BurstDataset(
+        cfg["path"],
+        outdir,
+        name=name,
+        telescope=tel,
+        f_factor=int(cfg["f_factor"]),
+        t_factor=int(cfg["t_factor"]),
+        outer_trim=float(cfg.get("outer_trim", 0.15)),
+        onpulse_crop=os.environ.get("FLITS_ONPULSE_CROP", "1") == "1",
+        onpulse_pad_factor=float(os.environ.get("FLITS_ONPULSE_PAD", "0.5")),
+    )
     m = ds.model
     m.dm_init = float(cfg.get("dm_init", 0.0))
     return m
@@ -52,7 +64,9 @@ def band_chi2(model, p, gain=False):
         valid = np.asarray(valid)
         r = r[valid] if valid.ndim == 1 else r[valid]
     r = r[np.isfinite(r)]
-    chi2 = float(np.sum(r**2)); npix = int(r.size); dof = max(npix - 7, 1)
+    chi2 = float(np.sum(r**2))
+    npix = int(r.size)
+    dof = max(npix - 7, 1)
     return chi2 / dof, mod
 
 
@@ -64,38 +78,102 @@ def main():
     mC = prepare(cC, f"{b}_chime", out)
     mD = prepare(cD, f"{b}_dsa", out)
 
-    d = json.load(open(f"{out}/{b}_joint_fit.json"))
+    d = json.load(open(f"{out}/{b}_joint_fit{SUF}.json"))
     p = {k: v["median"] for k, v in d["percentiles"].items()}
     tau, al = p["tau_1ghz"], p["alpha"]
-    gain = bool(d.get("marginalize_gain", False))
-    if gain:
-        pC = FRBParams(c0=1.0, t0=p["t0_C"], gamma=0.0, zeta=p["zeta_C"],
-                       tau_1ghz=tau, alpha=al, delta_dm=p["delta_dm_C"])
-        pD = FRBParams(c0=1.0, t0=p["t0_D"], gamma=0.0, zeta=p["zeta_D"],
-                       tau_1ghz=tau, alpha=al, delta_dm=p["delta_dm_D"])
+    # gain-marginal fits (marginalize_gain OR shared_zeta) fix c0=1 and apply the
+    # profiled per-channel gain in band_chi2. shared_zeta replaces the two per-band
+    # widths with ONE law zeta(nu)=zeta_1ghz*nu^x_zeta, evaluated on each band's freq
+    # (run_joint_fit.py:87-90); zeta then broadcasts per-channel in _smearing_sigma.
+    gain = bool(d.get("marginalize_gain") or d.get("shared_zeta"))
+    if d.get("shared_zeta"):
+        zC = p["zeta_1ghz"] * np.asarray(mC.freq, float) ** p["x_zeta"]
+        zD = p["zeta_1ghz"] * np.asarray(mD.freq, float) ** p["x_zeta"]
+        pC = FRBParams(
+            c0=1.0,
+            t0=p["t0_C"],
+            gamma=0.0,
+            zeta=zC,
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_C"],
+        )
+        pD = FRBParams(
+            c0=1.0,
+            t0=p["t0_D"],
+            gamma=0.0,
+            zeta=zD,
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_D"],
+        )
+    elif d.get("marginalize_gain"):
+        pC = FRBParams(
+            c0=1.0,
+            t0=p["t0_C"],
+            gamma=0.0,
+            zeta=p["zeta_C"],
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_C"],
+        )
+        pD = FRBParams(
+            c0=1.0,
+            t0=p["t0_D"],
+            gamma=0.0,
+            zeta=p["zeta_D"],
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_D"],
+        )
     else:
-        pC = FRBParams(c0=p["c0_C"], t0=p["t0_C"], gamma=p["gamma_C"], zeta=p["zeta_C"],
-                       tau_1ghz=tau, alpha=al, delta_dm=p["delta_dm_C"])
-        pD = FRBParams(c0=p["c0_D"], t0=p["t0_D"], gamma=p["gamma_D"], zeta=p["zeta_D"],
-                       tau_1ghz=tau, alpha=al, delta_dm=p["delta_dm_D"])
+        pC = FRBParams(
+            c0=p["c0_C"],
+            t0=p["t0_C"],
+            gamma=p["gamma_C"],
+            zeta=p["zeta_C"],
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_C"],
+        )
+        pD = FRBParams(
+            c0=p["c0_D"],
+            t0=p["t0_D"],
+            gamma=p["gamma_D"],
+            zeta=p["zeta_D"],
+            tau_1ghz=tau,
+            alpha=al,
+            delta_dm=p["delta_dm_D"],
+        )
 
     chiC, modC = band_chi2(mC, pC, gain=gain)
     chiD, modD = band_chi2(mD, pD, gain=gain)
-    print(f"{b}: alpha={al:.2f} tau1={tau:.3f} | CHIME chi2/dof={chiC:.2f}  DSA chi2/dof={chiD:.2f}")
+    print(
+        f"{b}: alpha={al:.2f} tau1={tau:.3f} | CHIME chi2/dof={chiC:.2f}  DSA chi2/dof={chiD:.2f}"
+    )
 
     fig, ax = plt.subplots(1, 2, figsize=(11, 4))
-    for a, m, mod, nm, ch in [(ax[0], mC, modC, f"CHIME chi2={chiC:.2f}", chiC),
-                              (ax[1], mD, modD, f"DSA chi2={chiD:.2f}", chiD)]:
-        prof_d = np.nansum(m.data, axis=0); prof_m = np.nansum(mod, axis=0)
+    for a, m, mod, nm, ch in [
+        (ax[0], mC, modC, f"CHIME chi2={chiC:.2f}", chiC),
+        (ax[1], mD, modD, f"DSA chi2={chiD:.2f}", chiD),
+    ]:
+        prof_d = np.nansum(m.data, axis=0)
+        prof_m = np.nansum(mod, axis=0)
         a.plot(m.time, prof_d, "k", lw=0.8, label="data")
         a.plot(m.time, prof_m, "r", lw=1.2, label="joint model")
-        a.set_title(f"{b} {nm}"); a.set_xlabel("time (ms)"); a.legend(fontsize=8)
+        a.set_title(f"{b} {nm}")
+        a.set_xlabel("time (ms)")
+        a.legend(fontsize=8)
     fig.suptitle(f"{b}: joint alpha={al:.2f}, tau_1GHz={tau:.3f} ms")
     fig.tight_layout()
-    fp = f"{out}/{b}_joint_ppc.png"; fig.savefig(fp, dpi=110); print(f"  wrote {fp}")
-    json.dump({"burst": b, "alpha": al, "tau_1ghz": tau,
-               "chi2_chime": chiC, "chi2_dsa": chiD},
-              open(f"{out}/{b}_joint_ppc.json", "w"), indent=2)
+    fp = f"{out}/{b}_joint_ppc{SUF}.png"
+    fig.savefig(fp, dpi=110)
+    print(f"  wrote {fp}")
+    json.dump(
+        {"burst": b, "alpha": al, "tau_1ghz": tau, "chi2_chime": chiC, "chi2_dsa": chiD},
+        open(f"{out}/{b}_joint_ppc{SUF}.json", "w"),
+        indent=2,
+    )
 
 
 if __name__ == "__main__":

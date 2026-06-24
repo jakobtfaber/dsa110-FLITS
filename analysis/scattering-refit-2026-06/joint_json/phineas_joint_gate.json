@@ -1,13 +1,13 @@
 {
   "burst": "phineas",
-  "chi2_reduced": 2.0175022651508754,
-  "chi2_chime": 1.2015961809256968,
-  "chi2_dsa": 2.0175022651508754,
-  "tau": 0.3219678541983566,
-  "alpha": 3.578037689994229,
+  "chi2_reduced": 2.186041853724213,
+  "chi2_chime": 1.1103110232818119,
+  "chi2_dsa": 2.186041853724213,
+  "tau": 0.4071332959397744,
+  "alpha": 4.079101219746015,
   "alpha_railed": false,
   "quality_flag": "MARGINAL",
   "notes": [
-    "L2 chi2_C=1.20(PASS) chi2_D=2.02(MARGINAL)"
+    "L2 chi2_C=1.11(PASS) chi2_D=2.19(MARGINAL)"
   ]
 }

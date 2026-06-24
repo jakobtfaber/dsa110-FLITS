@@ -1,13 +1,13 @@
 {
   "burst": "isha",
-  "chi2_reduced": null,
-  "chi2_chime": null,
-  "chi2_dsa": null,
-  "tau": 0.3472058050693977,
-  "alpha": 4.960585117191904,
+  "chi2_reduced": 3.6426903542845905,
+  "chi2_chime": 1.4419091568689466,
+  "chi2_dsa": 3.6426903542845905,
+  "tau": 0.10610721842750248,
+  "alpha": 5.812708610273398,
   "alpha_railed": false,
   "quality_flag": "MARGINAL",
   "notes": [
-    "L2 no PPC (chi2 unknown); L3 alpha=4.96 off Kolmogorov"
+    "L2 chi2_C=1.44(PASS) chi2_D=3.64(MARGINAL); L3 alpha=5.81 off Kolmogorov"
   ]
 }

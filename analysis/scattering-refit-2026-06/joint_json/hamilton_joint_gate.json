@@ -1,13 +1,13 @@
 {
   "burst": "hamilton",
-  "chi2_reduced": null,
-  "chi2_chime": null,
-  "chi2_dsa": null,
-  "tau": 0.004969769902862857,
-  "alpha": 5.98985258576896,
+  "chi2_reduced": 3.6736914310913837,
+  "chi2_chime": 3.6736914310913837,
+  "chi2_dsa": 1.221822884323681,
+  "tau": 0.07899074727879248,
+  "alpha": 1.5043744216121044,
   "alpha_railed": true,
-  "quality_flag": "MARGINAL",
+  "quality_flag": "FAIL",
   "notes": [
-    "L2 no PPC (chi2 unknown); L3 alpha=5.99 off Kolmogorov"
+    "L3 alpha=1.50 unphysical"
   ]
 }

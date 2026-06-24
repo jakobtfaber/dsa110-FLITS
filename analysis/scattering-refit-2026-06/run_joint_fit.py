@@ -124,6 +124,17 @@ def main():
     # physically motivated, but the +4.0 evidence is wilhelm-only so far; revisit
     # when more bursts carry per-band PBF evidence. Pass --pbf-C exp to revert CHIME
     # to a single global exponential PBF.
+    ap.add_argument(
+        "--gain-s2",
+        dest="gain_s2",
+        type=float,
+        default=None,
+        help="fix the gain-prior variance s2 instead of ML-profiling it per fit. "
+        "Profiled s2 (default) gives a profile/empirical-Bayes Z; for a CLEAN "
+        "cross-N Bayes factor (component model selection) fix s2 to one value "
+        "across the whole ladder. Output is tagged _s2-<val> so it does not "
+        "overwrite the profiled run.",
+    )
     ap.add_argument("--pbf-C", dest="pbf_C", default="powerlaw", choices=["exp", "powerlaw"])
     ap.add_argument("--pbf-D", dest="pbf_D", default="exp", choices=["exp", "powerlaw"])
     ap.add_argument("--beta-C", dest="beta_C", type=float, default=11.0 / 3.0)
@@ -171,6 +182,7 @@ def main():
         components_C=a.components_C,
         components_D=a.components_D,
         force_multi=a.force_multi,
+        gain_s2=a.gain_s2,
     )
 
     pct = res["percentiles"]
@@ -194,6 +206,7 @@ def main():
         "alpha_bounds": list(res["alpha_bounds"]),
         "components_C": a.components_C,
         "components_D": a.components_D,
+        "gain_s2": a.gain_s2,
         "percentiles": {n: pct[n] for n in names},
         "ncall": res["ncall"],
     }
@@ -275,6 +288,8 @@ def main():
         tag = "_sharedzeta"  # keep the per-band baseline json/npz for comparison
     else:
         tag = ""
+    if a.gain_s2 is not None:  # fixed-s2 ladder: never clobber the profiled run
+        tag += f"_s2-{a.gain_s2:g}"
     out = f"{out_dir}/{a.burst}_joint_fit{tag}.json"
     json.dump(summary, open(out, "w"), indent=2)
 

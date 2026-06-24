@@ -1,13 +1,13 @@
 {
   "burst": "freya",
-  "chi2_reduced": null,
-  "chi2_chime": null,
-  "chi2_dsa": null,
-  "tau": 0.048651057808932516,
-  "alpha": 5.995226536147882,
-  "alpha_railed": true,
-  "quality_flag": "MARGINAL",
+  "chi2_reduced": 1.298946402501231,
+  "chi2_chime": 1.298946402501231,
+  "chi2_dsa": 1.0333237701505424,
+  "tau": 0.11859163289550145,
+  "alpha": 4.355938198370946,
+  "alpha_railed": false,
+  "quality_flag": "PASS",
   "notes": [
-    "L2 no PPC (chi2 unknown); L3 alpha=6.00 off Kolmogorov"
+    "all levels pass"
   ]
 }
