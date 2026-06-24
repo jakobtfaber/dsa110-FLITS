@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "6c58351e1a84",
+  "session_id": "019efa83-0f57-7de1-89af-c5ff79e3cbc9",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T19:26:14.571443Z",
+  "branch": "main",
+  "checkpoints_count": 15,
+  "files_touched": [],
+  "agent": "Codex",
+  "model": "gpt-5.5",
+  "turn_id": "ce981873f8e9",
+  "checkpoint_transcript_start": 1239,
+  "transcript_lines_at_start": 1239,
+  "session_metrics": {
+    "turn_count": 15
+  }
+}

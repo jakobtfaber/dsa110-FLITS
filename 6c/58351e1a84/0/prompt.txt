@@ -1,0 +1,87 @@
+Confirm submodule Faber2026 is present.
+
+---
+
+is it on remote?
+
+---
+
+Faber2026 should be a submodule pointed at the fork jakobtfaber/dsa110-FLITS where development occurs. It is the manuscript. Search memory for details (both claude and codex memory)
+
+---
+
+Fix mismatch and point pipeline submodule in Faber2026/.gitmodules at git@github.com:jakobtfaber/dsa110-FLITS.git
+
+---
+
+push
+
+---
+
+Good. I want you to now take a close look at the timing analysis for all the codetected sources in the chime/dsa sample.
+
+Specifically, do we have paper-ready figures that characterize the analysis, including TOA crossmatch, Chance-coincidence, CHIME↔DSA position separation, and DM agreement.
+
+---
+
+brainstorm the design with me
+
+---
+
+yes
+
+---
+
+go with C
+
+---
+
+for the position, showing the localization regions would be useful, as well as the primary beam pattern/shape
+
+---
+
+C1 is better
+
+---
+
+I think having a figure like Ski1 for each burst separately is the way to start.
+
+---
+
+I think having a figure like C1 for each burst separately is the way to start.
+
+---
+
+how do you plan to show the TOA alignment? stacked timeseries? something else?
+
+---
+
+yes
+
+---
+
+If the chance coincidence panel is just going to be a number, then don't include it, Put it in a table somewhere. And if there's a way to do it gracefully, maybe try and fold the DM alignment bit as a panel within a panel into the TOA alignment panel so that it's just a 1 by 2 figure.
+
+---
+
+The "TOA residual +2.4 ms inside timing budget" As its own panel is superfluous
+
+---
+
+Also, if you're able to plot the CHIME beam, that would be good.
+
+---
+
+looks better
+
+---
+
+continue
+
+---
+
+don't stop till we've generated all the figures and placed them in the manuscript. /compact
+
+---
+
+$handoff
