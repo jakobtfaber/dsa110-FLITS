@@ -512,3 +512,14 @@ keep going!
 <status>completed</status>
 <summary>Background command "Codex adjudicate redundant PR #53" completed (exit code 0)</summary>
 </task-notification>
+
+---
+
+last thing is the remaining open task:
+---
+  5 tasks (4 done, 1 open)
+  ✔ Preserve in-flight Fork-B work on a branch
+  ✔ Merge origin/main #8 + reconcile johndoeii naming
+  ✔ Reconcile stale scattering narrative
+  ◻ Energies sample reconciliation (decision pending)
+  ✔ Compile manuscript + push + PR
