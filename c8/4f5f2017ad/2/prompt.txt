@@ -1,0 +1,9 @@
+/ai-research-workflows:researching
+
+---
+
+/ai-research-workflows:researching identify work that appears to be incomplete
+
+---
+
+/ai-research-workflows:planning-implementations
