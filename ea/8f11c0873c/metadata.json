@@ -3,7 +3,7 @@
   "checkpoint_id": "ea8f11c0873c",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 11,
+  "checkpoints_count": 12,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py"
   ],
@@ -25,6 +25,12 @@
       "transcript": "/ea/8f11c0873c/2/full.jsonl",
       "content_hash": "/ea/8f11c0873c/2/content_hash.txt",
       "prompt": "/ea/8f11c0873c/2/prompt.txt"
+    },
+    {
+      "metadata": "/ea/8f11c0873c/3/metadata.json",
+      "transcript": "/ea/8f11c0873c/3/full.jsonl",
+      "content_hash": "/ea/8f11c0873c/3/content_hash.txt",
+      "prompt": "/ea/8f11c0873c/3/prompt.txt"
     }
   ],
   "token_usage": {
