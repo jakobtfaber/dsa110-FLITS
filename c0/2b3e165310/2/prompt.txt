@@ -425,3 +425,11 @@ Pick up all remaining campaign tasks (#1 NE2025 systematic, #2 sightline attribu
 ---
 
 Continue the FLITS campaign: review the implementation workflow results (#1 NE2025 second-model floor, #2 attribution wrapper), record verify-gates, run figure-reviewer on #2 figure, then run the authorized network search for #2 (wilhelm/hamilton/chromatica) and re-run attribute_excess, then do a /boris + /ponytail review pass. #5 (shared-zeta default) already done.
+
+---
+
+Commit the campaign and open a PR, and then oversee the successful review and merging domain.
+
+---
+
+Commit the campaign and open a PR, and then oversee the successful review and merging into main.
