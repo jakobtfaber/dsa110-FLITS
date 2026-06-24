@@ -95,3 +95,7 @@ yeah write it up --- But carefully, quickly justify or clarify what you mean by 
 ---
 
 For Hamilton, can we, instead of doing a joint fit, just fit each band individually still?
+
+---
+
+yes and yes
