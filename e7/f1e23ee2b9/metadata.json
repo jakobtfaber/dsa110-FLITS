@@ -3,7 +3,7 @@
   "checkpoint_id": "e7f1e23ee2b9",
   "strategy": "manual-commit",
   "branch": "chore/coverage-tooling",
-  "checkpoints_count": 5,
+  "checkpoints_count": 6,
   "files_touched": [
     "noxfile.py",
     "pyproject.toml"
@@ -26,6 +26,12 @@
       "transcript": "/e7/f1e23ee2b9/2/full.jsonl",
       "content_hash": "/e7/f1e23ee2b9/2/content_hash.txt",
       "prompt": "/e7/f1e23ee2b9/2/prompt.txt"
+    },
+    {
+      "metadata": "/e7/f1e23ee2b9/3/metadata.json",
+      "transcript": "/e7/f1e23ee2b9/3/full.jsonl",
+      "content_hash": "/e7/f1e23ee2b9/3/content_hash.txt",
+      "prompt": "/e7/f1e23ee2b9/3/prompt.txt"
     }
   ],
   "token_usage": {
