@@ -23,3 +23,11 @@ Take over from previous session's end-state:
   One watch-item: the background "carry forward" auto-committer is live and dumps onto the checked-out
   branch (feat/figure-vector). figures/vector-clean is not checked out, so it stays pristine — push from
   there.
+
+---
+
+Proceed on remaining tasks.
+
+---
+
+Proceed on remaining tasks (note: `hpcc` is currently accessible).
