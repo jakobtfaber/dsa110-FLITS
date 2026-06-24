@@ -156,3 +156,7 @@ hpcc still reachable yet
 ---
 
 /boris and /ask-matt --- is ther anything left to do here?
+
+---
+
+@"scientific-python-development:scientific-python-expert (agent)" help guide this dev to a stable state and this session to a close --- make decisions wisely and autonomously
