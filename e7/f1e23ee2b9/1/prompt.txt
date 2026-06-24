@@ -301,3 +301,7 @@ UNSTABLE? why?
 ---
 
 make sure they pass or fix the problems
+
+---
+
+Have Codex confirm it's safe to do so
