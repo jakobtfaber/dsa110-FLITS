@@ -40,3 +40,7 @@ Propose a solution to your caveat @"scientific-python-development:scientific-doc
 ---
 
 Propose a solution to your caveat @"scientific-python-development:scientific-python-expert (agent)"
+
+---
+
+/ai-research-workflows:handoff
