@@ -3,7 +3,7 @@
   "checkpoint_id": "e7f1e23ee2b9",
   "strategy": "manual-commit",
   "branch": "chore/coverage-tooling",
-  "checkpoints_count": 1,
+  "checkpoints_count": 4,
   "files_touched": [
     "noxfile.py",
     "pyproject.toml"
@@ -14,13 +14,19 @@
       "transcript": "/e7/f1e23ee2b9/0/full.jsonl",
       "content_hash": "/e7/f1e23ee2b9/0/content_hash.txt",
       "prompt": "/e7/f1e23ee2b9/0/prompt.txt"
+    },
+    {
+      "metadata": "/e7/f1e23ee2b9/1/metadata.json",
+      "transcript": "/e7/f1e23ee2b9/1/full.jsonl",
+      "content_hash": "/e7/f1e23ee2b9/1/content_hash.txt",
+      "prompt": "/e7/f1e23ee2b9/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 86441,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 860800,
-    "output_tokens": 11086,
-    "api_call_count": 15
+    "input_tokens": 343244,
+    "cache_creation_tokens": 5824365,
+    "cache_read_tokens": 189031657,
+    "output_tokens": 1168278,
+    "api_call_count": 911
   }
 }
