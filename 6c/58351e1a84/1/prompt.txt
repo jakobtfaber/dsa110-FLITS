@@ -163,3 +163,11 @@ are the figures svg's if so maybe try replacing with pdfs
 ---
 
 and the pdf twin is being called in the .tex files?
+
+---
+
+Do we have figures for the foreground galaxy / galaxy cluster analysis in the manuscript on Github as well?
+
+---
+
+For the Purpose Association cards, can we regenerate them but without sub-figure titles and just leave the descriptive part on that front to the figure captions?
