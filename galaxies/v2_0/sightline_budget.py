@@ -942,10 +942,11 @@ def main():
     print(f"Wrote {md_path}")
 
     fig = make_budget_figure(df)
-    png_path = os.path.join(results_dir, "sightline_dm_scattering_budget.png")
-    fig.savefig(png_path, dpi=300, bbox_inches="tight")
+    for ext in ("svg", "pdf", "png"):
+        p = os.path.join(results_dir, f"sightline_dm_scattering_budget.{ext}")
+        fig.savefig(p, dpi=300, bbox_inches="tight")
+        print(f"Wrote {p}")
     plt.close(fig)
-    print(f"Wrote {png_path}")
 
 
 if __name__ == "__main__":

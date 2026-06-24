@@ -63,7 +63,7 @@ either a hard pin or a wide tail that reaches the bound.
 | mahi | 3.80 | 3.17 +1.47/−1.18 | **−0.63** | wide → floor | done |
 | oran | 2.69 | 2.662 ± 0.16 | −0.028 | no | done |
 | wilhelm | 2.56 | 2.558 ± ~0.04 | −0.002 | no | done |
-| zach | 2.41 | 4.59 ± 0.04 | **+2.18** | no (un-railed) | done (job 64538745, COMPLETED 01:44) — **PBF-confounded; see note** |
+| zach | 2.41 | **3.32 (single-comp)** | — | no | C2D3 **rejected** by fixed-s2 grid (sign-flip); single-comp all-exp α=3.319±0.013 is the value. C2D3 profiled 4.59 not citable. See note |
 | casey | 2.40 | 2.396 ± ~0.04 | −0.004 | no | done |
 | johndoeII | 1.58 | 1.573 (≈floor) | −0.007 | railed (floor) | done |
 | hamilton | 1.50 | 1.504 (≈floor) | +0.004 | railed (floor) | done |
@@ -102,10 +102,15 @@ not across the column.)
   single-component mixed value (3.32) — the claimed bias direction does not survive.
   **Settled (job 64539614):** the single-component all-exp α = **3.319** ≈ the
   single-component mixed 3.32, so under one physical PBF modeling components *raises*
-  α (3.319 → 4.59), the reverse of the mixed-PBF artifact (3.32 → 2.41). **Still
-  required before any publication claim:** run the fixed-s2 grid to confirm C2D3 is
-  still favored under all-exp (the component count rested on profiled-only lnZ).
-  Treat zach like mahi/whitney — needs re-prep,
+  α (3.319 → 4.59), the reverse of the mixed-PBF artifact (3.32 → 2.41).
+  **RESOLVED — rescue fails (fixed-s2 grid, jobs 64542330–64542345, 2026-06-24):**
+  the third DSA component is **not** real. ΔlnZ(C2D3 − C2D2) sign-flips across the
+  gain-prior scale — **+1443.4 / −758.7 / −0.4 at s²=1/10/100** — and the C2D3 α is
+  itself s²-unstable (2.40 / 2.77 / 2.76 fixed vs 4.59 profiled), the textbook
+  signature of a prior-driven component. **zach falls back to the single-component
+  all-exp value α = 3.319 ± 0.013**; it is not a multi-component measurement and the
+  4.59 must not be cited. (Contrast whitney, whose 2nd DSA component gave ΔlnZ
+  +2706/+2683/+2671 — flat, no flip — and is real.) Treat zach like mahi —
   not a value swap. Result JSON on `hpcc:/central/scratch/jfaber/flits-runs/data/joint/zach_joint_fit_C2D3_pbf-exp-exp.json` (pull to repo).
 - **phineas (C3D3) COMPLETED** (job 64538743): all-exp α = **3.426 ± 0.05**
   (un-railed) vs mixed 3.33 — Δα +0.096, **PBF-robust**. Joins the trustworthy
