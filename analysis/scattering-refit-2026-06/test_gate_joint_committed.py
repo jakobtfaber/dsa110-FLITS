@@ -4,20 +4,43 @@ Level-2 (reused classify_fit_quality), Level-3 alpha-physics, worst-of-band."""
 from gate_joint_committed import gate_one
 
 
-def _fit(alpha, tau=0.3, bounds=(1.0, 6.0)):
+def _fit(alpha, tau=0.3, bounds=(1.0, 6.0), err=None):
+    a = {"median": alpha}
+    if err is not None:
+        a["err_minus"] = a["err_plus"] = err
     return {
-        "alpha": {"median": alpha},
+        "alpha": a,
         "tau_1ghz": {"median": tau},
         "alpha_bounds": list(bounds),
     }
 
 
-def test_alpha_below_floor_fails_level1_but_not_prior_railed():
-    # whitney/oran/johndoeii case: converged to an unphysical alpha (<1.5) with
-    # good chi2, but 0.4 above the 1.0 prior floor -> L1 FAIL, rail=False.
-    v = gate_one("x", _fit(1.4), {"chi2_chime": 1.0, "chi2_dsa": 1.0})
-    assert v["final"] == "FAIL" and "alpha" in v["reason"].lower()
+def test_alpha_subkolmogorov_is_marginal_not_fail():
+    # ADR-0004: 1.0 <= alpha < 2.0 is sub-Kolmogorov -> L3 MARGINAL (inspect), not L1 FAIL.
+    # alpha=1.4 with tight err sits 0.4 (>> 3*0.05 sigma) above the 1.0 floor -> not railed.
+    v = gate_one("x", _fit(1.4, err=0.05), {"chi2_chime": 1.0, "chi2_dsa": 1.0})
+    assert v["final"] == "MARGINAL"
+    assert "sub-kolmogorov" in v["reason"].lower()
     assert v["rail"] is False
+
+
+def test_alpha_below_hard_floor_fails_level1():
+    # ADR-0004: alpha < 1.0 is achromatic (tau prop nu^-a meaningless) -> hard L1 FAIL.
+    v = gate_one("x", _fit(0.9, err=0.05), {"chi2_chime": 1.0, "chi2_dsa": 1.0})
+    assert v["final"] == "FAIL" and "alpha" in v["reason"].lower()
+
+
+def test_alpha_at_floor_is_admitted_not_l1_fail():
+    # alpha == 1.0 is admitted (L1 PASS), but sits on the prior bound -> rail-MARGINAL, never FAIL.
+    v = gate_one("x", _fit(1.0, err=0.05), {"chi2_chime": 1.0, "chi2_dsa": 1.0})
+    assert v["l1"] == "PASS" and v["final"] == "MARGINAL"
+
+
+def test_wide_posterior_within_3sigma_of_bound_is_rail_marginal():
+    # ADR-0004: oran case -- median 1.44 with a wide err (0.33) is within 3 sigma of the 1.0
+    # floor -> rail-MARGINAL regardless of value (unconstrained, not a measurement).
+    v = gate_one("x", _fit(1.44, err=0.33), {"chi2_chime": 1.0, "chi2_dsa": 1.0})
+    assert v["rail"] is True and v["final"] == "MARGINAL"
 
 
 def test_alpha_at_ceiling_fails_level1():

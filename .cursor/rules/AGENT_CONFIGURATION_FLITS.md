@@ -94,8 +94,8 @@ if not result.success:
 
 **For α (frequency scaling):**
 
-- ❌ Invalid: α ≤ 1.5 or α ≥ 6.0 (outside physical models)
-- ✅ Valid: 1.5 < α < 6.0
+- ❌ Invalid: α < 1.0 or α ≥ 6.0 (α < 1.0 is achromatic — τ ∝ ν^−α loses meaning; ADR-0004)
+- ✅ Valid: 1.0 ≤ α < 6.0 (1.0 ≤ α < 2.0 admitted as **sub-Kolmogorov MARGINAL** — inspect; ADR-0004)
 
 ```python
 tau = result.x[0]
@@ -246,9 +246,10 @@ else:
 ```python
 alpha = result.x[0]
 
-if alpha < 2.0 or alpha > 6.0:
+if alpha < 1.0 or alpha >= 6.0:  # ADR-0004: hard FAIL only below 1.0 (achromatic)
     print(f"❌ α = {alpha} out of plausible range")
     # Quality flag = FAIL
+# 1.0 <= alpha < 2.0: sub-Kolmogorov -> MARGINAL (inspect), not FAIL
 
 elif 3.5 <= alpha <= 4.5:
     print(f"✓ α = {alpha:.2f} consistent with Kolmogorov")
@@ -304,7 +305,7 @@ Conclusion: High-quality fit suitable for publication.
 - ⚠️ R² in range 0.70 - 0.85
 - ⚠️ Some parameters loosely constrained (rel_err 0.5-1.0)
 - ⚠️ Residuals slightly non-normal or weakly autocorrelated
-- ⚠️ α deviates from 4.0 but stays in 2.0 - 6.0 range
+- ⚠️ α deviates from 4.0 but stays in 1.0 - 6.0 range (1.0 ≤ α < 2.0 = sub-Kolmogorov; ADR-0004)
 
 **Action:** Use with caution. Flag as "marginal quality" if published.
 

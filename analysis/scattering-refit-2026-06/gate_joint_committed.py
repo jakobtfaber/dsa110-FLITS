@@ -23,9 +23,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))  # repo root
 from scattering.scat_analysis.burstfit import classify_fit_quality  # noqa: E402
 
-ALPHA_MIN, ALPHA_MAX = 1.5, 6.0  # Level-1 physical gate (strict)
+ALPHA_MIN, ALPHA_MAX = (
+    1.0,
+    6.0,
+)  # L1 hard gate: alpha<1.0 achromatic (tau prop nu^-a meaningless); ADR-0004
+ALPHA_SUBKOLM = 2.0  # 1.0<=alpha<2.0 = sub-Kolmogorov: L3 MARGINAL (inspect), not L1 FAIL; ADR-0004
 TAU_MIN, TAU_MAX = 1e-4, 100.0  # ms
-RAIL_EDGE = 0.1  # alpha within this of a prior bound => prior-railed (unconstrained)
+RAIL_EDGE = 0.1  # alpha within this (absolute) of a prior bound => prior-railed (unconstrained)
+RAIL_SIGMA = 3.0  # OR median within this many sigma of a prior bound => rail-MARGINAL regardless of value; ADR-0004
 KOLM_LO, KOLM_HI = 3.5, 4.5  # Level-3 PASS-consistent alpha window (Kolmogorov ref 4.0)
 _RANK = {"FAIL": 2, "MARGINAL": 1, "PASS": 0}
 
@@ -39,12 +44,22 @@ def gate_one(burst, fit, ppc):
     alpha = fit["alpha"]["median"]
     tau = fit["tau_1ghz"]["median"]
     lo, hi = fit["alpha_bounds"]
-    rail = min(alpha - lo, hi - alpha) < RAIL_EDGE
+    sig_lo = fit["alpha"].get("err_minus") or 0.0
+    sig_hi = fit["alpha"].get("err_plus") or 0.0
+    # railed if pinned in absolute terms OR the median sits within RAIL_SIGMA*sigma of either
+    # prior bound -- a wide posterior reaching a bound is unconstrained, not a measurement (ADR-0004)
+    rail = (
+        min(alpha - lo, hi - alpha) < RAIL_EDGE
+        or (alpha - lo) <= RAIL_SIGMA * sig_lo
+        or (hi - alpha) <= RAIL_SIGMA * sig_hi
+    )
 
     # Level 1 -- physical bounds (any failure => FAIL, regardless of chi2)
     l1_fail = []
-    if not (ALPHA_MIN < alpha < ALPHA_MAX):
-        l1_fail.append(f"alpha={alpha:.3f} outside ({ALPHA_MIN},{ALPHA_MAX})")
+    # ADR-0004: hard FAIL only below ALPHA_MIN (achromatic) or at/above the ceiling;
+    # 1.0 <= alpha < 2.0 is admitted (sub-Kolmogorov) and handled as L3 MARGINAL below.
+    if alpha < ALPHA_MIN or alpha >= ALPHA_MAX:
+        l1_fail.append(f"alpha={alpha:.3f} outside [{ALPHA_MIN},{ALPHA_MAX})")
     if not (TAU_MIN < tau < TAU_MAX):
         l1_fail.append(f"tau={tau:.4g}ms outside ({TAU_MIN},{TAU_MAX})")
     l1 = "FAIL" if l1_fail else "PASS"
@@ -88,7 +103,8 @@ def gate_one(burst, fit, ppc):
         if l2 == "MARGINAL":
             bits.append("L2 " + l2_note)
         if l3 == "MARGINAL":
-            bits.append(f"L3 alpha={alpha:.2f} off Kolmogorov")
+            tag = "sub-Kolmogorov (inspect)" if alpha < ALPHA_SUBKOLM else "off Kolmogorov"
+            bits.append(f"L3 alpha={alpha:.2f} {tag}")
         if not bits:  # passed every evaluable level; MARGINAL only because of the cap
             bits.append("L3 tau x dnu not evaluable (no dnu_d) -> capped at MARGINAL")
         reason = "; ".join(bits)
@@ -109,12 +125,35 @@ def gate_one(burst, fit, ppc):
     }
 
 
+def _is_allexp(fit):
+    """ADR-0003 PBF family: legacy mixed-PBF fits predate pbf_C/pbf_D and omit them."""
+    return fit.get("pbf_C") == "exp" and fit.get("pbf_D") == "exp"
+
+
 def main():
+    import os
+
     jdir = Path(__file__).resolve().parent / "joint_json"
+    fits = {fp: json.loads(fp.read_text()) for fp in sorted(jdir.glob("*_joint_fit.json"))}
+    # ADR-0003 fail-closed: the committed joint_json fits are mixed-PBF, whose alpha are superseded.
+    # Regenerating citable verdicts from them would leak a superseded sub-Kolmogorov alpha (e.g. oran,
+    # whitney) into the energy/citable path -- calculate_burst_energies reads these *_joint_gate.json
+    # quality flags and drops only FAIL. Refuse to overwrite the committed verdicts from mixed input
+    # unless the caller explicitly opts into a clearly NON-CITABLE interim run.
+    mixed = [fp.name for fp, fit in fits.items() if not _is_allexp(fit)]
+    if mixed and os.environ.get("FLITS_GATE_ALLOW_MIXED") != "1":
+        print(
+            f"!! {len(mixed)}/{len(fits)} joint_json fit(s) are mixed-PBF (pbf_C/pbf_D != 'exp'); their"
+            "\n   alpha are superseded (ADR-0003). Refusing to overwrite the committed citable verdicts"
+            "\n   from mixed input. Re-grade from the canonical all-exp fits (pending the canonical-fit-"
+            "\n   set decision), or set FLITS_GATE_ALLOW_MIXED=1 to write NON-CITABLE interim verdicts.",
+            file=sys.stderr,
+        )
+        return 1
+    provenance = "mixed-PBF-interim (NON-CITABLE)" if mixed else "all-exp"
     rows = []
-    for fp in sorted(jdir.glob("*_joint_fit.json")):
+    for fp, fit in fits.items():
         burst = fp.name.replace("_joint_fit.json", "")
-        fit = json.loads(fp.read_text())
         ppc_fp = jdir / f"{burst}_joint_ppc.json"
         ppc = json.loads(ppc_fp.read_text()) if ppc_fp.exists() else None
         v = gate_one(burst, fit, ppc)
@@ -126,6 +165,7 @@ def main():
             json.dumps(
                 {
                     "burst": burst,
+                    "pbf_provenance": provenance,
                     "chi2_reduced": worst_chi2,
                     "chi2_chime": v["chi2_chime"],
                     "chi2_dsa": v["chi2_dsa"],
@@ -161,6 +201,8 @@ def main():
     md = [
         "# Joint-fit quality verdicts (committed " + jdir.name + ")",
         "",
+        f"**PBF provenance: {provenance}.** alpha floor = {ALPHA_MIN} (ADR-0004; 1.0<=a<2.0 = sub-Kolmogorov MARGINAL).",
+        "",
         "| " + " | ".join(cols) + " |",
         "|" + "---|" * len(cols),
     ]
@@ -180,4 +222,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
