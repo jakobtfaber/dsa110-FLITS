@@ -3,7 +3,7 @@
   "checkpoint_id": "b83ed1fe9c08",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 19,
+  "checkpoints_count": 20,
   "files_touched": [
     "docs/entire-tracing-checkpoints.md"
   ],
@@ -37,6 +37,12 @@
       "transcript": "/b8/3ed1fe9c08/4/full.jsonl",
       "content_hash": "/b8/3ed1fe9c08/4/content_hash.txt",
       "prompt": "/b8/3ed1fe9c08/4/prompt.txt"
+    },
+    {
+      "metadata": "/b8/3ed1fe9c08/5/metadata.json",
+      "transcript": "/b8/3ed1fe9c08/5/full.jsonl",
+      "content_hash": "/b8/3ed1fe9c08/5/content_hash.txt",
+      "prompt": "/b8/3ed1fe9c08/5/prompt.txt"
     }
   ],
   "token_usage": {
