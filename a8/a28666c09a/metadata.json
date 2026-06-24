@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "a8a28666c09a",
+  "strategy": "manual-commit",
+  "branch": "pr/acf-revalidation",
+  "checkpoints_count": 15,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/a8/a28666c09a/0/metadata.json",
+      "transcript": "/a8/a28666c09a/0/full.jsonl",
+      "content_hash": "/a8/a28666c09a/0/content_hash.txt",
+      "prompt": "/a8/a28666c09a/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 1000898,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 12156672,
+    "output_tokens": 54001,
+    "api_call_count": 120
+  }
+}
