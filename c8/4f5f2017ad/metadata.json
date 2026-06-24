@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "c84f5f2017ad",
+  "strategy": "manual-commit",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/JOINT_FIT_STATE.md",
+    "docs/architecture/inventory.md",
+    "docs/codetection-science-plan.md",
+    "docs/rse/specs/plan-manuscript-completion.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/c8/4f5f2017ad/0/metadata.json",
+      "transcript": "/c8/4f5f2017ad/0/full.jsonl",
+      "content_hash": "/c8/4f5f2017ad/0/content_hash.txt",
+      "prompt": "/c8/4f5f2017ad/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 102562,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 948352,
+    "output_tokens": 10344,
+    "api_call_count": 15
+  }
+}
