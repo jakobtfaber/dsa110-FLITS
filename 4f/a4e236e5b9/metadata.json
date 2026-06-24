@@ -3,7 +3,7 @@
   "checkpoint_id": "4fa4e236e5b9",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 8,
+  "checkpoints_count": 13,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "analysis/burst_energies/burst_energies.json",
@@ -51,13 +51,19 @@
       "transcript": "/4f/a4e236e5b9/2/full.jsonl",
       "content_hash": "/4f/a4e236e5b9/2/content_hash.txt",
       "prompt": "/4f/a4e236e5b9/2/prompt.txt"
+    },
+    {
+      "metadata": "/4f/a4e236e5b9/3/metadata.json",
+      "transcript": "/4f/a4e236e5b9/3/full.jsonl",
+      "content_hash": "/4f/a4e236e5b9/3/content_hash.txt",
+      "prompt": "/4f/a4e236e5b9/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 321814,
-    "cache_creation_tokens": 7506918,
-    "cache_read_tokens": 259062904,
-    "output_tokens": 1671314,
-    "api_call_count": 1167
+    "input_tokens": 325529,
+    "cache_creation_tokens": 7569473,
+    "cache_read_tokens": 270876825,
+    "output_tokens": 1716732,
+    "api_call_count": 1208
   }
 }
