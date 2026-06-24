@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "f1f62f22454a",
+  "strategy": "manual-commit",
+  "branch": "feat/figure-sync",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "results/figures.manifest.json",
+    "results/figures.review.json",
+    "tools/sync_figures.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/f1/f62f22454a/0/metadata.json",
+      "transcript": "/f1/f62f22454a/0/full.jsonl",
+      "content_hash": "/f1/f62f22454a/0/content_hash.txt",
+      "prompt": "/f1/f62f22454a/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 47215,
+    "cache_creation_tokens": 278298,
+    "cache_read_tokens": 23090598,
+    "output_tokens": 138633,
+    "api_call_count": 146
+  }
+}
