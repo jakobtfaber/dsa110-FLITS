@@ -3,7 +3,7 @@
   "checkpoint_id": "6632c83f0f9c",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 11,
+  "checkpoints_count": 18,
   "files_touched": [
     "docs/rse/specs/decision-map-manuscript-completion.md"
   ],
@@ -25,13 +25,19 @@
       "transcript": "/66/32c83f0f9c/2/full.jsonl",
       "content_hash": "/66/32c83f0f9c/2/content_hash.txt",
       "prompt": "/66/32c83f0f9c/2/prompt.txt"
+    },
+    {
+      "metadata": "/66/32c83f0f9c/3/metadata.json",
+      "transcript": "/66/32c83f0f9c/3/full.jsonl",
+      "content_hash": "/66/32c83f0f9c/3/content_hash.txt",
+      "prompt": "/66/32c83f0f9c/3/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 194150,
-    "cache_creation_tokens": 2576765,
-    "cache_read_tokens": 77811347,
-    "output_tokens": 665663,
-    "api_call_count": 406
+    "input_tokens": 615682,
+    "cache_creation_tokens": 10030494,
+    "cache_read_tokens": 327695935,
+    "output_tokens": 2332799,
+    "api_call_count": 1585
   }
 }
