@@ -1,0 +1,64 @@
+Confirm (or push back on) a COMMIT plan for the FLITS repo. Read-only audit; do not edit
+files. Repo cwd is the FLITS root, branch feat/figure-vector.
+
+CONTEXT: A verified unit of work is ready to commit. Two specialist agents (RSE + research-docs)
+already advised; their consensus plan is below. A CONCURRENT agent is actively committing/
+rewriting history on feat/figure-vector in this same shared checkout (it rewrote HEAD last turn
+and owns .agents/deferred-tasks.md + the docs/manuscript-decisions worktree). I will NOT push
+(one-way door, left to the user).
+
+THE WORK (all verified this session, verify-gate recorded):
+- ADR-0003 fail-closed PBF guard: _s2verdict.py (rewritten, fail-closed to all-exp PBF family,
+  refuses the legacy mixed-PBF grid, parse-bug fixed), _ladder.py (added pbf column),
+  test_s2verdict.py (new, 4/4 pass) — all untracked in analysis/scattering-refit-2026-06/joint_ladder/.
+- Pulled the canonical zach all-exp fixed-s2 grid from HPCC: 6 JSONs
+  zach_joint_fit_C2D{2,3}_s2-{1,10,100}_pbf-exp-exp.json. With them present, _s2verdict.py now
+  adjudicates zach: Δ(C2D3 vs C2D2) = +1443.4/-758.7/-0.4 -> NOT robust -> C2D3 REJECTED ->
+  zach single-component alpha=3.319 (mixed-PBF alpha=2.41 was a PBF-family artifact). Matches
+  ALLEXP_PBF_RUN.md exactly.
+- 4 doc files corrected in place (confirmed-stale stub refs): docs/codetection-science-plan.md,
+  docs/rse/specs/plan-manuscript-completion.md (Δν row, line 71 region), JOINT_FIT_STATE.md:60,
+  docs/architecture/inventory.md.
+
+CONSENSUS PLAN (please confirm or amend):
+1. BRANCH: pathspec-scoped commit on feat/figure-vector (do NOT switch the shared checkout's
+   branch; do NOT create a worktree). Record each commit SHA to scratchpad so a concurrent
+   history-rewrite that orphans it is recoverable via reflog/cherry-pick. Do NOT push.
+2. COMMIT 1 (fix): the 3 guard code files + the 6 all-exp JSONs (the guard's canonical inputs),
+   one atomic unit. The ledger explicitly says commit the guard "in the scattering-refit lane,
+   not in a docs commit."
+3. COMMIT 2 (docs): the 4 doc files.
+4. EXCLUDE: the ~110 other untracked joint_ladder campaign files (incl. the 48 legacy mixed
+   *_s2-*.json, _figs.py, model_2d.py, model_overlay.py, figs_ladder/, overlays/), scratch/,
+   logs/, .claude/+.agents/skills, crossmatching/results SVGs, galaxies/v2_0/sightline_budget.py,
+   docs/entire-tracing-checkpoints.md, analysis/burst_energies/figures.review.json, and
+   .agents/deferred-tasks.md (concurrent agent's lane). Use explicit pathspecs only — no add -A/.
+   Run `git add -n` dry-run first to confirm exactly the intended paths.
+
+CONTESTED POINT TO ADJUDICATE:
+The research-docs agent says: also correct, in COMMIT 2, the line at
+docs/rse/specs/plan-manuscript-completion.md:71 —
+  "| Profile-bias α case study | 1 | zach (3.32→2.41) | demonstrator; ... |"
+to point to whitney and mark zach withdrawn, because it now contradicts COMMITTED ADR-0003.
+My deferred-tasks ledger had tagged the "zach 3.32→2.41" reconciliation as @decision (gated on
+the citable-α roster lock, #4). The agent argues the DEMONSTRATOR claim is NOT gated — it's
+already decided by ADR-0003 — whereas only the roster COUNTS (11/12 joint, α-trusted 3/12)
+remain gated.
+
+ADR-0003 (docs/adr/0003-single-exponential-pbf.md, Status: accepted, committed) says verbatim:
+  "The marquee profile-bias demonstrator moves off zach onto whitney (FRB 20220310F): zach's
+   multiplicity correction reverses sign with the PBF (mixed 3.32→2.41 vs all-exp 3.319→4.59),
+   so it is unreliable as a clean demonstrator and is withheld ... whitney's second DSA component
+   is confirmed real (ΔlnZ +2706/+2683/+2671 across s²=1/10/100, no sign-flip), so its α 1.5→5.12
+   unrailing is real physics, not a prior artifact."
+
+QUESTION for you, with file:line evidence:
+A. Is the consensus 2-commit plan correct and safe given the concurrent agent? Any change?
+B. Should the zach->whitney demonstrator line at plan-manuscript-completion.md:71 be corrected
+   NOW (in COMMIT 2) or left as @decision? Verify by reading ADR-0003 and that line. Distinguish
+   the demonstrator CLAIM (decided by ADR-0003?) from the roster COUNTS (gated on #4). If correct
+   now, propose exact wording consistent with ADR-0003.
+C. Anything in the EXCLUDE list that should actually be IN, or vice versa? Any safety gap?
+
+Output: CONFIRM / CONFIRM-WITH-CHANGES / REJECT, then concise bullets with file:line evidence.
+Do not write files.
