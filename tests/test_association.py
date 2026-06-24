@@ -164,10 +164,11 @@ def test_report_activates_pillars_2_and_4_from_chime_inputs(tmp_path):
     assert report["inputs"]["chime_localization_radius_deg"] == 0.1
 
 
-def test_report_pillar2_active_5_of_12_with_floor():
-    # Post-audit (.agents/audit-chime-side-dm.md): the arrival-regression on coherent-dedispersed data
-    # independently constrains CHIME DM for the 5 bright (8-sub-band) bursts; the 7 faint bursts are
-    # scatter-limited non-detections (DM nulled, confirmed across 5 methods). Pillar 4 stays 12/12.
+def test_report_pillar2_active_8_of_12_with_floor():
+    # Post-audit (.agents/audit-chime-side-dm.md): arrival-regression on coherent-dedispersed data at a
+    # uniform downsampled binning (TDS=32/N_SB=6) independently constrains CHIME DM for 8/12 bursts
+    # (downsampling rescued isha/wilhelm/phineas from the v2 +2-3 scattering bias). The other 4 are
+    # genuine non-detections (<3 sub-bands @ S/N>=4). Pillar 4 stays 12/12.
     chime = ROOT / "crossmatching/chime_side_inputs.json"
     if not chime.exists():
         import pytest
@@ -177,18 +178,18 @@ def test_report_pillar2_active_5_of_12_with_floor():
         ROOT / "crossmatching/notebook_reproduction_fixture.json", chime_inputs_path=chime
     )
     by = {b["name"]: b for b in report["bursts"]}
-    constrained = {"zach", "casey", "freya", "hamilton", "chromatica"}
-    # Pillar 2 active for the 5 constrained bursts: all consistent with DSA via the physical floor
+    constrained = {"zach", "casey", "freya", "hamilton", "chromatica", "isha", "wilhelm", "phineas"}
+    # Pillar 2 active for the 8 constrained bursts: all consistent with DSA via the physical floor
     for n in constrained:
         da = by[n]["dm_agreement"]
         assert da["consistent"] is True
         assert da["sigma"] >= 1.0  # 1 pc/cm^3 physical floor applied
         assert by[n]["dm_confidence"] == "constrained"
-    # the other 7 are honest non-detections: nulled, no fabricated value
+    # the other 4 are honest non-detections: nulled, no fabricated value
     for b in report["bursts"]:
         if b["name"] not in constrained:
             assert b["dm_agreement"]["consistent"] is None
             assert b["dm_confidence"] == "unconstrained"
-    assert sum(b["dm_agreement"]["consistent"] is True for b in report["bursts"]) == 5
+    assert sum(b["dm_agreement"]["consistent"] is True for b in report["bursts"]) == 8
     # Pillar 4 intact: all 12 CHIME positions still consistent with DSA
     assert all(b["position"]["consistent"] is True for b in report["bursts"])

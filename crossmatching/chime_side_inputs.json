@@ -6,13 +6,12 @@
     "chime_ra_deg": 310.180660386969,
     "chime_dec_deg": 72.89757639206155,
     "n_chan_ok": 863,
-    "n_good_subbands": 8,
-    "peak_snr": 32.0,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": 261.51,
-    "dm_chime_err": 0.033,
+    "n_good_subbands": 4,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 261.524,
+    "dm_chime_err": 0.0198,
     "dm_confidence": "constrained",
-    "dm_status": "independent CHIME DM (8 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor"
+    "dm_status": "independent CHIME DM (4 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "whitney",
@@ -21,13 +20,12 @@
     "chime_ra_deg": 134.7056140153573,
     "chime_dec_deg": 73.47993338958621,
     "n_chan_ok": 846,
-    "n_good_subbands": 3,
-    "peak_snr": 21.6,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
+    "n_good_subbands": 0,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
     "dm_chime": null,
     "dm_chime_err": null,
     "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "dm_status": "does not constrain DM: only 0 sub-bands above S/N 4 at the coarsest binning that the bright control still resolves; scatter/S-N-limited. Lean on Pillar 4 (position)."
   },
   {
     "name": "oran",
@@ -36,13 +34,12 @@
     "chime_ra_deg": 318.0295924851387,
     "chime_dec_deg": 72.79704164044884,
     "n_chan_ok": 842,
-    "n_good_subbands": 3,
-    "peak_snr": 24.3,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
+    "n_good_subbands": 1,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
     "dm_chime": null,
     "dm_chime_err": null,
     "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "dm_status": "does not constrain DM: only 1 sub-bands above S/N 4 at the coarsest binning that the bright control still resolves; scatter/S-N-limited. Lean on Pillar 4 (position)."
   },
   {
     "name": "isha",
@@ -52,12 +49,11 @@
     "chime_dec_deg": 70.29282929131966,
     "n_chan_ok": 812,
     "n_good_subbands": 4,
-    "peak_snr": 29.1,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": null,
-    "dm_chime_err": null,
-    "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 411.215,
+    "dm_chime_err": 0.1106,
+    "dm_confidence": "constrained",
+    "dm_status": "independent CHIME DM (4 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "wilhelm",
@@ -67,12 +63,11 @@
     "chime_dec_deg": 72.03009969194143,
     "n_chan_ok": 804,
     "n_good_subbands": 3,
-    "peak_snr": 26.8,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": null,
-    "dm_chime_err": null,
-    "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 601.902,
+    "dm_chime_err": 0.0132,
+    "dm_confidence": "constrained",
+    "dm_status": "independent CHIME DM (3 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "phineas",
@@ -81,13 +76,12 @@
     "chime_ra_deg": 177.76248454166281,
     "chime_dec_deg": 71.69519908517144,
     "n_chan_ok": 877,
-    "n_good_subbands": 5,
-    "peak_snr": 26.7,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": null,
-    "dm_chime_err": null,
-    "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "n_good_subbands": 4,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 609.821,
+    "dm_chime_err": 0.0308,
+    "dm_confidence": "constrained",
+    "dm_status": "independent CHIME DM (4 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "freya",
@@ -96,13 +90,12 @@
     "chime_ra_deg": 88.23227735274303,
     "chime_dec_deg": 74.1868518179743,
     "n_chan_ok": 877,
-    "n_good_subbands": 8,
-    "peak_snr": 70.8,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": 912.26,
-    "dm_chime_err": 0.03,
+    "n_good_subbands": 6,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 912.277,
+    "dm_chime_err": 0.0062,
     "dm_confidence": "constrained",
-    "dm_status": "independent CHIME DM (8 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor"
+    "dm_status": "independent CHIME DM (6 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "johndoeII",
@@ -111,13 +104,12 @@
     "chime_ra_deg": 336.03313529306723,
     "chime_dec_deg": 73.02700482495855,
     "n_chan_ok": 749,
-    "n_good_subbands": 3,
-    "peak_snr": 28.4,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
+    "n_good_subbands": 2,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
     "dm_chime": null,
     "dm_chime_err": null,
     "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: scatter-limited (S/N-max DM biased high, 3-5 sub-bands); coherent re-analysis (v3 DM-phase / v4 envelope / v4b regression) confirms non-detection, not a +2-3 measurement. Lean on Pillar 4"
+    "dm_status": "does not constrain DM: only 2 sub-bands above S/N 4 at the coarsest binning that the bright control still resolves; scatter/S-N-limited. Lean on Pillar 4 (position)."
   },
   {
     "name": "hamilton",
@@ -126,13 +118,12 @@
     "chime_ra_deg": 305.0772309652514,
     "chime_dec_deg": 70.79496771375449,
     "n_chan_ok": 791,
-    "n_good_subbands": 8,
-    "peak_snr": 28.9,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": 518.84,
-    "dm_chime_err": 0.031,
+    "n_good_subbands": 6,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 518.834,
+    "dm_chime_err": 0.0055,
     "dm_confidence": "constrained",
-    "dm_status": "independent CHIME DM (8 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor"
+    "dm_status": "independent CHIME DM (6 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "mahi",
@@ -141,13 +132,12 @@
     "chime_ra_deg": 39.75252796326108,
     "chime_dec_deg": 70.98040209736489,
     "n_chan_ok": 755,
-    "n_good_subbands": 2,
-    "peak_snr": 20.7,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
+    "n_good_subbands": 0,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
     "dm_chime": null,
     "dm_chime_err": null,
     "dm_confidence": "unconstrained",
-    "dm_status": "does not constrain DM: only 2 sub-bands above S/N 4 (lean on Pillar 4)"
+    "dm_status": "does not constrain DM: only 0 sub-bands above S/N 4 at the coarsest binning that the bright control still resolves; scatter/S-N-limited. Lean on Pillar 4 (position)."
   },
   {
     "name": "chromatica",
@@ -156,13 +146,12 @@
     "chime_ra_deg": 312.66468758114655,
     "chime_dec_deg": 73.8938506438336,
     "n_chan_ok": 756,
-    "n_good_subbands": 8,
-    "peak_snr": 36.1,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": 272.32,
-    "dm_chime_err": 0.534,
+    "n_good_subbands": 6,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 272.384,
+    "dm_chime_err": 0.0201,
     "dm_confidence": "constrained",
-    "dm_status": "independent CHIME DM (8 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor"
+    "dm_status": "independent CHIME DM (6 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   },
   {
     "name": "casey",
@@ -171,12 +160,11 @@
     "chime_ra_deg": 170.01464904333514,
     "chime_dec_deg": 70.67580439534554,
     "n_chan_ok": 770,
-    "n_good_subbands": 8,
-    "peak_snr": 262.9,
-    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM); chime_dm.measure_dm",
-    "dm_chime": 491.17,
-    "dm_chime_err": 0.001,
+    "n_good_subbands": 4,
+    "method": "arrival-time regression (scatter-deconvolved EMG sub-band t0 vs nu^-2; coherent_dedisp at DSA DM; uniform TDS=32/N_SB=6); downsampling rescues faint bursts. See .agents/audit-chime-side-dm.md",
+    "dm_chime": 491.168,
+    "dm_chime_err": 0.0005,
     "dm_confidence": "constrained",
-    "dm_status": "independent CHIME DM (8 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor"
+    "dm_status": "independent CHIME DM (4 sub-bands @ S/N>=4); consistent with DSA within the 1 pc/cm^3 agreement floor. Statistical sigma is a lower bound for the 3-4 sub-band fits."
   }
 ]

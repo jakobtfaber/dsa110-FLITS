@@ -154,15 +154,27 @@ CONFIRMATION, not the production estimator.
   not carry enough information to pin DM.** The v2 "+2–3 biased" tier is therefore reclassified as
   non-detections (the most defensible Pillar-2 form), not biased measurements.
 
-## LANDED (2026-06-24, PR feat/custom-dm-tool → main)
-Per-burst split, multi-method confirmed:
-- **5 constrain DM** (8 sub-bands @ S/N≥4, v2 arrival regression `chime_dm.measure_dm`): zach 261.51±0.03,
-  casey 491.17±0.001, freya 912.26±0.03, hamilton 518.84±0.03, chromatica 272.32±0.53 — all consistent
-  with DSA within the **1 pc/cm³ physical agreement floor** (`association.dm_agreement(dm_floor=1.0)`).
-- **7 do not** (whitney, oran, isha, wilhelm, phineas, johndoeII scatter-limited; mahi 2 sub-bands):
-  `dm_chime=null`, `dm_confidence=unconstrained` → lean on Pillar 4 (position).
-- `crossmatching/chime_side_inputs.json` un-nulled for the 5; `association_report.json` regenerated
-  (`dm_active=5/12`); `test_association.py` updated (floor + 5/12 active).
+### Downsampling sweep (2026-06-24) — upgrades 5/12 → 8/12
+The faint bursts' non-detections were partly a BINNING artifact: at fine binning (N_SB=8/16) too few
+sub-bands clear S/N≥4. A sweep over (TDS, N_SB) found a sweet spot **TDS=32, N_SB=6** (coarsest binning
+the bright control still resolves; TDS=64 over-smooths and loses sub-bands). At this uniform config the
+arrival regression on coherent-once data RESCUES three of the scatter-biased bursts into de-biased
+constraints near DSA: **isha −0.35, wilhelm −0.44, phineas −0.45** (vs their v2 +3.46/+2.18/+3.10). All
+three land in the same small-negative cluster as the bright bursts (zach −0.84 … hamilton +0.04) — the
+consistency across independent bursts is signal, confirming the v2 "+2–3" was the S/N-max-seed bias.
+The config is pre-registered (chosen by sub-band yield + control, NOT by DM agreement), applied uniformly
+to all 12 → not selection bias. Authoritative run: `scripts/extract_final_parallel.py` (parallel
+dedisp-once), `results/chime_dm_final.json`, figure-reviewed `diagnostics/chime_dm_final/`.
+
+## LANDED (2026-06-24, PR #41 feat/custom-dm-tool → main)
+Per-burst split (uniform TDS=32/N_SB=6 arrival regression on coherent-once data), figure-reviewed:
+- **8 constrain DM**, all consistent with DSA within the **1 pc/cm³ floor** (`dm_agreement(dm_floor=1.0)`):
+  zach 261.52±0.02, casey 491.17±0.001, freya 912.28±0.006, hamilton 518.83±0.006, chromatica 272.38±0.02,
+  isha 411.22±0.11, wilhelm 601.90±0.01, phineas 609.82±0.03. (Statistical σ is a lower bound for the
+  3–4 sub-band fits; the floor governs the agreement test.)
+- **4 do not** (whitney, oran, johndoeII <3 sub-bands; mahi 0): `dm_confidence=unconstrained` → Pillar 4.
+- `chime_side_inputs.json` un-nulled for the 8; `association_report.json` regenerated (`dm_active=8/12`);
+  `test_association.py` updated (floor + 8/12 active).
 
 ## Provenance
 Prior (retracted) numbers live in git (PR #29, commit cc64b7b) and off-repo at
