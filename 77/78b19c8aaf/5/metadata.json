@@ -1,0 +1,139 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "7778b19c8aaf",
+  "session_id": "fd6e62fe-81a0-4203-b863-f5b990ccbc15",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T14:38:16.721044Z",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 6,
+  "save_step_count": 6,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "4fc07539537d",
+  "checkpoint_transcript_start": 3610,
+  "transcript_lines_at_start": 3610,
+  "token_usage": {
+    "input_tokens": 6441,
+    "cache_creation_tokens": 361504,
+    "cache_read_tokens": 6036427,
+    "output_tokens": 25493,
+    "api_call_count": 21
+  },
+  "skill_events_version": 1,
+  "skill_events": [
+    {
+      "id": "prompt-skill-claude-code-boris-2026-06-24T14:24:24.520486Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "boris"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "cb9c8d73f556",
+      "timestamp": "2026-06-24T14:24:24.520486Z",
+      "native": {
+        "command": "/boris"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/boris",
+        "default_collapsed": true
+      }
+    },
+    {
+      "id": "prompt-skill-claude-code-ask-matt-2026-06-24T14:25:28.427561Z",
+      "event_type": "prompt_invocation",
+      "skill": {
+        "name": "ask-matt"
+      },
+      "source": {
+        "agent": "claude-code",
+        "signal": "prompt_slash_command",
+        "confidence": "explicit"
+      },
+      "turn_id": "ef582928088f",
+      "timestamp": "2026-06-24T14:25:28.427561Z",
+      "native": {
+        "command": "/ask-matt"
+      },
+      "collapse": {
+        "target": "user_message",
+        "label": "/ask-matt",
+        "default_collapsed": true
+      }
+    }
+  ],
+  "session_metrics": {
+    "turn_count": 7
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35808,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35808,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35808,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35976,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 35976,
+      "agent_lines_removed": 3,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
