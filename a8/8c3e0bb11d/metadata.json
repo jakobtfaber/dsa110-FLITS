@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "a88c3e0bb11d",
+  "strategy": "manual-commit",
+  "branch": "docs/manuscript-scope",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/joint_ladder/ALLEXP_PBF_RUN.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/a8/8c3e0bb11d/0/metadata.json",
+      "transcript": "/a8/8c3e0bb11d/0/full.jsonl",
+      "content_hash": "/a8/8c3e0bb11d/0/content_hash.txt",
+      "prompt": "/a8/8c3e0bb11d/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 309195,
+    "cache_creation_tokens": 6170240,
+    "cache_read_tokens": 204551588,
+    "output_tokens": 1274760,
+    "api_call_count": 961
+  }
+}
