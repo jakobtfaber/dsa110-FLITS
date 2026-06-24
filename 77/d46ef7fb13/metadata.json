@@ -1,0 +1,30 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "77d46ef7fb13",
+  "strategy": "manual-commit",
+  "branch": "feat/figure-vector",
+  "checkpoints_count": 2,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "CONTEXT.md",
+    "docs/adr/0002-canonical-burst-naming.md",
+    "docs/adr/0003-single-exponential-pbf.md",
+    "docs/adr/0004-l1-sub-kolmogorov-alpha-floor.md",
+    "docs/rse/specs/decision-map-manuscript-completion.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/77/d46ef7fb13/0/metadata.json",
+      "transcript": "/77/d46ef7fb13/0/full.jsonl",
+      "content_hash": "/77/d46ef7fb13/0/content_hash.txt",
+      "prompt": "/77/d46ef7fb13/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 12619,
+    "cache_creation_tokens": 106966,
+    "cache_read_tokens": 1355823,
+    "output_tokens": 30444,
+    "api_call_count": 15
+  }
+}
