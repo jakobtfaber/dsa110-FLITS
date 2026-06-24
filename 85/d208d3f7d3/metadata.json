@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "85d208d3f7d3",
+  "strategy": "manual-commit",
+  "branch": "feat/burst-energies-regen",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".agents/deferred-tasks.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/85/d208d3f7d3/0/metadata.json",
+      "transcript": "/85/d208d3f7d3/0/full.jsonl",
+      "content_hash": "/85/d208d3f7d3/0/content_hash.txt",
+      "prompt": "/85/d208d3f7d3/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 86441,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 860800,
+    "output_tokens": 11086,
+    "api_call_count": 15
+  }
+}
