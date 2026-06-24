@@ -1,0 +1,255 @@
+Pick up from previous session:
+---
+⏺ Done — faster delivered:
+
+  - 6 high rungs now at 32 cores (nproc=32 confirmed in headers, not just allocated) — ~4× the pool → roughly halved walltime. Wired
+  run_joint.sbatch so pool tracks the allocation (8-core backup kept).
+  - whitney resolved → single-component. Fixed-s2 grid flipped sign with the prior scale (−5.3 / +1.7 / −4.6), centered ~0 → the
+
+  - 6 high rungs now at 32 cores (nproc=32 confirmed in headers, not just allocated) — ~4× the pool → roughly halved walltime. Wired
+  run_joint.sbatch so pool tracks the allocation (8-core backup kept).
+  - whitney resolved → single-component. Fixed-s2 grid flipped sign with the prior scale (−5.3 / +1.7 / −4.6), centered ~0 → the
+  visually-marked 2nd component isn't statistically real. Profile-Z's +1.5 was the artifact. Also functionally proved --gain-s2 works.
+  rigorous way.
+
+  18 jobs running/queued; fresh poller will report the full ladder + fixed-s2 verdicts on drain (~30–60 min). Net component picture firming
+  up: whitney drops to single (visual overturned by evidence), isha/oran gain a component (evidence over visual) — the disagreements all
+  resolve toward the Bayes factor.
+
+✻ Cooked for 4m 35s · 2 shells still running
+
+⏺ Background command "Background-poll the 6 high-rung resubmissions" completed (exit code 0)
+
+⏺ That notification is the old poll (by1mjab8a) firing — it was watching the now-cancelled 8-core jobs, so its result is stale (those job
+  IDs no longer exist). The live poller is bx1sstu3x. Ignoring the stale one; quick live check that the 32-core jobs are progressing:
+
+---
+
+hamilton/whitney/johndoeII fail completely? or just for multi-component?
+
+---
+
+have Codex take a look
+
+---
+
+<task-notification>
+<task-id>b1zqetxes</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/b1zqetxes.output</output-file>
+<status>completed</status>
+<summary>Background command "Run Codex audit in background" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Launch fixed-s2 grids for oran/isha/mahi/zach on the cluster
+
+---
+
+how are the 30 jobs going?
+
+---
+
+Show me figures
+
+---
+
+I want to see the actual modeled bursts v the data
+
+---
+
+what about the 2D models?
+
+---
+
+How does the game marginal reconstruction work? Is it just a weighting per channel that's imposed after the fit?
+
+---
+
+also for bursts like whitney here, where the DSA data is surrounded by massive amounts of noise, cropping it would make the fit so much better, and would also make the two components distinguishable: [Image #3]
+
+---
+
+also, the CHIME data for whitney is weirdly downsampled, more than is needed
+
+---
+
+yes, but stick to single-burst runs for right now - start with whitney right now and let's get that right
+
+---
+
+yes, but stick to single-burst runs for right now - start with whitney right now and let's get that right. then open the figure for me so I can inspect it
+
+---
+
+and?
+
+---
+
+Would it go faster if we ran it locally?
+
+---
+
+uyes
+
+---
+
+yes pip install and run whiteny here
+
+---
+
+<task-notification>
+<task-id>baljw1w8x</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/baljw1w8x.output</output-file>
+<status>completed</status>
+<summary>Background command "Run whitney_fine C2D1 fit locally" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+why not maintain 1024 CHIME channels? is there there a harm?
+
+---
+
+did the 64 chan run finish?
+
+---
+
+<task-notification>
+<task-id>byk3jq9g4</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/byk3jq9g4.output</output-file>
+<status>completed</status>
+<summary>Background command "Run whitney_fine C2D2 fit locally" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+so whitney is consistent with Kolmogorov?
+
+---
+
+<task-notification>
+<task-id>bulfseqph</task-id>
+<tool-use-id>toolu_0124KDU6ffqS6du9acxeUoVQ</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bulfseqph.output</output-file>
+<status>failed</status>
+<summary>Background command "Poll for whitney_fine fit completion" failed with exit code 1</summary>
+</task-notification>
+
+---
+
+are we still fitting an exp-modified Gaussian or is this for a power-law PBF?
+
+---
+
+but we can't have different PBFs between CHIME and DSA for the same burst --- it's the same burst!
+
+---
+
+we should absolutely be tracking the PBF used so we don't have to repeat!
+
+---
+
+<task-notification>
+<task-id>bs7879m7h</task-id>
+<tool-use-id>toolu_01J6LTv41rD95WpCVFLtr5zp</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bs7879m7h.output</output-file>
+<status>completed</status>
+<summary>Background command "Run consistent-PBF whitney C2D2 (all-exp then all-powerlaw)" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+yes apply the PBF tracking mirror over SSH
+
+does PBF only rail when it's power-law?
+
+---
+
+<task-notification>
+<task-id>bn34w3nl5</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bn34w3nl5.output</output-file>
+<status>completed</status>
+<summary>Background command "Rerun all-exp + make figure in background" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+Resume
+
+---
+
+Go on the all-exp ladder as a workflow
+run formal component-reality check for whitney
+
+---
+
+<task-notification>
+<task-id>bpn4o26p9</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bpn4o26p9.output</output-file>
+<status>completed</status>
+<summary>Background command "Launch whitney fixed-s2 grid (C2D1/C2D2 x s2 1/10/100, all-exp) locally" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+can you fill in the manuscript while this is running
+
+---
+
+<task-notification>
+<task-id>wvsl4luh0</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/wvsl4luh0.output</output-file>
+<status>completed</status>
+<summary>Dynamic workflow "Rerun the CHIME-DSA joint scattering ladder under physical all-exponential PBF on the cluster, then verify each burst alpha-shift vs the mixed-PBF default" completed</summary>
+<result>{"table":"Acronyms:\nPBF — Pulse-Broadening Function\nlogz — log Bayesian evidence (ln Z)\n\n## All-exp PBF ladder delta\n\n| burst | α_mixed | α_exp (all-exp) | Δα (shift) | railed? | logz | verdict |\n|---|---|---|---|---|---|---|\n| isha | 5.39 | 5.481 | +0.091 | yes | 31947.8 | Railed at upper bound 6.0 (err_plus 0.416); both fits unphysically high — NOT trustworthy. |\n| whitney | 5.21 | 5.12 | −0.09 | no | — | All-exp barely moved α; well inside bounds — mixed α trustworthy. |\n| freya | 4.36 | 4.356 | −0.004 | no | −10166.7 | α essentially unchanged, well inside [1.5,6.0] — trustworthy. |\n| chromatica | 3.28 | 3.286 | +0.006 | no | −8526.1 | α essentially unchanged, well inside bounds — trustworthy. |\n| oran | 2.69 | 2.662 | −0.028 | no | 25050.5 | α barely moved, far from bounds — trustworthy. |\n| wilhelm | 2.56 | 2.558 | −0.002 | no | −1921.9 | α essentially unchanged, within bounds — trustworthy. |\n| casey | 2.40 | 2.396 | −0.004 | no | −55500.7 | α essentially unchanged, well inside bounds — trustworthy. |\n| mahi | 3.80 | 3.166 | −0.634 | yes | 28047.8 | All-exp drops α 0.634 and rails the 1.5 floor (err_minus 1.18) — NOT trustworthy, needs re-prep. |\n| johndoeII | 1.58 | 1.573 | −0.007 | yes | 6157.5 | α pinned at the 1.5 lower bound — NOT trustworthy, needs re-prep/model re-check. |\n| hamilton | 1.50 | 1.504 | +0.004 | yes | −11705.4 | α pinned at the 1.5 lower bound, unconstrained — NOT trustworthy. |\n| phineas | 3.33 | — | — | missing | — | All-exp fit missing — no comparison possible; cannot confirm or refute mixed α. |\n| zach | 2.41 | — | — | missing | — | All-exp fit (tag C2D3) not found on hpcc — must be re-run before comparison. |\n\n### Summary\n\nUnder the physical (all-exp) PBF, only **one** burst shifts |Δα| &gt; 0.5: **mahi** (−0.634, and it rails the floor). Every other burst with a completed all-exp fit moves by ≤0.09 in α, so the mixed-PBF ladder is stable to the PBF choice for the un-railed bursts (freya, chromatica, oran, wilhelm, casey, whitney). **Four** bursts rail a prior bound under all-exp — **isha** (upper 6.0), **mahi**, **johndoeII**, **hamilton** (all lower 1.5) — so their α is unphysical/unconstrained in either parametrization. Blunt verdict: the mixed-PBF ladder α values are trustworthy as published **only for the six un-railed bursts**; the four railed bursts (isha, mahi, johndoeII, hamilton) need re-prep/model re-check rather than swapping in all-exp values, and the two missing fits (phineas, zach) must be re-run before any publication claim. The all-exp values do not need to become canonical — they confirm the un-railed alphas rather than overturn them — but the six follow-up bursts (isha, mahi, johndoeII, hamilton, phineas, zach) block publishing the ladder as-is.","results":[{"burst":"freya","status":"ok","alpha_exp":4.356,"alpha_mixed":4.36,"shift":-0.004,"railed":false,"logz":-10166.7,"verdict":"All-exp leaves alpha essentially unchanged (shift -0.004, alpha_exp=4.356 vs mixed 4.36), not railed (well inside [1.5,6.0]); the mixed-PBF alpha for freya is trustworthy.","needs_followup":false},{"burst":"casey","status":"ok","alpha_exp":2.396,"alpha_mixed":2.4,"shift":-0.004,"railed":false,"logz":-55500.7,"verdict":"All-exp barely moved alpha (shift -0.004, essentially unchanged from mixed 2.4); not railed (2.396 well inside [1.5,6.0]); the mixed-PBF alpha for casey is trustworthy.","needs_followup":false},{"burst":"chromatica","status":"ok","alpha_exp":3.286,"alpha_mixed":3.28,"shift":0.006,"railed":false,"logz":-8526.1,"verdict":"All-exp barely moved alpha (+0.006 upward, 3.28 -&gt; 3.286), not railed and well inside [1.5, 6.0]; the mixed-PBF alpha for chromatica is trustworthy.","needs_followup":false},{"burst":"wilhelm","status":"ok","alpha_exp":2.558,"alpha_mixed":2.56,"shift":-0.002,"railed":false,"logz":-1921.9,"verdict":"All-exp left alpha essentially unchanged (shift -0.002, alpha_exp=2.558 vs mixed 2.56); not railed within bounds [1.5,6.0], so the mixed-PBF alpha for wilhelm is robust/trustworthy.","needs_followup":false},{"burst":"hamilton","status":"railed","alpha_exp":1.504,"alpha_mixed":1.5,"shift":0.004,"railed":true,"logz":-11705.4,"verdict":"All-exp left alpha essentially unchanged (+0.004, no real shift) but it sits pinned at the lower prior bound (1.504 vs bound 1.5, err -0.003/+0.007 -&gt; railed); alpha is unphysical/unconstrained, so the mixed-PBF alpha for hamilton is NOT trustworthy.","needs_followup":true},{"burst":"mahi","status":"railed","alpha_exp":3.166,"alpha_mixed":3.8,"shift":-0.634,"railed":true,"logz":28047.8,"verdict":"All-exp shifts alpha down by 0.634 (3.8 to 3.166) and the fit rails against the 1.5 lower bound (err_minus 1.18 reaches into the prior floor), so the mixed-PBF alpha=3.8 for mahi is NOT trustworthy and needs re-prep/model re-check like whitney.","needs_followup":true},{"status":"missing","burst":"phineas","alpha_exp":null,"alpha_mixed":3.33,"shift":null,"railed":null,"logz":null,"verdict":"All-exp fit for phineas is missing (script returned status=missing, no alpha_exp/logz), so no comparison to the mixed-PBF default (alpha=3.33) can be made and the mixed alpha cannot be confirmed or refuted from this run.","needs_followup":true},{"status":"ok","alpha_exp":2.662,"alpha_mixed":2.69,"shift":-0.028,"railed":false,"logz":25050.5,"burst":"oran","verdict":"All-exp barely moved alpha (-0.028, slightly lower) vs the mixed default 2.69; not railed (alpha 2.662 +/- ~0.16, far from bounds [1.5, 6.0]), so the mixed-PBF alpha for oran is trustworthy.","needs_followup":false},{"burst":"isha","status":"railed","alpha_exp":5.481,"alpha_mixed":5.39,"shift":0.091,"railed":true,"logz":31947.8,"verdict":"All-exp barely moved alpha (+0.091, slightly up: 5.39-&gt;5.481), but alpha_exp=5.481 is railed against the upper bound 6.0 (err_plus=0.416), so the mixed-PBF alpha for isha is NOT trustworthy — both fits sit unphysically high near the ceiling.","needs_followup":true},{"burst":"zach","status":"missing","alpha_exp":null,"alpha_mixed":2.41,"shift":null,"railed":null,"logz":null,"verdict":"All-exp fit for zach (tag C2D3) not found on hpcc (status=missing); no alpha_exp produced, so no shift vs the mixed default (2.41) can be computed and trustworthiness of the mixed-PBF alpha cannot be assessed from this run. The fit needs to be (re-)run before comparison.","needs_followup":true},{"burst":"johndoeII","status":"railed","alpha_exp":1.573,"alpha_mixed":1.58,"shift":-0.007,"railed":true,"logz":6157.5,"verdict":"All-exp barely moved alpha (shift -0.007, essentially unchanged from mixed 1.58), but alpha=1.573 is railed against the 1.5 lower prior bound (lower 1-sigma edge ~1.524) — pinned at the floor, so the mixed-PBF alpha for johndoeII is NOT trustworthy and needs re-prep/model re-check.","needs_followup":true}],"drained":true}</result>
+<usage><agent_count>17</agent_count><subagent_tokens>914639</subagent_tokens><tool_uses>27</tool_uses><duration_ms>1955939</duration_ms></usage>
+</task-notification>
+
+---
+
+eis the all-exp pbf campaign on hpcc running?
+
+---
+
+write up a summary on this specifically --- the all-exp pbf hpcc run
+
+---
+
+<task-notification>
+<task-id>bqyjvqea6</task-id>
+<tool-use-id>toolu_013k1RUxovMCUtFo2ue2jL4e</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-jakobfaber-Developer-repos-github-com-jakobtfaber-dsa110-FLITS/fd6e62fe-81a0-4203-b863-f5b990ccbc15/tasks/bqyjvqea6.output</output-file>
+<status>completed</status>
+<summary>Background command "Poll for phineas/zach drain, then report their all-exp results" completed (exit code 0)</summary>
+</task-notification>
+
+---
+
+fold these findings into the manuscript
+
+---
+
+Is the Zach rescue settled?
+
+---
+
+submit
+
+---
+
+Ready to continue writing and adding figures?
+
+---
+
+commit & push
+
+---
+
+regenerate pre-existing png's, then commit & push
