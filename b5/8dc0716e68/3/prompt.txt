@@ -142,3 +142,7 @@ so whitney is consistent with Kolmogorov?
 ---
 
 are we still fitting an exp-modified Gaussian or is this for a power-law PBF?
+
+---
+
+but we can't have different PBFs between CHIME and DSA for the same burst --- it's the same burst!
