@@ -3,7 +3,7 @@
   "checkpoint_id": "a50158cfad4d",
   "strategy": "manual-commit",
   "branch": "feat/scint-pipeline-wiring",
-  "checkpoints_count": 9,
+  "checkpoints_count": 11,
   "files_touched": [
     "scintillation/scint_analysis/analysis.py",
     "scintillation/scint_analysis/pipeline.py",
@@ -51,13 +51,19 @@
       "transcript": "/a5/0158cfad4d/6/full.jsonl",
       "content_hash": "/a5/0158cfad4d/6/content_hash.txt",
       "prompt": "/a5/0158cfad4d/6/prompt.txt"
+    },
+    {
+      "metadata": "/a5/0158cfad4d/7/metadata.json",
+      "transcript": "/a5/0158cfad4d/7/full.jsonl",
+      "content_hash": "/a5/0158cfad4d/7/content_hash.txt",
+      "prompt": "/a5/0158cfad4d/7/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 245529,
-    "cache_creation_tokens": 689343,
-    "cache_read_tokens": 34808344,
-    "output_tokens": 275272,
-    "api_call_count": 187
+    "input_tokens": 249832,
+    "cache_creation_tokens": 976012,
+    "cache_read_tokens": 36547634,
+    "output_tokens": 305919,
+    "api_call_count": 195
   }
 }
