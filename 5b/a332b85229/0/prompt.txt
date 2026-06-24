@@ -1,0 +1,323 @@
+You are reviewing a single-commit feature branch in a FLITS (FRB scattering/scintillation) repo.
+
+CONTEXT: PRs #54 (pipeline wiring) and #55 (ACF revalidation: compare_lorentzian_components) are now MERGED to origin/main. This branch feat/scint-multicomponent-select is rebased to a CLEAN single commit on top of current origin/main. Its full diff is below.
+
+The change wires revalidation.compare_lorentzian_components (BIC ΔBIC>6 AND nested F-test, p<0.05) into scintillation/scint_analysis/analysis.py::analyze_scintillation_from_acfs so the pipeline auto-selects the statistically-justified Lorentzian component count per sub-band, aggregates by plurality, and when >1 extracts each component (ordered by ascending Δν) into the existing per-component power-law path. Replaces a dead 2c/3c-in-name heuristic. Gated on a Lorentzian-family best model; gauss/power/lor_gen stay single-component.
+
+The full committed diff:
+---8<---
+commit 662ba4cb6a884c0a426602b5404100a6044aecee
+Author: Jakob Faber <jfaber@caltech.edu>
+Date:   Wed Jun 24 11:10:27 2026 -0700
+
+    feat(scint): pipeline auto-selects Lorentzian component count (BIC+F-test)
+    
+    Wires compare_lorentzian_components into analyze_scintillation_from_acfs: for a
+    Lorentzian-family best model, determine the statistically-justified component
+    count per sub-band (BIC ΔBIC>6 AND nested F-test) and aggregate by plurality;
+    when >1, extract each component (ordered by ascending Δν = same screen across
+    sub-bands) into the existing per-component power-law path. Replaces the dead
+    2c/3c-in-name heuristic. Reports n_components + per-sub-band counts in
+    final_results. Gauss/power/lor_gen stay single-component.
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+    Claude-Session: https://claude.ai/code/session_01Nkd8kUhDoc6ZZnviUsvVon
+
+diff --git a/scintillation/scint_analysis/analysis.py b/scintillation/scint_analysis/analysis.py
+index 00e969ab..31434156 100644
+--- a/scintillation/scint_analysis/analysis.py
++++ b/scintillation/scint_analysis/analysis.py
+@@ -1298,6 +1298,77 @@ def _select_overall_best_model(all_subband_fits):
+     return best_model
+ 
+ 
++def _determine_n_components(acf_results, max_components=3):
++    """Burst-level Lorentzian component count from the BIC + nested-F-test selector
++    (``revalidation.compare_lorentzian_components``) run on each sub-band ACF and
++    aggregated by plurality (ties → fewer components, the conservative default).
++
++    The pipeline feeds its OWN ACFs (``calculate_acf``) to the selector, so this does
++    not compromise the cross-check independence of the revalidation ACF estimator —
++    only the model-selection statistic is shared. Returns ``(n_components, per_subband)``.
++    """
++    from .revalidation import compare_lorentzian_components
++
++    per = []
++    for i in range(len(acf_results["subband_acfs"])):
++        lags = np.asarray(acf_results["subband_lags_mhz"][i], dtype=float)
++        acf = np.asarray(acf_results["subband_acfs"][i], dtype=float)
++        try:
++            per.append(compare_lorentzian_components(lags, acf, max_components=max_components))
++        except Exception as e:  # a single bad sub-band must not sink the burst
++            log.debug(f"component-count selector failed on sub-band {i}: {e}")
++            per.append({"n_preferred": 1})
++    if not per:
++        return 1, per
++    votes = {}
++    for v in per:
++        k = int(v.get("n_preferred", 1))
++        votes[k] = votes.get(k, 0) + 1
++    top = max(votes.values())
++    return min(k for k, c in votes.items() if c == top), per  # plurality, ties → fewer
++
++
++def _extract_multi_component(per_subband, num_comps, n_subbands):
++    """params_per_comp from each sub-band's N-Lorentzian fit (the selector's ``fits``
++    entry for n=num_comps). Components are ordered by ascending Δν so component k is
++    the same screen across sub-bands (the per-component power-law then tracks one
++    screen). Sub-bands whose N-fit failed or whose k-th component is non-physical get
++    a ``{}`` placeholder, which the downstream consumer skips."""
++    params_per_comp = [[] for _ in range(num_comps)]
++    for i in range(n_subbands):
++        verdict = per_subband[i] if per_subband and i < len(per_subband) else None
++        fit_n = (
++            next(
++                (
++                    f
++                    for f in verdict.get("fits", [])
++                    if f.get("n") == num_comps and f.get("success")
++                ),
++                None,
++            )
++            if verdict
++            else None
++        )
++        comps = sorted(fit_n["components"], key=lambda c: c["dnu_mhz"]) if fit_n else []
++        gof = {"bic": fit_n["bic"], "redchi": fit_n["redchi"]} if fit_n else {}
++        for c in range(num_comps):
++            cc = comps[c] if c < len(comps) else None
++            if cc and np.isfinite(cc["dnu_mhz"]) and cc["dnu_mhz"] > 0:
++                params_per_comp[c].append(
++                    {
++                        "bw": cc["dnu_mhz"],
++                        "mod": cc["m"],
++                        "bw_err": cc.get("dnu_err", np.nan),
++                        "mod_err": cc.get("m_err", np.nan),
++                        "finite_err": np.nan,
++                        "gof": gof,
++                    }
++                )
++            else:
++                params_per_comp[c].append({})
++    return params_per_comp
++
++
+ def analyze_scintillation_from_acfs(acf_results, config):
+     """
+     Main analysis orchestrator. Fits multiple ACF models, selects the best one,
+@@ -1354,11 +1425,13 @@ def analyze_scintillation_from_acfs(acf_results, config):
+         # If no model is forced, use the automatic selection.
+         best_model_name = auto_best_model
+ 
+-    # Logic for determining the number of components was not robust.
+-    if "3c" in best_model_name:
+-        num_comps = 3
+-    elif "2c" in best_model_name or "unresolved" in best_model_name:
+-        num_comps = 2
++    # Determine the statistically-justified number of Lorentzian components via the
++    # BIC + nested-F-test selector (aggregated across sub-bands). Only Lorentzian-
++    # family bursts are eligible; gauss/power/lor_gen stay single-component. This
++    # replaces a dead "2c"/"3c"-in-name heuristic that no model ever emitted.
++    n_comp_detail = None
++    if best_model_name.endswith("lor"):
++        num_comps, n_comp_detail = _determine_n_components(acf_results, max_components=3)
+     else:
+         num_comps = 1
+ 
+@@ -1441,7 +1514,19 @@ def analyze_scintillation_from_acfs(acf_results, config):
+         for comp_list in params_per_comp[1:]:
+             comp_list.append({})
+ 
++    # When the selector found >1 Lorentzian component, replace the single-component
++    # extraction above with per-component measurements from each sub-band's
++    # N-Lorentzian fit (component identity fixed by ascending Δν).
++    if num_comps > 1:
++        params_per_comp = _extract_multi_component(n_comp_detail, num_comps, len(all_fits))
++
+     final_results = {"best_model": best_model_name, "components": {}}
++    final_results["n_components"] = num_comps
++    if n_comp_detail is not None:
++        final_results["component_selection"] = {
++            "n_per_subband": [int(v.get("n_preferred", 1)) for v in n_comp_detail],
++            "criterion": n_comp_detail[0].get("criterion") if n_comp_detail else None,
++        }
+     all_powerlaw_fits = {}
+ 
+     for i, params_list in enumerate(params_per_comp):
+diff --git a/scintillation/scint_analysis/revalidation.py b/scintillation/scint_analysis/revalidation.py
+index 9d245518..8be5d92e 100644
+--- a/scintillation/scint_analysis/revalidation.py
++++ b/scintillation/scint_analysis/revalidation.py
+@@ -268,6 +268,12 @@ def _n_lorentzian_model(n):
+     return model
+ 
+ 
++def _param_stderr(param):
++    """lmfit parameter 1σ stderr as a float, or nan when unavailable."""
++    e = param.stderr
++    return float(e) if e is not None else float("nan")
++
++
+ def compare_lorentzian_components(
+     lags, acf, max_components=3, acf_err=None, delta_bic_strong=6.0, p_thresh=0.05
+ ):
+@@ -354,11 +360,18 @@ def compare_lorentzian_components(
+         except Exception:
+             fits.append({"n": n, "success": False, "bic": np.inf, "chi2": np.inf})
+             continue
++
+         comps = sorted(
+             (
+-                (abs(res_n.params[f"l{i}_gamma"].value), abs(res_n.params[f"l{i}_m"].value))
++                {
++                    "dnu_mhz": abs(res_n.params[f"l{i}_gamma"].value),
++                    "m": abs(res_n.params[f"l{i}_m"].value),
++                    "dnu_err": _param_stderr(res_n.params[f"l{i}_gamma"]),
++                    "m_err": _param_stderr(res_n.params[f"l{i}_m"]),
++                }
+                 for i in range(n)
+             ),
++            key=lambda c: c["dnu_mhz"],
+             reverse=True,
+         )
+         fits.append(
+@@ -371,7 +384,7 @@ def compare_lorentzian_components(
+                 "redchi": float(res_n.redchi),
+                 "n_params": int(res_n.nvarys),
+                 "ndata": int(res_n.ndata),
+-                "components": [{"dnu_mhz": g, "m": m} for g, m in comps],
++                "components": comps,
+             }
+         )
+ 
+diff --git a/scintillation/scint_analysis/tests/test_multicomponent_select.py b/scintillation/scint_analysis/tests/test_multicomponent_select.py
+new file mode 100644
+index 00000000..12065a99
+--- /dev/null
++++ b/scintillation/scint_analysis/tests/test_multicomponent_select.py
+@@ -0,0 +1,118 @@
++"""Pipeline wiring: analyze_scintillation_from_acfs determines and uses the
++statistically-justified number of Lorentzian components (BIC + nested F-test, via
++revalidation.compare_lorentzian_components), instead of the dead "2c"/"3c"-in-name
++heuristic that no model ever emitted.
++
++Driven on synthetic acf_results (raw burst spectra are gitignored, DATA_SOURCES.md):
++a known one- vs two-component ACF in every sub-band must come back as
++n_components 1 vs 2, with the two screens recovered as component_1 (narrow) and
++component_2 (wide).
++"""
++
++from __future__ import annotations
++
++import sys
++from pathlib import Path
++
++_test_dir = Path(__file__).parent
++sys.path.insert(0, str(_test_dir.parent.parent.parent))  # FLITS root
++sys.path.insert(0, str(_test_dir.parent.parent))  # scintillation dir
++
++import numpy as np
++
++from scint_analysis.analysis import (
++    _determine_n_components,
++    analyze_scintillation_from_acfs,
++    lorentzian_component,
++)
++
++_CFG = {
++    "analysis": {
++        "fitting": {
++            "fit_lagrange_mhz": 2.0,
++            "reference_frequency_mhz": 600.0,
++            "force_model": "fit_lor",  # deterministic Lorentzian gate
++        }
++    }
++}
++
++
++def _acf_results(component_sets, dch=0.01, nch=256, noise=2e-3, seed=0):
++    """acf_results dict (no noise template/self-noise -> single-prefix model labels)
++    whose every sub-band ACF is the sum of the given (gamma, m) Lorentzians."""
++    rng = np.random.default_rng(seed)
++    pos = np.arange(1, nch + 1) * dch
++    lags = np.concatenate((-pos[::-1], [0.0], pos))
++    out = {
++        "subband_acfs": [],
++        "subband_lags_mhz": [],
++        "subband_center_freqs_mhz": [],
++        "subband_channel_widths_mhz": [],
++        "subband_num_channels": [],
++        "noise_template": None,
++        "sigma_self_mhz": None,
++    }
++    freqs = np.linspace(450.0, 750.0, len(component_sets))
++    for f, comps in zip(freqs, component_sets, strict=True):
++        acf = np.zeros(lags.size)
++        for g, m in comps:
++            acf = acf + lorentzian_component(lags, g, m)
++        acf = acf + rng.normal(0, noise, lags.size)
++        out["subband_acfs"].append(acf)
++        out["subband_lags_mhz"].append(lags)
++        out["subband_center_freqs_mhz"].append(float(f))
++        out["subband_channel_widths_mhz"].append(dch)
++        out["subband_num_channels"].append(nch)
++    return out
++
++
++def test_determine_n_components_counts():
++    assert _determine_n_components(_acf_results([[(0.1, 0.8)]] * 4))[0] == 1
++    assert _determine_n_components(_acf_results([[(0.04, 0.6), (0.6, 0.6)]] * 4))[0] == 2
++
++
++def test_two_components_wired_into_output():
++    fr, _fits, _pl = analyze_scintillation_from_acfs(
++        _acf_results([[(0.04, 0.6), (0.6, 0.6)]] * 4), _CFG
++    )
++    assert fr["n_components"] == 2
++    assert set(fr["components"]) == {"component_1", "component_2"}
++    assert fr["component_selection"]["n_per_subband"] == [2, 2, 2, 2]
++    # component_1 = narrow (≈0.04), component_2 = wide (≈0.6), recovered at ref freq.
++    assert abs(fr["components"]["component_1"]["bw_at_ref_mhz"] - 0.04) < 0.02
++    assert abs(fr["components"]["component_2"]["bw_at_ref_mhz"] - 0.6) < 0.15
++    for name in ("component_1", "component_2"):
++        assert len(fr["components"][name]["subband_measurements"]) == 4
++
++
++def test_single_component_unchanged():
++    fr, _fits, _pl = analyze_scintillation_from_acfs(_acf_results([[(0.1, 0.8)]] * 4), _CFG)
++    assert fr["n_components"] == 1
++    assert list(fr["components"]) == ["scint_scale"]
++
++
++def test_non_lorentzian_best_model_stays_single():
++    """The component-count search is gated on a Lorentzian best model; force a
++    power-law and the burst must stay single-component (no spurious multi-fit)."""
++    cfg = {
++        "analysis": {
++            "fitting": {
++                "fit_lagrange_mhz": 2.0,
++                "reference_frequency_mhz": 600.0,
++                "force_model": "fit_power",
++            }
++        }
++    }
++    fr, _fits, _pl = analyze_scintillation_from_acfs(
++        _acf_results([[(0.04, 0.6), (0.6, 0.6)]] * 4), cfg
++    )
++    assert fr["n_components"] == 1
++    assert "component_selection" not in fr  # determination not run for non-Lorentzian
++
++
++if __name__ == "__main__":
++    test_determine_n_components_counts()
++    test_two_components_wired_into_output()
++    test_single_component_unchanged()
++    test_non_lorentzian_best_model_stays_single()
++    print("ok")
+---8<---
+
+Tests: 4 new + 94 scint suite pass; mutation-checked (forcing wrong count makes the new tests fail, confirming teeth). ruff: zero NEW errors from this diff (pre-existing scintillation noise only). revalidation.py ruff-clean.
+
+Give me TWO things, concisely:
+1. CORRECTNESS REVIEW of this wiring. Focus on: (a) does plurality-vote aggregation across sub-bands make physical sense, or should it be stricter/looser? (b) is ordering components by ascending Δν a sound "same screen across sub-bands" assumption? (c) any bug, edge case (empty sub-bands, all-fail, single sub-band), or silent-wrong risk in _determine_n_components / _extract_multi_component? (d) is gating on best_model_name.endswith("lor") correct given the model registry? Rate P1 (must-fix) / P2 (should-fix) / P3 (nit). If none, say "no P1/P2".
+2. LANDING VERDICT: given #54/#55 are merged and this is a clean single commit on origin/main, is opening a PR for this branch the right move? Any reason to hold, restructure, or squash differently? One line.
