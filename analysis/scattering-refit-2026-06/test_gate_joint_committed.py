@@ -25,9 +25,13 @@ def test_alpha_at_ceiling_fails_level1():
     assert v["final"] == "FAIL"
 
 
-def test_physical_alpha_good_chi2_passes():
+def test_all_evaluable_levels_pass_is_capped_at_marginal():
+    # Physical alpha, Kolmogorov window, good chi2, no rail: every EVALUABLE level
+    # passes, but tau x dnu (L3) is not evaluable here, so the gate caps at MARGINAL
+    # rather than certifying PASS on an incomplete contract check.
     v = gate_one("x", _fit(4.0), {"chi2_chime": 1.0, "chi2_dsa": 1.2})
-    assert v["final"] == "PASS"
+    assert v["final"] == "MARGINAL"
+    assert "tau x dnu" in v["reason"].lower()
 
 
 def test_catastrophic_chi2_fails():

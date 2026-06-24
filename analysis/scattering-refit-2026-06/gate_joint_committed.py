@@ -72,13 +72,16 @@ def gate_one(burst, fit, ppc):
     # A prior-railed alpha is unconstrained -- the fit pinned the prior bound
     # rather than measuring alpha -- so it is never better than MARGINAL even if
     # every level otherwise passes (consistent with excluding the rail-pinned
-    # chromatica/freya/hamilton joint fits as non-measurements).
-    final = _worst(l1, l2, l3, "MARGINAL" if rail else "PASS")
+    # chromatica/freya/hamilton joint fits as non-measurements). And because the
+    # Level-3 tau x dnu check is not evaluable here (no per-sightline dnu_d), the
+    # contract is only partially verified, so the ceiling is capped at MARGINAL --
+    # a fit is never certified PASS on an incomplete contract check.
+    final = _worst(l1, l2, l3, "MARGINAL" if rail else "PASS", "MARGINAL")
     if l1_fail:
         reason = "L1 " + "; ".join(l1_fail)
     elif l2 == "FAIL":
         reason = "L2 catastrophic " + l2_note
-    elif final == "MARGINAL":
+    else:  # final is MARGINAL (capped); list whatever drove it beyond the cap
         bits = []
         if rail:
             bits.append(f"alpha prior-railed (within {RAIL_EDGE} of bound) -> unconstrained")
@@ -86,9 +89,9 @@ def gate_one(burst, fit, ppc):
             bits.append("L2 " + l2_note)
         if l3 == "MARGINAL":
             bits.append(f"L3 alpha={alpha:.2f} off Kolmogorov")
+        if not bits:  # passed every evaluable level; MARGINAL only because of the cap
+            bits.append("L3 tau x dnu not evaluable (no dnu_d) -> capped at MARGINAL")
         reason = "; ".join(bits)
-    else:
-        reason = "all levels pass"
 
     return {
         "burst": burst,
