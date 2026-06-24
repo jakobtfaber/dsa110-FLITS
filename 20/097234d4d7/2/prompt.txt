@@ -1,0 +1,15 @@
+You are doing a read-only pre-merge safety review of PR #42 on jakobtfaber/dsa110-FLITS, branch feat/burst-energies-regen (HEAD) vs base main. Goal: confirm it is SAFE to squash-merge to main, or list concrete blockers.
+
+Inspect with git: run `git diff origin/main...HEAD --stat` and `git diff origin/main...HEAD` to see the full change. Context you should verify against the code:
+- This PR ONLY regenerates two committed artifacts (analysis/burst_energies/burst_energies.json and .tex) plus a one-line ledger change in .agents/deferred-tasks.md. It must contain NO source/logic changes.
+- The regen applies the energy trust boundary already in analysis/calculate_burst_energies.py (load_gate_flags / load_joint_params): joint fits the gate marks FAIL (oran, whitney, johndoeii) must be dropped, and each remaining row must carry a quality_flag.
+- Expected result: table goes from 8 bursts to 6 (chromatica, hamilton, isha, phineas, wilhelm, zach); oran + whitney removed; quality_flag stamped on every row.
+
+Checks to perform and report on:
+1. Does the diff touch ONLY those 3 files? Flag any unexpected file.
+2. In burst_energies.json: are oran/whitney/johndoeii absent, is quality_flag present on all rows, are there exactly 6 rows, and do the values look finite/physical (E_iso ~1e38-1e41 erg)?
+3. Does the .tex table match the json (same 6 bursts, no oran/whitney)?
+4. Is there any test in tests/ that reads the committed burst_energies.json/.tex and asserts the OLD 8-burst content (which this regen would break)? Check tests/test_burst_energies_fluxcal.py and any other test referencing the artifact. (Note CI Python 3.10/3.12 already passed.)
+5. Any other reason a squash-merge to main would be unsafe.
+
+End your answer with a single final line exactly: VERDICT: SAFE TO MERGE  or  VERDICT: DO NOT MERGE — <reason>.
