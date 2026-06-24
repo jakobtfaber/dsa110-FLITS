@@ -3,7 +3,7 @@
   "checkpoint_id": "c84f5f2017ad",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 11,
+  "checkpoints_count": 12,
   "files_touched": [
     "analysis/scattering-refit-2026-06/JOINT_FIT_STATE.md",
     "docs/architecture/inventory.md",
@@ -34,6 +34,12 @@
       "transcript": "/c8/4f5f2017ad/3/full.jsonl",
       "content_hash": "/c8/4f5f2017ad/3/content_hash.txt",
       "prompt": "/c8/4f5f2017ad/3/prompt.txt"
+    },
+    {
+      "metadata": "/c8/4f5f2017ad/4/metadata.json",
+      "transcript": "/c8/4f5f2017ad/4/full.jsonl",
+      "content_hash": "/c8/4f5f2017ad/4/content_hash.txt",
+      "prompt": "/c8/4f5f2017ad/4/prompt.txt"
     }
   ],
   "token_usage": {
