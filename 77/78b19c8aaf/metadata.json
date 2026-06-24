@@ -3,8 +3,20 @@
   "checkpoint_id": "7778b19c8aaf",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 2,
+  "checkpoints_count": 4,
   "files_touched": [
+    "analysis/build_manuscript.py",
+    "analysis/manuscript.tex",
+    "analysis/manuscript_figures.html",
+    "analysis/scattering-refit-2026-06/_figsave.py",
+    "analysis/scattering-refit-2026-06/chime_subband/chime_subband.tex",
+    "analysis/scattering-refit-2026-06/chime_subband/chime_subband_compare.svg",
+    "analysis/scattering-refit-2026-06/chime_subband/figures.manifest.json",
+    "analysis/scattering-refit-2026-06/chime_subband/figures.review.json",
+    "analysis/scattering-refit-2026-06/chime_subband_compare.py",
+    "analysis/scattering-refit-2026-06/joint_ppc.py",
+    "analysis/scattering-refit-2026-06/plot_joint_posteriors.py",
+    "analysis/scattering-refit-2026-06/within_chime_test.py",
     "results/figures.manifest.json",
     "results/figures.review.json"
   ],
@@ -14,13 +26,19 @@
       "transcript": "/77/78b19c8aaf/0/full.jsonl",
       "content_hash": "/77/78b19c8aaf/0/content_hash.txt",
       "prompt": "/77/78b19c8aaf/0/prompt.txt"
+    },
+    {
+      "metadata": "/77/78b19c8aaf/1/metadata.json",
+      "transcript": "/77/78b19c8aaf/1/full.jsonl",
+      "content_hash": "/77/78b19c8aaf/1/content_hash.txt",
+      "prompt": "/77/78b19c8aaf/1/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 27858,
-    "cache_creation_tokens": 232924,
-    "cache_read_tokens": 8988241,
-    "output_tokens": 111104,
-    "api_call_count": 61
+    "input_tokens": 341303,
+    "cache_creation_tokens": 6586966,
+    "cache_read_tokens": 227936499,
+    "output_tokens": 1520381,
+    "api_call_count": 1090
   }
 }
