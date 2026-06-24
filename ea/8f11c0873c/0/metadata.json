@@ -1,0 +1,94 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "ea8f11c0873c",
+  "session_id": "02981995-7383-484b-a695-5d943aa0e4e8",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T17:40:23.420449Z",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 5,
+  "save_step_count": 6,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "",
+  "turn_id": "268f24d9c2b6",
+  "token_usage": {
+    "input_tokens": 68830,
+    "cache_creation_tokens": 914545,
+    "cache_read_tokens": 40448702,
+    "output_tokens": 320442,
+    "api_call_count": 205
+  },
+  "session_metrics": {
+    "turn_count": 10
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37595,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37818,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 275,
+      "user_lines_removed": 0,
+      "agent_lines_added": 37893,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py": 274
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 23,
+      "user_lines_removed": 17,
+      "agent_lines_added": 38296,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".agents/deferred-tasks.md": 1,
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py": 21
+      },
+      "user_removed_per_file": {
+        ".agents/deferred-tasks.md": 1,
+        "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py": 16
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 43,
+      "user_lines_removed": 18,
+      "agent_lines_added": 38301,
+      "agent_lines_removed": 7,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py": 42
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/joint_ladder/_subband_tau_validation.py": 18
+      }
+    }
+  ]
+}

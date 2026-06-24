@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "ea8f11c0873c",
+  "strategy": "manual-commit",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 5,
+  "files_touched": null,
+  "sessions": [
+    {
+      "metadata": "/ea/8f11c0873c/0/metadata.json",
+      "transcript": "/ea/8f11c0873c/0/full.jsonl",
+      "content_hash": "/ea/8f11c0873c/0/content_hash.txt",
+      "prompt": "/ea/8f11c0873c/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 68830,
+    "cache_creation_tokens": 914545,
+    "cache_read_tokens": 40448702,
+    "output_tokens": 320442,
+    "api_call_count": 205
+  }
+}
