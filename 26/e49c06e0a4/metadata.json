@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "26e49c06e0a4",
+  "strategy": "manual-commit",
+  "branch": "docs/manuscript-scope",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "docs/rse/specs/plan-manuscript-completion.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/26/e49c06e0a4/0/metadata.json",
+      "transcript": "/26/e49c06e0a4/0/full.jsonl",
+      "content_hash": "/26/e49c06e0a4/0/content_hash.txt",
+      "prompt": "/26/e49c06e0a4/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 65457,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 327680,
+    "output_tokens": 8199,
+    "api_call_count": 8
+  }
+}

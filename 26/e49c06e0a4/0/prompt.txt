@@ -1,0 +1,20 @@
+Independently verify whether these 5 git branches are STALE/SUPERSEDED and safe to DELETE (both local refs/heads and remote origin/<branch>). Repo: dsa110-FLITS fork (origin = jakobtfaber/dsa110-FLITS).
+
+Branches:
+1. chore/mkdocs-github-pages
+2. docs/issue-37-nladder-resolved
+3. docs/nladder-nlive300-refine
+4. docs/research-joint-fit-state
+5. fix/issue-37-per-band-dt-min
+
+MY CLAIM (try to REFUTE it): each branch's work is already in origin/main, each has ZERO unique unmerged commits, and no open PR points at any of them, so all 5 are safe to delete.
+
+Use ONLY already-fetched refs (do NOT run 'git fetch' — read-only sandbox, no network). For EACH branch run and reason over:
+- git cherry -v origin/main origin/<branch>  -> SAFE requires EVERY line prefixed '-' (patch-equivalent already in main). ANY '+' line = a real unmerged commit = NOT_SAFE.
+- git rev-list --count origin/main..origin/<branch> and inspect those commit subjects (git log origin/main..origin/<branch> --oneline) — confirm they are squash-merged equivalents (often carry a (#NN) referencing a merged PR).
+- git diff origin/<branch> origin/main --stat to sanity-check direction (main should only be strictly ahead; the branch should introduce nothing main lacks).
+- Also compare local refs/heads/<branch> vs origin/<branch>: if the local ref is ahead of its remote, that local-only delta must be called out (could be unpushed work) -> NOT_SAFE for the LOCAL delete.
+
+For open-PR check: gh may have no network in this sandbox; if 'gh pr list --state open --head <branch>' fails, say so and rely on the caller's separate confirmation that only PR #41 (now merged) was open.
+
+Output one line PER BRANCH starting EXACTLY with 'SAFE_TO_DELETE <branch>' or 'NOT_SAFE <branch>', then a final 'OVERALL: SAFE' or 'OVERALL: NOT_SAFE (...)'. Include the concrete cherry/rev-list evidence per branch. Read-only; modify nothing, delete nothing.
