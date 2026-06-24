@@ -29,3 +29,9 @@ File: docs/rse/specs/handoff-2026-06-24-07-52-manuscript-figures-landed.md — m
 ---
 
 Decide what to work on next by consulting @"scientific-python-development:scientific-python-expert (agent)" and @"scientific-python-development:scientific-docs-architect (agent)" and @"astronomy-astrophysics-expert (agent)" collectively, and then confirming using Codex.
+
+---
+
+Proceed with gated items, you current have access to `hpcc` and `h17`, depending on which cluster you're referring to.
+
+Handle the commit of the code/docs autonomously by consulting your 3 expert agents and Codex.
