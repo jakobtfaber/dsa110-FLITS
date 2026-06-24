@@ -1,0 +1,48 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "9099199a1c39",
+  "session_id": "062ce024-8032-4ac6-882e-e6ee9b5aed19",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T03:11:21.087746Z",
+  "branch": "feature/cluster-catalog-engine",
+  "checkpoints_count": 1,
+  "save_step_count": 2,
+  "files_touched": [
+    "analysis/scattering-refit-2026-06/gen_joint_summary.py",
+    "tests/test_joint_summary_reproducible.py"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "5f63d29d7216",
+  "token_usage": {
+    "input_tokens": 24983,
+    "cache_creation_tokens": 89255,
+    "cache_read_tokens": 126762,
+    "output_tokens": 5147,
+    "api_call_count": 3
+  },
+  "session_metrics": {
+    "turn_count": 1
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-24T03:11:21.072274Z",
+    "agent_lines": 34,
+    "agent_removed": 3,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 34,
+    "total_lines_changed": 37,
+    "agent_percentage": 100,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    }
+  ]
+}
