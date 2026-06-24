@@ -31,29 +31,37 @@ def test_families_give_opposite_verdicts():
 
 
 def test_fail_closed_separates_pbf_families():
-    # the real joint_ladder dir holds BOTH the canonical zach all-exp fixed-s2 grid
-    # (pulled from HPCC, pbf-exp-exp) and the legacy mixed _s2- grid (no pbf_* keys);
-    # the two families must never co-mingle in one adjudication.
+    # A joint_ladder dir can hold BOTH the canonical all-exp fixed-s2 grid
+    # (pbf-exp-exp, pbf_C=pbf_D="exp") and the legacy mixed _s2- grid (no pbf_* keys);
+    # the two families must never co-mingle in one adjudication. Build a synthetic dir
+    # so this is self-contained — the real all-exp grid is HPCC-pulled/untracked and the
+    # legacy files are slated for deletion, so neither is present on a clean checkout.
+    import json
     import os
+    import tempfile
 
-    d = os.path.dirname(__file__)
-    allexp, ex_allexp = load_records(d, ALLEXP)
-    mixed, _ = load_records(d, MIXED_LEGACY)
-    # all-exp pass: includes the all-exp fixed-s2 grid, excludes every legacy mixed _s2-
-    assert any(t.endswith("pbf-exp-exp") and "_s2-" in t for (_, t) in allexp), (
-        "all-exp pass should include the pulled all-exp fixed-s2 grid"
-    )
-    assert not any("_s2-" in t and not t.endswith("pbf-exp-exp") for (_, t) in allexp), (
-        "legacy mixed _s2- files must not leak into the all-exp pass"
-    )
-    assert ex_allexp > 0, "all-exp pass should exclude the legacy mixed JSONs"
-    # mixed pass: includes the legacy _s2- grid, excludes the all-exp files
-    assert any("_s2-" in t and not t.endswith("pbf-exp-exp") for (_, t) in mixed), (
-        "mixed pass should include the legacy mixed _s2- grid"
-    )
-    assert not any(t.endswith("pbf-exp-exp") for (_, t) in mixed), (
-        "all-exp files must not leak into the mixed pass"
-    )
+    with tempfile.TemporaryDirectory() as d:
+        with open(os.path.join(d, "zach_joint_fit_C2D3_s2-1_pbf-exp-exp.json"), "w") as fh:
+            json.dump({"pbf_C": "exp", "pbf_D": "exp", "log_evidence": -1.0}, fh)
+        with open(os.path.join(d, "zach_joint_fit_C2D3_s2-1.json"), "w") as fh:
+            json.dump({"log_evidence": -2.0}, fh)  # omits pbf_* -> MIXED_LEGACY
+        allexp, ex_allexp = load_records(d, ALLEXP)
+        mixed, _ = load_records(d, MIXED_LEGACY)
+        # all-exp pass: includes the all-exp fixed-s2 grid, excludes every legacy mixed _s2-
+        assert any(t.endswith("pbf-exp-exp") and "_s2-" in t for (_, t) in allexp), (
+            "all-exp pass should include the all-exp fixed-s2 grid"
+        )
+        assert not any("_s2-" in t and not t.endswith("pbf-exp-exp") for (_, t) in allexp), (
+            "legacy mixed _s2- files must not leak into the all-exp pass"
+        )
+        assert ex_allexp > 0, "all-exp pass should exclude the legacy mixed JSONs"
+        # mixed pass: includes the legacy _s2- grid, excludes the all-exp files
+        assert any("_s2-" in t and not t.endswith("pbf-exp-exp") for (_, t) in mixed), (
+            "mixed pass should include the legacy mixed _s2- grid"
+        )
+        assert not any(t.endswith("pbf-exp-exp") for (_, t) in mixed), (
+            "all-exp files must not leak into the mixed pass"
+        )
 
 
 if __name__ == "__main__":
