@@ -3,7 +3,7 @@
   "checkpoint_id": "a88c3e0bb11d",
   "strategy": "manual-commit",
   "branch": "docs/manuscript-scope",
-  "checkpoints_count": 2,
+  "checkpoints_count": 3,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/ALLEXP_PBF_RUN.md"
   ],
@@ -13,6 +13,12 @@
       "transcript": "/a8/8c3e0bb11d/0/full.jsonl",
       "content_hash": "/a8/8c3e0bb11d/0/content_hash.txt",
       "prompt": "/a8/8c3e0bb11d/0/prompt.txt"
+    },
+    {
+      "metadata": "/a8/8c3e0bb11d/1/metadata.json",
+      "transcript": "/a8/8c3e0bb11d/1/full.jsonl",
+      "content_hash": "/a8/8c3e0bb11d/1/content_hash.txt",
+      "prompt": "/a8/8c3e0bb11d/1/prompt.txt"
     }
   ],
   "token_usage": {
