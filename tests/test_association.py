@@ -157,8 +157,8 @@ def test_report_activates_pillars_2_and_4_from_chime_inputs(tmp_path):
 
 
 def test_report_with_real_chime_inputs_activates_pillars():
-    # the committed CHIME-side extraction (figure-reviewed): 11/12 DM active (isha=noise->null),
-    # all 12 positions consistent, 3 real-confidence (zach/freya/casey)
+    # committed CHIME-side extraction (RFI-mask recipe, figure-reviewed): 2 real / 7 marginal /
+    # 3 noise -> 9/12 DM active (isha/phineas/mahi noise -> null), all 12 positions consistent.
     chime = ROOT / "crossmatching/chime_side_inputs.json"
     if not chime.exists():
         import pytest
@@ -168,14 +168,15 @@ def test_report_with_real_chime_inputs_activates_pillars():
         ROOT / "crossmatching/notebook_reproduction_fixture.json", chime_inputs_path=chime
     )
     by = {b["name"]: b for b in report["bursts"]}
-    assert by["isha"]["dm_confidence"] == "noise"
-    assert by["isha"]["dm_agreement"]["consistent"] is None  # railed -> nulled, not fabricated
+    noise = {"isha", "phineas", "mahi"}
+    assert {n for n in by if by[n]["dm_confidence"] == "noise"} == noise
+    for n in noise:  # noise -> nulled, not fabricated
+        assert by[n]["dm_agreement"]["consistent"] is None
     dm_active = [b for b in report["bursts"] if b["dm_agreement"]["consistent"] is not None]
-    assert len(dm_active) == 11
+    assert len(dm_active) == 9
     assert all(b["dm_agreement"]["consistent"] is True for b in dm_active)  # all within 3 sigma
     assert all(b["position"]["consistent"] is True for b in report["bursts"])  # 12/12 positions
     assert {b["name"] for b in report["bursts"] if b["dm_confidence"] == "real"} == {
         "zach",
         "freya",
-        "casey",
     }
