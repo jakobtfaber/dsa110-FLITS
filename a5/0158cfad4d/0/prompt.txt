@@ -1,0 +1,60 @@
+Adjudicate the EXECUTABLE SCOPE of ADR-0004 in FLITS. Read-only audit; do not edit files.
+Repo cwd is the FLITS root (branch feat/figure-vector). Two specialist agents split on a
+science hazard; you set the scope, then I execute + commit.
+
+ADR-0004 (accepted, docs/adr/0004-l1-sub-kolmogorov-alpha-floor.md): lower the joint-fit gate
+hard-FAIL α floor 1.5->1.0; reclassify 1.0<=α<2.0 as "sub-Kolmogorov" L3 MARGINAL (not FAIL);
+hard FAIL only below 1.0; reconcile the dead ALPHA_MARGINAL_MIN constant + contradictory contract
+prose; FULL verdict regeneration (the ADR forbids the bare floor edit — it desyncs every verdict);
+update the test. "Separately": flag a posterior median within ~3σ of a prior bound as rail-MARGINAL.
+
+THE GATE: analysis/scattering-refit-2026-06/gate_joint_committed.py reads the committed
+joint_json/{burst}_joint_fit.json and writes joint_gate_verdicts.{md,csv} + per-burst _joint_gate.json.
+
+VERIFIED FACTS:
+- joint_json/ holds 11 MIXED-PBF fits (pbf=None/None), sampled at alpha_bounds [1.0,6.0].
+  Current FAILs (on the 1.5 floor): johndoeII α=1.373, oran α=1.439, whitney α=1.458.
+- ADR-0003 (accepted): all citable α must come from ALL-EXP fits; mixed-PBF α are superseded.
+- The three flip-candidates' CANONICAL all-exp α (verified from local/HPCC fits):
+  * johndoeII: all-exp ≈ 1.37 (PBF-immaterial, clean, un-railed, tight ±0.05) — a genuine
+    sub-Kolmogorov measurement. Flip FAIL->MARGINAL is SOUND.
+  * oran: mixed α=1.44 but posterior is very wide (−0.33/+0.66); canonical all-exp C2D1 α≈2.69.
+    So oran is NOT sub-Kolmogorov — labeling it "sub-Kolmogorov MARGINAL" on 1.44 mislabels by ~1.3.
+  * whitney: mixed α=1.458 but canonical all-exp C2D2 (the real 2-comp model, lnZ=4992 vs C2D1
+    lnZ=2204) α=5.116 — Kolmogorov-consistent, and whitney is ADR-0003's REPLACEMENT profile-bias
+    demonstrator (1.5->5.12 real unrailing). Labeling it "sub-Kolmogorov" on 1.46 mislabels by ~3.7.
+    (whitney all-exp fits are local at local_runs/data/joint/whitney_fine_joint_fit_C2D2_pbf-exp-exp.json.)
+- The all-exp joint set is heterogeneous across bursts (sharedzeta vs C2D1/C1D1/C2D2/C3D3); WHICH
+  all-exp config is canonical per burst is an OPEN science @decision (the ledger's canonical-fit-set
+  item) — though it may be objectively the highest-lnZ all-exp model per burst, guarded by the
+  _s2verdict cross-N component test (just landed) for multiplicity.
+
+THE SPLIT:
+- RSE agent: mechanically execute on the mixed joint_json/ — floor->1.0, σ-rail, reconcile
+  constant/prose, update test, regenerate; johndoeII/oran/whitney all flip to MARGINAL; one commit.
+- Astro agent: the gate-logic/SSOT edit is sound, but regenerating on mixed data produces
+  SCIENTIFICALLY WRONG "sub-Kolmogorov" labels for oran (true 2.69) and whitney (true 5.12);
+  only johndoeII's flip is real. Stamp every verdict "mixed-PBF-interim"; oran/whitney MARGINAL
+  must be non-citable pending the all-exp regrade so 1.44/1.46 never reach the energies/citable roster.
+
+ADJUDICATE (CONFIRM / CONFIRM-WITH-CHANGES / REJECT, with file:line evidence):
+A. The gate POLICY + SSOT edit (ALPHA_MIN 1.5->1.0; reason label "sub-Kolmogorov (inspect)" for
+   1.0<=α<2.0; ALPHA_MARGINAL_MIN 2.0->1.0; reconcile AGENT_CONFIGURATION_FLITS.md prose; update
+   test_gate_joint_committed.py) — ship now? It's data-independent policy. Confirm or amend.
+B. The 3σ rail rule — implement now (augmenting the absolute RAIL_EDGE=0.1) or defer? It can flip
+   verdicts; does it correctly catch oran's wide/unconstrained posterior?
+C. THE CRUX — the verdict regeneration. Pick one and justify:
+   (1) regenerate on mixed joint_json/ now WITH a prominent "mixed-PBF-interim, non-citable"
+       provenance header + per-burst caveats (oran true 2.69 / whitney true 5.12) — keeps code↔
+       verdicts in sync per ADR-0004 but publishes known-wrong sub-K labels (caveated);
+   (2) ship the gate POLICY edit but DO NOT regenerate verdicts on mixed data (hold the regen for
+       the all-exp pass) — avoids the mislabel but leaves code↔verdicts knowingly desynced, which
+       ADR-0004's text forbids;
+   (3) repoint the gate at the canonical all-exp fits and regenerate CORRECTLY now — the "real fix"
+       — IF the canonical per-burst fit can be chosen objectively (highest-lnZ all-exp model +
+       _s2verdict multiplicity guard) WITHOUT a human science decision; else this is blocked.
+   Is (3) objectively determinable now, or does it require the open canonical-fit-set @decision?
+D. What must NOT happen: confirm energies/citable roster stays untouched (separate @decision), and
+   that no mixed-PBF α (1.44/1.46) can leak into a citable artifact.
+
+Be decisive about C — that is the call I need. Do not write files.
