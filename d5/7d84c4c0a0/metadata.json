@@ -3,11 +3,17 @@
   "checkpoint_id": "d57d84c4c0a0",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 4,
+  "checkpoints_count": 10,
   "files_touched": [
     "analysis/scattering-refit-2026-06/joint_ladder/_ladder.py",
     "analysis/scattering-refit-2026-06/joint_ladder/_s2verdict.py",
-    "analysis/scattering-refit-2026-06/joint_ladder/test_s2verdict.py"
+    "analysis/scattering-refit-2026-06/joint_ladder/test_s2verdict.py",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-100_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-10_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D2_s2-1_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-100_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-10_pbf-exp-exp.json",
+    "analysis/scattering-refit-2026-06/joint_ladder/zach_joint_fit_C2D3_s2-1_pbf-exp-exp.json"
   ],
   "sessions": [
     {
@@ -21,13 +27,19 @@
       "transcript": "/d5/7d84c4c0a0/1/full.jsonl",
       "content_hash": "/d5/7d84c4c0a0/1/content_hash.txt",
       "prompt": "/d5/7d84c4c0a0/1/prompt.txt"
+    },
+    {
+      "metadata": "/d5/7d84c4c0a0/2/metadata.json",
+      "transcript": "/d5/7d84c4c0a0/2/full.jsonl",
+      "content_hash": "/d5/7d84c4c0a0/2/content_hash.txt",
+      "prompt": "/d5/7d84c4c0a0/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 31450,
-    "cache_creation_tokens": 449478,
-    "cache_read_tokens": 13413447,
-    "output_tokens": 116711,
-    "api_call_count": 79
+    "input_tokens": 406086,
+    "cache_creation_tokens": 7583051,
+    "cache_read_tokens": 249149655,
+    "output_tokens": 1674198,
+    "api_call_count": 1202
   }
 }
