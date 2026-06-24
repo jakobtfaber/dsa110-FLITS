@@ -70,12 +70,20 @@ def _install_stubs():
     bf = types.ModuleType("scat_analysis.burstfit")
     bf.FRBParams = _Params
     bf.FRBModel = _Model
+    corner = types.ModuleType("corner")
+    corner.corner = lambda *a, **k: None
+    dyn = types.ModuleType("dynesty")
+    dynu = types.ModuleType("dynesty.utils")
+    dynu.resample_equal = lambda s, w: s
     for name, mod in {
         "scat_analysis": sa,
         "scat_analysis.config_utils": cu,
         "scat_analysis.pipeline": pipe,
         "scat_analysis.pipeline.io": io,
         "scat_analysis.burstfit": bf,
+        "corner": corner,
+        "dynesty": dyn,
+        "dynesty.utils": dynu,
     }.items():
         sys.modules[name] = mod
     # headless matplotlib is already Agg in the scripts; nothing else to stub.
@@ -92,7 +100,8 @@ def _write_cfgs(runs, b):
 
 
 def _percentiles(d):
-    return {k: {"median": v} for k, v in d.items()}
+    # real summaries carry median/lower/upper per param; consumers read alpha/tau bounds
+    return {k: {"median": v, "lower": v - 0.1, "upper": v + 0.1} for k, v in d.items()}
 
 
 # common per-band medians present in BOTH contracts
@@ -131,7 +140,7 @@ def main():
     import tempfile
 
     _install_stubs()
-    scripts = ["resid_map.py", "joint_ppc.py", "fullband_waterfall.py"]
+    scripts = ["resid_map.py", "joint_ppc.py", "fullband_waterfall.py", "validate_gain.py"]
     with tempfile.TemporaryDirectory() as td:
         runs = Path(td)
         joint = runs / "data" / "joint"
@@ -159,6 +168,54 @@ def main():
                     assert float(z) == _PERBAND["zeta_C"], f"{name} perband: wrong zeta_C"
                     assert pC["c0"] == _PERBAND["c0_C"], f"{name} perband: c0 not from json"
                 print(f"  ok  {name:22s} shared={shared}")
+
+        # pure-json top-level scripts: run as subprocesses on a shared-zeta json, expect no crash
+        import subprocess
+
+        env = {**os.environ, "FLITS_RUNS": str(runs), "FLITS_REPO": str(REPO)}
+        (joint / f"{b}_joint_fit.json").write_text(json.dumps(_summary(True)))
+        r = subprocess.run(
+            [sys.executable, str(HERE / "verify_joint_fits.py")],
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        assert r.returncode == 0, f"verify_joint_fits.py crashed:\n{r.stderr}"
+        assert b in r.stdout and "Traceback" not in r.stderr
+        print("  ok  verify_joint_fits.py   runs on shared-zeta json")
+
+        (joint / "precrop_backup").mkdir(exist_ok=True)
+        (joint / "precrop_backup" / f"{b}_joint_fit.json").write_text(json.dumps(_summary(True)))
+        r = subprocess.run(
+            [sys.executable, str(HERE / "report_prepost.py"), b],
+            env=env,
+            capture_output=True,
+            text=True,
+        )
+        assert r.returncode == 0, f"report_prepost.py crashed:\n{r.stderr}"
+        print("  ok  report_prepost.py      runs on shared-zeta json (PRE+POST)")
+
+    # plot_joint_posteriors.py: FOCUS must follow the fit's zeta params (import-safe, __main__-guarded)
+    spec = importlib.util.spec_from_file_location("_chk_pjp", HERE / "plot_joint_posteriors.py")
+    pjp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(pjp)
+    shared_names = ["tau_1ghz", "alpha", "zeta_1ghz", "x_zeta", "delta_dm_C", "delta_dm_D"]
+    perband_names = ["tau_1ghz", "alpha", "zeta_C", "zeta_D", "delta_dm_C", "delta_dm_D"]
+    assert pjp.focus_for(shared_names) == [
+        "tau_1ghz",
+        "alpha",
+        "zeta_1ghz",
+        "x_zeta",
+        "delta_dm_C",
+        "delta_dm_D",
+    ], "focus_for shared wrong"
+    assert pjp.focus_for(perband_names) == perband_names, "focus_for per-band wrong"
+    print("  ok  plot_joint_posteriors.py  FOCUS follows the fit's zeta params")
+
+    # build_joint_deck.py writes to a hard-coded path (cannot run here): assert the source guard
+    deck = (HERE / "build_joint_deck.py").read_text()
+    assert 'd.get("shared_zeta")' in deck, "build_joint_deck.py missing shared_zeta branch"
+    print("  ok  build_joint_deck.py       has shared_zeta branch (source-checked)")
 
     # fullband_aligned.py only changed filename+docstring; assert the contract in source.
     src = (HERE / "fullband_aligned.py").read_text()
