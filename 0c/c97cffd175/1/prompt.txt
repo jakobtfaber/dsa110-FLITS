@@ -213,3 +213,7 @@ What about policies to improve the efficacy and accuracy of agentic behavior and
 ---
 
 Check the agent-efficacy-policies workflow (run wf_01a7884e-6a4); if done, report the kept practice policies.
+
+---
+
+yes fix both
