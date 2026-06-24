@@ -1,0 +1,334 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "b58dc0716e68",
+  "session_id": "fd6e62fe-81a0-4203-b863-f5b990ccbc15",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T06:58:19.05433Z",
+  "branch": "main",
+  "checkpoints_count": 25,
+  "save_step_count": 25,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "21569583dd0d",
+  "token_usage": {
+    "input_tokens": 67567,
+    "cache_creation_tokens": 1492260,
+    "cache_read_tokens": 35271345,
+    "output_tokens": 218666,
+    "api_call_count": 194
+  },
+  "session_metrics": {
+    "turn_count": 25
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 8274,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".agents/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".agents/skills/hardening-research-code/SKILL.md": 173,
+        ".agents/skills/validating-implementations/SKILL.md": 226,
+        ".agents/skills/validating-implementations/references/report-templates.md": 164,
+        ".agents/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".agents/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".agents/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".agents/skills/xarray-for-multidimensional-data/references/patterns.md": 658,
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/scheduled_tasks.lock": 1,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658,
+        ".scratch/network_search_excess.py": 15,
+        "analysis/scattering-refit-2026-06/baseband_recovery/README.md": 193,
+        "analysis/scattering-refit-2026-06/baseband_recovery/npy_to_npz.py": 84,
+        "analysis/scattering-refit-2026-06/baseband_recovery/products/scint_casey/casey_analysis_results.json": 28,
+        "analysis/scattering-refit-2026-06/baseband_recovery/products/scint_casey_hi/casey_analysis_results.json": 28,
+        "analysis/scattering-refit-2026-06/baseband_recovery/products/scint_casey_hi_nosn/casey_analysis_results.json": 28,
+        "analysis/scattering-refit-2026-06/baseband_recovery/upchannelize_chime.py": 230,
+        "docs/agents/holoviz-eval.md": 55,
+        "docs/entire-tracing-checkpoints.md": 736,
+        "docs/rse/specs/plan-scattering-refit-validation.md": 235,
+        "results/figures.manifest.json": 12,
+        "results/figures.review.json": 16,
+        "scintillation/configs/bursts/casey_chime.yaml": 42,
+        "scintillation/configs/bursts/casey_chime_hi.yaml": 43,
+        "scratch/cluster-regen-out/done.txt": 12,
+        "scratch/cluster-regen-out/sightline_dm_scattering_budget.md": 16,
+        "scratch/codetection/probe_engines.py": 54,
+        "scratch/codetection/probe_missing_galaxies.py": 84,
+        "scratch/codetection/refilter_photoz.py": 84,
+        "scratch/codetection/regen_resumable.py": 80,
+        "scratch/codetection/run_nedtap_regen.py": 50,
+        "scratch/photoz-fix/sightline_budget_sensitivity_priors.yaml": 61,
+        "scratch/photoz-fix/sightline_budget_sensitivity_summary.md": 18,
+        "scratch/photoz-fix/sightline_dm_scattering_budget.md": 16
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 15020,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 15027,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 15027,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 15040,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 15040,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18051,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18299,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18471,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18597,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18597,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18597,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18597,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18597,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18617,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 99,
+      "user_lines_removed": 0,
+      "agent_lines_added": 17730,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D1.json": 98
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 99,
+      "user_lines_removed": 0,
+      "agent_lines_added": 17730,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D1.json": 98
+      }
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 9,
+      "user_lines_removed": 1078,
+      "agent_lines_added": 1120,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "docs/entire-tracing-checkpoints.md": 8
+      },
+      "user_removed_per_file": {
+        "docs/entire-tracing-checkpoints.md": 1078
+      }
+    },
+    {
+      "checkpoint_number": 21,
+      "user_lines_added": 118,
+      "user_lines_removed": 3,
+      "agent_lines_added": 17881,
+      "agent_lines_removed": 5,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1,
+        "analysis/scattering-refit-2026-06/local_runs/data/joint/whitney_fine_joint_fit_C2D2.json": 112,
+        "noxfile.py": 1,
+        "pyproject.toml": 4
+      },
+      "user_removed_per_file": {
+        "noxfile.py": 1,
+        "pyproject.toml": 2
+      }
+    },
+    {
+      "checkpoint_number": 22,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 23,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18000,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 24,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18002,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 25,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18002,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    },
+    {
+      "checkpoint_number": 26,
+      "user_lines_added": 1,
+      "user_lines_removed": 0,
+      "agent_lines_added": 18002,
+      "agent_lines_removed": 1,
+      "user_added_per_file": {
+        ".claude/scheduled_tasks.lock": 1
+      }
+    }
+  ]
+}
