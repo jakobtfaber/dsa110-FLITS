@@ -1,0 +1,24 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "a50158cfad4d",
+  "session_id": "02981995-7383-484b-a695-5d943aa0e4e8",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-24T16:28:45.846199Z",
+  "branch": "feat/scint-pipeline-wiring",
+  "checkpoints_count": 1,
+  "save_step_count": 1,
+  "files_touched": [],
+  "agent": "Claude Code",
+  "model": "claude-opus-4-8[1m]",
+  "turn_id": "39890f3a1fb6",
+  "token_usage": {
+    "input_tokens": 32651,
+    "cache_creation_tokens": 547559,
+    "cache_read_tokens": 24723146,
+    "output_tokens": 182968,
+    "api_call_count": 113
+  },
+  "session_metrics": {
+    "turn_count": 4
+  }
+}
