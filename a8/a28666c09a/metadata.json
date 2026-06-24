@@ -3,7 +3,7 @@
   "checkpoint_id": "a8a28666c09a",
   "strategy": "manual-commit",
   "branch": "pr/acf-revalidation",
-  "checkpoints_count": 17,
+  "checkpoints_count": 21,
   "files_touched": [
     "scintillation/scint_analysis/revalidation.py"
   ],
@@ -19,13 +19,19 @@
       "transcript": "/a8/a28666c09a/1/full.jsonl",
       "content_hash": "/a8/a28666c09a/1/content_hash.txt",
       "prompt": "/a8/a28666c09a/1/prompt.txt"
+    },
+    {
+      "metadata": "/a8/a28666c09a/2/metadata.json",
+      "transcript": "/a8/a28666c09a/2/full.jsonl",
+      "content_hash": "/a8/a28666c09a/2/content_hash.txt",
+      "prompt": "/a8/a28666c09a/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 1080141,
-    "cache_creation_tokens": 971112,
-    "cache_read_tokens": 57881165,
-    "output_tokens": 414610,
-    "api_call_count": 342
+    "input_tokens": 1514656,
+    "cache_creation_tokens": 8584170,
+    "cache_read_tokens": 319843370,
+    "output_tokens": 2190859,
+    "api_call_count": 1585
   }
 }
