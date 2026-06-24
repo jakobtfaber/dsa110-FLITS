@@ -3,7 +3,7 @@
   "checkpoint_id": "77d46ef7fb13",
   "strategy": "manual-commit",
   "branch": "feat/figure-vector",
-  "checkpoints_count": 4,
+  "checkpoints_count": 5,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "CONTEXT.md",
@@ -24,6 +24,12 @@
       "transcript": "/77/d46ef7fb13/1/full.jsonl",
       "content_hash": "/77/d46ef7fb13/1/content_hash.txt",
       "prompt": "/77/d46ef7fb13/1/prompt.txt"
+    },
+    {
+      "metadata": "/77/d46ef7fb13/2/metadata.json",
+      "transcript": "/77/d46ef7fb13/2/full.jsonl",
+      "content_hash": "/77/d46ef7fb13/2/content_hash.txt",
+      "prompt": "/77/d46ef7fb13/2/prompt.txt"
     }
   ],
   "token_usage": {
