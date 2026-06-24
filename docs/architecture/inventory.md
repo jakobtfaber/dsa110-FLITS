@@ -249,7 +249,7 @@ Each burst has a dedicated notebook/script following the pattern:
 
 ### **Scintillation Analysis** (`scintillation/notebooks/`)
 
-**Burst-Specific Directories:** Each burst has its own folder with multiple analysis versions
+**Burst-Specific Directories:** *(STALE — these per-burst notebook dirs were removed in the scat/scint refactor (`8217cb1`, finished `b0f8bdf`); only `scintillation/notebooks/debug/` remains tracked. List kept for historical reference.)* Each burst had its own folder with multiple analysis versions
 
 1. **casey/** - 3 notebooks (automated + manual versions)
 2. **freya/** - 5 notebooks (multiple manual analysis iterations)

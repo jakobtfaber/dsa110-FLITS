@@ -24,7 +24,7 @@ Scoping the most-interesting science extractable from the 12 CHIME/DSA co-detect
 | `simulation/engine.py` + `sim_fit_bridge.py` | Two-screen forward sim, inject→fit roundtrip | Mature (smoke-tested, not quantitative recovery) |
 | ↳ `wave_optics.py`, `multifreq_analysis.py` | Fresnel spike (Gpc-infeasible); broadband analysis | Incomplete |
 | ↳ `monte_carlo.py` + `sim_fit_bridge` roundtrip | Recovery campaign; inject→fit | Runs, but **no quantitative τ-recovery validation** (smoke-test only) |
-| `flits/batch/` | Multi-burst runner → SQLite, joint τ–Δν, export | Partial (scint config-gen + τ(ν) placeholders) |
+| `flits/batch/` | Multi-burst runner → SQLite, joint τ–Δν, export | Partial (scint configs discovered not generated; τ–Δν consistency implemented) |
 | `flits/fitting/`, `orchestration/` | Validation thresholds; Maistro provenance | Mature |
 | `galaxies/v2_0/` | Foreground search + **mNFW CGM DM+τ budget** | Mature — most complete science surface |
 | `crossmatching/` | CHIME↔DSA TOA + geometric-delay co-detection; **association significance** (`association.py`, pillars 1–4) | TOA + chance-coincidence pillar implemented & tested (`association_report.json`); pillars 2/4 (independent CHIME DM / localization) wired but await CHIME-side data |
@@ -48,11 +48,11 @@ Ordered by leverage-per-effort:
 
 1. **Wire the two-screen layer** (consistency relation + ν-scaling + modulation→size) into the pipeline. Funcs exist in `scintillation/scint_analysis/analysis.py`, just not called. *Low cost, unblocks the headline.*
 2. **NE2025 Galactic-floor integration** — wire `ne2025/query_ne2025_scint.py` so each burst's measured scattering is compared to the predicted MW floor (Galactic vs extragalactic split). *Low cost.*
-3. **Scintillation campaign tooling** — fix `flits/batch` scint config-gen stub (`batch_runner.py:262,275`, `# TODO: Add scintillation config generation`) so the mature scint pipeline runs over all 12.
+3. **Scintillation campaign coverage** — the scint pipeline runs (`batch_runner.py::discover_scint_configs`; configs are intentionally *discovered*/hand-tuned, not generated). What remains is running it over the 9/12 bursts that still need RFI/window-tuned configs — coverage, not missing code.
 4. **ACF anomaly re-validation harness** — RFI + self-noise + off-pulse checks for the 3 measured Δν, to certify diffractive vs artifact. *New, small.*
 5. **Quantitative parameter-recovery validation** — DONE (2026-06-22). `simulation/recovery_campaign.py` ensemble-averages the sim→fit dynamic spectra (suppresses scintillation) and recovers injected τ to **~3% (ratio 1.03, spread 1.4%) across 80× in τ** (0.07–5.84 ms) → `results/recovery_campaign.csv`; slow test `tests/test_recovery_campaign.py`. Side finding: a **narrow-band double-count** in `sim_fit_bridge.roundtrip` — the `nu0^-α` rescale is invalid for a 3% fractional band (it inflated the ratio to ≈2.44=0.8⁻⁴); compare raw τ_1ghz. **Δν recovery added** (same module, `dnu_recovery_curve`): ensemble-averaged frequency ACFs recover injected `nu_s_host` **linearly** (ratio 0.29, spread 2.5%, over ~5× in Δν) → `results/recovery_campaign_dnu.csv`. Both τ and Δν recovery are now validated → defensible error bars and upper limits.
 6. **Probabilistic host-DM treatment** — negative-host-DM is DIAGNOSED as expected Macquart-mean scatter on under-dense sightlines (not a `galaxies/v2_0` bug; see §B). Deliverable is to subtract the cosmic-DM *distribution* `p(DM_cosmic|z)` instead of the mean and report host DM as a posterior/upper limit. *Science task, needs a modelling decision — not autopilot.*
-7. Debt (not science): `flits/` wrapper consolidation; τ(ν) batch placeholder (`analysis_logic.py:110`); `crossmatching/` geometric-delay localization remains unbuilt (association significance + TOA cross-match are done, §A row).
+7. Debt (not science): `flits/` wrapper consolidation; `crossmatching/` geometric-delay localization remains unbuilt (association significance + TOA cross-match are done, §A row).
 
 ## D. To-be-explored (science)
 

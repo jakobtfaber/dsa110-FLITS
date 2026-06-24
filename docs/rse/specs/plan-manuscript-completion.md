@@ -68,8 +68,8 @@ coverage and the justification each section must state:
 | Joint scattering α (fits exist) | 11/12 | all but casey | casey: **only single-band multiscale output, no joint `c0/γ` fit in `joint_json/`** |
 | — adversarially trusted α | 3/12 | johndoeII, phineas, wilhelm | other 8: **α railed at a prior bound (chromatica/freya/hamilton→6.0), unconstrained (isha σ≈2.6, mahi), or pending multi-component + all-exp finalization (zach, whitney); oran refuted (CHIME nuisance railed)** |
 | Isotropic energies E_iso | 6/12 | chromatica, hamilton, isha, phineas, wilhelm, zach | freya/mahi/johndoeII: **placeholder z=1.0, no spectroscopic host redshift → no luminosity distance**; oran/whitney: **FAIL-gated joint fit, dropped by the energy trust boundary**; casey: **no joint c0/γ fit**. (hamilton, chromatica carry **provisional/unpublished z** — flag in table.) |
-| Scintillation Δν measured | 3/12 | casey, freya, wilhelm | other 9: **scint config-generation not yet run (stub at `flits/batch/batch_runner.py:262`)** — deferred, NOT unsuitable |
-| Profile-bias α case study | 1 | zach (3.32→2.41) | demonstrator; **generalization pending the multi-component campaign** |
+| Scintillation Δν measured | 3/12 | casey, freya, wilhelm | other 9: **scint configs not yet discovered/run for these (pipeline implemented — `batch_runner.py::discover_scint_configs`; hand-tuned RFI/window configs pending)** — deferred, NOT unsuitable |
+| Profile-bias α case study | 1 | whitney (α 1.5→5.12; zach withdrawn) | demonstrator; zach withheld — its mixed-PBF correction (3.32→2.41) reverses sign under the canonical all-exp PBF (3.319→4.59; C2D3 rejected → single-comp α=3.319), see ADR-0003; **generalization pending the multi-component campaign** |
 | Foreground/intervening census | 49 candidates / 12 sightlines | — | 29 confirmed, 7 background, 13 inconclusive; **MgII for 13 systems pending host-spectra location** (`results/mgii_inventory.csv`) |
 
 Keep this table in sync as fork-A relocks α and fork-B's scint campaign runs.
@@ -123,14 +123,14 @@ the framing stays internally consistent — **after** the in-flight edits are co
    caption/text.
 4. **Tighten the already-backed sections** (need no α): DM decomposition results, E_iso
    table (just merged, #42 — 6 bursts, flag provisional z for hamilton/chromatica),
-   TOA/association, foreground census, the zach profile-bias case study, wilhelm
-   two-screen scint case, bandpass/γ_D diagnostic.
+   TOA/association, foreground census, the whitney profile-bias case study (zach
+   withdrawn per ADR-0003), wilhelm two-screen scint case, bandpass/γ_D diagnostic.
 5. **Author list** (`auth.tex` stub) — owner/collaboration action.
 
 ## Have now (write-up-ready)
 DM budget (12/12); E_iso 6-burst table + calibration audit (on main, #42); TOA+positional
-association (12/12); foreground census (49/29-confirmed); profile-bias demonstrator (zach);
-wilhelm two-screen scint case; bandpass/γ_D diagnostic.
+association (12/12); foreground census (49/29-confirmed); profile-bias demonstrator
+(whitney; zach withdrawn per ADR-0003); wilhelm two-screen scint case; bandpass/γ_D diagnostic.
 
 ## Missing / externally blocked
 Author list (collaboration); 2 host redshifts (hamilton, chromatica — provisional);
