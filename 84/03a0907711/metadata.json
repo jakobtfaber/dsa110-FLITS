@@ -3,7 +3,7 @@
   "checkpoint_id": "8403a0907711",
   "strategy": "manual-commit",
   "branch": "feature/cluster-catalog-engine",
-  "checkpoints_count": 6,
+  "checkpoints_count": 10,
   "files_touched": null,
   "sessions": [
     {
@@ -17,13 +17,19 @@
       "transcript": "/84/03a0907711/1/full.jsonl",
       "content_hash": "/84/03a0907711/1/content_hash.txt",
       "prompt": "/84/03a0907711/1/prompt.txt"
+    },
+    {
+      "metadata": "/84/03a0907711/2/metadata.json",
+      "transcript": "/84/03a0907711/2/full.jsonl",
+      "content_hash": "/84/03a0907711/2/content_hash.txt",
+      "prompt": "/84/03a0907711/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 240988,
-    "cache_creation_tokens": 5282746,
-    "cache_read_tokens": 179400859,
-    "output_tokens": 1261402,
-    "api_call_count": 825
+    "input_tokens": 240990,
+    "cache_creation_tokens": 5292292,
+    "cache_read_tokens": 179534941,
+    "output_tokens": 1264458,
+    "api_call_count": 826
   }
 }
