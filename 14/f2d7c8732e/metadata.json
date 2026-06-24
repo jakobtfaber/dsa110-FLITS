@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "14f2d7c8732e",
+  "strategy": "manual-commit",
+  "branch": "feat/custom-dm-tool",
+  "checkpoints_count": 7,
+  "files_touched": [
+    "analysis/README.md",
+    "analysis/build_manuscript.py",
+    "analysis/burst_energies/figures.manifest.json",
+    "analysis/chime_dm/chime_dm.tex",
+    "analysis/chime_dm/chime_dm_grid.svg",
+    "analysis/chime_dm/figures.manifest.json",
+    "analysis/chime_dm/figures.review.json",
+    "analysis/chime_dm/plot_dm_grid.py",
+    "analysis/manuscript.tex",
+    "analysis/manuscript_figures.html",
+    "outputs/handoff_manuscript-figures_2026-06-24/HANDOFF.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/14/f2d7c8732e/0/metadata.json",
+      "transcript": "/14/f2d7c8732e/0/full.jsonl",
+      "content_hash": "/14/f2d7c8732e/0/content_hash.txt",
+      "prompt": "/14/f2d7c8732e/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 191400,
+    "cache_creation_tokens": 5443356,
+    "cache_read_tokens": 185807202,
+    "output_tokens": 1046721,
+    "api_call_count": 894
+  }
+}
