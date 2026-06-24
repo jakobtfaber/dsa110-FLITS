@@ -54,24 +54,25 @@ def gate_one(burst, fit, ppc):
         l2 = _worst(fc, fd)
         l2_note = f"chi2_C={cc:.2f}({fc}) chi2_D={cd:.2f}({fd})"
 
-    # Level 3 -- alpha physics consistency (FAIL if <2 or >6; PASS-consistent in
-    # the Kolmogorov window; otherwise MARGINAL). tau x dnu not evaluable here.
-    if alpha < 2.0 or alpha > 6.0:
-        l3 = "FAIL"
-    elif KOLM_LO <= alpha <= KOLM_HI:
-        l3 = "PASS"
-    else:
-        l3 = "MARGINAL"
+    # Level 3 -- alpha physics consistency. Physical bounds are Level 1's job
+    # (don't re-impose a second, stricter alpha cut here); Level 3 only judges
+    # closeness to Kolmogorov: in-window => PASS-consistent, else MARGINAL
+    # (off-Kolmogorov). tau x dnu not evaluable here (no per-sightline dnu_d).
+    l3 = "PASS" if KOLM_LO <= alpha <= KOLM_HI else "MARGINAL"
 
-    final = _worst(l1, l2, l3)
+    # A prior-railed alpha is unconstrained -- the fit pinned the prior bound
+    # rather than measuring alpha -- so it is never better than MARGINAL even if
+    # every level otherwise passes (consistent with excluding the rail-pinned
+    # chromatica/freya/hamilton joint fits as non-measurements).
+    final = _worst(l1, l2, l3, "MARGINAL" if rail else "PASS")
     if l1_fail:
         reason = "L1 " + "; ".join(l1_fail)
     elif l2 == "FAIL":
         reason = "L2 catastrophic " + l2_note
-    elif final == "FAIL":
-        reason = f"L3 alpha={alpha:.2f} unphysical"
     elif final == "MARGINAL":
         bits = []
+        if rail:
+            bits.append(f"alpha prior-railed (within {RAIL_EDGE} of bound) -> unconstrained")
         if l2 == "MARGINAL":
             bits.append("L2 " + l2_note)
         if l3 == "MARGINAL":
