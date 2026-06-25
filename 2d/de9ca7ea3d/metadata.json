@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "2dde9ca7ea3d",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 21,
+  "files_touched": [
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/README.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/2d/de9ca7ea3d/0/metadata.json",
+      "transcript": "/2d/de9ca7ea3d/0/full.jsonl",
+      "content_hash": "/2d/de9ca7ea3d/0/content_hash.txt",
+      "prompt": "/2d/de9ca7ea3d/0/prompt.txt"
+    }
+  ]
+}
