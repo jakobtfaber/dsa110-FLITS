@@ -1,36 +1,24 @@
 {
   "cli_version": "0.7.7",
   "checkpoint_id": "8388db32a37c",
-  "session_id": "019efa6b-b677-7273-a071-580c4e582f7f",
+  "session_id": "019efa83-0f57-7de1-89af-c5ff79e3cbc9",
   "strategy": "manual-commit",
-  "created_at": "2026-06-25T08:26:36.649752Z",
+  "created_at": "2026-06-25T08:26:47.12446Z",
   "branch": "main",
-  "checkpoints_count": 1,
-  "files_touched": [
-    ".gitignore",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/README.md",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/chat-brainstorm-short-take.md",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization-deep-search.csv",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization-deep-search.md",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization.bib",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-report.md",
-    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/project-library-papers.bib"
-  ],
+  "checkpoints_count": 15,
+  "save_step_count": 1,
+  "files_touched": [],
   "agent": "Codex",
   "model": "gpt-5.5",
-  "turn_id": "b013e1b55fae",
-  "checkpoint_transcript_start": 79,
-  "transcript_lines_at_start": 79,
-  "initial_attribution": {
-    "calculated_at": "2026-06-25T08:26:36.636333Z",
-    "agent_lines": 0,
-    "agent_removed": 0,
-    "human_added": 1550,
-    "human_modified": 0,
-    "human_removed": 0,
-    "total_committed": 1550,
-    "total_lines_changed": 1550,
-    "agent_percentage": 0,
-    "metric_version": 2
+  "turn_id": "ce981873f8e9",
+  "token_usage": {
+    "input_tokens": 1089061,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 16824192,
+    "output_tokens": 66992,
+    "api_call_count": 151
+  },
+  "session_metrics": {
+    "turn_count": 15
   }
 }
