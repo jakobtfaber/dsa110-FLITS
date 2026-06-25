@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "8388db32a37c",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    ".gitignore",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/README.md",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/chat-brainstorm-short-take.md",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization-deep-search.csv",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization-deep-search.md",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-localization.bib",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/dual-band-frb-scattering-report.md",
+    "docs/literature/undermind/2026-06-chime-dsa-frb-open-questions/project-library-papers.bib"
+  ],
+  "sessions": [
+    {
+      "metadata": "/83/88db32a37c/0/metadata.json",
+      "transcript": "/83/88db32a37c/0/full.jsonl",
+      "content_hash": "/83/88db32a37c/0/content_hash.txt",
+      "prompt": ""
+    }
+  ]
+}
