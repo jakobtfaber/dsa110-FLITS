@@ -91,8 +91,11 @@ def plot_sightline(sl: Sightline, cosmo: Optional[Cosmology] = None,
         a.annotate(H[i].label or ("C" if is_cl[i] else str(i + 1)), (xs[i], ys[i]),
                    fontsize=6.0, ha="center", va="center", color="w", zorder=6)
     a.scatter(0, 0, marker="*", s=240, color="crimson", edgecolor="k", lw=0.6, zorder=7)
-    a.add_patch(Ellipse((0, 0), 0.9, 0.6, angle=25, fill=False, ec="crimson", lw=1.0))
-    lim = float(np.max(np.abs(np.r_[xs, ys])) + theta_r200.max() * 0.6)
+    if len(H):                       # frame so the full R200 circles fit (no clipping)
+        lim = float(1.12 * max(np.max(np.abs(xs) + theta_r200), np.max(np.abs(ys) + theta_r200)))
+    else:
+        lim = 1.0
+    a.add_patch(Ellipse((0, 0), 0.10 * lim, 0.07 * lim, angle=25, fill=False, ec="crimson", lw=1.0))
     a.set_xlim(-lim, lim); a.set_ylim(-lim, lim)
     a.set_xlabel(r"$\Delta$RA (arcmin)"); a.set_ylabel(r"$\Delta$Dec (arcmin)")
     a.set_title("(a) Sky view (C = cluster)")
