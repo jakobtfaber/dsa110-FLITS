@@ -1,0 +1,27 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "189b0641173a",
+  "strategy": "manual-commit",
+  "branch": "migration/phase1-easy-wins",
+  "checkpoints_count": 12,
+  "files_touched": [
+    "DATA_LOCATIONS.md",
+    "docs/infrastructure/MACHINE_INVENTORY.md",
+    "docs/infrastructure/MIGRATION_LOG.md",
+    "docs/infrastructure/MIGRATION_PLAN_4HOST.md",
+    "docs/infrastructure/PHASE2_DESIGN.md",
+    "machine_inventory.yaml",
+    "reports/phase2_audit.json",
+    "scripts/migration/audit_h23_delta.py",
+    "scripts/migration/h23_to_iacobus.sh",
+    "scripts/query_machine_inventory.py"
+  ],
+  "sessions": [
+    {
+      "metadata": "/18/9b0641173a/0/metadata.json",
+      "transcript": "/18/9b0641173a/0/full.jsonl",
+      "content_hash": "/18/9b0641173a/0/content_hash.txt",
+      "prompt": "/18/9b0641173a/0/prompt.txt"
+    }
+  ]
+}
