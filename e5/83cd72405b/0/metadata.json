@@ -1,0 +1,111 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "e583cd72405b",
+  "session_id": "763e0b75-dd74-49da-9e0a-a07f8e0b46a0",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-26T23:44:53.644259Z",
+  "branch": "docs/post-migration-deferred",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    "DATA_SOURCES.md"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2.5-fast",
+  "turn_id": "2be9d2b58346",
+  "session_metrics": {
+    "turn_count": 36,
+    "context_tokens": 182888,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-26T23:44:53.612458Z",
+    "agent_lines": 16,
+    "agent_removed": 0,
+    "human_added": 97,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 113,
+    "total_lines_changed": 113,
+    "agent_percentage": 14.15929203539823,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 3630,
+      "user_lines_removed": 8,
+      "agent_lines_added": 35050,
+      "agent_lines_removed": 22,
+      "user_added_per_file": {
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658,
+        "docs/entire-tracing-checkpoints.md": 64
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 3566,
+      "user_lines_removed": 8,
+      "agent_lines_added": 35114,
+      "agent_lines_removed": 22,
+      "user_added_per_file": {
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 3566,
+      "user_lines_removed": 8,
+      "agent_lines_added": 35114,
+      "agent_lines_removed": 22,
+      "user_added_per_file": {
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/hooks/no-commit-to-protected-branch.sh": 28,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658
+      },
+      "user_removed_per_file": {
+        ".claude/hooks/no-commit-to-protected-branch.sh": 8
+      }
+    }
+  ]
+}
