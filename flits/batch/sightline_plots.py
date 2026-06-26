@@ -56,7 +56,7 @@ class Sightline:
 
 def plot_sightline(sl: Sightline, cosmo: Optional[Cosmology] = None,
                    mnfw: Optional[ModifiedNFW] = None, cmap: str = "viridis",
-                   figsize=(9.8, 7.4)):
+                   figsize=(8.8, 8.6)):
     """Render the 4-panel sightline figure; returns the Figure."""
     cosmo = cosmo or Cosmology()
     mnfw = mnfw or ModifiedNFW(cosmo=cosmo)
@@ -83,7 +83,7 @@ def plot_sightline(sl: Sightline, cosmo: Optional[Cosmology] = None,
     fig, ax = plt.subplots(2, 2, figsize=figsize)
     fig.subplots_adjust(left=0.08, right=0.97, top=0.93, bottom=0.07, hspace=0.26, wspace=0.26)
 
-    a = ax[0, 0]; a.set_aspect("equal")
+    a = ax[0, 0]
     for i in range(len(H)):
         a.add_patch(Circle((xs[i], ys[i]), theta_r200[i], fill=False, ec=cm(znorm(z[i])),
                     lw=1.6 if is_cl[i] else 1.0, ls="-" if pierces[i] else "--", alpha=0.85))
@@ -129,6 +129,9 @@ def plot_sightline(sl: Sightline, cosmo: Optional[Cosmology] = None,
     dx.axhline(meas, color="crimson", ls="--", lw=1.2); dx.text(0.004, meas + 6, "measured DM", color="crimson", fontsize=7)
     dx.set_xlabel("Redshift $z$"); dx.set_ylabel(r"Cumulative DM (pc cm$^{-3}$)")
     dx.set_title("(d) DM ledger along the sightline"); dx.set_xlim(0, sl.z_frb); dx.legend(fontsize=6.3, loc="upper left")
+
+    for _ax in ax.ravel():           # square boxes so all four panels match (incl. the equal-limit sky view)
+        _ax.set_box_aspect(1)
     return fig
 
 
