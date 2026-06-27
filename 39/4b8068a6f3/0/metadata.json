@@ -1,0 +1,35 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "394b8068a6f3",
+  "session_id": "763e0b75-dd74-49da-9e0a-a07f8e0b46a0",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-27T04:47:00.970177Z",
+  "branch": "docs/post-migration-deferred",
+  "checkpoints_count": 19,
+  "save_step_count": 1,
+  "files_touched": [
+    "analysis/burst_energies/burst_energies.json",
+    "analysis/burst_energies/burst_energies.provenance.json",
+    "analysis/calculate_burst_energies.py"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2.5-fast",
+  "turn_id": "ceda19e55d4a",
+  "session_metrics": {
+    "turn_count": 55,
+    "context_tokens": 209964,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-27T04:47:00.929249Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 4424,
+    "human_modified": 12,
+    "human_removed": 0,
+    "total_committed": 4424,
+    "total_lines_changed": 4507,
+    "agent_percentage": 0,
+    "metric_version": 2
+  }
+}
