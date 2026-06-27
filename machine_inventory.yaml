@@ -226,9 +226,9 @@ migration_map:
     completed_utc: "2026-06-26T18:30:00Z"
     action: keep
     source_host: h17
-    source_path: /data/jfaber/upchan_codetections
+    source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections
     target_host: h17
-    notes: 11f/473M five-target upchan; keep on h17; promote finished .npy when stable — phase4_audit
+    notes: 11f/473M five-target upchan; consolidated into compute workspace 2026-06-27; promote finished .npy when stable — phase4_audit
   - id: h17_ubuntu_stub
     phase: 4
     status: completed
@@ -541,24 +541,25 @@ machines:
           - path: /data/jfaber/arc_archive_2026-06/configs_json
             size_human: 65K
       - id: upchan_codetections
-        path: /data/jfaber/upchan_codetections
+        path: /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections
         kind: burst_data
         migration_action: keep
         migration_target: h17
         size_human: 473M
         file_count: 11
+        notes: moved from /data/jfaber/upchan_codetections 2026-06-27
         files:
-          - /data/jfaber/upchan_codetections/casey_chime_freq.npy
-          - /data/jfaber/upchan_codetections/casey_chime_upchan.npy
-          - /data/jfaber/upchan_codetections/isha_chime_freq.npy
-          - /data/jfaber/upchan_codetections/isha_chime_upchan.npy
-          - /data/jfaber/upchan_codetections/mahi_chime_freq.npy
-          - /data/jfaber/upchan_codetections/mahi_chime_upchan.npy
-          - /data/jfaber/upchan_codetections/phineas_chime_freq.npy
-          - /data/jfaber/upchan_codetections/phineas_chime_upchan.npy
-          - /data/jfaber/upchan_codetections/whitney_chime_freq.npy
-          - /data/jfaber/upchan_codetections/whitney_chime_upchan.npy
-          - /data/jfaber/upchan_codetections/_profcheck.py
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/casey_chime_freq.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/casey_chime_upchan.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/isha_chime_freq.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/isha_chime_upchan.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/mahi_chime_freq.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/mahi_chime_upchan.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/phineas_chime_freq.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/phineas_chime_upchan.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/whitney_chime_freq.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/whitney_chime_upchan.npy
+          - /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections/_profcheck.py
       - id: chime_singlebeam_empty
         path: /data/jfaber/chime_singlebeam
         kind: data
@@ -584,6 +585,8 @@ machines:
             size_human: 1.7M
           - path: /data/research/astrophysics/frbs/chime-dsa-codetections/results
             size_human: 1.5M
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections
+            size_human: 473M
       - id: chime_dsa_codetections_ubuntu
         path: /data/ubuntu/chime-dsa-codetections
         kind: working_tree

@@ -32,7 +32,7 @@ AUDITS = [
     },
     {
         "id": "h17_upchan_products",
-        "h17_path": "/data/jfaber/upchan_codetections",
+        "h17_path": "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections",
         "iacobus_path": None,
         "notes": "5-target upchan .npy; promote to arc/iacobus when stable",
     },

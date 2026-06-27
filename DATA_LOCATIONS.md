@@ -87,7 +87,7 @@ Verify: `rclone about gdrive-jakob:` · `rclone lsd gdrive-jakob:Research/`
 | Path | Size | Notes |
 |------|------|-------|
 | `/data/research/astrophysics/frbs/chime-dsa-codetections` | 29G | CHIME docker / filterbanks / numpy |
-| `/data/jfaber/upchan_codetections` | 473M | Upchan products |
+| `.../upchan_codetections` | 473M | Upchan products (5 targets; moved from `/data/jfaber/` 2026-06-27) |
 | `/data/jfaber/arc_archive_2026-06` | 36G | arc trash copy; optional dedupe → iacobus (Phase 4) |
 
 ## Legacy Documents-Area Clone
