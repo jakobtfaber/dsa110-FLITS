@@ -1,9 +1,12 @@
 {
   "cli_version": "0.7.7",
   "checkpoint_id": "4156a29ebf31",
+  "session_id": "763e0b75-dd74-49da-9e0a-a07f8e0b46a0",
   "strategy": "manual-commit",
+  "created_at": "2026-06-27T04:45:35.356279Z",
   "branch": "docs/post-migration-deferred",
-  "checkpoints_count": 20,
+  "checkpoints_count": 19,
+  "save_step_count": 20,
   "files_touched": [
     ".agents/deferred-tasks.md",
     ".agents/skills/ensuring-reproducibility/SKILL.md",
@@ -188,25 +191,178 @@
     "scratch/pr-cov-body.md",
     "scratch/wire_batch.py"
   ],
-  "sessions": [
+  "agent": "Cursor",
+  "model": "composer-2.5-fast",
+  "turn_id": "ceda19e55d4a",
+  "session_metrics": {
+    "turn_count": 55,
+    "context_tokens": 209964,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-27T04:45:35.314382Z",
+    "agent_lines": 34895,
+    "agent_removed": 6,
+    "human_added": 3597,
+    "human_modified": 1,
+    "human_removed": 0,
+    "total_committed": 38493,
+    "total_lines_changed": 38499,
+    "agent_percentage": 90.65430270916127,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
     {
-      "metadata": "/41/56a29ebf31/0/metadata.json",
-      "transcript": "/41/56a29ebf31/0/full.jsonl",
-      "content_hash": "/41/56a29ebf31/0/content_hash.txt",
-      "prompt": "/41/56a29ebf31/0/prompt.txt"
+      "checkpoint_number": 2,
+      "user_lines_added": 3598,
+      "user_lines_removed": 1,
+      "agent_lines_added": 34896,
+      "agent_lines_removed": 6,
+      "user_added_per_file": {
+        ".claude/agents/astronomy-astrophysics-expert.md": 987,
+        ".claude/commands/harden.md": 12,
+        ".claude/commands/reproduce.md": 12,
+        ".claude/commands/validate.md": 12,
+        ".claude/skills/ensuring-reproducibility/SKILL.md": 144,
+        ".claude/skills/hardening-research-code/SKILL.md": 173,
+        ".claude/skills/validating-implementations/SKILL.md": 226,
+        ".claude/skills/validating-implementations/references/report-templates.md": 164,
+        ".claude/skills/xarray-for-multidimensional-data/SKILL.md": 475,
+        ".claude/skills/xarray-for-multidimensional-data/references/common-issues.md": 147,
+        ".claude/skills/xarray-for-multidimensional-data/references/examples.md": 528,
+        ".claude/skills/xarray-for-multidimensional-data/references/patterns.md": 658,
+        "docs/entire-tracing-checkpoints.md": 59,
+        "galaxies/foreground/sightline_budget.py": 1
+      },
+      "user_removed_per_file": {
+        "galaxies/foreground/sightline_budget.py": 1
+      }
     },
     {
-      "metadata": "/41/56a29ebf31/1/metadata.json",
-      "transcript": "/41/56a29ebf31/1/full.jsonl",
-      "content_hash": "/41/56a29ebf31/1/content_hash.txt",
-      "prompt": "/41/56a29ebf31/1/prompt.txt"
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 38494,
+      "agent_lines_removed": 7
     }
-  ],
-  "token_usage": {
-    "input_tokens": 78131,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 338944,
-    "output_tokens": 4265,
-    "api_call_count": 8
-  }
+  ]
 }
