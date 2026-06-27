@@ -1,0 +1,826 @@
+Fan out and familiarize yourself with the workspace.
+
+---
+
+Fan out and familiarize yourself with the workspace.
+
+---
+
+First order of business: consolidation.
+
+Documents relevant to this project are spread across various directories, not only on this machine but also on various remote machines & servers, including:
+- `hpcc` (Caltech Resnick HPC)
+- `h17` (OVRO compute server)
+- `arc` / `CANFAR` (CHIME/FRB compute server)
+- `h23` (OVRO compute server)
+- `dsacamera` (OVRO compute server)
+- `iacobus` (my backup/old Intel Macbook Pro)
+
+Remind yourself of how to access these machines and where the relevant data and files on each reside.
+
+---
+
+First order of business: consolidation.
+
+Documents relevant to this project are spread across various directories, not only on this machine but also on various remote machines & servers, including:
+- `hpcc` (Caltech Resnick HPC)
+- `h17` (OVRO compute server)
+- `arc` / `CANFAR` (CHIME/FRB compute server)
+- `h23` (OVRO compute server)
+- `dsacamera` (OVRO compute server)
+- `iacobus` (my backup/old Intel Macbook Pro)
+
+Remind yourself of how to access these machines and where the relevant data and files on each reside.
+
+---
+
+Yes.
+
+---
+
+Yes.
+
+---
+
+Restate with minimal cognitive load
+
+---
+
+Restate with minimal cognitive load
+
+---
+
+How is arc/CANFAR accessed?
+
+---
+
+How is arc/CANFAR accessed?
+
+---
+
+what is "vls"?
+
+---
+
+what is "vls"?
+
+---
+
+Does this work similar ot ssh or does it not let us run anything on arc?
+
+---
+
+Does this work similar ot ssh or does it not let us run anything on arc?
+
+---
+
+But this cannot be done via the CLI?
+
+---
+
+But this cannot be done via the CLI?
+
+---
+
+Is it impossible to access CANFAR via the CLI in any way?
+
+---
+
+Is it impossible to access CANFAR via the CLI in any way?
+
+---
+
+just installed canfar via pip into `flits` env and `py312` env, please set it up
+
+---
+
+just installed canfar via pip into `flits` env and `py312` env, please set it up
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/home/dot_local/bin/executable_canfar
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/home/dot_local/bin/executable_canfar
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+
+---
+
+So what exactly are we able to use canfar for given the cli?
+
+---
+
+So what exactly are we able to use canfar for given the cli?
+
+---
+
+Can we access GPU's using `canfar` cli?
+
+---
+
+Can we access GPU's using `canfar` cli?
+
+---
+
+Run test(s) to confirm if GPU's can or cannot be accessed by us.
+
+---
+
+Run test(s) to confirm if GPU's can or cannot be accessed by us.
+
+---
+
+Can we document this very clearly --- previously before installing `canfar` we thought CANFAR had no GPU's accessible
+
+---
+
+Can we document this very clearly --- previously before installing `canfar` we thought CANFAR had no GPU's accessible
+
+---
+
+Can we document this very clearly --- previously before installing `canfar` we thought CANFAR had no GPU's accessible
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/learning_flits-likelihood-nch2-bug.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/learning_flits-likelihood-nch2-bug.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/learning_flits-likelihood-nch2-bug.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/learning_flits-likelihood-nch2-bug.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dotfiles/memory/project_dsa110-flits-scattering-budget.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_SOURCES.md
+
+---
+
+and unlike hpcc, this A100 gpu is immeidately accessible?
+
+---
+
+and unlike hpcc, this A100 gpu is immeidately accessible?
+
+---
+
+where does a100 gpu fall in how powerful it is compared to the gpu's on hpcc?
+
+---
+
+where does a100 gpu fall in how powerful it is compared to the gpu's on hpcc?
+
+---
+
+Can we modify the MIG slice at all?
+
+---
+
+Can we modify the MIG slice at all?
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/.cursor/projects/Users-jakobfaber-Developer-overleaf-Faber2026/agent-tools/d01669fc-ae91-4f33-bcc2-684d8eb804c1.txt
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/.cursor/projects/Users-jakobfaber-Developer-overleaf-Faber2026/agent-tools/d01669fc-ae91-4f33-bcc2-684d8eb804c1.txt
+
+---
+
+Revisit the machines and built a more detailed inventory of the contents on each respectively. Store those contents and full-filepaths into an easily referenced or queryable format.
+
+---
+
+Develop a plan to migrate data/docs/files/code from all of these machines to just:
+---
+jakob-mbp, arc, h17, iacobus
+
+---
+
+Develop a plan to migrate data/docs/files/code from all of these machines to just:
+---
+jakob-mbp, arc, h17, iacobus
+
+---
+
+Yes, write docs/infrastructure/MIGRATION_PLAN_4HOST.md in FLITS and wire into machine_inventory.yaml
+
+---
+
+Yes, write docs/infrastructure/MIGRATION_PLAN_4HOST.md in FLITS and wire into machine_inventory.yaml
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/query_machine_inventory.py
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/query_machine_inventory.py
+
+---
+
+Let's start the migration where it's easiest first.
+
+---
+
+Let's start the migration where it's easiest first.
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_LOG.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_LOG.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+
+---
+
+Continue to designing phase 2
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_LOG.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/PHASE2_DESIGN.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MACHINE_INVENTORY.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_LOG.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/MIGRATION_PLAN_4HOST.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/PHASE2_DESIGN.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/machine_inventory.yaml
+
+---
+
+Prodeed
+
+---
+
+Proceed
+
+---
+
+Proceed
+
+---
+
+Start multitasking
+
+---
+
+Start multitasking
+
+---
+
+Start on Phase 4
+
+---
+
+Execute phase 3
+
+---
+
+Execute phase 3
+
+---
+
+proceed with phase 5
+
+---
+
+proceed with phase 5
+
+---
+
+Execute Phase 4
+
+---
+
+has phase 4 finished?
+
+---
+
+has phase 4 finished?
+
+---
+
+has phase 4 finished?
+
+---
+
+has phase 4 finished?
+
+---
+
+has phase 4 finished?
+
+---
+
+resume phase 4 to finish inventory + skip/copy decisions
+
+---
+
+commit_PR branch`migration/phase1-easy-wins`
+
+give more context / less cognitive load for the deferred items
+
+---
+
+let's merge
+
+---
+
+did we lose any work through this squash?
+
+---
+
+great, let's continue
+
+---
+
+great, let's continue
+
+---
+
+Have Codex verify that the merge is safe and worth doing (use codex gpt-5.5 high)
+
+---
+
+merg #68
+
+---
+
+Let's continue, and for the next one have Codex gpt-5.5 high vet the safety and validitly of the merge as well
+
+---
+
+merge #69
+
+---
+
+proceed with D2
+
+---
+
+merge #70
+
+---
+
+merge #70
+
+---
+
+Proceed D3
+
+---
+
+check D3 transfer
+
+---
+
+what are we transferring to iacobus again?
+
+---
+
+what are we transferring to iacobus again?
+
+---
+
+wait why again?
+
+---
+
+wait why again?
+
+---
+
+Ah I actually don't want iacobus to be the data authority, after all
+
+---
+
+Ah I actually don't want iacobus to be the data authority, after all
+
+---
+
+is there space for it in `radiolab` on the `hpcc` server?
+
+---
+
+is there space for it in `radiolab` on the `hpcc` server?
+
+---
+
+the ideal would be storing it on some mutually accessible drive fully in the cloud that's easily downloadable to any machine
+
+---
+
+can i ask the reason for b2/s3 bucket over google drive?
+
+---
+
+does the gdrive reasoning still apply if I have a Google AI Pro account?
+
+---
+
+does the gdrive reasoning still apply if I have a Google AI Pro account?
+
+---
+
+let's try gdrive authority
+
+---
+
+let's try gdrive authority
+
+---
+
+let's try gdrive authority - use google acct jakobtfaber@gmail.com
+
+---
+
+how can I setup rclone in the easiest possible way?
+
+---
+
+what should I put for the config_team_drive value of type string?
+
+---
+
+keep drive remote?
+
+---
+
+keep drive remote?
+
+---
+
+done! created
