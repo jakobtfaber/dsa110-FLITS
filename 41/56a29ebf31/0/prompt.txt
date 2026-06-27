@@ -1,0 +1,1 @@
+Review PR #68 for jakobtfaber/dsa110-FLITS. Context: post-4-host-migration follow-up; adds DEFERRED_MIGRATION.md (D1-D3 optional transfer waves) and DATA_SOURCES.md CANFAR GPU smoke-test note. Main migration merged in #67. Answer: (1) merge safe? yes/no + why (2) worth doing? yes/no + why (3) any P0/P1 issues in the diff. Use gh pr diff 68 and gh pr view 68. Be concise.
