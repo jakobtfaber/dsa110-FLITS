@@ -1,0 +1,20 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "99bed6b08510",
+  "strategy": "manual-commit",
+  "branch": "docs/pass2-closeout-handoff",
+  "checkpoints_count": 7,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    ".agents/pass-2-grill-decisions.md",
+    "docs/rse/specs/handoff-2026-06-26-23-43-pass2-closeout.md"
+  ],
+  "sessions": [
+    {
+      "metadata": "/99/bed6b08510/0/metadata.json",
+      "transcript": "/99/bed6b08510/0/full.jsonl",
+      "content_hash": "/99/bed6b08510/0/content_hash.txt",
+      "prompt": "/99/bed6b08510/0/prompt.txt"
+    }
+  ]
+}

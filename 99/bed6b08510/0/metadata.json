@@ -1,0 +1,51 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "99bed6b08510",
+  "session_id": "763e0b75-dd74-49da-9e0a-a07f8e0b46a0",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-27T07:31:41.22662Z",
+  "branch": "docs/pass2-closeout-handoff",
+  "checkpoints_count": 7,
+  "save_step_count": 2,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    ".agents/pass-2-grill-decisions.md",
+    "docs/rse/specs/handoff-2026-06-26-23-43-pass2-closeout.md"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2.5-fast",
+  "turn_id": "1ab02fccd4a7",
+  "session_metrics": {
+    "turn_count": 74,
+    "context_tokens": 209964,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-27T07:31:41.17889Z",
+    "agent_lines": 50,
+    "agent_removed": 0,
+    "human_added": 115,
+    "human_modified": 2,
+    "human_removed": 0,
+    "total_committed": 167,
+    "total_lines_changed": 167,
+    "agent_percentage": 29.94011976047904,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 117,
+      "user_lines_removed": 2,
+      "agent_lines_added": 1,
+      "agent_lines_removed": 115,
+      "user_added_per_file": {
+        ".agents/deferred-tasks.md": 3,
+        "docs/rse/specs/handoff-2026-06-26-23-43-pass2-closeout.md": 114
+      },
+      "user_removed_per_file": {
+        ".agents/deferred-tasks.md": 2
+      }
+    }
+  ]
+}
