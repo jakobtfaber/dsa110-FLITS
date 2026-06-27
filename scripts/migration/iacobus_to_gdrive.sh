@@ -62,7 +62,7 @@ REMOTE_DST="${REMOTE}:${GDRIVE_ROOT}/"
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
 
 sentinel_verify() {
-  python3 - "$MANIFEST" "$REMOTE" "$GDRIVE_ROOT" <<'PY' | ssh -o BatchMode=yes "$IACOBUS" "bash -s" >>"$LOG" 2>&1
+  python3 - "$MANIFEST" "$REMOTE" "$GDRIVE_ROOT" <<'PY' >>"$LOG" 2>&1
 import hashlib, json, subprocess, sys, yaml
 
 manifest_path, remote, gdrive_root = sys.argv[1:4]
@@ -89,11 +89,12 @@ if got != expected:
     sys.exit(1)
 print(f"SENTINEL PASS: {rel} ({nbytes} B prefix sha256 match)")
 PY
+  return $?
 }
 
 if (( VERIFY_ONLY )); then
   log "VERIFY-ONLY sentinel check remote=$REMOTE dst=$GDRIVE_ROOT"
-  sentinel_verify
+  sentinel_verify || { echo "FAIL sentinel — see $LOG" >&2; exit 1; }
   echo "OK sentinel (log: $LOG)"
   exit 0
 fi
