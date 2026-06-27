@@ -141,8 +141,8 @@ migration_map:
     source_host: h23
     source_path: /media/ubuntu/ssd/jfaber/burstprop_paper/bursts
     target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/burstprop_paper
-    notes: rsync 2026-06-25; iacobus 183f/49G superset of h23 132f/42G
+    target_path: /Users/iacobus/Research/CHIME_Morphologies/burstprop_paper
+    notes: rsync 2026-06-25; re-homed from codetections/archive 2026-06-26 (67G live)
   - id: h23_dsa110_scat_archive
     phase: 2
     status: completed
@@ -380,18 +380,16 @@ machines:
         kind: data_root
         migration_action: migrate
         migration_target: gdrive
-        size_human: 283G
-        size_bytes: 234392304408
+        size_human: 223G
+        size_bytes: null
         file_count: 1546
-        notes: staging source for gdrive upload (~280G); demoted from data authority 2026-06-26
+        notes: staging source for gdrive upload; demoted from data authority 2026-06-26; burstprop_paper moved to CHIME_Morphologies 2026-06-26
         children:
           - id: archive
             path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive
-            size_human: 131G
+            size_human: 127G
             file_count: 401
             children:
-              - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/burstprop_paper
-                size_human: 26G
               - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
                 size_human: 2.7G
               - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/OLD_CHIME_DSA_Codetections
@@ -453,6 +451,16 @@ machines:
             path: /Users/iacobus/Research/CHIME_DSA_Codetections/codetections_manifest.yaml
             kind: manifest
             size_human: 4K
+      - id: research_chime_morphologies
+        path: /Users/iacobus/Research/CHIME_Morphologies
+        kind: data_root
+        migration_action: keep
+        migration_target: null
+        size_human: 67G
+        notes: burstprop_paper only; separate from CHIME–DSA codetections; moved from codetections/archive 2026-06-26
+        children:
+          - path: /Users/iacobus/Research/CHIME_Morphologies/burstprop_paper
+            size_human: 67G
       - id: icloud_chime_codetections
         path: /Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections
         kind: data_mirror

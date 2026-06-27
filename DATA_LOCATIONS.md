@@ -23,7 +23,7 @@ Do not develop on hpcc, arc checkout, or h23 trees. h17 may hold an optional clo
 | **rclone** | `gdrive-jakob:Research/CHIME_DSA_Codetections/` |
 | **Drive for Desktop** | mount after adding jakobtfaber@gmail.com — expected `~/Library/CloudStorage/GoogleDrive-jakobtfaber@gmail.com/My Drive/Research/CHIME_DSA_Codetections/` |
 
-**Staging source (iacobus):** `iacobus:~/Research/CHIME_DSA_Codetections/` (~283 GiB as of 2026-06-26). Bytes upload via `scripts/migration/iacobus_to_gdrive.sh` (direct iacobus→Drive; jakob-mbp orchestrates only).
+**Staging source (iacobus):** `iacobus:~/Research/CHIME_DSA_Codetections/` (~223 GiB as of 2026-06-26; excludes `CHIME_Morphologies/`). Bytes upload via `scripts/migration/iacobus_to_gdrive.sh` (direct iacobus→Drive; jakob-mbp orchestrates only).
 
 **Legacy iCloud mirror:** `~/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections/` — demoted; jakob-mbp shows placeholders only. iacobus CloudDocs clone retained until gdrive upload verified.
 
@@ -35,11 +35,21 @@ Do not develop on hpcc, arc checkout, or h23 trees. h17 may hold an optional clo
 | `scattering_results/` | Fit PDFs, corners (h23 + hpcc JSON merged) |
 | `dm_budget/` | DM budget code + h23 merge |
 | `metadata/` | CSVs, localizations |
-| `archive/` | `OLD_CHIME_DSA_Codetections/`, `burstprop_paper/`, `dsa110-scat/` |
+| `archive/` | `OLD_CHIME_DSA_Codetections/`, `dsa110-scat/` |
 
 Sentinels: [`codetections_manifest.yaml`](codetections_manifest.yaml)
 
 **Out of scope:** nihari (`Research/nihari/` on iCloud; h23 `jfaber/nihari/` remains on source).
+
+## CHIME Morphologies (separate project)
+
+**Not part of CHIME–DSA co-detections or the gdrive upload.**
+
+| Host | Path | Size (2026-06-26) |
+|------|------|-------------------|
+| **iacobus** | `~/Research/CHIME_Morphologies/burstprop_paper/` | 67G |
+
+Moved from `CHIME_DSA_Codetections/archive/burstprop_paper/` on iacobus 2026-06-26. iCloud CloudDocs may still show the old path until mirror sync catches up; authoritative live path is `~/Research/CHIME_Morphologies/`.
 
 ### rclone setup (gdrive-jakob)
 
