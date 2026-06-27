@@ -1,0 +1,127 @@
+let's commit and push all of the local/dirty work to main first for FLITS?
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/DEFERRED_MIGRATION.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/infrastructure/DEFERRED_MIGRATION.md
+
+---
+
+commit/push dedup fix
+
+---
+
+next?
+
+---
+
+let's go with science (#4)
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/CONTEXT.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06/CITABLE_ALPHA_ROSTER.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06/citable_alpha_roster.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/decision-map-manuscript-completion.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/CONTEXT.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06/CITABLE_ALPHA_ROSTER.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/analysis/scattering-refit-2026-06/citable_alpha_roster.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/decision-map-manuscript-completion.md
+
+---
+
+commit & push
+
+---
+
+is this session closable?
+
+---
+
+is this session closable?
