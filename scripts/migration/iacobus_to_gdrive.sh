@@ -164,7 +164,8 @@ launch() {
   echo "[$(date '+%F %T')] PID $! job $name" >>"$log"
 }
 : >"$LOG_DIR/iacobus_to_gdrive_parallel.pids"
-launch archive "${SRC}/archive/" "${REMOTE}:${GDRIVE_ROOT}/archive/"
+# burstprop_paper: separate project (not CHIME–DSA codetections); see DATA_LOCATIONS out-of-scope.
+launch archive --exclude "burstprop_paper/**" "${SRC}/archive/" "${REMOTE}:${GDRIVE_ROOT}/archive/"
 launch burst_pickles "${SRC}/burst_pickles/" "${REMOTE}:${GDRIVE_ROOT}/burst_pickles/"
 launch burst_npys "${SRC}/burst_npys/" "${REMOTE}:${GDRIVE_ROOT}/burst_npys/"
 launch rest \
