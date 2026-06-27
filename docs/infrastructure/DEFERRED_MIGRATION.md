@@ -71,7 +71,7 @@ Pre-move audit: [`reports/d2_chime_canfar_inventory.csv`](../../reports/d2_chime
 ```bash
 python scripts/migration/audit_h17_arc_archive.py --stdout
 bash scripts/migration/h17_to_iacobus.sh          # iacobus pull via ssh -A; --ignore-existing
-python scripts/query_machine_inventory.py --migration-map --id h17_arc_archive_copy
+python scripts/query_machine_inventory.py --migration-map --json | jq '.[] | select(.id=="h17_arc_archive_copy")'
 ```
 
 Pre-move audit: [`reports/d3_h17_arc_inventory.csv`](../../reports/d3_h17_arc_inventory.csv), [`reports/d3_h17_arc_inventory.json`](../../reports/d3_h17_arc_inventory.json).
