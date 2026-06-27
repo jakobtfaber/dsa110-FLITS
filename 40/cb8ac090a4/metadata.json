@@ -20,5 +20,17 @@
       "content_hash": "/40/cb8ac090a4/1/content_hash.txt",
       "prompt": "/40/cb8ac090a4/1/prompt.txt"
     }
-  ]
+  ],
+  "combined_attribution": {
+    "calculated_at": "2026-06-27T04:53:40.024028Z",
+    "agent_lines": 1,
+    "agent_removed": 3,
+    "human_added": 0,
+    "human_modified": 0,
+    "human_removed": 0,
+    "total_committed": 1,
+    "total_lines_changed": 4,
+    "agent_percentage": 100,
+    "metric_version": 2
+  }
 }
