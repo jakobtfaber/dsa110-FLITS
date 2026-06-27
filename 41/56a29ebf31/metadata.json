@@ -3,7 +3,7 @@
   "checkpoint_id": "4156a29ebf31",
   "strategy": "manual-commit",
   "branch": "docs/post-migration-deferred",
-  "checkpoints_count": 20,
+  "checkpoints_count": 21,
   "files_touched": [
     ".agents/deferred-tasks.md",
     ".agents/skills/ensuring-reproducibility/SKILL.md",
@@ -200,6 +200,12 @@
       "transcript": "/41/56a29ebf31/1/full.jsonl",
       "content_hash": "/41/56a29ebf31/1/content_hash.txt",
       "prompt": "/41/56a29ebf31/1/prompt.txt"
+    },
+    {
+      "metadata": "/41/56a29ebf31/2/metadata.json",
+      "transcript": "/41/56a29ebf31/2/full.jsonl",
+      "content_hash": "/41/56a29ebf31/2/content_hash.txt",
+      "prompt": "/41/56a29ebf31/2/prompt.txt"
     }
   ],
   "token_usage": {
