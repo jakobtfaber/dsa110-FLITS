@@ -247,14 +247,14 @@ migration_map:
     notes: path absent on h17 2026-06-26 probe; baseband under compute workspace chime_singlebeam/14G
   - id: iacobus_chime_canfar_archive
     phase: 4
-    status: skipped
-    completed_utc: "2026-06-26T18:30:00Z"
-    action: dedupe
+    status: completed
+    completed_utc: "2026-06-27T01:43:00Z"
+    action: migrate
     source_host: iacobus
     source_path: /Users/iacobus/Archives/CHIME_canfar
     target_host: iacobus
     target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
-    notes: 725f/2.7G vs archive 937f/178G — zero basename overlap; unique CANFAR exports; move-only merge deferred (D4 policy)
+    notes: D2 move-only mv 2026-06-27; pre-move 725f/2.7G vs archive 937f/178G — zero basename overlap (reports/d2_chime_canfar_inventory.csv); post-move source absent target 725f/2.7G
   - id: h17_arc_archive_copy
     phase: 4
     status: skipped
