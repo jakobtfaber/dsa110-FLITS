@@ -373,6 +373,8 @@ machines:
             children:
               - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/burstprop_paper
                 size_human: 26G
+              - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
+                size_human: 2.7G
               - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/OLD_CHIME_DSA_Codetections
                 size_human: 105G
           - id: burst_npys
@@ -441,16 +443,16 @@ machines:
         file_count: 1546
         notes: CloudDocs mirror; byte-identical to Research/ per 2026-06-17 diff
       - id: chime_canfar_archive
-        path: /Users/iacobus/Archives/CHIME_canfar
+        path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
         kind: archive
-        migration_action: dedupe
+        migration_action: keep
         migration_target: iacobus
         size_human: 2.7G
         file_count: 725
         children:
           - baseband_morphologies
           - forJason
-        notes: relocated from jakob-mbp iCloud Archives; Phase 4 skipped merge — 0 basename overlap vs Research/archive; retain here until D4 move-only wave
+        notes: D2 move-only mv 2026-06-27 from ~/Archives/CHIME_canfar; pre-move 0 basename overlap vs Research/archive
 
   h17:
     hostname: lxd110h17-hpc
