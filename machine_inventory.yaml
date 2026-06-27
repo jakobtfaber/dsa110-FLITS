@@ -2,8 +2,8 @@
 # Live-probed inventory of CHIME–DSA co-detection assets by host.
 # Query: yq / scripts/query_machine_inventory.py (see docs/infrastructure/MACHINE_INVENTORY.md)
 schema: 3
-generated_utc: "2026-06-26T18:30:00Z"
-generated_by: "Phase 4 closeout — h17 audit + inventory decisions (2026-06-26)"
+generated_utc: "2026-06-26T22:00:00Z"
+generated_by: "GDrive authority decision — iacobus demoted to staging (2026-06-26)"
 project: CHIME-DSA codetections
 excluded:
   - nihari
@@ -18,7 +18,9 @@ migration:
 
 canonical:
   code_repo: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
-  data_authority: iacobus:/Users/iacobus/Research/CHIME_DSA_Codetections
+  data_authority: gdrive-jakob:Research/CHIME_DSA_Codetections
+  data_authority_account: jakobtfaber@gmail.com
+  data_staging: iacobus:/Users/iacobus/Research/CHIME_DSA_Codetections
   arc_storage: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections
   arc_burst_npys: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/DSA_bursts
 
@@ -264,7 +266,16 @@ migration_map:
     source_path: /data/jfaber/arc_archive_2026-06
     target_host: iacobus
     target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06
-    notes: D3 hash-map 245 pkl/npy — 97.5% unique bytes vs OLD_CHIME+chime_canfar; rsync via h17_to_iacobus.sh (ignore-existing)
+    notes: D3 hash-map 245 pkl/npy — 97.5% unique bytes; rsync via h17_to_iacobus.sh; iacobus staging toward gdrive authority
+  - id: iacobus_to_gdrive
+    phase: 5
+    status: skipped
+    action: migrate
+    source_host: iacobus
+    source_path: /Users/iacobus/Research/CHIME_DSA_Codetections
+    target_host: gdrive
+    target_path: gdrive-jakob:Research/CHIME_DSA_Codetections
+    notes: DEFERRED 2026-06-27 — ~283G upload time; gdrive-jakob@gmail.com remains canonical target; scripts/migration/iacobus_to_gdrive.sh; OAuth blocker 2026-06-26
   - id: h23_nihari
     phase: 0
     status: out_of_scope
@@ -327,7 +338,7 @@ machines:
         migration_action: keep
         migration_target: jakob-mbp
         size_human: 1.5M
-        size_note: iCloud placeholders only on jakob-mbp; not materialized locally
+        size_note: iCloud placeholders only on jakob-mbp; demoted — gdrive is authority
         subdirs:
           - archive
           - burst_npys
@@ -337,12 +348,20 @@ machines:
           - metadata
           - presentations
           - scattering_results
-        notes: authoritative bytes live on iacobus; see iacobus:research_chime_codetections
+        notes: legacy mirror; bytes on iacobus staging until gdrive upload complete
+      - id: gdrive_chime_codetections
+        path: gdrive-jakob:Research/CHIME_DSA_Codetections
+        kind: data_root
+        migration_action: keep
+        migration_target: gdrive
+        size_human: pending
+        size_note: target ~280G from iacobus; remote not configured 2026-06-26
+        notes: canonical cloud authority jakobtfaber@gmail.com; rclone remote gdrive-jakob on iacobus
 
   iacobus:
     hostname: iacobus
     migration_status: target
-    role: data authority + iCloud uploader; materialized CHIME/DSA products
+    role: staging source for gdrive upload; legacy iCloud uploader; materialized CHIME/DSA products until gdrive verified
     access:
       ssh: iacobus
       user: iacobus
@@ -359,12 +378,12 @@ machines:
       - id: research_chime_codetections
         path: /Users/iacobus/Research/CHIME_DSA_Codetections
         kind: data_root
-        migration_action: keep
-        migration_target: iacobus
-        size_human: 218G
+        migration_action: migrate
+        migration_target: gdrive
+        size_human: 283G
         size_bytes: 234392304408
         file_count: 1546
-        notes: canonical materialized data root (APFS clone of CloudDocs mirror)
+        notes: staging source for gdrive upload (~280G); demoted from data authority 2026-06-26
         children:
           - id: archive
             path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive
