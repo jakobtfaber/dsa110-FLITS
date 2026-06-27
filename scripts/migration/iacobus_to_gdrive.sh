@@ -19,19 +19,36 @@ REMOTE="${RCLONE_REMOTE:-gdrive-jakob}"
 GDRIVE_ROOT="${GDRIVE_ROOT:-Research/CHIME_DSA_Codetections}"
 SRC="${IACOBUS_SRC:-/Users/iacobus/Research/CHIME_DSA_Codetections}"
 LOG_DIR="${LOG_DIR:-$HOME/logs/gdrive_transfers}"
-RCLONE_OPTS=(--progress --stats-one-line --stats 30s -v)
+# Perf defaults: saturate ~3 MiB/s home uplink without hammering Drive API.
+# Override: RCLONE_TRANSFERS=2 RCLONE_PARALLEL_JOBS=3 ...
+RCLONE_TRANSFERS="${RCLONE_TRANSFERS:-4}"
+RCLONE_CHECKERS="${RCLONE_CHECKERS:-8}"
+RCLONE_CHUNK="${RCLONE_CHUNK:-64M}"
+RCLONE_BUFFER="${RCLONE_BUFFER:-32M}"
+RCLONE_OPTS=(
+  --progress --stats-one-line --stats 30s -v
+  --ignore-existing
+  --transfers "$RCLONE_TRANSFERS"
+  --checkers "$RCLONE_CHECKERS"
+  --drive-chunk-size "$RCLONE_CHUNK"
+  --buffer-size "$RCLONE_BUFFER"
+  --fast-list
+)
 TRANSFER="${TRANSFER:-copy}" # copy | sync
 
 usage() {
   cat <<EOF >&2
-Usage: $0 [--dry-run] [--subdir NAME] [--verify-only] [--sync]
+Usage: $0 [--dry-run] [--subdir NAME] [--verify-only] [--sync] [--parallel]
 
   --dry-run       rclone dry-run (no bytes moved)
   --subdir NAME   transfer one top-level subdir only (e.g. metadata)
   --verify-only   sentinel SHA-256 check on remote; no transfer
   --sync          use rclone sync instead of copy (destructive on remote extras)
+  --parallel      run disjoint subtree copies in parallel ON iacobus (fast path)
 
-Env: RCLONE_REMOTE (default gdrive-jakob), GDRIVE_ROOT, IACOBUS_HOST, LOG_DIR
+Env: RCLONE_REMOTE, GDRIVE_ROOT, IACOBUS_HOST, LOG_DIR,
+     RCLONE_TRANSFERS (4), RCLONE_CHECKERS (8), RCLONE_CHUNK (64M),
+     RCLONE_BUFFER (32M)
 EOF
   exit 1
 }
@@ -39,12 +56,14 @@ EOF
 DRY=0
 SUBDIR=""
 VERIFY_ONLY=0
+PARALLEL=0
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY=1; shift ;;
     --subdir) SUBDIR="$2"; shift 2 ;;
     --verify-only) VERIFY_ONLY=1; shift ;;
     --sync) TRANSFER=sync; shift ;;
+    --parallel) PARALLEL=1; shift ;;
     -h|--help) usage ;;
     *) usage ;;
   esac
@@ -102,7 +121,7 @@ fi
 RCLONE_DRY=()
 (( DRY )) && RCLONE_DRY=(--dry-run)
 
-log "START $NAME transfer=$TRANSFER dry_run=$DRY"
+log "START $NAME transfer=$TRANSFER dry_run=$DRY parallel=$PARALLEL"
 log "  src: iacobus:$LOCAL_SRC"
 log "  dst: $REMOTE_DST"
 
@@ -111,6 +130,51 @@ if ! ssh -o BatchMode=yes "$IACOBUS" "rclone listremotes" 2>>"$LOG" | grep -q "^
   log "FAILED preflight: remote ${REMOTE}: not configured on $IACOBUS"
   echo "FAIL — configure gdrive remote on iacobus first (see script header). Log: $LOG" >&2
   exit 1
+fi
+
+if (( PARALLEL )) && [[ -z "$SUBDIR" ]]; then
+  IACOBUS_LOG_DIR="${IACOBUS_LOG_DIR:-/Users/iacobus/logs/gdrive_transfers}"
+  ssh -o BatchMode=yes "$IACOBUS" "mkdir -p '$IACOBUS_LOG_DIR'"
+  log "Launching 4 parallel rclone jobs on $IACOBUS (logs under $IACOBUS_LOG_DIR/)"
+  ssh -o BatchMode=yes "$IACOBUS" bash -s \
+    "$TRANSFER" "$DRY" "$SRC" "$REMOTE" "$GDRIVE_ROOT" "$IACOBUS_LOG_DIR" \
+    "$RCLONE_TRANSFERS" "$RCLONE_CHECKERS" "$RCLONE_CHUNK" "$RCLONE_BUFFER" <<'REMOTE'
+set -eo pipefail
+TRANSFER=$1 DRY=$2 SRC=$3 REMOTE=$4 GDRIVE_ROOT=$5 LOG_DIR=$6
+RCLONE_TRANSFERS=$7 RCLONE_CHECKERS=$8 RCLONE_CHUNK=$9 RCLONE_BUFFER=${10}
+OPTS=(
+  --progress --stats-one-line --stats 30s
+  --ignore-existing
+  --transfers "$RCLONE_TRANSFERS"
+  --checkers "$RCLONE_CHECKERS"
+  --drive-chunk-size "$RCLONE_CHUNK"
+  --buffer-size "$RCLONE_BUFFER"
+  --fast-list
+)
+launch() {
+  local name=$1; shift
+  local log="$LOG_DIR/iacobus_to_gdrive_${name}.log"
+  echo "[$(date '+%F %T')] START parallel job $name $*" >>"$log"
+  if (( DRY )); then
+    nohup rclone "$TRANSFER" --dry-run "${OPTS[@]}" "$@" >>"$log" 2>&1 &
+  else
+    nohup rclone "$TRANSFER" "${OPTS[@]}" "$@" >>"$log" 2>&1 &
+  fi
+  echo $! >>"$LOG_DIR/iacobus_to_gdrive_parallel.pids"
+  echo "[$(date '+%F %T')] PID $! job $name" >>"$log"
+}
+: >"$LOG_DIR/iacobus_to_gdrive_parallel.pids"
+launch archive "${SRC}/archive/" "${REMOTE}:${GDRIVE_ROOT}/archive/"
+launch burst_pickles "${SRC}/burst_pickles/" "${REMOTE}:${GDRIVE_ROOT}/burst_pickles/"
+launch burst_npys "${SRC}/burst_npys/" "${REMOTE}:${GDRIVE_ROOT}/burst_npys/"
+launch rest \
+  --exclude "archive/**" --exclude "burst_pickles/**" --exclude "burst_npys/**" \
+  "${SRC}/" "${REMOTE}:${GDRIVE_ROOT}/"
+cat "$LOG_DIR/iacobus_to_gdrive_parallel.pids"
+REMOTE
+  log "Parallel jobs launched on $IACOBUS — monitor: ssh $IACOBUS 'tail -f $IACOBUS_LOG_DIR/iacobus_to_gdrive_*.log'"
+  echo "OK ${NAME}_parallel launched (orchestrator log: $LOG)"
+  exit 0
 fi
 
 RSYNC_CMD=(rclone "$TRANSFER" "${RCLONE_DRY[@]}" "${RCLONE_OPTS[@]}" "$LOCAL_SRC" "$REMOTE_DST")
