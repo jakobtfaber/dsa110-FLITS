@@ -62,11 +62,11 @@ Pre-move audit: [`reports/d2_chime_canfar_inventory.csv`](../../reports/d2_chime
 
 | Source | Target | Size |
 |--------|--------|------|
-| h17 `/data/jfaber/arc_archive_2026-06` | iacobus `archive/arc_trash_2026-06/` | 1924 f / 36 G |
+| h17 `.../chime-dsa-codetections/archive/arc_trash_2026-06` (was `/data/jfaber/arc_archive_2026-06`) | iacobus `archive/arc_trash_2026-06/` | 1924 f / 36 G |
 
 **Finding (2026-06-27 hash-map):** full sha256 on 245 `.pkl`/`.npy` (36.4 G hashed) vs iacobus `OLD_CHIME_DSA_Codetections` + `archive/chime_canfar` — **97.5% unique bytes** (20 hash duplicates / 906 M duplicate bytes). Basename overlap remains low (numeric vs nickname naming).
 
-**Executed (2026-06-27):**
+**Executed (2026-06-27):** rsync h17→iacobus (`03:45 UTC`); h17 source consolidated move-only into compute workspace (`07:24 UTC`).
 
 ```bash
 python scripts/migration/audit_h17_arc_archive.py --stdout

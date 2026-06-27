@@ -86,9 +86,12 @@ Verify: `rclone about gdrive-jakob:` · `rclone lsd gdrive-jakob:Research/`
 
 | Path | Size | Notes |
 |------|------|-------|
-| `/data/research/astrophysics/frbs/chime-dsa-codetections` | 29G | CHIME docker / filterbanks / numpy |
+| `/data/research/astrophysics/frbs/chime-dsa-codetections` | ~65G | CHIME docker / filterbanks / numpy / arc archive |
 | `.../upchan_codetections` | 473M | Upchan products (5 targets; moved from `/data/jfaber/` 2026-06-27) |
-| `/data/jfaber/arc_archive_2026-06` | 36G | arc trash copy; optional dedupe → iacobus (Phase 4) |
+| `.../archive/arc_trash_2026-06` | 36G | arc trash copy (moved from `/data/jfaber/` 2026-06-27); optional dedupe → iacobus |
+| `.../scripts/upchannelize_chime.py` | 12K | Baseband upchan worker (moved from `/data/jfaber/` 2026-06-27) |
+
+`/data/jfaber/` is empty of codetection products as of 2026-06-27.
 
 ## Legacy Documents-Area Clone
 

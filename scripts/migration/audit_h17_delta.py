@@ -38,9 +38,9 @@ AUDITS = [
     },
     {
         "id": "h17_arc_archive_copy",
-        "h17_path": "/data/jfaber/arc_archive_2026-06",
+        "h17_path": "/data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06",
         "iacobus_path": "/Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06",
-        "notes": "optional copy to iacobus after Phase 3 OLD_CHIME dedupe",
+        "notes": "consolidated from /data/jfaber/ 2026-06-27; optional copy to iacobus after dedupe",
         "children": True,
     },
     {

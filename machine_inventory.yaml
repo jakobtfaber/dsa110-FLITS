@@ -219,7 +219,7 @@ migration_map:
     source_host: h17
     source_path: /data/research/astrophysics/frbs/chime-dsa-codetections
     target_host: h17
-    notes: 339f/29G CHIME docker workspace; keep on h17 — reports/phase4_audit.json h17_compute_workspace
+    notes: 2275f/~65G CHIME docker workspace (includes arc archive + upchan); keep on h17 — reports/phase4_audit.json h17_compute_workspace
   - id: h17_upchan_products
     phase: 4
     status: completed
@@ -260,13 +260,13 @@ migration_map:
   - id: h17_arc_archive_copy
     phase: 4
     status: completed
-    completed_utc: "2026-06-27T03:45:00Z"
+    completed_utc: "2026-06-27T07:24:00Z"
     action: copy
     source_host: h17
-    source_path: /data/jfaber/arc_archive_2026-06
+    source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06
     target_host: iacobus
     target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06
-    notes: D3 hash-map 245 pkl/npy — 97.5% unique bytes; rsync via h17_to_iacobus.sh; iacobus staging toward gdrive authority
+    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staging toward gdrive authority
   - id: iacobus_to_gdrive
     phase: 5
     status: skipped
@@ -504,41 +504,41 @@ machines:
           size_human: 8.61GB
     locations:
       - id: arc_archive_2026_06
-        path: /data/jfaber/arc_archive_2026-06
+        path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06
         kind: archive
-        migration_action: dedupe
-        migration_target: iacobus
+        migration_action: keep
+        migration_target: h17
         size_human: 36G
         file_count: 1924
-        source: arc VOSpace trash migration (2026-06)
-        notes: optional promote to iacobus archive/arc_trash_2026-06 after Phase 3 dedupe (phase4 audit 2026-06-25)
+        source: arc VOSpace trash migration (2026-06); consolidated from /data/jfaber/ 2026-06-27
+        notes: optional promote to iacobus archive/arc_trash_2026-06 after dedupe
         children:
-          - path: /data/jfaber/arc_archive_2026-06/fullstokes_pkl
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/fullstokes_pkl
             size_human: 25G
-          - path: /data/jfaber/arc_archive_2026-06/stokes_cubes_npy
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/stokes_cubes_npy
             size_human: 4.3G
-          - path: /data/jfaber/arc_archive_2026-06/other_data_npy
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/other_data_npy
             size_human: 3.4G
-          - path: /data/jfaber/arc_archive_2026-06/other_data_pkl
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/other_data_pkl
             size_human: 1.9G
-          - path: /data/jfaber/arc_archive_2026-06/singlebeam_h5
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/singlebeam_h5
             size_human: 91M
-          - path: /data/jfaber/arc_archive_2026-06/processed_spectra_pkl
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/processed_spectra_pkl
             size_human: 396M
-          - path: /data/jfaber/arc_archive_2026-06/notebooks
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/notebooks
             size_human: 173M
-          - path: /data/jfaber/arc_archive_2026-06/plots
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/plots
             size_human: 419M
-          - path: /data/jfaber/arc_archive_2026-06/scattering_dirs
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/scattering_dirs
             size_human: 54M
-          - path: /data/jfaber/arc_archive_2026-06/trashed_directories
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/trashed_directories
             size_human: 710M
             notes: live probe 2026-06-25; not in original arc trash manifest
-          - path: /data/jfaber/arc_archive_2026-06/acf_results
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/acf_results
             size_human: 4.4M
-          - path: /data/jfaber/arc_archive_2026-06/code
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/code
             size_human: 317K
-          - path: /data/jfaber/arc_archive_2026-06/configs_json
+          - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/configs_json
             size_human: 65K
       - id: upchan_codetections
         path: /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections
@@ -570,8 +570,9 @@ machines:
         kind: working_tree
         migration_action: keep
         migration_target: h17
-        size_human: 29G
-        file_count: 339
+        size_human: 65G
+        file_count: 2275
+        notes: canonical h17 workspace; /data/jfaber/ cleared of codetect products 2026-06-27
         children:
           - path: /data/research/astrophysics/frbs/chime-dsa-codetections/chime_singlebeam
             size_human: 14G
