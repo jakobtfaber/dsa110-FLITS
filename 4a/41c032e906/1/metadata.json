@@ -1,0 +1,85 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "4a41c032e906",
+  "session_id": "fb8173a3-653a-4c78-b367-cf9e6c34922f",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-27T05:17:33.51912Z",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "save_step_count": 4,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "CONTEXT.md",
+    "analysis/scattering-refit-2026-06/CITABLE_ALPHA_ROSTER.md",
+    "analysis/scattering-refit-2026-06/citable_alpha_roster.json",
+    "docs/adr/0005-citable-alpha-roster.md",
+    "docs/rse/specs/decision-map-manuscript-completion.md"
+  ],
+  "agent": "Cursor",
+  "model": "composer-2.5-fast",
+  "turn_id": "ce307909f970",
+  "checkpoint_transcript_start": 44,
+  "transcript_lines_at_start": 44,
+  "session_metrics": {
+    "turn_count": 5,
+    "context_tokens": 187125,
+    "context_window_size": 200000
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-27T05:17:33.496874Z",
+    "agent_lines": 108,
+    "agent_removed": 12,
+    "human_added": 30,
+    "human_modified": 30,
+    "human_removed": 0,
+    "total_committed": 153,
+    "total_lines_changed": 180,
+    "agent_percentage": 66.66666666666666,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 57,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 57,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 196,
+      "agent_lines_removed": 22
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 30,
+      "user_lines_removed": 15,
+      "agent_lines_added": 210,
+      "agent_lines_removed": 27,
+      "user_added_per_file": {
+        "analysis/scattering-refit-2026-06/citable_alpha_roster.json": 8,
+        "docs/adr/0005-citable-alpha-roster.md": 22
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/citable_alpha_roster.json": 6,
+        "docs/adr/0005-citable-alpha-roster.md": 9
+      }
+    }
+  ]
+}

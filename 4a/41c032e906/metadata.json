@@ -3,11 +3,13 @@
   "checkpoint_id": "4a41c032e906",
   "strategy": "manual-commit",
   "branch": "main",
-  "checkpoints_count": 3,
+  "checkpoints_count": 6,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "CONTEXT.md",
     "analysis/scattering-refit-2026-06/CITABLE_ALPHA_ROSTER.md",
+    "analysis/scattering-refit-2026-06/citable_alpha_roster.json",
+    "docs/adr/0005-citable-alpha-roster.md",
     "docs/rse/specs/decision-map-manuscript-completion.md"
   ],
   "sessions": [
@@ -16,6 +18,12 @@
       "transcript": "/4a/41c032e906/0/full.jsonl",
       "content_hash": "/4a/41c032e906/0/content_hash.txt",
       "prompt": "/4a/41c032e906/0/prompt.txt"
+    },
+    {
+      "metadata": "/4a/41c032e906/1/metadata.json",
+      "transcript": "/4a/41c032e906/1/full.jsonl",
+      "content_hash": "/4a/41c032e906/1/content_hash.txt",
+      "prompt": "/4a/41c032e906/1/prompt.txt"
     }
   ]
 }
