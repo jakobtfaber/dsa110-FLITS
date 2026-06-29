@@ -3,7 +3,7 @@
   "checkpoint_id": "285dbe0442d3",
   "strategy": "manual-commit",
   "branch": "verify-claude-review",
-  "checkpoints_count": 6,
+  "checkpoints_count": 28,
   "files_touched": [
     "docs/entire-tracing-checkpoints.md"
   ],
@@ -13,6 +13,12 @@
       "transcript": "/28/5dbe0442d3/0/full.jsonl",
       "content_hash": "/28/5dbe0442d3/0/content_hash.txt",
       "prompt": "/28/5dbe0442d3/0/prompt.txt"
+    },
+    {
+      "metadata": "/28/5dbe0442d3/1/metadata.json",
+      "transcript": "/28/5dbe0442d3/1/full.jsonl",
+      "content_hash": "/28/5dbe0442d3/1/content_hash.txt",
+      "prompt": "/28/5dbe0442d3/1/prompt.txt"
     }
   ],
   "token_usage": {
