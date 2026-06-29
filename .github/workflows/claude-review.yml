@@ -94,5 +94,17 @@ jobs:
             exit 0
           fi
 
-          echo "::error title=Claude review no-op::No claude[bot] comments from this run. Refresh CLAUDE_CODE_OAUTH_TOKEN (claude setup-token) and install the Claude GitHub App on $repo."
+          # No comment posted. Distinguish a Claude-side outage (expired
+          # CLAUDE_CODE_OAUTH_TOKEN / exec error -> is_error in the execution
+          # log) from a genuine posting regression (Claude ran clean but posted
+          # nothing). Only the latter should fail the check; a lapsed personal
+          # Max token must not block PRs.
+          exec_file="${{ steps.claude.outputs.execution_file }}"
+          [ -n "$exec_file" ] || exec_file="$RUNNER_TEMP/claude-execution-output.json"
+          if [ -f "$exec_file" ] && grep -q '"is_error"[[:space:]]*:[[:space:]]*true' "$exec_file"; then
+            echo "::warning title=Claude review unavailable::Claude could not run (likely expired CLAUDE_CODE_OAUTH_TOKEN). Refresh with 'claude setup-token | gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo $repo'. Not blocking this PR."
+            exit 0
+          fi
+
+          echo "::error title=Claude review no-op::Claude ran but posted no claude[bot] comments this run (posting regression). Check the code-review plugin / allowedTools and the Claude GitHub App on $repo."
           exit 1
