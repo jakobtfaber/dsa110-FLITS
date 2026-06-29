@@ -1,0 +1,37 @@
+tell me if any of the ACF analysis figures exist
+
+---
+
+when was that produced?
+
+---
+
+when was that produced?
+
+---
+
+pull the latest version of jakobtfaber/dsa110-FLITS
+
+---
+
+pull the latest version of jakobtfaber/dsa110-FLITS
+
+---
+
+is that still the only ACF figure? is there perhaps one on h17?
+
+---
+
+don't worry about it for now, let's just identify what figures we're trying to create for the manuscript in ~/Developer/overleaf/Faber2026
+
+---
+
+don't worry about it for now, let's just identify what figures we're trying to create for the manuscript in ~/Developer/overleaf/Faber2026
+
+---
+
+can you remind me what "grand" indicates in "grand_galaxies_cgm" or "grand_clusters_icm"?
+
+---
+
+can you remind me what "grand" indicates in "grand_galaxies_cgm" or "grand_clusters_icm"?
