@@ -1,0 +1,242 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "cb83f3bfaadd",
+  "session_id": "f4303e81-83be-43e4-87f4-e10343e49d8d",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-29T05:54:44.415856Z",
+  "branch": "verify-claude-review",
+  "checkpoints_count": 22,
+  "save_step_count": 25,
+  "files_touched": [],
+  "agent": "Cursor",
+  "model": "claude-opus-4-8-thinking-high",
+  "turn_id": "29e54af4d431",
+  "session_metrics": {
+    "turn_count": 22,
+    "context_tokens": 295447,
+    "context_window_size": 300000
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 121,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0,
+      "user_added_per_file": {
+        "docs/entire-tracing-checkpoints.md": 121
+      }
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 121,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 527,
+      "agent_lines_removed": 92
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 527,
+      "agent_lines_removed": 92
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 610,
+      "agent_lines_removed": 93
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 610,
+      "agent_lines_removed": 93
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 610,
+      "agent_lines_removed": 93
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 662,
+      "agent_lines_removed": 146
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 78,
+      "agent_lines_removed": 9
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 332,
+      "agent_lines_removed": 116,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 21,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 22,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 23,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 24,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 25,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 26,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 62,
+      "agent_lines_removed": 0,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    }
+  ]
+}
