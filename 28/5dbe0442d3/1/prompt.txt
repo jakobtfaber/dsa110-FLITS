@@ -291,3 +291,7 @@ yes, rm worktree + delete branch
 ---
 
 refresh now, keep the reviews going & automatic
+
+---
+
+done! set for both dsa110-FLITS and Faber2026
