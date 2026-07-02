@@ -3,7 +3,7 @@
   "checkpoint_id": "1899558b453e",
   "strategy": "manual-commit",
   "branch": "separate-lane/foreground-galaxy-20260629",
-  "checkpoints_count": 43,
+  "checkpoints_count": 44,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "docs/rse/specs/reproducibility-foreground-galaxies.md",
@@ -34,6 +34,7 @@
     "results/figures.review.json",
     "results/sightline_dm_scattering_budget.md",
     "results/sightline_dm_scattering_budget.svg",
+    "scratch/repro-foreground-coverage-figures/figures.review.json",
     "scratch/repro-foreground-figures/closeout-mnfw.json",
     "scratch/repro-foreground-figures/clusters_icm.svg",
     "scratch/repro-foreground-figures/figures.manifest.json",
@@ -58,13 +59,19 @@
       "transcript": "/18/99558b453e/1/full.jsonl",
       "content_hash": "/18/99558b453e/1/content_hash.txt",
       "prompt": "/18/99558b453e/1/prompt.txt"
+    },
+    {
+      "metadata": "/18/99558b453e/2/metadata.json",
+      "transcript": "/18/99558b453e/2/full.jsonl",
+      "content_hash": "/18/99558b453e/2/content_hash.txt",
+      "prompt": "/18/99558b453e/2/prompt.txt"
     }
   ],
   "token_usage": {
-    "input_tokens": 0,
-    "cache_creation_tokens": 0,
-    "cache_read_tokens": 0,
-    "output_tokens": 0,
-    "api_call_count": 0
+    "input_tokens": 25701,
+    "cache_creation_tokens": 170540,
+    "cache_read_tokens": 3339676,
+    "output_tokens": 46322,
+    "api_call_count": 28
   }
 }

@@ -1,0 +1,28 @@
+Remake the all-sky coverage map in galaxies/foreground/survey_coverage_figures.py.
+
+Problem: make_allsky_coverage_map() draws DESI/SDSS as full-360-deg RA bands (fill_between on all RA). User correctly says this looks odd — only Dec coverage, not RA. Need honest 2D survey footprints on a Mollweide map plus the 12 co-detection sightlines.
+
+Context:
+- Repo: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
+- Branch: separate-lane/foreground-galaxy-20260629
+- Current file: galaxies/foreground/survey_coverage_figures.py (make_allsky_coverage_map)
+- Coverage logic in galaxies/foreground/survey_coverage.py uses simplified Dec-only rules for in_footprint checks — DO NOT change search logic unless you add separate VIS-only geometry constants clearly labeled approximate.
+- Targets: galaxies/foreground/config.py TARGETS (12 sightlines, all high northern Dec ~+70 to +74)
+- survey_coverage.csv: scratch/repro-foreground-search-hpcc/survey_coverage.csv
+- Output dir: scratch/repro-foreground-coverage-figures/survey_coverage_allsky.{png,pdf,svg}
+- Update figures.manifest.json expectation for allsky figure
+- Regenerate figures by running: conda run -n flits python -m galaxies.foreground.survey_coverage_figures
+
+Requirements:
+1. Plot approximate but RA-aware footprints for:
+   - DESI Legacy DR8 North (VII/292/north): not full RA at fixed Dec; use published approximate polygon or stripe coverage (northern Legacy is ~RA 100-270 deg, Dec >= -20, not all-sky strip)
+   - SDSS DR12 NGC: not full RA strip; use approximate SDSS imaging NGC polygon (Dec>=1.26 plus RA bounds of NGC imaging)
+   - Optionally note NED/GLADE+/CLUSTERS are all-sky (no fill or very faint full sphere hint)
+2. Keep sightline markers colored by best status from coverage CSV (_sightline_marker_colors)
+3. Add an inset zoom on the sightline cluster (all 12 in small patch) — main map shows global footprints
+4. Fix overlapping labels (adjustText if in env, else manual offsets)
+5. No unicode ≥/minus in matplotlib text (font warnings)
+6. Ponytail: minimal diff, no over-engineering; can add small helper module galaxies/foreground/survey_footprint_polygons.py if cleaner
+7. After edits, run figure generator and confirm PNG written
+
+Return: brief summary of footprint geometry sources used and paths to output PNG.
