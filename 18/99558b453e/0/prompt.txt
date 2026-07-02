@@ -1,0 +1,463 @@
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/sections/budget.tex
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/v2_0/grand_systems_figures.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/matplotlibrc
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/sections/budget.tex
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/v2_0/grand_systems_figures.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/matplotlibrc
+
+---
+
+Where did we run the full search to produce the results we have now? On what machine? h17? hpcc?
+
+---
+
+Where did we run the full search to produce the results we have now? On what machine? h17? hpcc?
+
+---
+
+if you had to re-run the foreground galaxy search from scratch, how would you do it?
+
+---
+
+if you had to re-run the foreground galaxy search from scratch, how would you do it?
+
+---
+
+Anything here you would modify or improve? I notice, for instance, the grand_cluster_img.svg only shows foreground clusters for 1 burst (FRB 20230307A) and I don't know for instance if that's the only burst with foreground galaxy clusters or if it's just the best example case to show.
+
+---
+
+are we using modified-NFW profiles to model the baryon density profiles?
+
+---
+
+is that based on some prior art
+
+---
+
+let's use the mNFW profile instead. most of the code needed should already exist in https://github.com/FRBs/FRB
+
+---
+
+let's use the mNFW profile instead. most of the code needed should already exist in https://github.com/FRBs/FRB
+
+---
+
+let's use the mNFW profile instead. most of the code needed should already exist in https://github.com/FRBs/FRB
+
+---
+
+let's rename the files to not use the word "grand" - it's confusing to me - we can just drop it altgether
+
+---
+
+rename the scripts/filenames still carrying "grand_"
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/pipeline/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/pipeline/reports/phase3_closeout_packet.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/reports/phase3_closeout_packet.json
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/pipeline/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/overleaf/Faber2026/pipeline/reports/phase3_closeout_packet.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/.agents/deferred-tasks.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/reports/phase3_closeout_packet.json
+
+---
+
+Does https://github.com/FRBs/FRB contain any other useful tools for characterizing foregrounds?
+
+---
+
+fold the host-side utilities into our analysis pipeline
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/foreground/sightline_budget.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/__init__.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/catalog.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/data/hosts.yaml
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/dm_predict.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/em.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/test_dm_predict.py
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/foreground/sightline_budget.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/__init__.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/catalog.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/data/hosts.yaml
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/dm_predict.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/em.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/host/test_dm_predict.py
+
+---
+
+let's launch the foreground galaxy search again but let's do it on hpcc
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/foreground_search.sbatch
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/launch_foreground_search.sh
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/run_foreground_search.py
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/foreground_search.sbatch
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/launch_foreground_search.sh
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/hpcc/run_foreground_search.py
+
+---
+
+hpcc is now accessible
+
+---
+
+hpcc is now accessible
+
+---
+
+pending on what exactly?
+
+---
+
+pending on what exactly?
+
+---
+
+we're not using a GPU correct?
+
+---
+
+While that's running, let's prepare the manuscript figures so we can slot in the output
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/foreground/sightline_budget.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/results/figures.manifest.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/results/figures.review.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scratch/repro-foreground-figures/figures.manifest.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scratch/repro-foreground-figures/figures.review.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/manuscript/regenerate_budget_figures.sh
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/manuscript/slot_hpcc_foreground.sh
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/docs/rse/specs/reproducibility-foreground-galaxies.md
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/galaxies/foreground/sightline_budget.py
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/results/figures.manifest.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/results/figures.review.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scratch/repro-foreground-figures/figures.manifest.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scratch/repro-foreground-figures/figures.review.json
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/manuscript/regenerate_budget_figures.sh
+  - /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS/scripts/manuscript/slot_hpcc_foreground.sh
+
+---
+
+where are gates set in Cursor?
+
+---
+
+where are gates set in Cursor?
+
+---
+
+can we relax the verify gate in Cursor but keep for Claude?
+
+---
+
+can we relax the verify gate in Cursor but keep for Claude?
+
+---
+
+do that, disable verify-gate just for Cursor, not the others
+
+---
+
+how is the hpcc run going?
+
+---
+
+how is the hpcc run going?
+
+---
+
+how's it progressing?
+
+---
+
+run it
+
+---
+
+run it
+
+---
+
+what is a census merge?
+
+---
+
+what is a census merge?
+
+---
+
+Added note: I want it clearly documented and visualized via coverage maps which surveys were queried for each event and whether the surveys had coverage along that events sightline (i.e. at its localized sky position)
+
+---
+
+Added note: I want it clearly documented and visualized via coverage maps which surveys were queried for each event and whether the surveys had coverage along that events sightline (i.e. at its localized sky position)
+
+---
+
+this looks odd to me, it only shows Dec coverage, not RA
+
+---
+
+this looks odd to me, it only shows Dec coverage, not RA. Have claude code opus 4.8 remake it
+
+---
+
+this looks odd to me, it only shows Dec coverage, not RA. Have claude code opus 4.8 remake it
+
+---
+
+Rather than plot approximate coverage, plot the exact coverage maps. Also, icurrenlty it just shows DESI DR8 and SDSS NGC
+
+---
+
+Rather than plot approximate coverage, plot the exact coverage maps. Also, icurrenlty it just shows DESI DR8 and SDSS NGC
+
+---
+
+excellent --- what are the chances some events did not get flagged for having foregroudn galaxies due to a lack of coverage by one or more surveys?
+
+---
+
+excellent --- what are the chances some events did not get flagged for having foregroudn galaxies due to a lack of coverage by one or more surveys?
+
+---
+
+wait you're saying DESI DR8 bore nothing because it didn't have photo-z's?
+
+---
+
+wait you're saying DESI DR8 bore nothing because it didn't have photo-z's?
+
+---
+
+the fact that 8 of the events weren
+
+---
+
+the fact that 8 of the events weren
+
+---
+
+the fact that 8 of the events weren't flagged due to missing survey data is a big problem for the analysis
+
+---
+
+the fact that 8 of the events weren't flagged due to missing survey data is a big problem for the analysis

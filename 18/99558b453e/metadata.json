@@ -1,0 +1,61 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1899558b453e",
+  "strategy": "manual-commit",
+  "branch": "separate-lane/foreground-galaxy-20260629",
+  "checkpoints_count": 34,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "docs/rse/specs/reproducibility-foreground-galaxies.md",
+    "galaxies/foreground/build_unified.py",
+    "galaxies/foreground/data/sightline_attribution_matrix.csv",
+    "galaxies/foreground/data/tau_consistency_catalog.csv",
+    "galaxies/foreground/engines_extra.py",
+    "galaxies/foreground/scattering_predict.py",
+    "galaxies/foreground/search.py",
+    "galaxies/foreground/sightline_budget.py",
+    "galaxies/foreground/survey_footprint_mocs.py",
+    "galaxies/foreground/test_build_unified.py",
+    "galaxies/foreground/test_scattering_predict.py",
+    "galaxies/host/__init__.py",
+    "galaxies/host/catalog.py",
+    "galaxies/host/data/hosts.yaml",
+    "galaxies/host/dm_predict.py",
+    "galaxies/host/em.py",
+    "galaxies/host/test_dm_predict.py",
+    "galaxies/v2_0/grand_systems_figures.py",
+    "galaxies/v2_0/systems_figures.py",
+    "matplotlibrc",
+    "reports/phase3_closeout_packet.json",
+    "results/figures.manifest.json",
+    "results/figures.review.json",
+    "results/sightline_dm_scattering_budget.md",
+    "results/sightline_dm_scattering_budget.svg",
+    "scratch/repro-foreground-figures/closeout-mnfw.json",
+    "scratch/repro-foreground-figures/clusters_icm.svg",
+    "scratch/repro-foreground-figures/figures.manifest.json",
+    "scratch/repro-foreground-figures/figures.review.json",
+    "scratch/repro-foreground-figures/galaxies_cgm.svg",
+    "scratch/repro-foreground-search-hpcc/done.txt",
+    "scripts/hpcc/foreground_search.sbatch",
+    "scripts/hpcc/launch_foreground_search.sh",
+    "scripts/hpcc/run_foreground_search.py",
+    "scripts/manuscript/regenerate_budget_figures.sh",
+    "scripts/manuscript/slot_hpcc_foreground.sh"
+  ],
+  "sessions": [
+    {
+      "metadata": "/18/99558b453e/0/metadata.json",
+      "transcript": "/18/99558b453e/0/full.jsonl",
+      "content_hash": "/18/99558b453e/0/content_hash.txt",
+      "prompt": "/18/99558b453e/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  }
+}

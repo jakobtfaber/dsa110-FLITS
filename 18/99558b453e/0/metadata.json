@@ -1,0 +1,642 @@
+{
+  "cli_version": "0.7.7",
+  "checkpoint_id": "1899558b453e",
+  "session_id": "73c8ed30-4884-488f-8750-1408ff63d33a",
+  "strategy": "manual-commit",
+  "created_at": "2026-07-02T00:48:17.937288Z",
+  "branch": "separate-lane/foreground-galaxy-20260629",
+  "checkpoints_count": 34,
+  "save_step_count": 34,
+  "files_touched": [
+    ".agents/deferred-tasks.md",
+    "docs/rse/specs/reproducibility-foreground-galaxies.md",
+    "galaxies/foreground/build_unified.py",
+    "galaxies/foreground/data/sightline_attribution_matrix.csv",
+    "galaxies/foreground/data/tau_consistency_catalog.csv",
+    "galaxies/foreground/engines_extra.py",
+    "galaxies/foreground/scattering_predict.py",
+    "galaxies/foreground/search.py",
+    "galaxies/foreground/sightline_budget.py",
+    "galaxies/foreground/survey_footprint_mocs.py",
+    "galaxies/foreground/test_build_unified.py",
+    "galaxies/foreground/test_scattering_predict.py",
+    "galaxies/host/__init__.py",
+    "galaxies/host/catalog.py",
+    "galaxies/host/data/hosts.yaml",
+    "galaxies/host/dm_predict.py",
+    "galaxies/host/em.py",
+    "galaxies/host/test_dm_predict.py",
+    "galaxies/v2_0/grand_systems_figures.py",
+    "galaxies/v2_0/systems_figures.py",
+    "matplotlibrc",
+    "reports/phase3_closeout_packet.json",
+    "results/figures.manifest.json",
+    "results/figures.review.json",
+    "results/sightline_dm_scattering_budget.md",
+    "results/sightline_dm_scattering_budget.svg",
+    "scratch/repro-foreground-figures/closeout-mnfw.json",
+    "scratch/repro-foreground-figures/clusters_icm.svg",
+    "scratch/repro-foreground-figures/figures.manifest.json",
+    "scratch/repro-foreground-figures/figures.review.json",
+    "scratch/repro-foreground-figures/galaxies_cgm.svg",
+    "scratch/repro-foreground-search-hpcc/done.txt",
+    "scripts/hpcc/foreground_search.sbatch",
+    "scripts/hpcc/launch_foreground_search.sh",
+    "scripts/hpcc/run_foreground_search.py",
+    "scripts/manuscript/regenerate_budget_figures.sh",
+    "scripts/manuscript/slot_hpcc_foreground.sh"
+  ],
+  "agent": "Claude Code",
+  "model": "composer-2.5-fast",
+  "turn_id": "ac16e53488d5",
+  "checkpoint_transcript_start": 45,
+  "transcript_lines_at_start": 45,
+  "token_usage": {
+    "input_tokens": 0,
+    "cache_creation_tokens": 0,
+    "cache_read_tokens": 0,
+    "output_tokens": 0,
+    "api_call_count": 0
+  },
+  "session_metrics": {
+    "turn_count": 40
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-07-02T00:48:17.905972Z",
+    "agent_lines": 0,
+    "agent_removed": 0,
+    "human_added": 87666,
+    "human_modified": 397219,
+    "human_removed": 0,
+    "total_committed": 87666,
+    "total_lines_changed": 484893,
+    "agent_percentage": 0,
+    "metric_version": 2
+  },
+  "prompt_attributions": [
+    {
+      "checkpoint_number": 1,
+      "user_lines_added": 0,
+      "user_lines_removed": 0,
+      "agent_lines_added": 0,
+      "agent_lines_removed": 0
+    },
+    {
+      "checkpoint_number": 2,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 3,
+      "user_lines_added": 1,
+      "user_lines_removed": 2,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 1
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 1
+      }
+    },
+    {
+      "checkpoint_number": 4,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 5,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 6,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 7,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 8,
+      "user_lines_added": 2985,
+      "user_lines_removed": 3104,
+      "agent_lines_added": 11876,
+      "agent_lines_removed": 33,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 3,
+        "galaxies/foreground/build_unified.py": 4,
+        "galaxies/foreground/engines_extra.py": 1,
+        "galaxies/foreground/scattering_predict.py": 85,
+        "galaxies/foreground/search.py": 1,
+        "galaxies/foreground/test_build_unified.py": 4,
+        "galaxies/foreground/test_scattering_predict.py": 24,
+        "galaxies/v2_0/grand_systems_figures.py": 19,
+        "results/sightline_dm_scattering_budget.md": 1,
+        "scratch/repro-foreground-grand-figures/closeout-mnfw.json": 89,
+        "scratch/repro-foreground-grand-figures/grand_clusters_icm.svg": 2416,
+        "scratch/repro-foreground-grand-figures/grand_galaxies_cgm.svg": 338
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 2,
+        "galaxies/foreground/build_unified.py": 12,
+        "galaxies/foreground/engines_extra.py": 1,
+        "galaxies/foreground/scattering_predict.py": 82,
+        "galaxies/foreground/search.py": 1,
+        "galaxies/foreground/test_build_unified.py": 4,
+        "galaxies/foreground/test_scattering_predict.py": 37,
+        "galaxies/v2_0/grand_systems_figures.py": 16,
+        "results/sightline_dm_scattering_budget.md": 1,
+        "scratch/repro-foreground-grand-figures/grand_clusters_icm.svg": 2609,
+        "scratch/repro-foreground-grand-figures/grand_galaxies_cgm.svg": 338
+      }
+    },
+    {
+      "checkpoint_number": 9,
+      "user_lines_added": 2848,
+      "user_lines_removed": 2951,
+      "agent_lines_added": 12049,
+      "agent_lines_removed": 284,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 5,
+        "scratch/repro-foreground-grand-figures/closeout-mnfw.json": 89,
+        "scratch/repro-foreground-grand-figures/grand_clusters_icm.svg": 2416,
+        "scratch/repro-foreground-grand-figures/grand_galaxies_cgm.svg": 338
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 3,
+        "scratch/repro-foreground-grand-figures/grand_clusters_icm.svg": 2609,
+        "scratch/repro-foreground-grand-figures/grand_galaxies_cgm.svg": 338
+      }
+    },
+    {
+      "checkpoint_number": 10,
+      "user_lines_added": 26,
+      "user_lines_removed": 25,
+      "agent_lines_added": 12290,
+      "agent_lines_removed": 629,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 26
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 24
+      }
+    },
+    {
+      "checkpoint_number": 11,
+      "user_lines_added": 26,
+      "user_lines_removed": 25,
+      "agent_lines_added": 12293,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 26
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 24
+      }
+    },
+    {
+      "checkpoint_number": 12,
+      "user_lines_added": 26,
+      "user_lines_removed": 25,
+      "agent_lines_added": 12293,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 26
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 24
+      }
+    },
+    {
+      "checkpoint_number": 13,
+      "user_lines_added": 26,
+      "user_lines_removed": 25,
+      "agent_lines_added": 12293,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 26
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 24
+      }
+    },
+    {
+      "checkpoint_number": 14,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12790,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 15,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12790,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 16,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12911,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 17,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12911,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 18,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12911,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 19,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12911,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 20,
+      "user_lines_added": 46,
+      "user_lines_removed": 26,
+      "agent_lines_added": 12911,
+      "agent_lines_removed": 632,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 46
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 25
+      }
+    },
+    {
+      "checkpoint_number": 21,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 22,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 23,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 24,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 25,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 26,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 27,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14639,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 28,
+      "user_lines_added": 2144,
+      "user_lines_removed": 2155,
+      "agent_lines_added": 14651,
+      "agent_lines_removed": 1779,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 54,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 30,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 29,
+      "user_lines_added": 227529,
+      "user_lines_removed": 2158,
+      "agent_lines_added": 14853,
+      "agent_lines_removed": 1797,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 91,
+        "galaxies/foreground/parse_search_log_coverage.py": 133,
+        "galaxies/foreground/survey_coverage_figures.py": 107,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 13,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 7,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 221036,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 4052,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 31,
+        "galaxies/foreground/survey_coverage_figures.py": 2,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 30,
+      "user_lines_added": 227529,
+      "user_lines_removed": 2158,
+      "agent_lines_added": 14853,
+      "agent_lines_removed": 1797,
+      "user_added_per_file": {
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 91,
+        "galaxies/foreground/parse_search_log_coverage.py": 133,
+        "galaxies/foreground/survey_coverage_figures.py": 107,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 13,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 7,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 221036,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 4052,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1747
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "docs/rse/specs/reproducibility-foreground-galaxies.md": 31,
+        "galaxies/foreground/survey_coverage_figures.py": 2,
+        "scratch/repro-foreground-figures/clusters_icm.svg": 343,
+        "scratch/repro-foreground-figures/galaxies_cgm.svg": 1781
+      }
+    },
+    {
+      "checkpoint_number": 31,
+      "user_lines_added": 0,
+      "user_lines_removed": 1,
+      "agent_lines_added": 144016,
+      "agent_lines_removed": 1797,
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1
+      }
+    },
+    {
+      "checkpoint_number": 32,
+      "user_lines_added": 4026,
+      "user_lines_removed": 125082,
+      "agent_lines_added": 144126,
+      "agent_lines_removed": 1797,
+      "user_added_per_file": {
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 130,
+        "galaxies/foreground/survey_footprint_mocs.py": 32,
+        "galaxies/foreground/test_survey_coverage.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 3665,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 146,
+        "galaxies/foreground/survey_footprint_mocs.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 124736,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      }
+    },
+    {
+      "checkpoint_number": 33,
+      "user_lines_added": 4026,
+      "user_lines_removed": 125082,
+      "agent_lines_added": 144126,
+      "agent_lines_removed": 1797,
+      "user_added_per_file": {
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 130,
+        "galaxies/foreground/survey_footprint_mocs.py": 32,
+        "galaxies/foreground/test_survey_coverage.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 3665,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 146,
+        "galaxies/foreground/survey_footprint_mocs.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 124736,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      }
+    },
+    {
+      "checkpoint_number": 34,
+      "user_lines_added": 4026,
+      "user_lines_removed": 125082,
+      "agent_lines_added": 144126,
+      "agent_lines_removed": 1797,
+      "user_added_per_file": {
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 130,
+        "galaxies/foreground/survey_footprint_mocs.py": 32,
+        "galaxies/foreground/test_survey_coverage.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 3665,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      },
+      "user_removed_per_file": {
+        "analysis/scattering-refit-2026-06/local_runs/runtime": 1,
+        "galaxies/foreground/data/survey_footprints/README.md": 3,
+        "galaxies/foreground/survey_coverage_figures.py": 146,
+        "galaxies/foreground/survey_footprint_mocs.py": 8,
+        "scratch/repro-foreground-coverage-figures/figures.manifest.json": 3,
+        "scratch/repro-foreground-coverage-figures/figures.review.json": 2,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_allsky.svg": 124736,
+        "scratch/repro-foreground-coverage-figures/survey_coverage_matrix.svg": 183
+      }
+    }
+  ]
+}
