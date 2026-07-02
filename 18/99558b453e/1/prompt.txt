@@ -1,0 +1,175 @@
+Investigate if and how `~/Developer/research-holding/caltech/ovro/dsa110/chime_dsa_codetections` should be merged with `~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS`
+
+---
+
+Investigate if and how `~/Developer/research-holding/caltech/ovro/dsa110/chime_dsa_codetections` should be merged with `~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS`
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+Implement the plan as specified, it is attached for your reference. Do NOT edit the plan file itself.
+
+To-do's from the plan have already been created. Do not create them again. Mark them as in_progress as you work, starting with the first one. Don't stop until you have completed all the to-dos.
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/research-holding/caltech/ovro/dsa110/_quarantine/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/.gitignore
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/codetections_manifest.yaml
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/docs/migration/chime-dsa-holding-tree-drain-2026-06-29.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/notebooks/codetections/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/notebooks/codetections/interveners.ipynb
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/research-holding/caltech/ovro/dsa110/_quarantine/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/.gitignore
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/DATA_LOCATIONS.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/codetections_manifest.yaml
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/docs/migration/chime-dsa-holding-tree-drain-2026-06-29.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/notebooks/codetections/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/notebooks/codetections/interveners.ipynb
+
+---
+
+is there anything left in `~/Developer/research-holding/caltech/ovro/dsa110/chime_dsa_codetections` ?
+
+---
+
+is there anything left in `~/Developer/research-holding/caltech/ovro/dsa110/chime_dsa_codetections` ?
+
+---
+
+let's move everything out and remove that directory
+
+---
+
+let's move everything out and remove that directory
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/research-holding/caltech/ovro/dsa110/_quarantine/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/docs/migration/chime-dsa-holding-tree-drain-2026-06-29.md
+
+---
+
+VERIFY GATE: substantive edits this turn have NOT been independently verified.
+
+A clean compile / build / lint pass / "it ran" / your own confidence is NOT verification —
+it shows the edit is well-formed, not that it is CORRECT. Before finishing you must run an
+INDEPENDENT correctness check on each path and record it. Strongest first:
+  - dispatch an independent reviewer subagent to try to BREAK the edit (adversarial-review)
+  - a test that ASSERTS the right answer (test)
+  - compare against a known-truth / reference / analytic value (oracle)
+  - independently re-derive or reconstruct and check it agrees (reproduce / cross-check)
+  - the user explicitly confirms (human)
+
+Record it (this clears the gate):
+  verify-gate record --paths <file> --method <adversarial-review|test|oracle|reproduce|cross-check|human> \
+      --check "what you checked and how" --evidence "the concrete result: cmd+output / number / verdict"
+
+Genuinely trivial edit (typo, comment, rename)? Log it, don't skip it silently:
+  verify-gate record --paths <file> --method trivial --check "why trivial" --evidence "<what changed>"
+
+Unverified paths:
+  - /Users/jakobfaber/Developer/research-holding/caltech/ovro/dsa110/_quarantine/README.md
+  - /Users/jakobfaber/Developer/scratch/worktrees/flits-holding-drain-20260629/docs/migration/chime-dsa-holding-tree-drain-2026-06-29.md
+
+---
+
+archive that too and remove `_quarantine/`
+
+---
+
+now let's migrate the worktree changes into main
+
+---
+
+now let's migrate the worktree changes into main
+
+---
+
+yes pus
+
+---
+
+yes push
+
+---
+
+we're still on the `holding-drain-20260629` branc
+
+---
+
+we're still on the `holding-drain-20260629` branc
+
+---
+
+we're still on the `holding-drain-20260629` branch
+
+---
+
+cleanup

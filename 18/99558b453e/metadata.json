@@ -3,7 +3,7 @@
   "checkpoint_id": "1899558b453e",
   "strategy": "manual-commit",
   "branch": "separate-lane/foreground-galaxy-20260629",
-  "checkpoints_count": 34,
+  "checkpoints_count": 43,
   "files_touched": [
     ".agents/deferred-tasks.md",
     "docs/rse/specs/reproducibility-foreground-galaxies.md",
@@ -14,9 +14,12 @@
     "galaxies/foreground/scattering_predict.py",
     "galaxies/foreground/search.py",
     "galaxies/foreground/sightline_budget.py",
+    "galaxies/foreground/survey_coverage.py",
+    "galaxies/foreground/survey_coverage_figures.py",
     "galaxies/foreground/survey_footprint_mocs.py",
     "galaxies/foreground/test_build_unified.py",
     "galaxies/foreground/test_scattering_predict.py",
+    "galaxies/foreground/test_survey_coverage.py",
     "galaxies/host/__init__.py",
     "galaxies/host/catalog.py",
     "galaxies/host/data/hosts.yaml",
@@ -49,6 +52,12 @@
       "transcript": "/18/99558b453e/0/full.jsonl",
       "content_hash": "/18/99558b453e/0/content_hash.txt",
       "prompt": "/18/99558b453e/0/prompt.txt"
+    },
+    {
+      "metadata": "/18/99558b453e/1/metadata.json",
+      "transcript": "/18/99558b453e/1/full.jsonl",
+      "content_hash": "/18/99558b453e/1/content_hash.txt",
+      "prompt": "/18/99558b453e/1/prompt.txt"
     }
   ],
   "token_usage": {
