@@ -200,6 +200,31 @@ def test_boundary_pinned_width_is_reported_as_failed_fit(monkeypatch):
     assert result.acf_model
 
 
+def test_lower_bound_pinned_width_is_reported_as_failed_fit(monkeypatch):
+    # Deterministic branch pin: a solver solution at the 0.25*channel_width
+    # lower bound is unresolved by channelization, not a measurement.
+    channel_width_mhz = 0.02
+    acf_obj = _lorentzian_acf_object(0.4, channel_width_mhz)
+    monkeypatch.setattr(freya_scintillation, "calculate_acf", lambda *a, **k: acf_obj)
+    monkeypatch.setattr(
+        freya_scintillation,
+        "curve_fit",
+        lambda *a, **k: (np.array([0.8, 0.25 * channel_width_mhz, 0.05]), np.eye(3) * 1e-6),
+    )
+
+    result = measure_scintillation_bandwidth(
+        np.full(512, 100.0),
+        channel_width_mhz=channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.5,
+    )
+
+    assert not result.success
+    assert result.delta_nu_mhz is None
+    assert "lower bound" in result.message
+    assert "channelization" in result.message
+
+
 def test_nonfinite_covariance_is_reported_as_failed_fit(monkeypatch):
     channel_width_mhz = 0.02
     acf_obj = _lorentzian_acf_object(0.4, channel_width_mhz)
@@ -238,7 +263,8 @@ def _baseline_guard_cfg(noise_window: list[int]) -> dict:
 
 @pytest.mark.parametrize(
     ("noise_window", "expect_subtraction"),
-    [([0, 30], False), ([0, 90], True)],
+    # 50/51 pin the exact pipeline.py:178 edge (`> off_pulse_lims[0] + 50`).
+    [([0, 30], False), ([0, 50], False), ([0, 51], True), ([0, 90], True)],
 )
 def test_baseline_subtraction_requires_pipeline_scale_off_window(
     monkeypatch, noise_window, expect_subtraction
