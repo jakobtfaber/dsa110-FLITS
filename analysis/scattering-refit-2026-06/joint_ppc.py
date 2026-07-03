@@ -29,6 +29,7 @@ from _figsave import save_fig
 from scat_analysis.burstfit import FRBParams
 from scat_analysis.config_utils import load_telescope_block
 from scat_analysis.pipeline.io import BurstDataset
+from scat_analysis.turbulence import beta_from_alpha_thin_screen
 
 
 def prepare(cfg_path, name, outdir):
@@ -72,15 +73,22 @@ def band_chi2(model, p, gain=False):
 
 def main():
     b = sys.argv[1]
+    # optional variant tag matching run_joint_fit's output naming, e.g. _sharedzeta
+    tag = sys.argv[2] if len(sys.argv) > 2 else ""
     out = f"{RUNS}/data/joint"
     cC = f"{RUNS}/configs/{b}_chime_run.yaml"
     cD = f"{RUNS}/configs/{b}_dsa_run.yaml"
     mC = prepare(cC, f"{b}_chime", out)
     mD = prepare(cD, f"{b}_dsa", out)
 
-    d = json.load(open(f"{out}/{b}_joint_fit.json"))
+    d = json.load(open(f"{out}/{b}_joint_fit{tag}.json"))
     p = {k: v["median"] for k, v in d["percentiles"].items()}
-    tau, al = p["tau_1ghz"], p["alpha"]
+    # derived alpha is a top-level summary field (beta-native percentiles carry
+    # only the 8 sampled params); old JSONs also duplicate it in percentiles.
+    tau, al = p["tau_1ghz"], d["alpha"]["median"]
+    # FRBParams is beta-native post-ADR-0006 (alpha= kwarg TypeErrors); old JSONs
+    # carry only alpha, so invert the thin-screen closure when beta is absent.
+    bet = p["beta"] if "beta" in p else beta_from_alpha_thin_screen(al)
     shared = bool(d.get("shared_zeta", False))  # shared zeta(nu) fit is gain-marginal
     gain = bool(d.get("marginalize_gain", False)) or shared
     # shared zeta -> per-band array zeta_1ghz*nu^x_zeta; else the stored per-band scalar
@@ -93,7 +101,7 @@ def main():
             gamma=0.0,
             zeta=zC,
             tau_1ghz=tau,
-            alpha=al,
+            beta=bet,
             delta_dm=p["delta_dm_C"],
         )
         pD = FRBParams(
@@ -102,7 +110,7 @@ def main():
             gamma=0.0,
             zeta=zD,
             tau_1ghz=tau,
-            alpha=al,
+            beta=bet,
             delta_dm=p["delta_dm_D"],
         )
     else:
@@ -112,7 +120,7 @@ def main():
             gamma=p["gamma_C"],
             zeta=zC,
             tau_1ghz=tau,
-            alpha=al,
+            beta=bet,
             delta_dm=p["delta_dm_C"],
         )
         pD = FRBParams(
@@ -121,7 +129,7 @@ def main():
             gamma=p["gamma_D"],
             zeta=zD,
             tau_1ghz=tau,
-            alpha=al,
+            beta=bet,
             delta_dm=p["delta_dm_D"],
         )
 
