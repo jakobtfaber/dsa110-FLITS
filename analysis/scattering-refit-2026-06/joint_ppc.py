@@ -88,7 +88,20 @@ def main():
     tau, al = p["tau_1ghz"], d["alpha"]["median"]
     # FRBParams is beta-native post-ADR-0006 (alpha= kwarg TypeErrors); old JSONs
     # carry only alpha, so invert the thin-screen closure when beta is absent.
-    bet = p["beta"] if "beta" in p else beta_from_alpha_thin_screen(al)
+    # The inversion is only faithful for alpha >= 4: alpha < 4 maps to beta > 4,
+    # which the model exp-clips (BETA_EXP_EPS) so the PPC would silently evaluate
+    # at effectively alpha=4, not the stored alpha -- fail loudly instead.
+    if "beta" in p:
+        bet = p["beta"]
+    elif al < 4.0:
+        raise ValueError(
+            f"legacy alpha-only fit has alpha={al:.3f} < 4: not representable on the "
+            "thin-screen beta branch (beta > 4 would be exp-clipped, evaluating the "
+            "PPC at alpha=4 instead of the stored alpha). Re-run the fit beta-native "
+            "or PPC it with the legacy alpha-native code."
+        )
+    else:
+        bet = beta_from_alpha_thin_screen(al)
     shared = bool(d.get("shared_zeta", False))  # shared zeta(nu) fit is gain-marginal
     gain = bool(d.get("marginalize_gain", False)) or shared
     # shared zeta -> per-band array zeta_1ghz*nu^x_zeta; else the stored per-band scalar
@@ -153,13 +166,16 @@ def main():
         a.legend(fontsize=8)
     fig.suptitle(f"{b}: joint alpha={al:.2f}, tau_1GHz={tau:.3f} ms")
     fig.tight_layout()
+    # tag flows into the output stem too: untagged names are the baseline pair
+    # that gate_joint_committed/report_prepost read -- a tagged run must not
+    # clobber or impersonate them.
     fp = save_fig(
-        fig, f"{out}/{b}_joint_ppc", dpi=110, bbox_inches=None
+        fig, f"{out}/{b}_joint_ppc{tag}", dpi=110, bbox_inches=None
     )  # keep original (untight) crop; montage assembles these
     print(f"  wrote {fp}")
     json.dump(
         {"burst": b, "alpha": al, "tau_1ghz": tau, "chi2_chime": chiC, "chi2_dsa": chiD},
-        open(f"{out}/{b}_joint_ppc.json", "w"),
+        open(f"{out}/{b}_joint_ppc{tag}.json", "w"),
         indent=2,
     )
 
