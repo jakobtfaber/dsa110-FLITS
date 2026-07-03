@@ -73,16 +73,31 @@ def unrailed(beta_triplet, prior=BETA_PRIOR):
     }
 
 
-def grade(chi2_chime, chi2_dsa, a_vs_b_verdict, unrailed_ok):
-    """PASS if both bands sit in the Level-2 band, A-vs-B agrees, beta un-railed;
-    MARGINAL if exactly one gate degrades without failing hard; else FAIL."""
-    in_band = [CHI2_PASS[0] <= c <= CHI2_PASS[1] for c in (chi2_chime, chi2_dsa)]
-    if all(in_band) and a_vs_b_verdict == "agree" and unrailed_ok:
-        return "PASS"
-    hard_fail = any(c > 3.0 or c < 0.1 for c in (chi2_chime, chi2_dsa))
-    if hard_fail or a_vs_b_verdict in ("shifted", "incompatible") or not unrailed_ok:
+def _chi2_flag(c):
+    """Exact mirror of the kernel chi2 gate in classify_fit_quality
+    (burstfit.py:1484-1495; constants burstfit.py:81-83: SUSPICIOUSLY_LOW=0.3,
+    GOOD_MAX=1.5, FAIL_MAX=10.0). Non-finite fails closed. Parity with the
+    real function is pinned by test_chi2_flag_parity_with_kernel."""
+    if c is None or not np.isfinite(c):
         return "FAIL"
-    return "MARGINAL"
+    c = float(c)
+    if c > 10.0:
+        return "FAIL"
+    if c > 1.5 or c < 0.3:
+        return "MARGINAL"
+    return "PASS"
+
+
+def grade(chi2_chime, chi2_dsa, a_vs_b_verdict, unrailed_ok):
+    """Worst-of the per-band kernel chi2 flags; any A-vs-B verdict other than
+    `agree` (the #105 tolerance semantics: widened IS a breach) or a railed
+    beta fails outright."""
+    if a_vs_b_verdict != "agree" or not unrailed_ok:
+        return "FAIL"
+    flags = {_chi2_flag(chi2_chime), _chi2_flag(chi2_dsa)}
+    if "FAIL" in flags:
+        return "FAIL"
+    return "MARGINAL" if "MARGINAL" in flags else "PASS"
 
 
 def build(preflight=True):

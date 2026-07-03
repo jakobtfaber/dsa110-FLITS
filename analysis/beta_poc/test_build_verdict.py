@@ -39,15 +39,37 @@ def test_grade_pass():
     assert bv.grade(1.18, 1.03, "agree", True) == "PASS"
 
 
-def test_grade_marginal_on_chi2_drift():
-    # one band outside the Level-2 band but not a hard fail (<3.0)
+def test_grade_marginal_per_kernel_contract():
+    # kernel contract: finite 1.5 < chi2 <= 10 is MARGINAL, not FAIL
     assert bv.grade(1.8, 1.03, "agree", True) == "MARGINAL"
+    assert bv.grade(4.6, 1.03, "agree", True) == "MARGINAL"
+    assert bv.grade(10.0, 1.03, "agree", True) == "MARGINAL"
+    assert bv.grade(0.2, 1.03, "agree", True) == "MARGINAL"  # suspiciously low side
+
+
+def test_grade_band_edges_pass():
+    assert bv.grade(0.3, 1.5, "agree", True) == "PASS"  # both edges inclusive
 
 
 def test_grade_fail_closed():
-    assert bv.grade(4.6, 1.03, "agree", True) == "FAIL"  # hard chi2 fail
+    assert bv.grade(10.1, 1.03, "agree", True) == "FAIL"  # catastrophic chi2
+    assert bv.grade(float("nan"), 1.03, "agree", True) == "FAIL"  # non-finite
+    assert bv.grade(float("inf"), 1.03, "agree", True) == "FAIL"
+    assert bv.grade(None, 1.03, "agree", True) == "FAIL"
     assert bv.grade(1.18, 1.03, "shifted", True) == "FAIL"  # A-vs-B stop verdict
+    assert bv.grade(1.18, 1.03, "widened", True) == "FAIL"  # widened IS a breach (#105)
     assert bv.grade(1.18, 1.03, "agree", False) == "FAIL"  # railed beta
+
+
+def test_chi2_flag_parity_with_kernel():
+    # pin the mirror against the real classify_fit_quality on a boundary grid
+    sys.path.insert(0, str(bv.REPO / "scattering"))
+    from scat_analysis.burstfit import classify_fit_quality
+
+    grid = [0.05, 0.2, 0.3, 0.9, 1.5, 1.6, 4.6, 10.0, 10.1, 50.0, float("nan"), float("inf")]
+    for c in grid:
+        kernel_flag, _ = classify_fit_quality(c)
+        assert bv._chi2_flag(c) == kernel_flag, c
 
 
 @pytest.mark.slow
