@@ -180,28 +180,40 @@ def _goodness(m: FRBModel, tau, z1, x, t0, ddm, beta) -> dict:
 
 
 def _diagnostic_figure(m: FRBModel, tau, z1, x, t0, ddm, beta, gof: dict, band: str, path):
-    """Band-summed data-vs-model + residual profile at the posterior median
-    (fit-validation contract: every fit emits diagnostics -- #111)."""
+    """Data-vs-model, residual profile, and Q-Q of noise-normalized residuals at
+    the posterior median (the fit-validation contract's diagnostics checklist:
+    data-vs-model + residual + Q-Q + Durbin-Watson, the last in gof -- #111)."""
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from scipy.special import erfinv
 
-    d, model, _valid = _matched(m, tau, z1, x, t0, ddm, beta)
-    fig, (ax0, ax1) = plt.subplots(
-        2, 1, sharex=True, figsize=(8, 5), height_ratios=[3, 1], layout="tight"
-    )
+    d, model, valid = _matched(m, tau, z1, x, t0, ddm, beta)
+    sig = np.clip(m.noise_std[valid], 1e-9, None)
+    fig, (ax0, ax1, ax2) = plt.subplots(3, 1, figsize=(8, 8), height_ratios=[3, 1, 2])
     ax0.plot(m.time, d.sum(axis=0), "k-", lw=0.8, label="data")
     ax0.plot(m.time, model.sum(axis=0), "r-", lw=1.2, label="model (matched gains)")
     ax0.set_ylabel("band-summed flux [S/N units]")
     ax0.legend(frameon=False)
     ax0.set_title(
-        f"freya {band}: red_chi2={gof['red_chi2']:.2f}, r2={gof['r2']:.3f}, beta={beta:.3f}"
+        f"freya {band}: red_chi2={gof['red_chi2']:.2f}, r2={gof['r2']:.3f}, "
+        f"dw={gof['durbin_watson']:.2f}, beta={beta:.3f}"
     )
     ax1.plot(m.time, (d - model).sum(axis=0), "k-", lw=0.8)
     ax1.axhline(0.0, color="r", lw=0.6)
     ax1.set_xlabel("time [ms]")
     ax1.set_ylabel("residual")
+    # Q-Q: per-pixel noise-normalized residuals vs standard normal (Hazen positions)
+    r = np.sort(((d - model) / sig[:, None]).ravel())
+    q = (np.arange(r.size) + 0.5) / r.size
+    theo = np.sqrt(2.0) * erfinv(2.0 * q - 1.0)
+    ax2.plot(theo, r, "k.", ms=1, rasterized=True)
+    lim = [theo[0], theo[-1]]
+    ax2.plot(lim, lim, "r-", lw=0.8)
+    ax2.set_xlabel("normal quantiles")
+    ax2.set_ylabel("residual quantiles [sigma]")
+    fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
 
@@ -252,7 +264,8 @@ def _write_manifest(outdir: Path, figures: list, data_source: str):
             "expectation": (
                 f"beta POC {src}, {band} band: matched-gain model (red) overlays the "
                 "band-summed data profile (black) including the scattering tail; "
-                "residual panel structureless around zero."
+                "residual panel structureless around zero; Q-Q panel of "
+                "noise-normalized residuals hugs the y=x line."
             ),
         }
     manifest_path.write_text(

@@ -61,7 +61,7 @@ Three analysis surfaces plus a shared package. The **canonical physics kernel** 
 - **Level 2 quality:** χ²_red is the gate (`classify_fit_quality`: PASS 0.3–1.5, MARGINAL 1.5–10 or suspiciously <0.3, FAIL >10); R², residual normality, and Durbin-Watson are informational-only — low R² never flips the flag by itself (low-S/N rationale in the docstring).
 - **Level 3 physics:** τ×Δν in [0.1, 2.0] (≈0.159 thin screen, ≈1.0 extended); α near 4.0 = Kolmogorov.
 
-Thresholds in code: `flits/fitting/VALIDATION_THRESHOLDS.py` (canonical, single source of truth).
+Thresholds in code: Level-2 χ²_red bands live beside `classify_fit_quality` in `scattering/scat_analysis/burstfit.py` (0.3 / 1.5 / 10.0); `flits/fitting/VALIDATION_THRESHOLDS.py` remains canonical for the other gate constants, but its `CHI_SQ_RED_MARGINAL_MAX = 3.0` is superseded for Level 2 — do not classify from it.
 
 ## Code style: lazy-minimalist (ponytail)
 
