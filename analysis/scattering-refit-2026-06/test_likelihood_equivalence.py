@@ -99,11 +99,13 @@ def test_adjudicate_flags_disagreement():
     }
     bad = json.loads(json.dumps(rec))
     bad["bands"]["D"]["route_B"] = -634.5 * (1.0 + 1e-9)
-    bad["bands"]["D"]["rel_diff"] = rel_diff(-634.5, bad["bands"]["D"]["route_B"])
+    # The stale rel_diff fields are left at 0.0 on purpose: adjudicate must
+    # recompute from the route values, never trust a precomputed diff.
     v = adjudicate([rec, bad])
     assert not v["passes"] and len(v["failures"]) == 1
     f = v["failures"][0]  # per-band, per-theta breakdown rides with the failure
-    assert f["index"] == 1 and f["bands"]["D"]["rel_diff"] > RTOL
+    assert f["index"] == 1
+    assert rel_diff(f["bands"]["D"]["route_A"], f["bands"]["D"]["route_B"]) > RTOL
     assert f["theta"]["tau_1ghz"] == 0.0 and v["max_rel_diff"] > RTOL
 
 
@@ -112,7 +114,7 @@ def test_rel_diff_properties():
     assert rel_diff(2.0, 1.0) == rel_diff(1.0, 2.0) == 0.5
     assert rel_diff(1e-300, 0.0) == 1e-300  # denominator floored at 1: absolute near zero
     assert np.isnan(rel_diff(float("nan"), 1.0))  # NaN propagates; adjudicate fails closed
-    assert not adjudicate([{"rel_diff": float("nan"), "bands": {}}])["passes"]
+    assert not adjudicate([{"route_A": float("nan"), "route_B": -5.0, "bands": {}}])["passes"]
 
 
 @pytest.mark.slow

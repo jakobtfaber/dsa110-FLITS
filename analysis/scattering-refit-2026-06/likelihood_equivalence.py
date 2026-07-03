@@ -128,16 +128,21 @@ def evaluate(m_C, m_D, thetas) -> list[dict]:
 
 def adjudicate(records: list[dict], rtol: float = RTOL) -> dict:
     """Hard verdict: every total AND every per-band pair within rtol; any NaN
-    fails closed. Failures carry the full per-band, per-theta breakdown."""
+    fails closed. Diffs are RECOMPUTED here from the stored route_A/route_B
+    values -- the verdict never trusts a record's precomputed rel_diff (which
+    is informational, for the artifact). Failures carry the full per-band,
+    per-theta breakdown."""
+
+    def _diffs(r: dict) -> list[float]:
+        return [rel_diff(r["route_A"], r["route_B"])] + [
+            rel_diff(b["route_A"], b["route_B"]) for b in r["bands"].values()
+        ]
 
     def _ok(r: dict) -> bool:
-        diffs = [r["rel_diff"]] + [b["rel_diff"] for b in r["bands"].values()]
-        return all(np.isfinite(d) and d <= rtol for d in diffs)
+        return all(np.isfinite(d) and d <= rtol for d in _diffs(r))
 
     failures = [{"index": i, **r} for i, r in enumerate(records) if not _ok(r)]
-    diffs = [r["rel_diff"] for r in records] + [
-        b["rel_diff"] for r in records for b in r["bands"].values()
-    ]
+    diffs = [d for r in records for d in _diffs(r)]
     return {
         "passes": not failures,
         "rtol": float(rtol),
