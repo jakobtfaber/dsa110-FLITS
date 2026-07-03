@@ -65,6 +65,17 @@ def test_stop_condition_on_shift():
     assert result["stop_condition_triggered"] is True
 
 
+def test_stop_condition_on_widened():
+    a = _poc_artifact(**_BASE)
+    b = _joint_artifact(**_BASE)
+    # triple B's beta width: ratio 1/3 < 1/width_ratio_max -> widened is a breach
+    b["percentiles"]["beta"] = _triplet(_BASE["beta"], err=0.03)
+    result = cr.compare(a, b)
+    assert result["params"]["beta"]["verdict"] == "widened"
+    assert result["verdict"] == "widened"
+    assert result["stop_condition_triggered"] is True
+
+
 def test_bookkeeping_fields():
     a = _poc_artifact(**_BASE)
     b = _joint_artifact(**_BASE)

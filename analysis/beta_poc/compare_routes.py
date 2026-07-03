@@ -7,9 +7,10 @@ parameters only -- t0/ddm are per-band nuisance with matching prep/window here,
 but excluded per the comparator docstring's cross-fit guidance so the overall
 verdict is carried by the measurement, not alignment bookkeeping.
 
-Exit is nonzero on a `shifted`/`incompatible` overall verdict (the #105 stop
-condition: written diagnosis required, no downstream motion), mirroring the
-likelihood_equivalence.py CLI precedent.
+Exit is nonzero on any overall verdict other than `agree` (the #105 stop
+condition: "agreement beyond tolerance" -- and the comparator emits `widened`
+precisely when width_ratio breaches width_ratio_max, so it IS a tolerance
+breach), mirroring the likelihood_equivalence.py CLI precedent.
 
   conda run -n flits python analysis/beta_poc/compare_routes.py
 """
@@ -33,7 +34,7 @@ ROUTE_B_NPZ = (
 OUT_JSON = REPO / "analysis" / "beta_poc" / "freya" / "freya_route_a_vs_b.json"
 # Shared physics of the 8-vector theta; per-band t0/delta_dm are nuisance.
 PHYSICS_PARAMS = ["beta", "tau_1ghz", "zeta_1ghz", "x_zeta"]
-STOP_VERDICTS = ("shifted", "incompatible")
+STOP_VERDICTS = ("widened", "shifted", "incompatible")
 
 
 def _load_comparator():
