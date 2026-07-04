@@ -1,6 +1,8 @@
 # ==============================================================================
 # File: scint_analysis/scint_analysis/pipeline.py
 # ==============================================================================
+import hashlib
+import json
 import logging
 import os
 import pickle
@@ -32,10 +34,31 @@ class ScintillationAnalysis:
             os.makedirs(self.cache_dir, exist_ok=True)
             log.info(f"Intermediate results will be cached in: {self.cache_dir}")
 
+    def _config_fingerprint(self):
+        """Short hash of every config field that shapes cached pipeline products.
+
+        Cache files are pickles keyed by burst_id; without a fingerprint,
+        toggling a preprocessing flag (grid_regularization,
+        bandpass_normalization, RFI masking, downsample factors, ...) after a
+        cached run would silently reload the stale spectrum/ACF built under
+        the old settings (#120 review r2, P1). Fingerprinting the whole
+        `analysis` block plus input path and downsample factors errs toward
+        recomputation, never toward stale reuse.
+        """
+        relevant = {
+            "input_data_path": self.config.get("input_data_path"),
+            "downsample": self.config.get("pipeline_options", {}).get("downsample", {}),
+            "analysis": self.config.get("analysis", {}),
+        }
+        payload = json.dumps(relevant, sort_keys=True, default=str)
+        return hashlib.sha256(payload.encode()).hexdigest()[:12]
+
     def _get_cache_path(self, stage_name):
         """Generates a standard path for a cache file."""
         burst_id = self.config.get("burst_id", "unknown_burst")
-        return os.path.join(self.cache_dir, f"{burst_id}_{stage_name}.pkl")
+        return os.path.join(
+            self.cache_dir, f"{burst_id}_{self._config_fingerprint()}_{stage_name}.pkl"
+        )
 
     def _create_diagnostic_plots(self, burst_lims, off_pulse_lims, baseline_info=None):
         """Internal helper to generate and save diagnostic plots."""

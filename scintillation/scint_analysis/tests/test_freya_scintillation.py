@@ -724,3 +724,65 @@ def test_pipeline_applies_bandpass_normalization():
     sa_off.masked_spectrum = ds
     sa_off._apply_bandpass_normalization(off_lims)
     assert sa_off.masked_spectrum is ds
+
+
+def test_pipeline_bandpass_normalization_fails_closed_on_short_off_window():
+    from scint_analysis.pipeline import ScintillationAnalysis
+
+    ds, _channel_width_mhz, _ripple = _synthetic_rippled_dynamic_spectrum()
+    sa = ScintillationAnalysis(
+        {
+            "burst_id": "freya-pipe-short",
+            "input_data_path": "unused.npz",
+            "analysis": {"bandpass_normalization": {"enable": True}},
+        }
+    )
+    sa.masked_spectrum = ds
+    with pytest.raises(ValueError, match="off-pulse time bins"):
+        sa._apply_bandpass_normalization((0, 40))
+
+
+def test_pipeline_cache_key_tracks_preprocessing_config(tmp_path):
+    # Toggling a preprocessing-relevant flag must change the cache identity;
+    # an irrelevant option must not.
+    from scint_analysis.pipeline import ScintillationAnalysis
+
+    base = _pipeline_cfg(tmp_path, enable_grid=False)
+    on = _pipeline_cfg(tmp_path, enable_grid=True)
+    irrelevant = _pipeline_cfg(tmp_path, enable_grid=False)
+    irrelevant["pipeline_options"]["log_level"] = "DEBUG"
+
+    path_base = ScintillationAnalysis(base)._get_cache_path("processed_spectrum")
+    path_on = ScintillationAnalysis(on)._get_cache_path("processed_spectrum")
+    path_irrelevant = ScintillationAnalysis(irrelevant)._get_cache_path("processed_spectrum")
+
+    assert path_base != path_on
+    assert path_base == path_irrelevant
+
+
+def test_pipeline_cached_spectrum_not_reused_after_flag_change(monkeypatch, tmp_path):
+    # The r2 P1 scenario: run once with regularization off and caching on,
+    # then enable the flag -- the stale unregularized pickle must NOT be
+    # silently reloaded.
+    from scint_analysis.pipeline import ScintillationAnalysis
+
+    _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
+    monkeypatch.setattr(
+        DynamicSpectrum,
+        "from_numpy_file",
+        classmethod(lambda cls, path: gapped),
+    )
+    monkeypatch.setattr(DynamicSpectrum, "mask_rfi", lambda self, cfg: self)
+
+    cfg_off = _pipeline_cfg(tmp_path, enable_grid=False)
+    cfg_off["pipeline_options"]["save_intermediate_steps"] = True
+    sa_off = ScintillationAnalysis(cfg_off)
+    sa_off.prepare_data()
+    assert sa_off.masked_spectrum.num_channels == gapped.num_channels
+
+    cfg_on = _pipeline_cfg(tmp_path, enable_grid=True)
+    cfg_on["pipeline_options"]["save_intermediate_steps"] = True
+    sa_on = ScintillationAnalysis(cfg_on)
+    sa_on.prepare_data()
+    assert sa_on.masked_spectrum.num_channels == 512
+    assert sa_on.masked_spectrum.channel_width_mhz == pytest.approx(native, rel=1e-9)
