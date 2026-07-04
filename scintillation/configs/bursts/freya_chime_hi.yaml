@@ -7,9 +7,15 @@ analysis:
     padding_factor: 0.0
     use_symmetric_noise_window: true
     rfi_downsample_factor: 16
+    # Keep time-domain flagging OFF: the burst is the largest time-domain
+    # outlier, so robust-z flagging masks the on-pulse window itself (verified:
+    # it empties bins 244-268). The pass-1 speckle at 620-630 and 725-760 MHz is
+    # frequency-domain RFI, killed instead by tightening freq_threshold_sigma.
     enable_time_domain_flagging: false
     time_threshold_sigma: 7.0
-    freq_threshold_sigma: 5.0
+    # Lowered 5.0 -> 3.0 to catch the pass-1 residual freq-domain speckle;
+    # masks ~14% of channels (off-pulse outliers), burst band preserved.
+    freq_threshold_sigma: 3.0
     # time bins (dt=0.32768 ms): local burst span >3 sigma around bin ~250 is 244-267.
     manual_burst_window:
     - 244
@@ -31,8 +37,16 @@ analysis:
     fit_lagrange_mhz: 1.0
     reference_frequency_mhz: 700.0
     force_model: null
-  baseline_subtraction:
+  bandpass_normalization:
+    # pass-1 inspection: the frequency ACF was dominated by a static ~0.39 MHz
+    # coarse-channel scallop ~7x the fit baseline. Flat-fielding by the per-fine-
+    # channel off-pulse mean divides out that multiplicative gain exactly.
     enable: true
+  baseline_subtraction:
+    # Disabled for pass-2: flat-fielding above removes the full bandpass (incl.
+    # the periodic scallop, which an order-1 poly cannot follow); running both
+    # only depresses the on-pulse mean and inflates the modulation index.
+    enable: false
     poly_order: 1
   noise:
     disable: false
