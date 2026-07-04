@@ -500,6 +500,12 @@ def test_regularize_frequency_grid_snaps_interblock_offsets():
     diffs = np.diff(reg.frequencies)
     assert np.allclose(diffs, diffs[0])
     assert reg.channel_width_mhz == pytest.approx(native, rel=1e-6)
+    # The uniform axis must come from NaN-filled re-embedding, not from
+    # compacting the gapped axis: full grid length restored, exactly the
+    # missing rows masked.
+    assert reg.num_channels == 512
+    filler_rows = int(np.ma.getmaskarray(reg.power).all(axis=1).sum())
+    assert filler_rows == 512 - drifted.num_channels
 
 
 def test_regularize_frequency_grid_rejects_colliding_channels():
@@ -513,8 +519,10 @@ def test_regularize_frequency_grid_rejects_colliding_channels():
         freya_scintillation.regularize_frequency_grid(bad)
 
 
-@pytest.mark.parametrize("enable", [False, True])
-def test_grid_regularization_config_wiring_and_warning(monkeypatch, caplog, enable):
+@pytest.mark.parametrize(
+    ("enable", "f_factor"), [(False, 1), (True, 1), (True, 2)]
+)
+def test_grid_regularization_config_wiring_and_warning(monkeypatch, caplog, enable, f_factor):
     _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
     monkeypatch.setattr(
         DynamicSpectrum,
@@ -524,7 +532,7 @@ def test_grid_regularization_config_wiring_and_warning(monkeypatch, caplog, enab
     monkeypatch.setattr(DynamicSpectrum, "mask_rfi", lambda self, cfg: self)
     cfg = {
         "input_data_path": "unused.npz",
-        "pipeline_options": {"downsample": {"f_factor": 1, "t_factor": 1}},
+        "pipeline_options": {"downsample": {"f_factor": f_factor, "t_factor": 1}},
         "analysis": {
             "rfi_masking": {
                 "manual_burst_window": [43, 54],
@@ -538,7 +546,11 @@ def test_grid_regularization_config_wiring_and_warning(monkeypatch, caplog, enab
         masked, _burst, _off = freya_scintillation.prepare_spectrum_from_config(cfg)
 
     if enable:
-        assert masked.channel_width_mhz == pytest.approx(native, rel=1e-9)
+        # Regularization runs BEFORE downsampling: the full 512-channel grid is
+        # what gets block-averaged (512//f), never the compact gapped axis
+        # (384//f). At f_factor=2 that ordering is the only way to get 256.
+        assert masked.num_channels == 512 // f_factor
+        assert masked.channel_width_mhz == pytest.approx(f_factor * native, rel=1e-9)
         assert not any("grid_regularization" in rec.message for rec in caplog.records)
     else:
         assert masked.channel_width_mhz > 1.25 * native
@@ -597,3 +609,118 @@ def test_fit_window_scan_records_windows_and_systematic(tmp_path):
         max(widths) - min(widths)
     )
     assert result.fit_window_systematic_mhz is not None
+
+
+def test_fit_window_scan_survives_non_finite_entries(tmp_path):
+    # A NaN from YAML must become a visible failed record, not crash the
+    # strict allow_nan=False JSON writer.
+    ds = _synthetic_dynamic_spectrum()
+
+    run_notebook_style_analysis(
+        ds,
+        burst_id="freya-nan-scan",
+        burst_lims=(43, 54),
+        off_pulse_lims=(0, 30),
+        output_dir=tmp_path,
+        fit_lag_scan_mhz=[1.0, float("nan")],
+        write_figures=False,
+    )
+
+    payload = json.loads((tmp_path / "freya-nan-scan_scintillation.json").read_text())
+    scan = payload["fit_window_scan"]
+    assert scan[0]["success"] is True
+    assert scan[1] == {
+        "fit_lag_mhz": None,
+        "success": False,
+        "delta_nu_mhz": None,
+        "delta_nu_err_mhz": None,
+        "message": "invalid fit window: non-finite value nan",
+    }
+
+
+def test_modulation_index_acf_requires_off_pulse_level():
+    # Without an off-pulse mean the ACF denominator is mean_on^2 and the
+    # fitted amplitude is floor-diluted, so the physical field must be None.
+    spectrum, channel_width_mhz = _synthetic_scintillating_spectrum()
+
+    result = measure_scintillation_bandwidth(
+        spectrum,
+        channel_width_mhz=channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+
+    assert result.success
+    assert result.modulation_index_acf is None
+
+
+def _pipeline_cfg(tmp_path, enable_grid: bool) -> dict:
+    return {
+        "burst_id": "freya-pipe",
+        "input_data_path": "unused.npz",
+        "pipeline_options": {
+            "downsample": {"f_factor": 1, "t_factor": 1},
+            "cache_directory": str(tmp_path / "cache"),
+        },
+        "analysis": {
+            "rfi_masking": {
+                "manual_burst_window": [43, 54],
+                "manual_noise_window": [0, 30],
+            },
+            "grid_regularization": {"enable": enable_grid},
+        },
+    }
+
+
+@pytest.mark.parametrize("enable", [False, True])
+def test_pipeline_prepare_data_applies_grid_regularization(monkeypatch, tmp_path, enable):
+    # The subband pipeline shares the CLI's gating: an enabled config must not
+    # be silently bypassed by ScintillationAnalysis.prepare_data.
+    from scint_analysis.pipeline import ScintillationAnalysis
+
+    _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
+    monkeypatch.setattr(
+        DynamicSpectrum,
+        "from_numpy_file",
+        classmethod(lambda cls, path: gapped),
+    )
+    monkeypatch.setattr(DynamicSpectrum, "mask_rfi", lambda self, cfg: self)
+
+    sa = ScintillationAnalysis(_pipeline_cfg(tmp_path, enable))
+    sa.prepare_data()
+
+    if enable:
+        assert sa.masked_spectrum.num_channels == 512
+        assert sa.masked_spectrum.channel_width_mhz == pytest.approx(native, rel=1e-9)
+    else:
+        assert sa.masked_spectrum.num_channels == gapped.num_channels
+        assert sa.masked_spectrum.channel_width_mhz > 1.25 * native
+
+
+def test_pipeline_applies_bandpass_normalization():
+    from scint_analysis.pipeline import ScintillationAnalysis
+
+    ds, _channel_width_mhz, ripple_period_chan = _synthetic_rippled_dynamic_spectrum()
+    off_lims = (0, 80)
+    on_lims = (88, 105)
+    cfg = {
+        "burst_id": "freya-pipe-bp",
+        "input_data_path": "unused.npz",
+        "analysis": {"bandpass_normalization": {"enable": True}},
+    }
+    sa = ScintillationAnalysis(cfg)
+    sa.masked_spectrum = ds
+
+    sa._apply_bandpass_normalization(off_lims)
+
+    # Same ripple signature as the direct normalize_bandpass test: the
+    # half-period anti-correlation of the scallop must be gone.
+    half_period = int(ripple_period_chan // 2)
+    assert _acf_at_lag(ds.get_spectrum(on_lims), half_period) < -0.3
+    assert abs(_acf_at_lag(sa.masked_spectrum.get_spectrum(on_lims), half_period)) < 0.1
+
+    # Flag off: untouched (identity), so existing configs are unaffected.
+    sa_off = ScintillationAnalysis({"burst_id": "x", "input_data_path": "y", "analysis": {}})
+    sa_off.masked_spectrum = ds
+    sa_off._apply_bandpass_normalization(off_lims)
+    assert sa_off.masked_spectrum is ds

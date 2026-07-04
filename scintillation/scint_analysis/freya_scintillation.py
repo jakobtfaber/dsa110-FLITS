@@ -70,6 +70,10 @@ class ACFBandwidthResult:
     ``modulation_index_acf`` is the physical estimate sqrt(zero-lag ACF
     amplitude above baseline) from the Lorentzian fit; ``calculate_acf``
     normalizes by (mean_on - off_mean)^2, so the fitted amplitude ~ m^2.
+    That reading is only valid when an off-pulse mean was supplied -- without
+    one the ACF denominator falls back to mean_on^2 and the amplitude is
+    floor-diluted like the std/mean diagnostic -- so the field is None unless
+    the fit succeeded AND ``off_burst_spectrum_mean`` was provided.
     """
 
     success: bool
@@ -297,7 +301,11 @@ def measure_scintillation_bandwidth(
         delta_nu_mhz=gamma,
         delta_nu_err_mhz=gamma_err,
         modulation_index=modulation_index,
-        modulation_index_acf=float(np.sqrt(max(float(popt[0]), 0.0))),
+        modulation_index_acf=(
+            float(np.sqrt(max(float(popt[0]), 0.0)))
+            if off_burst_spectrum_mean is not None
+            else None
+        ),
         channel_width_mhz=float(channel_width_mhz),
         fit_lag_mhz=float(fit_lag_mhz),
         max_lag_mhz=float(max_lag_mhz),
@@ -550,6 +558,35 @@ def regularize_frequency_grid(spectrum: DynamicSpectrum) -> DynamicSpectrum:
     return DynamicSpectrum(power_full, freqs_full, spectrum.times.copy())
 
 
+def apply_grid_regularization(spectrum: DynamicSpectrum, cfg: dict) -> DynamicSpectrum:
+    """Apply ``analysis.grid_regularization`` gating to a freshly loaded
+    spectrum: regularize when enabled, warn loudly when disabled on a
+    non-uniform grid, no-op otherwise.
+
+    Shared by every data-preparation path (this module's
+    ``prepare_spectrum_from_config`` and ``pipeline.ScintillationAnalysis``),
+    so a config that enables the flag cannot be silently bypassed by one
+    entry point. Must run BEFORE ``downsample``: block-averaging across a gap
+    junction mixes non-adjacent frequencies exactly like the index-lag ACF
+    does.
+    """
+    grid_cfg = cfg.get("analysis", {}).get("grid_regularization", {})
+    if grid_cfg.get("enable", False):
+        return regularize_frequency_grid(spectrum)
+    native, mean, ratio = _grid_stretch_ratio(spectrum.frequencies)
+    if abs(ratio - 1.0) > _GRID_UNIFORM_REL_TOL:
+        log.warning(
+            "Frequency grid is non-uniform (mean spacing %.6g MHz vs native "
+            "%.6g MHz): the ACF lag axis and Delta nu_d will be overstated "
+            "by ~%.4fx and gap-straddling lags will mix distant channels. "
+            "Enable analysis.grid_regularization to fix (issue #120).",
+            mean,
+            native,
+            ratio,
+        )
+    return spectrum
+
+
 def prepare_spectrum_from_config(
     cfg: dict,
 ) -> tuple[DynamicSpectrum, tuple[int, int], tuple[int, int] | None]:
@@ -557,25 +594,7 @@ def prepare_spectrum_from_config(
     f_factor = int(ds_cfg.get("f_factor", 1))
     t_factor = int(ds_cfg.get("t_factor", 1))
     spectrum = DynamicSpectrum.from_numpy_file(cfg["input_data_path"])
-
-    grid_cfg = cfg.get("analysis", {}).get("grid_regularization", {})
-    if grid_cfg.get("enable", False):
-        # Before downsampling: block-averaging across a gap junction would mix
-        # non-adjacent frequencies exactly like the index-lag ACF does.
-        spectrum = regularize_frequency_grid(spectrum)
-    else:
-        native, mean, ratio = _grid_stretch_ratio(spectrum.frequencies)
-        if abs(ratio - 1.0) > _GRID_UNIFORM_REL_TOL:
-            log.warning(
-                "Frequency grid is non-uniform (mean spacing %.6g MHz vs native "
-                "%.6g MHz): the ACF lag axis and Delta nu_d will be overstated "
-                "by ~%.4fx and gap-straddling lags will mix distant channels. "
-                "Enable analysis.grid_regularization to fix (issue #120).",
-                mean,
-                native,
-                ratio,
-            )
-
+    spectrum = apply_grid_regularization(spectrum, cfg)
     spectrum = spectrum.downsample(f_factor, t_factor)
     masked = spectrum.mask_rfi(cfg)
     burst_lims, off_lims = determine_windows(masked, cfg)
@@ -623,6 +642,19 @@ def _scan_fit_windows(
     records: list[dict] = []
     widths: list[float] = []
     for fit_lag in scan_lags_mhz:
+        if not np.isfinite(fit_lag):
+            # A NaN/inf from YAML must surface as a failed record, not crash
+            # the strict allow_nan=False JSON writer downstream.
+            records.append(
+                {
+                    "fit_lag_mhz": None,
+                    "success": False,
+                    "delta_nu_mhz": None,
+                    "delta_nu_err_mhz": None,
+                    "message": f"invalid fit window: non-finite value {fit_lag!r}",
+                }
+            )
+            continue
         try:
             r = measure_scintillation_bandwidth(
                 on_spectrum,
