@@ -293,6 +293,103 @@ def test_baseline_subtraction_requires_pipeline_scale_off_window(
     assert (len(calls) == 1) is expect_subtraction
 
 
+def _synthetic_rippled_dynamic_spectrum() -> tuple[DynamicSpectrum, float, float]:
+    """Ripple x scintillation dynamic spectrum for the flat-fielding test.
+
+    Multiplicative PFB model: power = G(f) * (noise + burst * I(f)), where G is
+    a strong static coarse-channel scallop, I(f) carries a known-width smooth
+    scintillation pattern, and the burst is confined to a few time bins. The
+    off-pulse mean of channel f is G(f)*<noise>, so dividing by it must cancel
+    G(f) exactly while leaving I(f) intact.
+    """
+    channel_width_mhz = 0.02
+    nchan = 1024
+    nt = 128
+    freq = np.arange(nchan, dtype=float) * channel_width_mhz  # ascending -> no flip
+    rng = np.random.default_rng(7)
+
+    # Narrow scintillation kernel (width ~5 ch) kept well below the ripple
+    # period so the intrinsic ACF is negligible one ripple-period out; the only
+    # thing living at that lag is the scallop.
+    white = rng.normal(0.0, 1.0, nchan)
+    kernel_lags = np.arange(-40, 41)
+    kernel = np.exp(-0.5 * (kernel_lags / 5.0) ** 2)
+    kernel /= kernel.sum()
+    scint = np.convolve(white, kernel, mode="same")
+    intrinsic = 1.0 + 0.4 * scint / np.nanstd(scint)  # I(f), known width
+
+    ripple_period_chan = 40.0
+    scallop = 1.0 + 0.6 * np.cos(2.0 * np.pi * np.arange(nchan) / ripple_period_chan)
+
+    times = np.arange(nt, dtype=float) * 0.001
+    burst = np.exp(-0.5 * ((np.arange(nt) - 96.0) / 3.0) ** 2)
+    noise = rng.normal(0.0, 0.05, (nchan, nt)) + 1.0  # positive off-pulse floor
+    sky = noise + 8.0 * burst[None, :] * intrinsic[:, None]
+    power = scallop[:, None] * sky
+    return DynamicSpectrum(power, freq, times), channel_width_mhz, ripple_period_chan
+
+
+def _acf_at_lag(spectrum_1d: np.ma.MaskedArray, lag_bins: int) -> float:
+    y = np.ma.masked_invalid(spectrum_1d)
+    y = y - np.ma.mean(y)
+    a0 = float(np.ma.sum(y * y))
+    a_lag = float(np.ma.sum(y[:-lag_bins] * y[lag_bins:]))
+    return a_lag / a0
+
+
+def test_bandpass_normalization_removes_ripple_and_recovers_width():
+    ds, channel_width_mhz, ripple_period_chan = _synthetic_rippled_dynamic_spectrum()
+    off_lims = (0, 80)
+    on_lims = (88, 105)
+
+    raw_on = ds.get_spectrum(on_lims)
+    normed = freya_scintillation.normalize_bandpass(ds, off_lims)
+    normed_on = normed.get_spectrum(on_lims)
+
+    # A periodic scallop anti-correlates strongly at half its period (cos(pi) =
+    # -1); broadband scintillation does not. That half-period dip is therefore a
+    # clean signature of the ripple alone, and flat-fielding must erase it.
+    half_period = int(ripple_period_chan // 2)
+    raw_half = _acf_at_lag(raw_on, half_period)
+    normed_half = _acf_at_lag(normed_on, half_period)
+    assert raw_half < -0.3
+    assert abs(normed_half) < 0.1
+
+    # The known-width central scintillation component survives the flat-field.
+    result = measure_scintillation_bandwidth(
+        normed_on,
+        channel_width_mhz=channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+    assert result.success
+    assert channel_width_mhz < result.delta_nu_mhz < 1.0
+
+
+def test_bandpass_normalization_masks_gain_starved_channels():
+    ds, _channel_width_mhz, _ripple = _synthetic_rippled_dynamic_spectrum()
+    ds.power.data[10, :] = 0.0  # zero off-pulse mean -> below floor
+    ds.power.data[20, :] = -3.0  # negative off-pulse mean
+    off_lims = (0, 80)
+
+    normed = freya_scintillation.normalize_bandpass(ds, off_lims)
+    mask = np.ma.getmaskarray(normed.power)
+
+    assert mask[10].all()
+    assert mask[20].all()
+    # A healthy channel is normalised to ~1 in its off-pulse window, not masked.
+    assert not mask[15].all()
+    healthy = np.ma.mean(normed.power[15, off_lims[0] : off_lims[1]])
+    assert np.isfinite(healthy)
+    assert healthy == pytest.approx(1.0, abs=0.05)
+
+
+def test_bandpass_normalization_requires_sufficient_off_pulse_bins():
+    ds, _channel_width_mhz, _ripple = _synthetic_rippled_dynamic_spectrum()
+    with pytest.raises(ValueError, match="off-pulse time bins"):
+        freya_scintillation.normalize_bandpass(ds, (0, 40))  # 40 < 50-bin floor
+
+
 def test_run_notebook_style_analysis_writes_json_and_figures(tmp_path):
     ds = _synthetic_dynamic_spectrum()
 

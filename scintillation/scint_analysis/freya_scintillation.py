@@ -27,6 +27,18 @@ log = logging.getLogger(__name__)
 # bound, so an equality test would miss real boundary hits.
 _GAMMA_BOUND_REL_TOL = 0.01
 
+# Minimum off-pulse time bins required to estimate a per-channel bandpass by
+# averaging. Fewer bins leave the estimate noise-dominated, and flat-fielding
+# would then imprint that noise as gain rather than removing the true bandpass.
+# Mirrors the >50-bin off-pulse guard used for polynomial baseline subtraction
+# (pipeline.py / issue #118).
+_MIN_BANDPASS_OFF_BINS = 50
+
+# A fine channel whose mean off-pulse level sits below this fraction of the
+# median off-pulse level is gain-starved: dividing by it amplifies noise
+# without bound, so it is masked rather than normalised.
+_BANDPASS_FLOOR_FRAC = 1.0e-3
+
 
 @dataclass(frozen=True)
 class FigureRecord:
@@ -355,6 +367,66 @@ def determine_windows(
     return burst_lims, off_lims
 
 
+def normalize_bandpass(
+    spectrum: DynamicSpectrum,
+    off_pulse_lims: tuple[int, int],
+    *,
+    floor_frac: float = _BANDPASS_FLOOR_FRAC,
+) -> DynamicSpectrum:
+    """Flat-field: divide every fine channel by its mean off-pulse level.
+
+    A per-fine-channel off-pulse mean *is* the static instrumental bandpass
+    (the system gain, including the PFB coarse-channel scallop), because that
+    gain multiplies the off-pulse noise and the on-pulse burst identically.
+    Dividing the whole dynamic spectrum by it cancels the scallop exactly while
+    leaving the (time-variable) scintillation imprinted on the burst untouched --
+    unlike a low-order polynomial baseline, which cannot follow a periodic
+    scallop at all. Pass-1 freya_chime inspection: the frequency ACF was
+    dominated by a ~0.39 MHz coarse-channel ripple ~7x the fit baseline, static
+    in time; only a multiplicative flat-field removes it.
+
+    Guard rails mirror the #118 baseline-subtraction philosophy: fail loudly on
+    an off-pulse window too short to average down noise, and mask (never divide
+    by) channels whose off-pulse mean is non-positive, non-finite, or gain-
+    starved relative to the median.
+    """
+    start, end = int(off_pulse_lims[0]), int(off_pulse_lims[1])
+    n_off = end - start
+    if n_off < _MIN_BANDPASS_OFF_BINS:
+        raise ValueError(
+            f"bandpass normalization needs >= {_MIN_BANDPASS_OFF_BINS} off-pulse "
+            f"time bins to estimate the per-channel gain, got {n_off} "
+            f"(off-pulse window [{start}, {end}))"
+        )
+
+    off_mean = np.ma.filled(np.ma.mean(spectrum.power[:, start:end], axis=1), np.nan)
+    finite_positive = off_mean[np.isfinite(off_mean) & (off_mean > 0.0)]
+    if finite_positive.size == 0:
+        raise ValueError(
+            "bandpass normalization: off-pulse window has no finite, positive "
+            "channel means to define a reference level"
+        )
+    floor = float(floor_frac) * float(np.median(finite_positive))
+    bad_channel = ~(np.isfinite(off_mean) & (off_mean > floor))
+
+    # Bad channels carry a placeholder gain of 1.0 only to keep the division
+    # finite; they are masked below and never read as data.
+    gain = np.where(bad_channel, 1.0, off_mean)
+    normalised = spectrum.power.data / gain[:, np.newaxis]
+
+    if spectrum.power.mask is np.ma.nomask or np.isscalar(spectrum.power.mask):
+        base_mask = np.zeros(spectrum.power.shape, dtype=bool)
+    else:
+        base_mask = spectrum.power.mask.copy()
+    final_mask = base_mask | np.broadcast_to(bad_channel[:, None], spectrum.power.shape)
+
+    n_masked = int(bad_channel.sum())
+    if n_masked:
+        log.info("Bandpass normalization masked %d gain-starved channel(s).", n_masked)
+    new_power = np.ma.MaskedArray(normalised, mask=final_mask)
+    return DynamicSpectrum(new_power, spectrum.frequencies.copy(), spectrum.times.copy())
+
+
 def prepare_spectrum_from_config(
     cfg: dict,
 ) -> tuple[DynamicSpectrum, tuple[int, int], tuple[int, int] | None]:
@@ -366,6 +438,19 @@ def prepare_spectrum_from_config(
     )
     masked = spectrum.mask_rfi(cfg)
     burst_lims, off_lims = determine_windows(masked, cfg)
+
+    bandpass_cfg = cfg.get("analysis", {}).get("bandpass_normalization", {})
+    if bandpass_cfg.get("enable", False):
+        # Flat-field before any additive baseline step: the coarse-channel
+        # scallop is multiplicative, so it must be divided out on the raw
+        # bandpass, not after a polynomial has already been subtracted.
+        if off_lims is None or off_lims[1] <= off_lims[0]:
+            raise ValueError("bandpass normalization requires a valid off-pulse window")
+        masked = normalize_bandpass(
+            masked,
+            off_lims,
+            floor_frac=float(bandpass_cfg.get("floor_frac", _BANDPASS_FLOOR_FRAC)),
+        )
 
     baseline_cfg = cfg.get("analysis", {}).get("baseline_subtraction", {})
     if baseline_cfg.get("enable", False):
