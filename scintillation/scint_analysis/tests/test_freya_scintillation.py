@@ -412,3 +412,188 @@ def test_run_notebook_style_analysis_writes_json_and_figures(tmp_path):
         assert (tmp_path / fig["path"]).exists()
         assert fig["kind"] in {"dynamic_spectrum", "acf", "structure_function"}
     assert result.acf.success
+    # No scan requested: the fields exist and are null (JSON contract stable).
+    assert payload["fit_window_scan"] is None
+    assert payload["fit_window_systematic_mhz"] is None
+
+
+def _synthetic_gapped_dynamic_spectrum() -> tuple[DynamicSpectrum, DynamicSpectrum, float, np.ndarray]:
+    """A scintillating dynamic spectrum plus a gapped copy with 25% of its
+    channels deleted in blocks (mimicking missing coarse channels), so the
+    gapped mean spacing overstates the native step by ~1.33x."""
+    spectrum, channel_width_mhz = _synthetic_scintillating_spectrum()
+    nchan = spectrum.size
+    nt = 96
+    freqs = 1300.0 + np.arange(nchan, dtype=float) * channel_width_mhz
+    times = np.arange(nt, dtype=float) * 0.001
+    profile = np.exp(-0.5 * ((np.arange(nt) - 48.0) / 4.0) ** 2)
+    noise = np.random.default_rng(23).normal(0.0, 0.4, (nchan, nt))
+    power = noise + spectrum[:, None] * profile[None, :]
+    full = DynamicSpectrum(power.copy(), freqs.copy(), times.copy())
+
+    keep = np.ones(nchan, dtype=bool)
+    keep[80:120] = False
+    keep[230:280] = False
+    keep[390:428] = False
+    gapped = DynamicSpectrum(power[keep], freqs[keep], times.copy())
+    return full, gapped, channel_width_mhz, keep
+
+
+def test_regularize_frequency_grid_noop_on_uniform_grid():
+    ds = _synthetic_dynamic_spectrum()
+    assert freya_scintillation.regularize_frequency_grid(ds) is ds
+
+
+def test_regularize_frequency_grid_restores_axis_and_unbiases_width():
+    full, gapped, native, keep = _synthetic_gapped_dynamic_spectrum()
+    stretch = gapped.channel_width_mhz / native
+    assert stretch > 1.25  # the gapped mean spacing is materially wrong
+
+    reg = freya_scintillation.regularize_frequency_grid(gapped)
+    assert reg.num_channels == full.num_channels
+    assert reg.channel_width_mhz == pytest.approx(native, rel=1e-9)
+    assert np.allclose(reg.frequencies, full.frequencies)
+    # Filler rows are fully masked; surviving rows carry the original data.
+    mask = np.ma.getmaskarray(reg.power)
+    assert mask[~keep].all()
+    assert not mask[keep].any()
+    assert np.allclose(reg.power.data[keep], gapped.power.data)
+
+    on_lims = (43, 54)
+    w_full = measure_scintillation_bandwidth(
+        full.get_spectrum(on_lims),
+        channel_width_mhz=full.channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+    w_gap = measure_scintillation_bandwidth(
+        gapped.get_spectrum(on_lims),
+        channel_width_mhz=gapped.channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+    w_reg = measure_scintillation_bandwidth(
+        reg.get_spectrum(on_lims),
+        channel_width_mhz=reg.channel_width_mhz,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+    assert w_full.success and w_gap.success and w_reg.success
+    # The deterministic claim: on IDENTICAL data the gapped path overstates
+    # the regularized width by the axis-stretch factor (mean/native spacing).
+    assert w_gap.delta_nu_mhz / w_reg.delta_nu_mhz == pytest.approx(stretch, rel=0.15)
+    # Sanity anchor only: deleting 25% of a finite-scintle realization moves
+    # the fitted width (sample variance), so the ungapped-truth comparison is
+    # deliberately loose.
+    assert w_reg.delta_nu_mhz == pytest.approx(w_full.delta_nu_mhz, rel=0.5)
+
+
+def test_regularize_frequency_grid_snaps_interblock_offsets():
+    _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
+    freqs = gapped.frequencies.copy()
+    # Emulate upchannelized inter-block registration drift: shift everything
+    # above the first gap by 0.3 of a fine channel.
+    freqs[80:] += 0.3 * native
+    drifted = DynamicSpectrum(gapped.power.data.copy(), freqs, gapped.times.copy())
+
+    reg = freya_scintillation.regularize_frequency_grid(drifted)
+    diffs = np.diff(reg.frequencies)
+    assert np.allclose(diffs, diffs[0])
+    assert reg.channel_width_mhz == pytest.approx(native, rel=1e-6)
+
+
+def test_regularize_frequency_grid_rejects_colliding_channels():
+    _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
+    freqs = gapped.frequencies.copy()
+    # Push one channel onto its neighbour's grid position: a compressed axis
+    # must be rejected, never silently merged.
+    freqs[40] = freqs[41] - 0.1 * native
+    bad = DynamicSpectrum(gapped.power.data.copy(), freqs, gapped.times.copy())
+    with pytest.raises(ValueError, match="same grid position"):
+        freya_scintillation.regularize_frequency_grid(bad)
+
+
+@pytest.mark.parametrize("enable", [False, True])
+def test_grid_regularization_config_wiring_and_warning(monkeypatch, caplog, enable):
+    _full, gapped, native, _keep = _synthetic_gapped_dynamic_spectrum()
+    monkeypatch.setattr(
+        DynamicSpectrum,
+        "from_numpy_file",
+        classmethod(lambda cls, path: gapped),
+    )
+    monkeypatch.setattr(DynamicSpectrum, "mask_rfi", lambda self, cfg: self)
+    cfg = {
+        "input_data_path": "unused.npz",
+        "pipeline_options": {"downsample": {"f_factor": 1, "t_factor": 1}},
+        "analysis": {
+            "rfi_masking": {
+                "manual_burst_window": [43, 54],
+                "manual_noise_window": [0, 30],
+            },
+            "grid_regularization": {"enable": enable},
+        },
+    }
+
+    with caplog.at_level("WARNING", logger=freya_scintillation.log.name):
+        masked, _burst, _off = freya_scintillation.prepare_spectrum_from_config(cfg)
+
+    if enable:
+        assert masked.channel_width_mhz == pytest.approx(native, rel=1e-9)
+        assert not any("grid_regularization" in rec.message for rec in caplog.records)
+    else:
+        assert masked.channel_width_mhz > 1.25 * native
+        assert any(
+            "Enable analysis.grid_regularization" in rec.getMessage()
+            for rec in caplog.records
+        )
+
+
+def test_modulation_index_acf_reports_physical_depth():
+    # On-spectrum = burst * intrinsic pattern + additive noise floor. The
+    # std/mean diagnostic is diluted by the floor in its denominator; the
+    # ACF-amplitude estimate divides by (mean_on - off_mean)^2 and recovers
+    # the physical modulation of the burst term.
+    spectrum, channel_width_mhz = _synthetic_scintillating_spectrum()
+    floor = float(np.mean(spectrum))  # comparable to the burst term
+    with_floor = spectrum + floor
+    m_true = float(np.std(spectrum) / np.mean(spectrum))
+
+    result = measure_scintillation_bandwidth(
+        with_floor,
+        channel_width_mhz=channel_width_mhz,
+        off_burst_spectrum_mean=floor,
+        max_lag_mhz=2.0,
+        fit_lag_mhz=1.0,
+    )
+
+    assert result.success
+    assert result.modulation_index_acf is not None
+    # The diluted diagnostic underestimates; the ACF estimate matches truth.
+    assert result.modulation_index < 0.75 * m_true
+    assert result.modulation_index_acf == pytest.approx(m_true, rel=0.25)
+
+
+def test_fit_window_scan_records_windows_and_systematic(tmp_path):
+    ds = _synthetic_dynamic_spectrum()
+
+    result = run_notebook_style_analysis(
+        ds,
+        burst_id="freya-scan",
+        burst_lims=(43, 54),
+        off_pulse_lims=(0, 30),
+        output_dir=tmp_path,
+        fit_lag_scan_mhz=[1.0, 0.5, 0.01],  # 0.01 < one channel: invalid window
+        write_figures=False,
+    )
+
+    payload = json.loads((tmp_path / "freya-scan_scintillation.json").read_text())
+    scan = payload["fit_window_scan"]
+    assert [entry["fit_lag_mhz"] for entry in scan] == [1.0, 0.5, 0.01]
+    assert scan[0]["success"] is True and scan[1]["success"] is True
+    assert scan[2]["success"] is False
+    assert "invalid fit window" in scan[2]["message"]
+    widths = [entry["delta_nu_mhz"] for entry in scan[:2]]
+    assert payload["fit_window_systematic_mhz"] == pytest.approx(
+        max(widths) - min(widths)
+    )
+    assert result.fit_window_systematic_mhz is not None

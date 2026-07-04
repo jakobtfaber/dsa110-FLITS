@@ -37,6 +37,18 @@ analysis:
     fit_lagrange_mhz: 1.0
     reference_frequency_mhz: 700.0
     force_model: null
+    # Grid-locked instrumental ripple sits at ~0.40 MHz, inside the 1.0 MHz
+    # window; the window choice is a systematic comparable to the statistical
+    # error (E2 experiment: 44.7/57.2/67.7 kHz at 1.0/0.3/0.2). Report it.
+    fit_lag_scan_mhz:
+    - 1.0
+    - 0.3
+    - 0.2
+  grid_regularization:
+    # The upchan npz has 61 missing-coarse-channel gap junctions; without
+    # regularization the index-lag ACF axis is stretched 1.2340x and lags
+    # straddling gaps mix distant channels (issue #120, E1/E2 experiment).
+    enable: true
   bandpass_normalization:
     # pass-1 inspection: the frequency ACF was dominated by a static ~0.39 MHz
     # coarse-channel scallop ~7x the fit baseline. Flat-fielding by the per-fine-
