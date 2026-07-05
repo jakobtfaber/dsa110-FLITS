@@ -41,6 +41,7 @@ Installed as `flits-halos` (see `pyproject.toml`):
 flits-halos services --keywords galaxy cluster        # RegTAP service discovery
 flits-halos tables <tap-url>                          # candidate tables at one endpoint
 flits-halos cone <tap-url> <table> <ra_col> <dec_col> <ra> <dec>
+flits-halos run-targets <tap-url> <table> <ra_col> <dec_col> --targets <targets.yaml>
 flits-halos discover --services vizier,mast,datalab   # cache services + tables
 flits-halos query  --targets galaxies/foreground/vo/targets_example.yaml
 flits-halos reduce --targets galaxies/foreground/vo/targets_example.yaml --out results/

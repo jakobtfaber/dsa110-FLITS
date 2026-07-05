@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .discover import discover_tables
+from .discover import _normalize_service_url, discover_tables
 from .normalize import to_common_schema
 from .query import cone_query
 from .registry import discover_tap_services
@@ -53,6 +53,16 @@ def cmd_cone(args: argparse.Namespace) -> None:
     print(df.head().to_string(index=False))
 
 
+def cmd_run_targets(args: argparse.Namespace) -> None:
+    """Cone-query one endpoint/table for every target; print per-target row counts."""
+    for t in load_targets(args.targets):
+        df = cone_query(
+            args.access_url, args.table, args.ra_col, args.dec_col,
+            t.ra, t.dec, args.radius_arcmin / 60.0,
+        )
+        print(f"# {t.name}: {len(df)} rows")
+
+
 def cmd_discover(args: argparse.Namespace) -> None:
     """Cache the service list and per-service candidate tables."""
     if args.services == "auto":
@@ -65,7 +75,10 @@ def cmd_discover(args: argparse.Namespace) -> None:
     svc_records = []
     for url in svc_urls:
         tables = discover_tables(url, limit=args.limit, cache_dir=cache)
-        svc_records.append({"access_url": url, "service_hash": _hash(url), "num_tables": len(tables)})
+        # hash the normalized URL: discover_tables names its cache file by it, and
+        # query/reduce glob tables_{service_hash}_* — the two must agree
+        h = _hash(_normalize_service_url(url) or url)
+        svc_records.append({"access_url": url, "service_hash": h, "num_tables": len(tables)})
     pd.DataFrame(svc_records).to_parquet(cache / "services.parquet")
     print(f"Wrote services and tables caches for {len(svc_records)} services")
 
@@ -158,6 +171,13 @@ def main(argv: list[str] | None = None) -> None:
     sp.add_argument("--radius-arcmin", type=float, default=5.0)
     sp.add_argument("--columns", default="*")
     sp.set_defaults(func=cmd_cone)
+
+    sp = sub.add_parser("run-targets", help="Cone-query one endpoint/table for every target")
+    for a in ("access_url", "table", "ra_col", "dec_col"):
+        sp.add_argument(a)
+    sp.add_argument("--targets", type=Path, required=True, help="Path to targets.yaml")
+    sp.add_argument("--radius-arcmin", type=float, default=5.0)
+    sp.set_defaults(func=cmd_run_targets)
 
     sp = sub.add_parser("discover", help="Cache services and their candidate tables")
     sp.add_argument("--services", default="auto", help="auto|vizier,mast,datalab")
