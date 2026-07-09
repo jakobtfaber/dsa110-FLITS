@@ -24,7 +24,6 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
-from matplotlib.patches import Patch  # noqa: E402
 
 ROOT = pathlib.Path(__file__).parents[1]
 CSV = ROOT / "crossmatching/dm_provenance.csv"
@@ -64,7 +63,7 @@ def main() -> None:
     ax.errorbar(con_x, con_y, yerr=con_yerr, fmt="o", color="C0",
                 capsize=3, lw=1.2, ms=6, zorder=3, label="constrained (CHIME DM)")
     # sigma annotations above each constrained point.
-    for xi, yi, si in zip(con_x, con_y, con_sig):
+    for xi, yi, si in zip(con_x, con_y, con_sig, strict=True):
         ax.annotate(f"{si:+.1f}$\\sigma$", (xi, yi), textcoords="offset points",
                     xytext=(0, 9), ha="center", fontsize=7.5, color="C0")
 
