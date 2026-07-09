@@ -53,3 +53,27 @@ manifest cubes (arc node dates: 2025-05-19).
   regeneration — not by builder audit.
 - Byte-identity local↔arc was verified separately (P2.2, 2026-07-06):
   see the manifest status column.
+
+## P2.2 arc byte cross-check procedure (one-shot, performed 2026-07-06)
+
+The `ARC_BYTE_MATCH` status in `data-manifest.csv` was produced by a one-shot
+manual procedure, not a committed script:
+
+1. For each of the 24 manifest rows, download the arc VOSpace node to a
+   temporary directory using `vcp` (CANFAR VOSpace client):
+   `vcp arc:<node_path> <tmp_dir>/<filename>`
+2. Compute sha256 of the downloaded file: `sha256sum <tmp_dir>/<filename>`.
+3. Compare against the manifest's `sha256` column (written by
+   `scripts/fill_data_manifest.py` in P0.1).
+4. If all 24 match, upgrade the manifest's `status` column from
+   `HASHED_LOCAL` to `ARC_BYTE_MATCH`.
+
+Result (2026-07-06): 24/24 match, 0 mismatch, 0 download failures. Every
+cross-check hash equals the manifest sha256. VOSpace exposes no MD5 node
+property (checked: creator/date/ispublic/length only), so byte download was
+the only content-level comparison available; sizes had already matched 24/24.
+
+The `ARC_BYTE_MATCH` state is pinned by `tests/test_data_manifest.py`. To
+re-run the cross-check, repeat the procedure above; no committed script wraps
+it because `vcp` is a one-shot manual client and the result is already
+byte-pinned in the manifest.

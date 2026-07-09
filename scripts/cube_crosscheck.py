@@ -119,6 +119,14 @@ def reference_for(data_root: pathlib.Path, burst: str) -> pathlib.Path | None:
     return p if p.exists() else None
 
 
+def _rel(path: pathlib.Path, root: pathlib.Path) -> str:
+    """Path relative to root, or str(path) if not under root."""
+    try:
+        return str(path.relative_to(root))
+    except ValueError:
+        return str(path)
+
+
 def build_rows(data_root: pathlib.Path, max_lag: int) -> list[dict[str, str]]:
     rows = []
     for row in manifest_chime_rows():
@@ -127,7 +135,7 @@ def build_rows(data_root: pathlib.Path, max_lag: int) -> list[dict[str, str]]:
         out = {
             "burst": burst,
             "cube_filename": row["filename"],
-            "cube_path": str(cube_path) if cube_path else "",
+            "cube_path": _rel(cube_path, data_root) if cube_path else "",
             "reference_path": "",
             "direct_verdict": "missing-cube",
             "max_snr": "",
@@ -162,7 +170,7 @@ def build_rows(data_root: pathlib.Path, max_lag: int) -> list[dict[str, str]]:
         lag = best_lag_bins(prof, ref_prof, max_lag=max_lag)
         out.update(
             {
-                "reference_path": str(ref_path),
+                "reference_path": _rel(ref_path, data_root),
                 "cross_lag_bins": str(lag),
                 "cross_verdict": "pass" if abs(lag) < 5 else "fail",
             }
@@ -191,7 +199,7 @@ def write_csv(rows: list[dict[str, str]], path: pathlib.Path) -> None:
         writer.writerows(rows)
 
 
-def write_figure(rows: list[dict[str, str]], path: pathlib.Path) -> None:
+def write_figure(rows: list[dict[str, str]], path: pathlib.Path, data_root: pathlib.Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     ncols = 3
     nrows = int(np.ceil(len(rows) / ncols))
@@ -201,12 +209,14 @@ def write_figure(rows: list[dict[str, str]], path: pathlib.Path) -> None:
             ax.set_title(f"{row['burst']}: missing cube")
             ax.axis("off")
             continue
-        cube = pathlib.Path(row["cube_path"])
+        cube = data_root / row["cube_path"]
         x = np.arange(32000)
         cube_snr = robust_snr(cube_profile(cube))
         ax.plot(x, np.clip(cube_snr, -5, 20), lw=0.6, label="cube")
         if row["reference_path"]:
-            ref = resample_profile(reference_profile(pathlib.Path(row["reference_path"])), cube_snr.size)
+            ref = resample_profile(
+                reference_profile(data_root / row["reference_path"]), cube_snr.size
+            )
             ref_snr = robust_snr(ref)
             ax.plot(x, np.clip(ref_snr, -5, 20), lw=0.6, alpha=0.8, label="regen")
         title = (
@@ -241,7 +251,7 @@ def main(argv: list[str] | None = None) -> int:
     csv_path = args.out_dir / "cube_crosscheck_lags.csv"
     fig_path = args.out_dir / "cube_crosscheck_thumbnails.png"
     write_csv(rows, csv_path)
-    write_figure(rows, fig_path)
+    write_figure(rows, fig_path, data_root)
     print(f"wrote {csv_path}")
     print(f"wrote {fig_path}")
     failures = [r for r in rows if r["direct_verdict"] != "pass" or r["cross_verdict"] == "fail"]

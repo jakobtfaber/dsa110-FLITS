@@ -1,8 +1,13 @@
 """Fill sha256/bytes in data-manifest.csv from locally reachable files.
 
-Rows whose file is not reachable under --data-root are left PENDING and
-reported; they are closed on h17 in P2.2.
+P0.1 step only: writes status=HASHED_LOCAL. The subsequent P2.2 arc byte
+cross-check (which upgrades HASHED_LOCAL -> ARC_BYTE_MATCH) was a one-shot
+`vcp` download + sha256 comparison documented in
+`scattering/scat_analysis/builders_arc/ORIGIN.md`; it is not wrapped by this
+script. The manifest's ARC_BYTE_MATCH state is pinned by
+`tests/test_data_manifest.py`.
 """
+
 import argparse
 import csv
 import hashlib
@@ -22,8 +27,7 @@ def sha256(path, chunk=1 << 20):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--data-root", required=True,
-                    help="e.g. ~/Data/Faber2026")
+    ap.add_argument("--data-root", required=True, help="e.g. ~/Data/Faber2026")
     args = ap.parse_args()
     root = pathlib.Path(args.data_root).expanduser()
     with MANIFEST.open() as fh:
@@ -43,8 +47,7 @@ def main():
         w = csv.DictWriter(fh, fieldnames=fields)
         w.writeheader()
         w.writerows(rows)
-    print(f"filled {len(rows) - len(missing)}/{len(rows)}; "
-          f"still pending: {missing}")
+    print(f"filled {len(rows) - len(missing)}/{len(rows)}; still pending: {missing}")
     return 0
 
 
