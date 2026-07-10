@@ -99,12 +99,11 @@ flags remain in the tables and per-burst diagnostics.
 
 ## ACF Fit Figures
 
-Each burst figure follows the manuscript scintillation-summary
-layout: the left panel shows selected Lorentzian bandwidths versus
-DSA sub-band center frequency with a data-anchored reference
-$\gamma\propto\nu^4$ curve where constrained, and the right column
-shows stacked frequency-lag ACF panels with the fitted total
-Lorentzian model overlaid.
+Each burst figure follows the Freya instrumental-origin experiment's
+explanatory layout: a bandwidth summary, explicit validation context,
+and spacious positive-frequency-lag ACF panels with the selected
+Lorentzian model overlaid. These figures remain diagnostic until the
+upstream Phase 0 producer/ACF/fitting validation passes.
 
 ### casey
 

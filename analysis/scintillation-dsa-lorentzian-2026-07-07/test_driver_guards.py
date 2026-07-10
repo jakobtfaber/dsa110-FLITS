@@ -125,5 +125,48 @@ def test_driver_harmonic_mask_disabled_is_passthrough():
     assert L.size == int(np.sum(keep))
 
 
+def test_public_diagnostic_plot_uses_experiment_style_contract(tmp_path):
+    """The tracked producer emits a spacious, explicitly diagnostic figure."""
+    import matplotlib.image as mpimg
+
+    lags, acf, err, _ = _lorentzian_acf(0.2, 0.8, dch=0.01, nch=80, noise=1e-3)
+    component = {
+        "dnu_mhz": 0.2,
+        "dnu_err": 0.02,
+        "m": 0.8,
+        "m_err": 0.04,
+        "quality_flags": [],
+    }
+    payload = {
+        "lags": lags,
+        "acf": acf,
+        "err": err,
+        "summary": {
+            "index": 0,
+            "center_freq_mhz": 650.0,
+            "channel_width_mhz": 0.01,
+            "fit_range_mhz": 0.8,
+            "selected_redchi": 1.05,
+            "selected_components": [component],
+        },
+        "fit": {"constant": 0.0, "components": [component]},
+    }
+
+    outputs = drv.plot_burst_acf_diagnostic(
+        "freya", [payload], figure_dir=tmp_path, band="chime"
+    )
+
+    svg = Path(outputs["figure_svg"]).read_text()
+    assert "Diagnostic ACF" in svg
+    assert "equal integrated on-pulse signal" in svg
+    assert "Sub-band 1" in svg
+    assert "Positive frequency lag" in svg
+    assert "Phase 0 validated: no" in svg
+    assert "DIAGNOSTIC ONLY" in svg
+    image = mpimg.imread(outputs["figure_png"])
+    assert image.shape[1] > image.shape[0]
+    assert Path(outputs["figure_pdf"]).read_bytes().startswith(b"%PDF")
+
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-v"]))

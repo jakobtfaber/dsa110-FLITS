@@ -388,13 +388,19 @@ MANUSCRIPT_GUIDE = "gray"
 MANUSCRIPT_GRID = "#d9d9d9"
 
 
-def _plot_burst_acfs(
+def plot_burst_acf_diagnostic(
     burst: str,
     plot_subbands: list[dict[str, Any]],
     *,
     figure_dir: Path,
     band: str = "dsa",
 ) -> dict[str, str]:
+    """Render the canonical experiment-style per-burst ACF diagnostic.
+
+    The structured fit payload remains the scientific source of truth.  This
+    function only renders it, explicitly labels the output as pre-Phase-0
+    diagnostic material, and never changes measurement eligibility.
+    """
     import matplotlib
 
     matplotlib.use("Agg")
@@ -407,10 +413,10 @@ def _plot_burst_acfs(
     plt.rcParams.update(
         {
             "axes.linewidth": 0.9,
-            "axes.labelsize": 8.0,
-            "axes.titlesize": 8.0,
-            "font.size": 7.5,
-            "legend.fontsize": 7.0,
+            "axes.labelsize": 10.0,
+            "axes.titlesize": 11.0,
+            "font.size": 9.5,
+            "legend.fontsize": 8.5,
             "savefig.dpi": 300,
             "svg.fonttype": "none",
             # STIX math keeps a serif look consistent with the AASTeX manuscript
@@ -420,30 +426,28 @@ def _plot_burst_acfs(
             "mathtext.fontset": "stix",
             "pdf.fonttype": 42,
             "xtick.direction": "in",
-            "xtick.labelsize": 6.8,
+            "xtick.labelsize": 8.5,
             "xtick.top": True,
             "ytick.direction": "in",
-            "ytick.labelsize": 6.8,
+            "ytick.labelsize": 8.5,
             "ytick.right": True,
         }
     )
 
     figure_dir.mkdir(parents=True, exist_ok=True)
     n_subbands = len(plot_subbands)
-    fig = plt.figure(
-        figsize=(7.1, max(3.4, 1.75 * max(n_subbands, 1))),
-        constrained_layout=True,
-    )
+    n_acf_rows = max(1, int(np.ceil(max(n_subbands, 1) / 2)))
+    fig = plt.figure(figsize=(12.5, 4.2 + 3.3 * n_acf_rows), constrained_layout=True)
     gs = fig.add_gridspec(
-        max(n_subbands, 1),
+        1 + n_acf_rows,
         2,
-        width_ratios=[1.15, 1.0],
-        hspace=0.36,
-        wspace=0.25,
+        height_ratios=[1.0] + [1.45] * n_acf_rows,
+        hspace=0.30,
+        wspace=0.20,
     )
-    ax_bw = fig.add_subplot(gs[:, 0])
-    fit_color = "black"
-    stack_colors = [plt.get_cmap("plasma")(x) for x in np.linspace(0.15, 0.78, max(n_subbands, 1))]
+    ax_bw = fig.add_subplot(gs[0, 0])
+    ax_info = fig.add_subplot(gs[0, 1])
+    fit_color = "#d62728"
 
     component_rows = []
     for payload in plot_subbands:
@@ -530,6 +534,7 @@ def _plot_burst_acfs(
         ax_bw.yaxis.set_minor_formatter(NullFormatter())
     ax_bw.set_xlabel("Center Frequency (MHz)")
     ax_bw.set_ylabel(r"Decorrelation Bandwidth, $\gamma$ (MHz)")
+    ax_bw.set_title("(a) Bandwidth summary")
     ax_bw.grid(axis="y", color=MANUSCRIPT_GRID, alpha=0.55, lw=0.45)
     ax_bw.tick_params(top=True, right=True, which="both", direction="in")
     ax_bw.legend(
@@ -540,8 +545,49 @@ def _plot_burst_acfs(
         handlelength=1.35,
     )
 
+    status_lines = [
+        f"Burst: {burst}",
+        f"Band: {band.upper()}",
+        f"Sub-bands: {n_subbands}",
+        "Partition: equal integrated on-pulse signal",
+        "           (approximate equal S/N; not equal channels)",
+        "",
+        "Phase 0 validated: no",
+        "Scientific status: DIAGNOSTIC ONLY",
+    ]
+    for payload in plot_subbands:
+        summary = payload["summary"]
+        flags = _summary_subband_status(summary).replace("_", " ")
+        null_pass = summary.get("off_pulse_null", {}).get("null_pass")
+        low_lag = summary.get("low_lag_stability", {}).get("stable")
+        guard_bits = []
+        if null_pass is not None:
+            guard_bits.append(f"off-pulse {'pass' if null_pass else 'FAIL'}")
+        if low_lag is not None:
+            guard_bits.append(f"low-lag {'stable' if low_lag else 'FAIL'}")
+        guard_text = f"; {', '.join(guard_bits)}" if guard_bits else ""
+        status_lines.append(
+            f"Sub-band {int(summary['index']) + 1}: {flags}{guard_text}"
+        )
+    ax_info.axis("off")
+    ax_info.set_title("(b) Validation context", loc="left")
+    ax_info.text(
+        0.02,
+        0.94,
+        "\n".join(status_lines),
+        transform=ax_info.transAxes,
+        va="top",
+        ha="left",
+        family="monospace",
+        fontsize=9.0,
+        linespacing=1.35,
+        bbox={"facecolor": "#f7f7f7", "edgecolor": "0.75", "boxstyle": "round,pad=0.5"},
+    )
+
     for row_idx, payload in enumerate(plot_subbands):
-        ax_acf = fig.add_subplot(gs[row_idx, 1])
+        grid_row = 1 + row_idx // 2
+        grid_col = row_idx % 2
+        ax_acf = fig.add_subplot(gs[grid_row, grid_col])
         lags = np.asarray(payload["lags"], dtype=float)
         acf = np.asarray(payload["acf"], dtype=float)
         err = np.asarray(payload["err"], dtype=float) if payload.get("err") is not None else None
@@ -551,13 +597,13 @@ def _plot_burst_acfs(
         lag_zoom = min(fit_range, 12.0)
         center_freq = float(subband["center_freq_mhz"])
 
-        display = np.isfinite(lags) & np.isfinite(acf) & (np.abs(lags) <= lag_zoom)
-        nonzero = display & (lags != 0)
+        display = np.isfinite(lags) & np.isfinite(acf) & (lags >= 0) & (lags <= lag_zoom)
+        nonzero = display & (lags > 0)
         if not np.any(nonzero):
             ax_acf.axis("off")
             continue
 
-        xfit = np.linspace(-lag_zoom, lag_zoom, 700)
+        xfit = np.linspace(0.0, lag_zoom, 700)
         yfit = _model_curve(xfit, fit)
         if err is not None:
             err_mask = nonzero & np.isfinite(err) & (err > 0)
@@ -573,20 +619,15 @@ def _plot_burst_acfs(
                     alpha=0.75,
                     zorder=0,
                 )
-        ax_acf.plot(
-            lags[nonzero],
-            acf[nonzero],
-            color=stack_colors[row_idx],
-            lw=0.8,
-            alpha=0.85,
-            zorder=2,
-        )
+        data_idx = _decimated_indices(nonzero, max_points=450)
+        ax_acf.plot(lags[data_idx], acf[data_idx], "k.", ms=3.0, alpha=0.85, zorder=2)
 
         ax_acf.plot(
             xfit,
             yfit,
             color=fit_color,
-            lw=1.25,
+            lw=1.4,
+            label="selected Lorentzian model",
             zorder=5,
         )
 
@@ -600,20 +641,31 @@ def _plot_burst_acfs(
             label,
             transform=ax_acf.transAxes,
             va="top",
-            fontsize=6.4,
+            fontsize=8.0,
             bbox={"facecolor": "white", "alpha": 0.75, "boxstyle": "round,pad=0.2"},
         )
         ax_acf.axhline(0.0, color="0.7", lw=0.55, zorder=1)
-        ax_acf.set_xlim(-lag_zoom, lag_zoom)
+        if band == "chime":
+            for harmonic in np.arange(0.390625, lag_zoom + 0.390625, 0.390625):
+                ax_acf.axvline(harmonic, color="0.6", ls=":", lw=0.7, alpha=0.8)
+        ax_acf.set_xlim(0.0, lag_zoom)
         ax_acf.yaxis.set_major_locator(MaxNLocator(nbins=3))
-        ax_acf.grid(axis="y", color=MANUSCRIPT_GRID, alpha=0.5, lw=0.4)
-        if row_idx == n_subbands - 1:
-            ax_acf.set_xlabel("Frequency Lag (MHz)")
-        else:
-            ax_acf.tick_params(labelbottom=False)
-        if row_idx == max(n_subbands // 2 - 1, 0):
-            ax_acf.set_ylabel(r"ACF Power  ($m^2$)")
+        ax_acf.grid(color=MANUSCRIPT_GRID, alpha=0.55, lw=0.5)
+        ax_acf.set_xlabel("Positive frequency lag (MHz)")
+        ax_acf.set_ylabel(r"ACF power ($m^2$)")
+        panel = chr(ord("c") + row_idx)
+        ax_acf.set_title(
+            f"({panel}) Sub-band {int(subband['index']) + 1}: "
+            f"{center_freq:.1f} MHz",
+            loc="left",
+        )
+        ax_acf.legend(loc="upper right", framealpha=0.9)
         ax_acf.tick_params(top=True, right=True, which="both", direction="in")
+
+    fig.suptitle(
+        f"{burst}: {band.upper()} Diagnostic ACF and Lorentzian Fits",
+        fontsize=14,
+    )
 
     png = figure_dir / f"{burst}_{band}_acf_lorentzian_fits.png"
     svg = figure_dir / f"{burst}_{band}_acf_lorentzian_fits.svg"
@@ -1280,7 +1332,7 @@ def _fit_one_burst(
     if make_figures:
         selected_n = int(result["requested_num_subbands"])
         result.update(
-            _plot_burst_acfs(
+            plot_burst_acf_diagnostic(
                 burst, plot_payloads[selected_n], figure_dir=output_dir / "figures", band=band
             )
         )
@@ -1447,12 +1499,11 @@ def _write_markdown(
             "",
             "## ACF Fit Figures",
             "",
-            "Each burst figure follows the manuscript scintillation-summary",
-            "layout: the left panel shows selected Lorentzian bandwidths versus",
-            "DSA sub-band center frequency with a data-anchored reference",
-            "$\\gamma\\propto\\nu^4$ curve where constrained, and the right column",
-            "shows stacked frequency-lag ACF panels with the fitted total",
-            "Lorentzian model overlaid.",
+            "Each burst figure follows the Freya instrumental-origin experiment's",
+            "explanatory layout: a bandwidth summary, explicit validation context,",
+            "and spacious positive-frequency-lag ACF panels with the selected",
+            "Lorentzian model overlaid. These figures remain diagnostic until the",
+            "upstream Phase 0 producer/ACF/fitting validation passes.",
             "",
         ]
     )
