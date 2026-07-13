@@ -169,6 +169,26 @@ def test_driver_harmonic_mask_disabled_is_passthrough():
     assert L.size == int(np.sum(keep))
 
 
+def test_chime_physical_fit_uses_unique_positive_lags_starting_at_two():
+    lags = np.arange(-5, 6, dtype=float) * 0.01
+    acf = np.arange(lags.size, dtype=float)
+    err = np.ones_like(acf)
+    selected_lags, selected_acf, selected_err = drv._select_physical_fit_lags(
+        lags, acf, err, channel_width_mhz=0.01, telescope="chime"
+    )
+    assert selected_lags.tolist() == [0.02, 0.03, 0.04, 0.05]
+    assert selected_acf.shape == selected_lags.shape == selected_err.shape
+
+
+def test_non_chime_physical_fit_lags_are_unchanged():
+    lags = np.array([-0.02, -0.01, 0.01, 0.02])
+    acf = np.ones_like(lags)
+    selected_lags, _, _ = drv._select_physical_fit_lags(
+        lags, acf, None, channel_width_mhz=0.01, telescope="dsa"
+    )
+    assert np.array_equal(selected_lags, lags)
+
+
 def test_public_diagnostic_plot_uses_experiment_style_contract(tmp_path):
     """The tracked producer emits a spacious, explicitly diagnostic figure."""
     import matplotlib.image as mpimg
