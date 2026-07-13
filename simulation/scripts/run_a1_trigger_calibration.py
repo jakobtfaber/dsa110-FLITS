@@ -39,7 +39,15 @@ from trigger_calibration import (  # noqa: E402
 )
 
 CHANNEL_WIDTH_MHZ = 0.05
-BAND_WIDTH_MHZ = 6.0
+# Band width scales with subband count so every subband keeps a fixed
+# channel budget: calculate_acf requires >= 20 unmasked channels, and a
+# fixed total band starved the 8-subband arm (6 MHz / 8 = 15 channels ->
+# every injection failed instantly on first launch).
+SUBBAND_CHANNELS = 120
+
+
+def _band_width_mhz(num_subbands):
+    return num_subbands * SUBBAND_CHANNELS * CHANNEL_WIDTH_MHZ
 
 NULL_GRID = {
     "dnu_over_dchan": [2, 5, 10, 30, 100],
@@ -61,24 +69,23 @@ def _run_cell(kind, params, n_real, nlive, dlogz, n_real_cov, cell_index):
     if kind == "null":
         sample = null_dlnz_cell(
             dnu_hwhm_mhz=params["dnu_over_dchan"] * CHANNEL_WIDTH_MHZ,
-            snr=params["snr"], band_width_mhz=BAND_WIDTH_MHZ,
+            snr=params["snr"],
+            band_width_mhz=_band_width_mhz(params["num_subbands"]),
             channel_width_mhz=CHANNEL_WIDTH_MHZ,
             num_subbands=params["num_subbands"],
             n_real=n_real, seed=seed, nlive=nlive, dlogz=dlogz,
             n_real_cov=n_real_cov,
         )
     else:
-        kwargs = {}
-        if "f_prior" in params:
-            kwargs = {}  # prior sensitivity handled by caller via kind tag
         sample = power_dlnz_cell(
             f=params["f"], m2_ratio=params["m2_ratio"],
             dnu1_hwhm_mhz=CENTRAL["dnu_over_dchan"] * CHANNEL_WIDTH_MHZ,
-            snr=CENTRAL["snr"], band_width_mhz=BAND_WIDTH_MHZ,
+            snr=CENTRAL["snr"],
+            band_width_mhz=_band_width_mhz(CENTRAL["num_subbands"]),
             channel_width_mhz=CHANNEL_WIDTH_MHZ,
             num_subbands=CENTRAL["num_subbands"],
             n_real=n_real, seed=seed, nlive=nlive, dlogz=dlogz,
-            n_real_cov=n_real_cov, **kwargs,
+            n_real_cov=n_real_cov,
         )
     return sample, seed
 
@@ -180,7 +187,7 @@ def main():
         "power_curves_at_1pct": power_curves,
         "grid": {"null": null_grid, "power": power_grid, "central": CENTRAL,
                  "channel_width_mhz": CHANNEL_WIDTH_MHZ,
-                 "band_width_mhz": BAND_WIDTH_MHZ},
+                 "subband_channels": SUBBAND_CHANNELS},
         "settings": {"n_real": n_real, "n_real_power": n_real_power,
                      "nlive": nlive, "dlogz": dlogz,
                      "n_real_cov": n_real_cov, "seed0": SEED0,
