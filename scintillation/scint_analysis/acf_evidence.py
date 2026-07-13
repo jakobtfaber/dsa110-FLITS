@@ -236,6 +236,36 @@ def compare_acf_evidence(lags, acf, cov, channel_width_mhz, band_width_mhz,
     }
 
 
+def escalation_trigger_verdict(dlnz, rail_flags, ppc_pvalues, calibration):
+    """A1 escalation verdict: limb (i) dlnZ, limb (ii) burst-profile PPC.
+
+    Semantics fixed by the A1 design (plan-a1-trigger-calibration.md):
+      - a railed second component (posterior edge-pile) is model-family
+        rejection — never a two-screen detection, regardless of dlnZ;
+      - PPC band [0.05, 0.95] is the rung-iv contract; ``lag1_acf`` is the
+        registered statistic sensitive to unmodeled temporal structure;
+      - no escalation is 'censored', never a single-screen claim (a host-side
+        screen below channel resolution is invisible to limb i).
+
+    ``calibration`` must carry the injection-calibrated ``dlnz_threshold``
+    (ADR-0008 calibration entry; reports/a1_trigger_calibration.json).
+    """
+    threshold = calibration["dlnz_threshold"]
+    if rail_flags:
+        return {"escalate": False, "verdict": "model_family_rejection",
+                "reasons": [], "rail_flags": list(rail_flags)}
+    reasons = []
+    if dlnz >= threshold:
+        reasons.append("dlnz")
+    p = ppc_pvalues.get("lag1_acf")
+    if p is not None and not (0.05 <= p <= 0.95):
+        reasons.append("ppc_lag1_acf")
+    if reasons:
+        return {"escalate": True, "verdict": "escalate", "reasons": reasons}
+    return {"escalate": False, "verdict": "no_escalation_censored",
+            "reasons": []}
+
+
 def evidence_with_mc_covariance(masked_spectrum, channel_width_mhz, snr,
                                 n_real=500, seed=0, nlive=500, dlogz=0.1,
                                 max_lag_bins=None, f_lo=3.0, f_hi=300.0):
