@@ -499,7 +499,13 @@ def foreground_unified(
             )
 
             registry = load_intervening_census_registry(registry_path)
-            matches = registry_to_matches(registry, name, z_frb)
+            matches = registry_to_matches(
+                registry,
+                name,
+                z_frb,
+                sight_ra_deg=sight_ra,
+                sight_dec_deg=sight_dec,
+            )
             registry_authoritative = name.lower() in census_roster_nicknames()
         except (ImportError, OSError, ValueError):
             matches = None
