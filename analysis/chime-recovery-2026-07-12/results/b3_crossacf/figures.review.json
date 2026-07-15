@@ -1,12 +1,12 @@
 {
-  "figure_manifest_sha256": "9b9f8c0fc00255a8fba814a3d2f494ea5fe72508b987dbbab9df96b0f05e1ec8",
+  "figure_manifest_sha256": "e6f69c26643d581e22fcf3c4f61c411f54d963cf44c9591b7b3ae075fb7ea9ac",
   "pass": false,
   "reviewed_at": "2026-07-14T01:15:00-07:00",
   "reviewer": "Codex",
   "collaborating_review": {
     "reviewer": "Claude Fable 5 xhigh via Repowire",
     "status": "reviewed_fail",
-    "note": "Independent adversarial review confirmed coherent low-lag structure in 11/12 off-pulse windows and no P0/P1 defects in the fail-closed run path."
+    "note": "Independent adversarial review confirmed coherent low-lag structure in 11/12 off-pulse windows and no P0/P1 defects in the fail-closed run path. Re-reviewed after declaring the portable manifest path base."
   },
   "schema_version": 1,
   "status": "reviewed_fail",

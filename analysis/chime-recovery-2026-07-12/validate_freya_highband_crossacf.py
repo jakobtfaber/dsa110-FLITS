@@ -301,9 +301,7 @@ def _remove_instrument_template(cross: CrossACF, controls: list[CrossACF]) -> Cr
     )
     covariance = np.asarray(cross.covariance) + template_covariance
     block_acfs = (
-        None
-        if cross.block_acfs is None
-        else np.asarray(cross.block_acfs) - template[None, :]
+        None if cross.block_acfs is None else np.asarray(cross.block_acfs) - template[None, :]
     )
     return CrossACF(
         lag_bins=cross.lag_bins,
@@ -453,8 +451,7 @@ def _injection_gate(
                 if cross is not None:
                     control_index = trial % len(starts)
                     controls = (
-                        offpulse_crosses[:control_index]
-                        + offpulse_crosses[control_index + 1 :]
+                        offpulse_crosses[:control_index] + offpulse_crosses[control_index + 1 :]
                     )
                     cross = _remove_instrument_template(cross, controls)
                 fit = (
@@ -635,7 +632,7 @@ def _write_figure_manifest(output: Path, paths: list[str]) -> Path:
         pixels = plt.imread(path)
         figures.append(
             {
-                "path": str(path),
+                "path": path.relative_to(output).as_posix(),
                 "sha256": _sha256(path),
                 "pixel_shape": list(pixels.shape),
                 "expectation": expectations[path.name],
@@ -643,7 +640,12 @@ def _write_figure_manifest(output: Path, paths: list[str]) -> Path:
         )
     manifest = output / "figures.manifest.json"
     manifest.write_text(
-        json.dumps({"schema_version": 1, "figures": figures}, indent=2, sort_keys=True) + "\n"
+        json.dumps(
+            {"schema_version": 1, "path_base": "manifest_directory", "figures": figures},
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n"
     )
     return manifest
 

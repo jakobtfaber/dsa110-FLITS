@@ -33,5 +33,5 @@
       }
     }
   ],
-  "note": "All figures are legible and faithfully expose the documented failure; the on-pulse Lorentzian is diagnostic only."
+  "note": "Re-reviewed after portable manifest normalization and explicit manifest path-base declaration. All figures are legible and faithfully expose the documented failure; the on-pulse Lorentzian is diagnostic only."
 }

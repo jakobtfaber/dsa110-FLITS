@@ -21,5 +21,6 @@
       "sha256": "7399c676787c104de947b6f7e6ae9e80b78a8940fc2083e6112ed7740ce15ee6"
     }
   ],
+  "path_base": "repository_root",
   "schema_version": 1
 }

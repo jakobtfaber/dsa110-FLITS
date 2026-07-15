@@ -2,7 +2,7 @@
   "figures": [
     {
       "expectation": "template-corrected off-pulse curves scatter around zero",
-      "path": "/Users/jakobfaber/Developer/scratch/worktrees/flits-chime-highband-crossacf/analysis/chime-recovery-2026-07-12/results/b4_fourstream/figures/freya_b4_offpulse_null.png",
+      "path": "figures/freya_b4_offpulse_null.png",
       "pixel_shape": [
         817,
         1659,
@@ -12,7 +12,7 @@
     },
     {
       "expectation": "bias bars expose the validated modulation region",
-      "path": "/Users/jakobfaber/Developer/scratch/worktrees/flits-chime-highband-crossacf/analysis/chime-recovery-2026-07-12/results/b4_fourstream/figures/freya_b4_injection_recovery.png",
+      "path": "figures/freya_b4_injection_recovery.png",
       "pixel_shape": [
         873,
         1334,
@@ -22,7 +22,7 @@
     },
     {
       "expectation": "on-pulse points expose the weak boundary-dependent feature",
-      "path": "/Users/jakobfaber/Developer/scratch/worktrees/flits-chime-highband-crossacf/analysis/chime-recovery-2026-07-12/results/b4_fourstream/figures/freya_b4_onpulse_acf.png",
+      "path": "figures/freya_b4_onpulse_acf.png",
       "pixel_shape": [
         822,
         1363,
@@ -31,5 +31,6 @@
       "sha256": "e609cc8e300087ec9bf63b6b39290f97403ba2cf23e47b6815b5e12dfce18995"
     }
   ],
+  "path_base": "manifest_directory",
   "schema_version": 1
 }
