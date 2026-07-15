@@ -293,32 +293,26 @@ def registry_to_matches(
        parameter is recomputed from (position, coordinates, best_z) rather
        than trusting the provenance-heterogeneous listed value.
     """
+    # The adjudication inputs are committed repo data; a missing file is a
+    # broken checkout and must raise, never silently disable the remediation
+    # (review finding on this PR: a swallowed FileNotFoundError here would
+    # un-dedupe the census and drop every mass adjudication without warning).
     if adjudicated_masses is None:
-        try:
-            adjudicated_masses = load_adjudicated_masses()
-        except (OSError, ValueError):
-            adjudicated_masses = None
+        adjudicated_masses = load_adjudicated_masses()
     adj_by_key: dict[tuple[str, str], dict] = {}
-    if adjudicated_masses is not None:
-        for _, a in adjudicated_masses.iterrows():
-            logm = pd.to_numeric(a.get("logM_adj"), errors="coerce")
-            if pd.notna(logm) and np.isfinite(float(logm)):
-                adj_by_key[(str(a.nickname).lower(), str(a.obj))] = {
-                    "logM_adj": float(logm),
-                    "mass_source_adj": str(a.get("mass_source", "census_adjudicated")),
-                }
-    try:
-        for _, o in load_mass_overrides().iterrows():
-            adj_by_key[(str(o.nickname).lower(), str(o.obj))] = {
-                "logM_adj": float(o.logM_adj),
-                "mass_source_adj": str(o.mass_source),
+    for _, a in adjudicated_masses.iterrows():
+        logm = pd.to_numeric(a.get("logM_adj"), errors="coerce")
+        if pd.notna(logm) and np.isfinite(float(logm)):
+            adj_by_key[(str(a.nickname).lower(), str(a.obj))] = {
+                "logM_adj": float(logm),
+                "mass_source_adj": str(a.get("mass_source", "census_adjudicated")),
             }
-    except (OSError, ValueError):
-        pass
-    try:
-        duplicates = load_census_duplicates()
-    except (OSError, ValueError):
-        duplicates = {}
+    for _, o in load_mass_overrides().iterrows():
+        adj_by_key[(str(o.nickname).lower(), str(o.obj))] = {
+            "logM_adj": float(o.logM_adj),
+            "mass_source_adj": str(o.mass_source),
+        }
+    duplicates = load_census_duplicates()
 
     sub = registry[
         (registry.nickname.str.lower() == nickname.lower())
