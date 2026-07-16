@@ -87,8 +87,10 @@ def _build_spec(name, burst, off):
     return spec, c, method
 
 
-def lorentz(l, A, gamma, c0):
-    return A / (1.0 + (l / gamma) ** 2) + c0
+# Reuse the pipeline's Lorentzian-with-baseline model rather than defining a fifth parallel
+# copy (CLAUDE.md: no duplicate implementations). Signature is (lag, amplitude, gamma, baseline),
+# matching the (l, A, gamma, c0) order curve_fit expects below.
+lorentz = fs._lorentzian_with_baseline
 
 
 def _fit_subband(lags, acf):
