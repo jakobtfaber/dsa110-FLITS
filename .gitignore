@@ -409,3 +409,14 @@ test_output/
 /analysis/scattering-refit-2026-06/**/*.npz
 /analysis/scattering-refit-2026-06/**/*.csv
 /.superpowers/
+
+# Results-library Phase B — content under FABER2026_RESULTS_LIBRARY
+# (parent scripts/results_library_catalog.yaml). Local symlinks:
+#   python3 ../scripts/materialize_results_library.py
+/results
+/analysis/scattering-dm-locked-2026-07-14/results
+/analysis/scattering-refit-2026-06/_a1_fits
+/analysis/scattering-refit-2026-06/joint_json
+/analysis/beta_campaign/fits
+/analysis/beta_campaign/beta_campaign_verdicts.json
+/analysis/scintillation-dsa-lorentzian-2026-07-07/results
