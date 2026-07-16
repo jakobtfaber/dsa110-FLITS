@@ -124,6 +124,29 @@ Storage: `vos`/`vls` with `~/.ssl/cadcproxy.pem`. Compute: `canfar` CLI (`canfar
 
 Authoritative staging on iacobus CloudDocs `Dropbox-Migration/`; codetection-scope folders renamed `*_retired_2026-04-24_iCloud_is_authoritative/` on Dropbox source. Burst pickles live only under `Research/CHIME_DSA_Codetections/burst_pickles/`.
 
+## Results library (navigable inventory)
+
+Fit/campaign **products** (fit JSON, PPC, catalogs, review ledgers) are inventoried outside the fitting repos as a symlink map. Fitting **code** stays in this FLITS checkout and in Faber2026.
+
+| Item | Path |
+|------|------|
+| **Library root** | `~/Data/Faber2026/results-library/` (override: `FABER2026_RESULTS_LIBRARY`) |
+| **INDEX** | `$FABER2026_RESULTS_LIBRARY/INDEX.md` |
+| **Machine inventory** | `$FABER2026_RESULTS_LIBRARY/_inventory/inventory.yaml` |
+| **Catalog (edit campaigns)** | Faber2026 `scripts/results_library_catalog.yaml` |
+| **Builder** | Faber2026 `scripts/build_results_library_inventory.py` |
+| **Path helper** | Faber2026 `scripts/results_library.py` (`results_slot(...)`) |
+
+Refresh (always from the Faber2026 git checkout — never a library-side copy of the builder):
+
+```bash
+python3 scripts/build_results_library_inventory.py --dry-run
+python3 scripts/build_results_library_inventory.py --link --force
+```
+
+Pointers in this tree: [`analysis/RESULTS_LIBRARY.md`](analysis/RESULTS_LIBRARY.md), [`results/RESULTS_LIBRARY.md`](results/RESULTS_LIBRARY.md).  
+Drive `scattering_results/` remains the optional authority backup mirror (Phase B); it is not the live navigable inventory.
+
 ## Related repos
 
 - subhalos: https://github.com/jakobtfaber/subhalos — archived 2026-07-05; consolidated into frb-foreground-halos (June 2026), itself integrated into `galaxies/foreground/vo/`
