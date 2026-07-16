@@ -128,6 +128,14 @@ def _fit_subband(lags, acf):
 def refit(name, burst_lims, off_lims, rfi_bands_mhz=None):
     burst = (int(burst_lims[0]), int(burst_lims[1]))
     off = (int(off_lims[0]), int(off_lims[1]))
+    # The off-pulse window feeds the off-pulse-only RFI statistics and the de-scallop gain.
+    # If it overlaps the burst, burst/scintillation structure leaks into those statistics and
+    # can be masked as RFI before the ACF fits. The interactive sliders are independent, so
+    # this is easy to trigger by accident -- fail loudly rather than silently corrupt the fit.
+    if off[1] > burst[0] and burst[1] > off[0]:
+        raise ValueError(
+            f"off-pulse window {off} overlaps the burst window {burst}; "
+            "move the off-pulse slider clear of the on-pulse region")
     rfi_bands_mhz = rfi_bands_mhz or []
     spec, c, method = _build_spec(name, burst, off)
     freqs = np.asarray(spec.frequencies, float)
@@ -152,7 +160,13 @@ def refit(name, burst_lims, off_lims, rfi_bands_mhz=None):
         Amat = np.vstack([np.log(fr / np.mean(fr)), np.ones_like(fr)]).T
         W = np.diag(lw); cov = np.linalg.inv(Amat.T @ W @ Amat)
         beta = cov @ (Amat.T @ W @ np.log(gm))
-        alpha = dict(alpha=float(beta[0]), alpha_err=float(np.sqrt(cov[0, 0])), n=len(resolved))
+        # n==2 is a zero-degree-of-freedom power-law fit: the slope passes exactly through the
+        # two points and the CHIME support guard (subband_support_verdict) treats it as
+        # diagnostic-only. We still report it (matching the batch driver's >=2 threshold so the
+        # tuning numbers mirror run_persubband_fits) but flag it so the display does not present
+        # a two-point slope as a firmly measured alpha.
+        alpha = dict(alpha=float(beta[0]), alpha_err=float(np.sqrt(cov[0, 0])), n=len(resolved),
+                     provisional=(len(resolved) < 3))
     return dict(name=name, burst=burst, off=off, method=method, center_freqs=cf, order=list(order),
                 fits=fits, alpha=alpha, rfi_new=int((flag & ~already).sum()),
                 rfi_total=int(flag.sum()), ntime=spec.power.shape[1], nchan=spec.power.shape[0])
