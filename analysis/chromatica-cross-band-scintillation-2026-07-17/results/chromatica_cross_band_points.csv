@@ -1,0 +1,9 @@
+band,frequency_mhz,gamma_mhz,gamma_err_mhz,accepted,exclusion_reason,uncertainty_policy,subband_index
+CHIME/FRB,749.2,0.11355624617131926,0.029588486800608084,True,,"quadrature(fit, finite_scintle, window_systematic)",0
+CHIME/FRB,687.2,0.07789857571184326,0.012051506289100412,True,,"quadrature(fit, finite_scintle, window_systematic)",1
+CHIME/FRB,661.1,0.07699702497168384,0.01983420204668156,True,,"quadrature(fit, finite_scintle, window_systematic)",2
+CHIME/FRB,623.6,0.06406872771524634,0.010391236084135764,True,,"quadrature(fit, finite_scintle, window_systematic)",3
+DSA-110,1321.0629985349178,0.728456793543379,0.0897932364055874,True,,Lorentzian covariance error,0
+DSA-110,1351.0971837864236,0.5957143809274987,0.08014451060137061,True,,Lorentzian covariance error,1
+DSA-110,1395.88902002279,2.0652691362954894,0.15768618389170966,True,,Lorentzian covariance error,2
+DSA-110,1459.620096044278,1.38918172555824,0.10084115397470149,False,off-pulse null did not pass,Lorentzian covariance error,3

@@ -1,0 +1,328 @@
+{
+  "analysis": "Chromatica CHIME/FRB + DSA-110 scintillation bandwidth power law",
+  "chime_only_with_total_uncertainty": {
+    "alpha": 2.817395257757596,
+    "alpha_err": 1.564124740873922,
+    "chi_square": 0.2634456094396861,
+    "covariance_log_gamma_ref_alpha": [
+      [
+        0.40553299456212505,
+        0.9847882841932231
+      ],
+      [
+        0.9847882841932231,
+        2.446486205013914
+      ]
+    ],
+    "dof": 2,
+    "gamma_ref_err_mhz": 0.15133224504983264,
+    "gamma_ref_mhz": 0.23763936196768207,
+    "goodness_of_fit_p": 0.8765839463379328,
+    "model": "gamma_ref * (nu / nu_ref)^alpha",
+    "n_points": 4,
+    "nu_ref_mhz": 1000.0,
+    "reduced_chi_square": 0.13172280471984305
+  },
+  "formal_no_extra_scatter": {
+    "alpha": 3.9977569640342887,
+    "alpha_err": 0.15501655395930788,
+    "chi_square": 68.19559015363072,
+    "covariance_log_gamma_ref_alpha": [
+      [
+        0.0028292898356914375,
+        -0.0028707828175977236
+      ],
+      [
+        -0.002870782817597724,
+        0.024030132001419017
+      ]
+    ],
+    "dof": 5,
+    "gamma_ref_err_mhz": 0.01972772674206711,
+    "gamma_ref_mhz": 0.37088419283531393,
+    "goodness_of_fit_p": 2.4318136557002143e-13,
+    "model": "gamma_ref * (nu / nu_ref)^alpha",
+    "n_points": 7,
+    "nu_ref_mhz": 1000.0,
+    "reduced_chi_square": 13.639118030726143
+  },
+  "inputs": {
+    "chime_json": "/Users/jakobfaber/Developer/scratch/recovery/flits-window-tuning-ae67bdf/analysis/window-tuning-campaign-2026-07-17/results/chromatica_hi_campaign.json",
+    "chime_sha256": "e2e1fd4761c6e09bbd1d07b5bb55752700c395a0b45c558c18703a35b19f13e8",
+    "dsa_json": "/Users/jakobfaber/Developer/scratch/recovery/flits-window-tuning-ae67bdf/analysis/chromatica-cross-band-scintillation-2026-07-17/dsa/chromatica_dsa_lorentzian_fits.json",
+    "dsa_raw_data_path": "/Users/jakobfaber/Data/Faber2026/dsa110/scintillation/data/chromatica.npz",
+    "dsa_raw_data_sha256": "d0bae026095d37a4063914a1004b15e0c1e37a92892575190cb0348c3dd48265",
+    "dsa_sha256": "ccf62efd87515bec868887f66980d68c217bfcf1194d8e4bbb630fc76d8b0425",
+    "fitter_sha256": "470c130f01bdc98d5f124397f55074502c6b9ccd1bfdec28181dd0a4f63339b5"
+  },
+  "interpretation": {
+    "exact_single_power_law_rejected_at_p_lt_0p01": true,
+    "primary_model": "intrinsic_scatter",
+    "reason": "The no-extra-scatter fit fails its chi-square goodness-of-fit test; the intrinsic-scatter model is the primary cross-band characterization."
+  },
+  "intrinsic_scatter": {
+    "alpha": 3.6329697572712396,
+    "alpha_err": 0.3923718174219743,
+    "covariance_log_gamma_ref_alpha_log_scatter": [
+      [
+        0.01951822635408957,
+        0.008373128837575254,
+        -0.0018211777827730122
+      ],
+      [
+        0.008373128837575256,
+        0.15395564310702314,
+        -0.00610709306413724
+      ],
+      [
+        -0.0018211777827730122,
+        -0.00610709306413724,
+        0.08974596713219689
+      ]
+    ],
+    "gamma_ref_err_mhz": 0.04596171470128305,
+    "gamma_ref_mhz": 0.32898496262317733,
+    "intrinsic_log_scatter": 0.3237739145135839,
+    "intrinsic_log_scatter_err_minus": 0.08381465310402075,
+    "intrinsic_log_scatter_err_plus": 0.11309002273835728,
+    "intrinsic_log_scatter_uncertainty_identifiable": true,
+    "model": "gamma_ref * (nu / nu_ref)^alpha with Gaussian intrinsic log scatter",
+    "n_points": 7,
+    "negative_log_likelihood": 2.4554311075926654,
+    "nu_ref_mhz": 1000.0
+  },
+  "points": [
+    {
+      "accepted": true,
+      "band": "CHIME/FRB",
+      "exclusion_reason": null,
+      "frequency_mhz": 749.2,
+      "gamma_err_mhz": 0.029588486800608084,
+      "gamma_mhz": 0.11355624617131926,
+      "subband_index": 0,
+      "uncertainty_policy": "quadrature(fit, finite_scintle, window_systematic)"
+    },
+    {
+      "accepted": true,
+      "band": "CHIME/FRB",
+      "exclusion_reason": null,
+      "frequency_mhz": 687.2,
+      "gamma_err_mhz": 0.012051506289100412,
+      "gamma_mhz": 0.07789857571184326,
+      "subband_index": 1,
+      "uncertainty_policy": "quadrature(fit, finite_scintle, window_systematic)"
+    },
+    {
+      "accepted": true,
+      "band": "CHIME/FRB",
+      "exclusion_reason": null,
+      "frequency_mhz": 661.1,
+      "gamma_err_mhz": 0.01983420204668156,
+      "gamma_mhz": 0.07699702497168384,
+      "subband_index": 2,
+      "uncertainty_policy": "quadrature(fit, finite_scintle, window_systematic)"
+    },
+    {
+      "accepted": true,
+      "band": "CHIME/FRB",
+      "exclusion_reason": null,
+      "frequency_mhz": 623.6,
+      "gamma_err_mhz": 0.010391236084135764,
+      "gamma_mhz": 0.06406872771524634,
+      "subband_index": 3,
+      "uncertainty_policy": "quadrature(fit, finite_scintle, window_systematic)"
+    },
+    {
+      "accepted": true,
+      "band": "DSA-110",
+      "exclusion_reason": null,
+      "frequency_mhz": 1321.0629985349178,
+      "gamma_err_mhz": 0.0897932364055874,
+      "gamma_mhz": 0.728456793543379,
+      "subband_index": 0,
+      "uncertainty_policy": "Lorentzian covariance error"
+    },
+    {
+      "accepted": true,
+      "band": "DSA-110",
+      "exclusion_reason": null,
+      "frequency_mhz": 1351.0971837864236,
+      "gamma_err_mhz": 0.08014451060137061,
+      "gamma_mhz": 0.5957143809274987,
+      "subband_index": 1,
+      "uncertainty_policy": "Lorentzian covariance error"
+    },
+    {
+      "accepted": true,
+      "band": "DSA-110",
+      "exclusion_reason": null,
+      "frequency_mhz": 1395.88902002279,
+      "gamma_err_mhz": 0.15768618389170966,
+      "gamma_mhz": 2.0652691362954894,
+      "subband_index": 2,
+      "uncertainty_policy": "Lorentzian covariance error"
+    },
+    {
+      "accepted": false,
+      "band": "DSA-110",
+      "exclusion_reason": "off-pulse null did not pass",
+      "frequency_mhz": 1459.620096044278,
+      "gamma_err_mhz": 0.10084115397470149,
+      "gamma_mhz": 1.38918172555824,
+      "subband_index": 3,
+      "uncertainty_policy": "Lorentzian covariance error"
+    }
+  ],
+  "residuals": [
+    {
+      "band": "CHIME/FRB",
+      "formal_standardized_log_residual": -0.11222660173490824,
+      "frequency_mhz": 749.2,
+      "intrinsic_scatter_standardized_log_residual": -0.035361665513088454,
+      "subband_index": 0
+    },
+    {
+      "band": "CHIME/FRB",
+      "formal_standardized_log_residual": -0.39302509673276703,
+      "frequency_mhz": 687.2,
+      "intrinsic_scatter_standardized_log_residual": -0.21672446764347525,
+      "subband_index": 1
+    },
+    {
+      "band": "CHIME/FRB",
+      "formal_standardized_log_residual": 0.31968268041064846,
+      "frequency_mhz": 661.1,
+      "intrinsic_scatter_standardized_log_residual": 0.12389212780970893,
+      "subband_index": 2
+    },
+    {
+      "band": "CHIME/FRB",
+      "formal_standardized_log_residual": 0.8138153695088961,
+      "frequency_mhz": 623.6,
+      "intrinsic_scatter_standardized_log_residual": 0.21981416276087518,
+      "subband_index": 3
+    },
+    {
+      "band": "DSA-110",
+      "formal_standardized_log_residual": -3.5540000545384554,
+      "frequency_mhz": 1321.0629985349178,
+      "intrinsic_scatter_standardized_log_residual": -0.6253119141565686,
+      "subband_index": 0
+    },
+    {
+      "band": "DSA-110",
+      "formal_standardized_log_residual": -5.419562505276185,
+      "frequency_mhz": 1351.0971837864236,
+      "intrinsic_scatter_standardized_log_residual": -1.4245721287524278,
+      "subband_index": 1
+    },
+    {
+      "band": "DSA-110",
+      "formal_standardized_log_residual": 5.026077994696629,
+      "frequency_mhz": 1395.88902002279,
+      "intrinsic_scatter_standardized_log_residual": 1.879709229470785,
+      "subband_index": 2
+    }
+  ],
+  "selection_policy": {
+    "chime": "campaign ok and resolved; narrow component",
+    "chime_uncertainty": "quadrature of fit, finite-scintle, and window systematic",
+    "dsa": "narrowest selected component with no component flags, off-pulse null pass, and low-lag stability pass",
+    "dsa_uncertainty": "Lorentzian covariance error; no DSA window-campaign systematic available"
+  },
+  "sensitivity": {
+    "leave_out_dsa_subband_0_1321.063_mhz": {
+      "alpha": 3.762018908174899,
+      "alpha_err": 0.44139775049124547,
+      "covariance_log_gamma_ref_alpha_log_scatter": [
+        [
+          0.026531549462723288,
+          0.02314907454628825,
+          -0.002878142453597641
+        ],
+        [
+          0.02314907454628825,
+          0.19483197413873177,
+          -0.00828068997675226
+        ],
+        [
+          -0.002878142453597641,
+          -0.00828068997675226,
+          0.10670142955064778
+        ]
+      ],
+      "gamma_ref_err_mhz": 0.05663337504034164,
+      "gamma_ref_mhz": 0.3476891490145996,
+      "intrinsic_log_scatter": 0.3337488485098533,
+      "intrinsic_log_scatter_err_minus": 0.09300417835323552,
+      "intrinsic_log_scatter_err_plus": 0.1289334356262346,
+      "intrinsic_log_scatter_uncertainty_identifiable": true,
+      "model": "gamma_ref * (nu / nu_ref)^alpha with Gaussian intrinsic log scatter",
+      "n_points": 6,
+      "negative_log_likelihood": 2.312961133737759,
+      "nu_ref_mhz": 1000.0
+    },
+    "leave_out_dsa_subband_1_1351.097_mhz": {
+      "alpha": 3.9707201510598646,
+      "alpha_err": 0.3539163507945973,
+      "covariance_log_gamma_ref_alpha_log_scatter": [
+        [
+          0.0166174318457256,
+          0.012797929782146781,
+          -0.0030793320458777193
+        ],
+        [
+          0.012797929782146783,
+          0.12525678335976448,
+          -0.009417807082614115
+        ],
+        [
+          -0.0030793320458777198,
+          -0.009417807082614115,
+          0.12500344509870784
+        ]
+      ],
+      "gamma_ref_err_mhz": 0.04853734133102284,
+      "gamma_ref_mhz": 0.3765251851234599,
+      "intrinsic_log_scatter": 0.2507764522854149,
+      "intrinsic_log_scatter_err_minus": 0.07468496901955837,
+      "intrinsic_log_scatter_err_plus": 0.10636080304630208,
+      "intrinsic_log_scatter_uncertainty_identifiable": true,
+      "model": "gamma_ref * (nu / nu_ref)^alpha with Gaussian intrinsic log scatter",
+      "n_points": 6,
+      "negative_log_likelihood": 0.8647712847317848,
+      "nu_ref_mhz": 1000.0
+    },
+    "leave_out_dsa_subband_2_1395.889_mhz": {
+      "alpha": 3.117302774645319,
+      "alpha_err": 0.18929414726205118,
+      "covariance_log_gamma_ref_alpha_log_scatter": [
+        [
+          0.004391972489529264,
+          0.00142374864446859,
+          -0.003648066678373822
+        ],
+        [
+          0.00142374864446859,
+          0.03583227418766712,
+          -0.016105292260973382
+        ],
+        [
+          -0.0036480666783738225,
+          -0.016105292260973382,
+          7989498.308840629
+        ]
+      ],
+      "gamma_ref_err_mhz": 0.017841558872293835,
+      "gamma_ref_mhz": 0.26921731700288576,
+      "intrinsic_log_scatter": 2.6954324437502247e-05,
+      "intrinsic_log_scatter_err_minus": null,
+      "intrinsic_log_scatter_err_plus": null,
+      "intrinsic_log_scatter_uncertainty_identifiable": false,
+      "model": "gamma_ref * (nu / nu_ref)^alpha with Gaussian intrinsic log scatter",
+      "n_points": 6,
+      "negative_log_likelihood": -3.7154822686011255,
+      "nu_ref_mhz": 1000.0
+    }
+  }
+}

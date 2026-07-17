@@ -1,0 +1,30 @@
+{
+  "reviewed_on": "2026-07-17",
+  "reviewer": "Codex",
+  "figures": [
+    {
+      "path": "results/chromatica_cross_band_fit.png",
+      "sha256": "aecceba9ef8b2d2150da937a333c2e8677027a5949dd1619aa08c94ec7d35608",
+      "status": "reviewed",
+      "checks": [
+        "no plot title",
+        "math-formatted axes",
+        "CHIME/FRB and DSA-110 labels",
+        "excluded DSA point visibly distinct",
+        "intrinsic-scatter envelope labeled",
+        "accepted DSA scatter not concealed"
+      ]
+    },
+    {
+      "path": "dsa/figures/chromatica_dsa_acf_lorentzian_fits.png",
+      "sha256": "7082dffe4ba3d667aaec5e7ad29e4915e4db627130e22d517b6d0cc2cfa5ec5a",
+      "status": "reviewed",
+      "checks": [
+        "all four selected subband ACFs shown",
+        "narrow and broad tracks separated",
+        "1321 MHz residual structure visible",
+        "selected fit curves visible"
+      ]
+    }
+  ]
+}
