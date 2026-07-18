@@ -9,7 +9,7 @@
 ## Summary
 
 - Phases: 5 of 5 implementation/validation phases complete; publication closeout is
-  the only remaining operational step.
+  complete in draft PR #200.
 - Automated checks: 7 passing commands, 0 unresolved failures.
 - Manual testing: 4 figures reviewed at original resolution; 0 items remain.
 - Critical issues: 0.

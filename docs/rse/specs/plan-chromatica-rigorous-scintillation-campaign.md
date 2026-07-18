@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-17
 **Author:** AI Assistant
-**Status:** In Progress — implementation and validation complete; publication pending
+**Status:** Complete — implemented, validated, pushed, and documented in draft PR #200
 **Related Documents:**
 - [Research: rigorous scintillation campaign](research-chromatica-rigorous-scintillation-campaign.md)
 - [Experiment: fit and uncertainty architecture](experiment-chromatica-scintillation-fit-uncertainty.md)
@@ -120,7 +120,7 @@ cross-band power-law result only from points that pass every required gate.
 - [x] Repeat the result-generating commands in an isolated clean environment and
   compare deterministic hashes or declared numeric tolerances.
 - [x] Inspect every new figure at full resolution and record the review.
-- [ ] Write implementation and validation reports, run `agent-closeout-check`, commit
+- [x] Write implementation and validation reports, run `agent-closeout-check`, commit
   only task-scoped paths, push, and update draft PR #200.
 
 ## Success Criteria

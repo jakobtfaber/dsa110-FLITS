@@ -129,8 +129,9 @@ figure_png_exact_match=true
 
 ## Remaining Work
 
-No implementation or scientific-validation work remains. Publication of the validated
-commit and update of draft PR #200 are the final operational closeout steps.
+No implementation, scientific-validation, or publication-closeout work remains in
+this campaign. The validated commits are pushed and draft PR #200 records the
+fail-closed scientific outcome.
 
 ## References
 
