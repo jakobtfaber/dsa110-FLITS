@@ -82,13 +82,14 @@ def default_windows(name):
     return [int(bl[0]), int(bl[1])], ([int(ol[0]), int(ol[1])] if ol else None)
 
 
-def _build_spec(name, burst, off):
+def _build_spec(name, burst, off, *, num_subbands=4):
     """Mirror run_persubband_fits' spectrum build EXACTLY so the notebook and the batch
     driver produce identical numbers: manual windows -> full prepare_spectrum_from_config
     with bandpass de-scallop ON, except wide bursts (< _MIN_OFF off bins) fall back to a
     per-channel time-median flat-field."""
     c = _base_config(name); an = c.setdefault("analysis", {})
-    an.setdefault("acf", {})["num_subbands"] = 4; an["acf"]["use_snr_subbanding"] = True
+    an.setdefault("acf", {})["num_subbands"] = int(num_subbands)
+    an["acf"]["use_snr_subbanding"] = True
     an.setdefault("grid_regularization", {})["enable"] = True
     an.setdefault("bandpass_normalization", {})["enable"] = True
     an.setdefault("rfi_masking", {})["manual_burst_window"] = list(burst)
@@ -316,8 +317,27 @@ def _artifact_controls(spec, res, fits, order, burst, off):
     return summary
 
 
+def _common_acf_payload(res):
+    """Return JSON-ready ACF arrays for the shared rigorous fit contract."""
+    return {
+        "subband_lags_mhz": [np.asarray(row, float).tolist() for row in res["subband_lags_mhz"]],
+        "subband_acfs": [np.asarray(row, float).tolist() for row in res["subband_acfs"]],
+        "subband_acfs_err": [
+            np.asarray(row, float).tolist() for row in res["subband_acfs_err"]
+        ],
+        "subband_channel_widths_mhz": [
+            float(value) for value in res["subband_channel_widths_mhz"]
+        ],
+        "subband_num_channels": [int(value) for value in res["subband_num_channels"]],
+        "subband_channel_slices": [
+            [int(start), int(end)] for start, end in res["subband_channel_slices"]
+        ],
+    }
+
+
 def refit(name, burst_lims, off_lims, rfi_bands_mhz=None, first_fit_lag=1,
-          time_weights=None, subband_channel_slices=None, validate_artifacts=False):
+          time_weights=None, subband_channel_slices=None, validate_artifacts=False,
+          num_subbands=4, return_prepared=False):
     """first_fit_lag=1 keeps the lag-1 bin, which carries most of the constraint for
     gamma near the channel width (FFL=2 in the drifted configs railed chromatica's
     517 MHz subband; FFL=1 reproduces the archived resolved fit). Uniform for all
@@ -338,7 +358,7 @@ def refit(name, burst_lims, off_lims, rfi_bands_mhz=None, first_fit_lag=1,
             f"off-pulse window {off} overlaps the burst window {burst}; "
             "move the off-pulse slider clear of the on-pulse region")
     rfi_bands_mhz = rfi_bands_mhz or []
-    spec, c, method = _build_spec(name, burst, off)
+    spec, c, method = _build_spec(name, burst, off, num_subbands=num_subbands)
     c["analysis"]["acf"]["first_fit_lag"] = int(first_fit_lag)
     if subband_channel_slices is not None:
         c["analysis"]["acf"]["subband_channel_slices"] = [
@@ -401,8 +421,16 @@ def refit(name, burst_lims, off_lims, rfi_bands_mhz=None, first_fit_lag=1,
     artifact_controls = (
         _artifact_controls(spec, res, fits, order, burst, off) if validate_artifacts else None
     )
-    return dict(name=name, burst=burst, off=off, method=method, center_freqs=cf, order=list(order),
-                fits=fits, alpha=alpha, rfi_new=int((flag & ~already).sum()),
-                rfi_total=int(flag.sum()), ntime=spec.power.shape[1], nchan=spec.power.shape[0],
-                subband_channel_slices=res["subband_channel_slices"],
-                artifact_controls=artifact_controls)
+    output = dict(name=name, burst=burst, off=off, method=method, center_freqs=cf,
+                  order=list(order), fits=fits, alpha=alpha,
+                  rfi_new=int((flag & ~already).sum()), rfi_total=int(flag.sum()),
+                  ntime=spec.power.shape[1], nchan=spec.power.shape[0],
+                  subband_channel_slices=res["subband_channel_slices"],
+                  artifact_controls=artifact_controls, common_acf=_common_acf_payload(res))
+    if return_prepared:
+        # Analysis runners can reuse the exact masked/prepared object for matched
+        # off-pulse injections.  It is intentionally omitted from normal JSON-ready
+        # campaign results.
+        output["_prepared_spectrum"] = spec
+        output["_prepared_config"] = c
+    return output

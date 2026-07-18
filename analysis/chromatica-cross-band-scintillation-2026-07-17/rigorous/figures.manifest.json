@@ -1,0 +1,22 @@
+{
+  "directory": "/Users/jakobfaber/Developer/scratch/recovery/flits-window-tuning-ae67bdf/analysis/chromatica-cross-band-scintillation-2026-07-17/rigorous",
+  "generated": "2026-07-17",
+  "campaign": "Chromatica rigorous cross-band scintillation",
+  "figures": [
+    {
+      "file": "chime_rigorous_acf_fits.png",
+      "expectation": "Each fitted curve follows the central ACF peak; admitted/excluded labels and modulation markers agree with the rigorous campaign JSON.",
+      "review_status": "pending"
+    },
+    {
+      "file": "chromatica_modulation_qualification.png",
+      "expectation": "Each fitted curve follows the central ACF peak; admitted/excluded labels and modulation markers agree with the rigorous campaign JSON.",
+      "review_status": "pending"
+    },
+    {
+      "file": "dsa_rigorous_acf_fits.png",
+      "expectation": "Each fitted curve follows the central ACF peak; admitted/excluded labels and modulation markers agree with the rigorous campaign JSON.",
+      "review_status": "pending"
+    }
+  ]
+}

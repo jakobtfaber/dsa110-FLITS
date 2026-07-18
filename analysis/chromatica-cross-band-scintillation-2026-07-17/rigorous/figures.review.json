@@ -1,0 +1,39 @@
+{
+  "reviewed_by": "Codex",
+  "reviewed_on": "2026-07-17",
+  "verdicts": [
+    {
+      "path": "chime_rigorous_acf_fits.png",
+      "sha256": "6847ae499948a2071770092b5f6d88fd9769692fb44c3fe0117147b974d8074c",
+      "verdict": "match",
+      "panels": {
+        "623.6 MHz": "The selected curve follows the narrow central peak; periodic residual structure remains visible; excluded label and total uncertainty are legible.",
+        "661.1 MHz": "The selected curve follows the low-lag peak while broad oscillatory residuals remain visible; excluded label is legible.",
+        "687.2 MHz": "The selected curve follows the central peak and does not conceal the harmonic residual structure; excluded label is legible.",
+        "749.2 MHz": "The selected curve follows the peak and broad tail; the large variant uncertainty and excluded label are legible."
+      },
+      "notes": "No plot title; all panels use math-formatted lag axes and normalized ACF labels."
+    },
+    {
+      "path": "dsa_rigorous_acf_fits.png",
+      "sha256": "94561a82a25515cdd9c0855f730b7ee64469dc7a1c504d887db2ec08b6164e8d",
+      "verdict": "match",
+      "panels": {
+        "1321.1 MHz": "The narrow central peak and large structured residual oscillations are visible; the fit is not visually over-promoted.",
+        "1351.1 MHz": "The selected curve follows the peak but the broad uncertainty and baseline structure remain visible.",
+        "1395.9 MHz": "The broad central feature and large uncertainty are visible; the fit leaves substantial residual structure.",
+        "1459.6 MHz": "The strong central peak and broad negative residual trend are visible; excluded label agrees with the failed off-pulse/shape/recovery gates."
+      },
+      "notes": "No plot title; all four DSA equal-S/N subbands are shown with their full declared fit span."
+    },
+    {
+      "path": "chromatica_modulation_qualification.png",
+      "sha256": "4f355b5f00c1ab1e0b433069af7a1df55ceb8c036596ba2ff28f5331683a87b2",
+      "verdict": "match",
+      "panels": {
+        "single panel": "Narrow, broad, and total conditional amplitudes are all plotted as excluded crosses; the log scale keeps ordinary values and pathological totals visible; the m=1 guide is labeled."
+      },
+      "notes": "No modulation value is visually presented as admitted or given an error bar."
+    }
+  ]
+}

@@ -7,8 +7,10 @@ import numpy as np
 import pytest
 from fit_cross_band import (
     Point,
+    build_result,
     intrinsic_scatter_power_law,
     load_dsa_points,
+    load_rigorous_points,
     weighted_power_law,
 )
 
@@ -71,3 +73,64 @@ def test_near_zero_intrinsic_scatter_has_no_spurious_infinite_error() -> None:
     assert result["intrinsic_log_scatter"] < 1e-4
     assert result["intrinsic_log_scatter_uncertainty_identifiable"] is False
     assert result["intrinsic_log_scatter_err_plus"] is None
+
+
+def _rigorous_payload(*, accepted: bool = False) -> dict:
+    failed = [] if accepted else ["matched_injection:failed"]
+    return {
+        "schema": "flits.rigorous-scintillation-campaign/v1",
+        "bands": {
+            band: {
+                "subbands": [
+                    {
+                        "index": 0,
+                        "center_frequency_mhz": frequency,
+                        "accepted_for_cross_band": accepted,
+                        "qualification": {"qualified": accepted, "failed": failed},
+                        "central_fit": {
+                            "fit_ok": True,
+                            "components": {
+                                "bandwidth": {
+                                    "gamma_mhz": gamma,
+                                    "total_sigma_mhz": 0.1 * gamma,
+                                    "admitted": accepted,
+                                }
+                            },
+                        },
+                    }
+                ]
+            }
+            for band, frequency, gamma in (
+                ("CHIME/FRB", 700.0, 0.1),
+                ("DSA-110", 1400.0, 1.0),
+            )
+        },
+    }
+
+
+def test_rigorous_loader_rejects_legacy_dsa_schema(tmp_path: Path) -> None:
+    path = tmp_path / "legacy.json"
+    path.write_text(json.dumps({"subbands": []}))
+    with pytest.raises(ValueError, match="rigorous-scintillation-campaign"):
+        load_rigorous_points(path)
+
+
+def test_rigorous_loader_preserves_failed_gate_reasons(tmp_path: Path) -> None:
+    path = tmp_path / "rigorous.json"
+    path.write_text(json.dumps(_rigorous_payload()))
+    points = load_rigorous_points(path)
+    assert len(points) == 2
+    assert all(not point.accepted for point in points)
+    assert all(point.exclusion_reason == "matched_injection:failed" for point in points)
+
+
+def test_build_result_refuses_joint_fit_without_two_qualified_dsa_points(
+    tmp_path: Path,
+) -> None:
+    path = tmp_path / "rigorous.json"
+    path.write_text(json.dumps(_rigorous_payload()))
+    result = build_result(path)
+    assert result["joint_fit"]["available"] is False
+    assert result["joint_fit"]["reason"] == "requires at least two qualified points per band"
+    assert result["formal_no_extra_scatter"] is None
+    assert result["intrinsic_scatter"] is None

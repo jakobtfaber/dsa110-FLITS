@@ -43,6 +43,28 @@ def test_fixed_subband_slices_are_reused_exactly():
     assert result["subband_channel_slices"] == [tuple(item) for item in slices]
 
 
+def test_window_refit_exports_common_acf_payload_without_numpy_objects():
+    result = {
+        "subband_lags_mhz": [np.array([-0.1, 0.1])],
+        "subband_acfs": [np.array([0.2, 0.2])],
+        "subband_acfs_err": [np.array([0.03, 0.03])],
+        "subband_channel_widths_mhz": [0.1],
+        "subband_num_channels": [64],
+        "subband_channel_slices": [(3, 67)],
+    }
+
+    payload = window_refit._common_acf_payload(result)
+
+    assert payload == {
+        "subband_lags_mhz": [[-0.1, 0.1]],
+        "subband_acfs": [[0.2, 0.2]],
+        "subband_acfs_err": [[0.03, 0.03]],
+        "subband_channel_widths_mhz": [0.1],
+        "subband_num_channels": [64],
+        "subband_channel_slices": [[3, 67]],
+    }
+
+
 def test_physical_alpha_bounds_are_open():
     assert window_refit.alpha_is_physical({"alpha": 4.0})
     assert not window_refit.alpha_is_physical({"alpha": 1.5})

@@ -112,6 +112,68 @@ def load_dsa_points(path: Path) -> list[Point]:
     return points
 
 
+def load_rigorous_points(path: Path) -> list[Point]:
+    """Load only the fail-closed common-campaign schema.
+
+    The legacy CHIME and DSA loaders remain available for forensic comparisons, but
+    production cross-band fitting cannot call them accidentally.
+    """
+    payload = json.loads(path.read_text())
+    expected_schema = "flits.rigorous-scintillation-campaign/v1"
+    if payload.get("schema") != expected_schema:
+        raise ValueError(
+            f"cross-band input must use {expected_schema}; legacy per-telescope "
+            "schemas are diagnostic only"
+        )
+    bands = payload.get("bands", {})
+    if not all(name in bands for name in ("CHIME/FRB", "DSA-110")):
+        raise ValueError("rigorous campaign must contain CHIME/FRB and DSA-110 bands")
+
+    points = []
+    for band in ("CHIME/FRB", "DSA-110"):
+        for position, subband in enumerate(bands[band].get("subbands", [])):
+            index = int(subband.get("index", position))
+            central = subband.get("central_fit", {})
+            if not central.get("fit_ok"):
+                continue
+            bandwidth = central.get("components", {}).get("bandwidth", {})
+            frequency = _positive(
+                subband.get("center_frequency_mhz"), f"{band} subband {index} frequency"
+            )
+            gamma = _positive(bandwidth.get("gamma_mhz"), f"{band} subband {index} gamma")
+            error = _positive(
+                bandwidth.get("total_sigma_mhz"),
+                f"{band} subband {index} total gamma uncertainty",
+            )
+            qualification = subband.get("qualification", {})
+            accepted = bool(
+                subband.get("accepted_for_cross_band")
+                and qualification.get("qualified")
+                and bandwidth.get("admitted")
+            )
+            failed = [str(reason) for reason in qualification.get("failed", [])]
+            if not accepted and not failed:
+                failed = ["rigorous campaign did not admit the bandwidth"]
+            points.append(
+                Point(
+                    band=band,
+                    frequency_mhz=frequency,
+                    gamma_mhz=gamma,
+                    gamma_err_mhz=error,
+                    accepted=accepted,
+                    exclusion_reason="; ".join(failed) if failed else None,
+                    uncertainty_policy=(
+                        "quadrature(conditional covariance, moving-block bootstrap, "
+                        "window/fit-policy systematic)"
+                    ),
+                    subband_index=index,
+                )
+            )
+    if not points:
+        raise ValueError("rigorous campaign contains no fitted subbands")
+    return points
+
+
 def weighted_power_law(points: list[Point], nu_ref_mhz: float = 1000.0) -> dict[str, Any]:
     accepted = [point for point in points if point.accepted]
     if len(accepted) < 2:
@@ -242,88 +304,103 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _dsa_raw_input_provenance(dsa_path: Path) -> dict[str, Any]:
-    payload = json.loads(dsa_path.read_text())
-    if "results" in payload:
-        results = payload["results"]
-        payload = results[0] if len(results) == 1 else {}
-    raw_value = payload.get("input_data_path")
-    if not raw_value:
-        return {"dsa_raw_data_path": None, "dsa_raw_data_sha256": None}
-    raw_path = Path(raw_value).expanduser()
-    if not raw_path.is_file():
-        raise FileNotFoundError(f"DSA raw input recorded by fit does not exist: {raw_path}")
-    return {
-        "dsa_raw_data_path": str(raw_path.resolve()),
-        "dsa_raw_data_sha256": _sha256(raw_path),
-    }
-
-
-def build_result(chime_path: Path, dsa_path: Path) -> dict[str, Any]:
-    points = load_chime_points(chime_path) + load_dsa_points(dsa_path)
+def build_result(campaign_path: Path) -> dict[str, Any]:
+    points = load_rigorous_points(campaign_path)
     accepted = [point for point in points if point.accepted]
-    formal = weighted_power_law(accepted)
-    intrinsic = intrinsic_scatter_power_law(accepted)
-    chime_only = weighted_power_law([point for point in points if point.band == "CHIME/FRB"])
+    accepted_by_band = {
+        band: [point for point in accepted if point.band == band]
+        for band in ("CHIME/FRB", "DSA-110")
+    }
+    joint_available = all(len(accepted_by_band[band]) >= 2 for band in accepted_by_band)
+    formal = weighted_power_law(accepted) if joint_available else None
+    intrinsic = intrinsic_scatter_power_law(accepted) if joint_available else None
+    chime_only = (
+        weighted_power_law(accepted_by_band["CHIME/FRB"])
+        if len(accepted_by_band["CHIME/FRB"]) >= 2
+        else None
+    )
     sensitivities = {}
-    for point in accepted:
-        if point.band != "DSA-110":
-            continue
-        retained = [candidate for candidate in accepted if candidate is not point]
-        key = f"leave_out_dsa_subband_{point.subband_index}_{point.frequency_mhz:.3f}_mhz"
-        sensitivities[key] = intrinsic_scatter_power_law(retained)
+    if joint_available:
+        for point in accepted_by_band["DSA-110"]:
+            retained = [candidate for candidate in accepted if candidate is not point]
+            key = f"leave_out_dsa_subband_{point.subband_index}_{point.frequency_mhz:.3f}_mhz"
+            if len(retained) >= 3:
+                sensitivities[key] = intrinsic_scatter_power_law(retained)
 
     residuals = []
-    for point in accepted:
-        x = math.log(point.frequency_mhz / formal["nu_ref_mhz"])
-        observed = math.log(point.gamma_mhz)
-        formal_expected = math.log(formal["gamma_ref_mhz"]) + formal["alpha"] * x
-        measurement_sigma = point.gamma_err_mhz / point.gamma_mhz
-        intrinsic_expected = math.log(intrinsic["gamma_ref_mhz"]) + intrinsic["alpha"] * x
-        intrinsic_sigma = math.sqrt(measurement_sigma**2 + intrinsic["intrinsic_log_scatter"] ** 2)
-        residuals.append(
-            {
-                "band": point.band,
-                "subband_index": point.subband_index,
-                "frequency_mhz": point.frequency_mhz,
-                "formal_standardized_log_residual": (observed - formal_expected)
-                / measurement_sigma,
-                "intrinsic_scatter_standardized_log_residual": (observed - intrinsic_expected)
-                / intrinsic_sigma,
-            }
-        )
+    if joint_available:
+        for point in accepted:
+            x = math.log(point.frequency_mhz / formal["nu_ref_mhz"])
+            observed = math.log(point.gamma_mhz)
+            formal_expected = math.log(formal["gamma_ref_mhz"]) + formal["alpha"] * x
+            measurement_sigma = point.gamma_err_mhz / point.gamma_mhz
+            intrinsic_expected = math.log(intrinsic["gamma_ref_mhz"]) + intrinsic["alpha"] * x
+            intrinsic_sigma = math.sqrt(
+                measurement_sigma**2 + intrinsic["intrinsic_log_scatter"] ** 2
+            )
+            residuals.append(
+                {
+                    "band": point.band,
+                    "subband_index": point.subband_index,
+                    "frequency_mhz": point.frequency_mhz,
+                    "formal_standardized_log_residual": (observed - formal_expected)
+                    / measurement_sigma,
+                    "intrinsic_scatter_standardized_log_residual": (
+                        observed - intrinsic_expected
+                    )
+                    / intrinsic_sigma,
+                }
+            )
 
     exact_law_rejected = bool(
-        formal["goodness_of_fit_p"] is not None and formal["goodness_of_fit_p"] < 0.01
+        formal is not None
+        and formal["goodness_of_fit_p"] is not None
+        and formal["goodness_of_fit_p"] < 0.01
     )
     return {
         "analysis": "Chromatica CHIME/FRB + DSA-110 scintillation bandwidth power law",
         "selection_policy": {
-            "chime": "campaign ok and resolved; narrow component",
-            "chime_uncertainty": "quadrature of fit, finite-scintle, and window systematic",
-            "dsa": "narrowest selected component with no component flags, off-pulse null pass, and low-lag stability pass",
-            "dsa_uncertainty": "Lorentzian covariance error; no DSA window-campaign systematic available",
+            "both_bands": (
+                "common rigorous campaign: explicit True for normalization, fit quality, "
+                "off-pulse null, low-lag stability, bootstrap width stability, variant "
+                "width stability, alternative shape, and matched injection"
+            ),
+            "uncertainty": (
+                "quadrature of conditional covariance, moving-block bootstrap, and "
+                "window/fit-policy systematic"
+            ),
         },
         "inputs": {
-            "chime_json": str(chime_path.resolve()),
-            "chime_sha256": _sha256(chime_path),
-            "dsa_json": str(dsa_path.resolve()),
-            "dsa_sha256": _sha256(dsa_path),
+            "rigorous_campaign_json": str(campaign_path.resolve()),
+            "rigorous_campaign_sha256": _sha256(campaign_path),
             "fitter_sha256": _sha256(Path(__file__)),
-            **_dsa_raw_input_provenance(dsa_path),
         },
         "points": [asdict(point) for point in points],
+        "joint_fit": {
+            "available": joint_available,
+            "reason": (
+                "at least two qualified points per band"
+                if joint_available
+                else "requires at least two qualified points per band"
+            ),
+            "accepted_counts": {
+                band: len(rows) for band, rows in accepted_by_band.items()
+            },
+        },
         "formal_no_extra_scatter": formal,
         "intrinsic_scatter": intrinsic,
         "chime_only_with_total_uncertainty": chime_only,
         "residuals": residuals,
         "sensitivity": sensitivities,
         "interpretation": {
-            "primary_model": "intrinsic_scatter",
+            "primary_model": "intrinsic_scatter" if joint_available else None,
             "exact_single_power_law_rejected_at_p_lt_0p01": exact_law_rejected,
             "reason": (
                 "The no-extra-scatter fit fails its chi-square goodness-of-fit test; "
                 "the intrinsic-scatter model is the primary cross-band characterization."
+                if joint_available
+                else "No cross-band exponent is reported because the rigorous campaign "
+                "did not qualify at least two points in each telescope band."
             ),
         },
     }
@@ -376,28 +453,39 @@ def _plot(result: dict[str, Any], output_stem: Path) -> None:
                 s=58,
                 linewidth=1.6,
                 color=colors[band],
-                label=f"{band} excluded by artifact gate",
+                label=f"{band} excluded by rigorous gate",
                 zorder=4,
             )
     fit = result["intrinsic_scatter"]
-    nu = np.geomspace(580.0, 1550.0, 400)
-    model = fit["gamma_ref_mhz"] * (nu / fit["nu_ref_mhz"]) ** fit["alpha"]
-    scatter = fit["intrinsic_log_scatter"]
-    ax.plot(
-        nu,
-        model,
-        color="black",
-        lw=1.6,
-        label=rf"cross-band fit: $\alpha={fit['alpha']:.2f}\pm{fit['alpha_err']:.2f}$",
-    )
-    ax.fill_between(
-        nu,
-        model * np.exp(-scatter),
-        model * np.exp(scatter),
-        color="black",
-        alpha=0.12,
-        label="intrinsic-scatter envelope",
-    )
+    if fit is not None:
+        nu = np.geomspace(580.0, 1550.0, 400)
+        model = fit["gamma_ref_mhz"] * (nu / fit["nu_ref_mhz"]) ** fit["alpha"]
+        scatter = fit["intrinsic_log_scatter"]
+        ax.plot(
+            nu,
+            model,
+            color="black",
+            lw=1.6,
+            label=rf"cross-band fit: $\alpha={fit['alpha']:.2f}\pm{fit['alpha_err']:.2f}$",
+        )
+        ax.fill_between(
+            nu,
+            model * np.exp(-scatter),
+            model * np.exp(scatter),
+            color="black",
+            alpha=0.12,
+            label="intrinsic-scatter envelope",
+        )
+    else:
+        ax.text(
+            0.5,
+            0.05,
+            "No joint fit: rigorous qualification failed",
+            transform=ax.transAxes,
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlabel(r"$\nu$ (MHz)")
@@ -411,8 +499,7 @@ def _plot(result: dict[str, Any], output_stem: Path) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--chime-json", type=Path, required=True)
-    parser.add_argument("--dsa-json", type=Path, required=True)
+    parser.add_argument("--campaign-json", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     return parser.parse_args()
 
@@ -420,7 +507,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    result = build_result(args.chime_json, args.dsa_json)
+    result = build_result(args.campaign_json)
     (args.output_dir / "chromatica_cross_band_fit.json").write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n"
     )
@@ -428,12 +515,18 @@ def main() -> int:
     _plot(result, args.output_dir / "chromatica_cross_band_fit")
     primary = result["intrinsic_scatter"]
     formal = result["formal_no_extra_scatter"]
-    print(
-        f"alpha={primary['alpha']:.6f} +/- {primary['alpha_err']:.6f}; "
-        f"gamma_1GHz={primary['gamma_ref_mhz']:.6f} MHz; "
-        f"intrinsic_log_scatter={primary['intrinsic_log_scatter']:.6f}; "
-        f"formal_chi2/dof={formal['chi_square']:.3f}/{formal['dof']}"
-    )
+    if primary is None:
+        print(
+            "joint fit unavailable; accepted counts="
+            + json.dumps(result["joint_fit"]["accepted_counts"], sort_keys=True)
+        )
+    else:
+        print(
+            f"alpha={primary['alpha']:.6f} +/- {primary['alpha_err']:.6f}; "
+            f"gamma_1GHz={primary['gamma_ref_mhz']:.6f} MHz; "
+            f"intrinsic_log_scatter={primary['intrinsic_log_scatter']:.6f}; "
+            f"formal_chi2/dof={formal['chi_square']:.3f}/{formal['dof']}"
+        )
     return 0
 
 

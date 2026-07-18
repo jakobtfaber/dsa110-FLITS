@@ -56,6 +56,24 @@ def _one_realization(rng, n_chan, gamma_bins, mod_index=1.0, snr=np.inf):
     return inten
 
 
+def simulate_thin_screen_spectrum(
+    rng, n_chan, gamma_bins, mod_index=1.0, snr=np.inf
+):
+    """Public fixed-convention wrapper for matched-data injection campaigns.
+
+    The returned mean-one spectrum has the same Lorentzian HWHM convention used by
+    :func:`mc_acf_covariance` and the production ACF fitter.  Callers may add it to
+    real off-pulse spectra to retain the observed mask and radiometer noise.
+    """
+    return _one_realization(
+        rng,
+        n_chan,
+        gamma_bins,
+        mod_index=mod_index,
+        snr=snr,
+    )
+
+
 def _ledoit_wolf_lambda(A):
     """Shrinkage intensity toward the diagonal (Ledoit-Wolf-style estimate)."""
     n, p = A.shape
