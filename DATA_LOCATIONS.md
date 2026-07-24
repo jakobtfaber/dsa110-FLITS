@@ -134,8 +134,8 @@ Override: `FABER2026_RESULTS_LIBRARY`.
 |------|------|
 | Library root | `~/Data/Faber2026/results-library/` |
 | Index | `$FABER2026_RESULTS_LIBRARY/INDEX.md` |
-| Catalog (git) | Faber2026 `scripts/results_library_catalog.yaml` |
-| Materialize | `python3 scripts/materialize_results_library.py` |
+| Catalog (git) | sibling analysis repo `../analysis/scripts/results_library_catalog.yaml` |
+| Materialize | `python3 ../analysis/scripts/materialize_results_library.py` |
 
 Phase B moves bulk campaign `results/`, `_a1_fits/`, `joint_json/`, and `pipeline/results` into the library; in-repo paths are local symlinks (gitignored). Driver `.py` stays in FLITS / parent `analysis/`. Overleaf `figures/` stay in Faber2026 git (link-only).
 
