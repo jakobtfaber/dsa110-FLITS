@@ -369,7 +369,7 @@ machines:
 
   iacobus:
     hostname: iacobus
-    migration_status: drained
+    migration_status: retired
     role: retired staging source; dated recovery quarantine only
     access:
       ssh: iacobus

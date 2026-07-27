@@ -13,7 +13,7 @@ hpcc, dsacamera, and arc (VOSpace), with scoped custody updates through
 
 | Machine | migration_status | Role | Key path |
 |---------|------------------|------|----------|
-| **iacobus** | drained | retired staging source | `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` |
+| **iacobus** | retired | drained staging source | `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` |
 | **jakob-mbp** | target | development + local replicas | `~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS` |
 | **arc** | target | fit-input store + CANFAR compute | `arc:home/jfaber/baseband_morphologies/chime_dsa_codetections` |
 | **h17** | target | raw-data access + compute | `/data/Faber2026/data` |
