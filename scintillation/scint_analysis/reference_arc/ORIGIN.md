@@ -21,9 +21,6 @@ Several notebooks are grep-positive for the Nimmo attribution.
 1. **h17 arc-trash rescue** (`h17:/data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/`),
    itself the 2026-06 rescue of the arc VOSpace trash. Pulled 2026-07-12 via
    scp; all 19 files sha256-verified against the h17 originals (0 mismatches).
-   A second copy of the same tree exists at
-   `iacobus:~/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06/`
-   (D3 rsync 2026-06-27) — not independently re-verified here.
    - `code/` — all 11 `*.py` from `arc_trash_2026-06/code/`:
      `scinttools_old.py`, `scinttools_new.py`, `scinttools_v3.py`
      (refactor chain; v3 docstring: ACF computation + Lorentzian
@@ -48,7 +45,7 @@ Several notebooks are grep-positive for the Nimmo attribution.
 - `arc:home/jfaber/burst_search/` (`frb-ops`, `L4_databases`) — CHIME ops
   tooling, not scintillation analysis.
 - The other 55 `arc_trash_2026-06/notebooks/*.ipynb` (scattering/DM/TOA
-  work) — remain in the h17 + iacobus archive copies; pull on demand.
+  work) — remain in the h17 archive copy; pull on demand.
 
 ## Why this exists
 

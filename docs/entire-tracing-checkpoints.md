@@ -2080,7 +2080,7 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:12-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `6b0491b1`
 - origin/main: `9b037c2b`
@@ -2141,12 +2141,12 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:14-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `5a964d4a`
 - origin/main: `9b037c2b`
 - worktree: dirty
-- note: watched path changed: scripts/migration/iacobus_to_gdrive.sh
+- note: watched migration path changed
 - tracked status:
   - M docs/entire-tracing-checkpoints.md
 - local `entire/*` refs:
@@ -2203,12 +2203,12 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:16-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `710e449d`
 - origin/main: `9b037c2b`
 - worktree: dirty
-- note: watched path changed: scripts/migration/iacobus_to_gdrive.sh
+- note: watched migration path changed
 - tracked status:
   - M docs/entire-tracing-checkpoints.md
 - local `entire/*` refs:
@@ -2265,12 +2265,12 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:17-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `f34a9239`
 - origin/main: `9b037c2b`
 - worktree: dirty
-- note: watched path changed: scripts/migration/iacobus_to_gdrive.sh
+- note: watched migration path changed
 - tracked status:
   - M docs/entire-tracing-checkpoints.md
 - local `entire/*` refs:
@@ -2327,7 +2327,7 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:19-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `add10929`
 - origin/main: `9b037c2b`
@@ -2389,7 +2389,7 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:21-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `da1d7d51`
 - origin/main: `9b037c2b`
@@ -2451,7 +2451,7 @@ preserving for future agents.
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
 
 ## 2026-06-27T15:25:22-06:00 — jakob
-- repo: `/Users/jakobfaber/Developer/scratch/worktrees/flits-gdrive-authority`
+- repo: retired migration worktree
 - branch: ``
 - head: `f22965df`
 - origin/main: `9b037c2b`

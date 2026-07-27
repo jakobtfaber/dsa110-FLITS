@@ -8,10 +8,8 @@
 Canonical code lives in GitHub (`jakobtfaber/dsa110-FLITS`, developed on
 `jakob-mbp`). The manuscript pin is `jakobtfaber/Faber2026` → submodule
 `pipeline/` → this fork. Raw inputs are read from `/data/Faber2026/data`;
-Google Drive holds the processed-data archive. The former iacobus staging tree
-is quarantined move-only at
-`iacobus:~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/`
-(see [`DATA_LOCATIONS.md`](../../DATA_LOCATIONS.md)).
+derived inputs are read from CANFAR/arc or the local replicas documented in
+[`DATA_LOCATIONS.md`](../../DATA_LOCATIONS.md).
 
 ## Layout
 
@@ -26,7 +24,7 @@ is quarantined move-only at
 | `/data/Faber2026/data/dsa-110/<project-id>/` | **source data** | 12 DSA-110 SIGPROC `.fil` inputs (~6G) |
 | `upchan_codetections/` | **product** | Upchannelized CHIME spectra (current) |
 | `results/`, `diagnostics/` | **product** | Small JSON/PNG/CSV — promote into FLITS when citable |
-| `manifest_cubes/`, `numpy/` | **product** | Large intermediates — stay here / stage to iacobus |
+| `manifest_cubes/`, `numpy/` | **product** | Large intermediates — retain on h17 while needed |
 | `archive/` | cold | June 2026 dump (~36G); not on the active path |
 | `baseband-analysis-canfar-src/` | vendor cache | Upstream CHIME baseband-analysis source snapshot |
 
@@ -47,13 +45,13 @@ git checkout origin/dm-campaign-2026-07   # detached OK for compute
 
 ## What to promote back (h17 → FLITS / Faber)
 
-| Promote into git | Leave on h17 / iacobus / gdrive |
-|------------------|----------------------------------|
+| Promote into git | Leave on h17 |
+|------------------|--------------|
 | Python workers under `scripts/h17_codetections/` | `*.h5`, `*.fil`, multi-GB `*.npy` cubes |
 | Small JSON/CSV results, QA PNG diagnostics | `archive/`, docker image layers, `venv/` |
 | Regenerated manuscript tables/figures via Faber | Superseded `upchan_codetections/*SUPERSEDED*` |
 
-Checksum large products and list them in manifests (`codetections_manifest.yaml`, Faber `repro_manifest.csv`) instead of committing binaries.
+Checksum large products and list them in the Faber `repro_manifest.csv` instead of committing binaries.
 
 ## Path config
 
@@ -65,16 +63,6 @@ Workers default to absolute h17 roots:
 Burst catalog / VOS URIs: workspace `metadata/notebook_reproduction_fixture.json` (mirrors FLITS `crossmatching/notebook_reproduction_fixture.json`). Prefer the FLITS copy when editing; sync to h17 `metadata/` for download scripts that still read the local path.
 
 Docker entrypoint on this host: workspace `bin/baseband_analysis_python.sh` → image `chimefrb/baseband-analysis:latest`.
-
-## SSH topology (verified 2026-07-13)
-
-h17 → jakob-mbp → iacobus works end-to-end: tailnet ACL grant
-`tag:hpc → tag:work-laptop` (`tcp:22`) added 2026-07-13 (before that,
-jakob-mbp's inbound `PacketFilter` was empty — every data-plane packet
-dropped; check `Tailscale debug netmap` first if this recurs). h17's
-`ssh iacobus` ProxyJumps through `jakob-mbp` to iacobus's Tailscale IP
-(`100.93.229.114`). Drain closeout details:
-[`HANDOFF_mbp_tailscale_ssh_iacobus.md`](HANDOFF_mbp_tailscale_ssh_iacobus.md).
 
 ## History note (2026-07-13)
 

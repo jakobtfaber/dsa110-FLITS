@@ -32,7 +32,7 @@ Scoping the most-interesting science extractable from the 12 CHIME/DSA co-detect
 
 ## B. The sample (ground truth)
 
-12 co-detected FRBs (casey, chromatica, freya, hamilton, isha, johndoeii, mahi, oran, phineas, whitney, wilhelm, zach). CHIME ~0.6 GHz + DSA ~1.4 GHz on the same burst — the two-band lever arm is the defining asset. 234 GB data external (iacobus), none in-repo.
+12 co-detected FRBs (casey, chromatica, freya, hamilton, isha, johndoeii, mahi, oran, phineas, whitney, wilhelm, zach). CHIME ~0.6 GHz + DSA ~1.4 GHz on the same burst — the two-band lever arm is the defining asset. Bulk data remain external; none are committed to the repository.
 
 Status: 11/12 joint scattering fits; host search 9/12; DM budget 12/12; TOA cross-match 12/12 (ad-hoc, not via the stub). **Scintillation Δν measured for only 3/12** (casey, freya, wilhelm). 3 fits FAIL (casey, freya, wilhelm). 3 placeholder z=1.0 (freya, mahi, johndoeii).
 

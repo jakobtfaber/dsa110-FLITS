@@ -2,11 +2,9 @@
 
 **Raw-data authority (2026-07-24):** **h17** (`lxd110h17`) — `/data/Faber2026/data/`. Every raw CHIME/FRB baseband and DSA-110 filterbank used by this project is pulled from h17 and from nowhere else. Full inventory with checksums: Faber2026 `docs/rse/ops/raw-data-provenance.md`; ledger at `h17:/data/Faber2026/provenance/h17-source-data-migration-20260721.json`.
 
-**Processed-data archive (2026-06-26):** Google Drive **jakobtfaber@gmail.com** — `Research/CHIME_DSA_Codetections/` (~280 GiB). This is the bulk store for *derived* products — burst pickles, full-Stokes waterfalls, fit results — not a raw-data access point and not an authority for anything raw.
+**Host roles:** jakob-mbp (code), **h17** (raw-data authority + compute), and arc/CANFAR (CHIME baseband upstream origin; `.npy` replica). Retired hosts h23, hpcc, and dsacamera are read-only quarantine references only.
 
-**Host roles:** jakob-mbp (code), **h17** (raw-data authority + compute), gdrive (processed-data archive), arc/CANFAR (CHIME baseband upstream origin; `.npy` replica). Retired hosts h23, hpcc, dsacamera are read-only quarantine references only. `iacobus` (`iacobus-bkp-mbp`) was the staging source; its tree was drained 2026-07-13 and it is not an access path for anything.
-
-History of the host migration that produced this layout: [`docs/infrastructure/MIGRATION_PLAN_4HOST.md`](docs/infrastructure/MIGRATION_PLAN_4HOST.md) (superseded host-role plan; kept as a record) · Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py) · Upload: [`scripts/migration/iacobus_to_gdrive.sh`](scripts/migration/iacobus_to_gdrive.sh)
+Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py)
 
 ## Code (GitHub canonical)
 
@@ -34,73 +32,12 @@ Stokes Q, U and V were not migrated — h17 is authoritative for total intensity
 
 Derived `.npy` waterfalls under `h17:/home/ubuntu/flits-runs/data/` are **not** raw data: the dispersion measure is baked into the filename and the array, so they cannot be used to revalidate a dispersion measure.
 
-## Processed data (Google Drive archive)
-
-**Bulk archive, not an authority:** `gdrive-jakob:Research/CHIME_DSA_Codetections/` (rclone remote; account **jakobtfaber@gmail.com**).
-
-| Access | Path |
-|--------|------|
-| **rclone** | `gdrive-jakob:Research/CHIME_DSA_Codetections/` |
-| **Drive for Desktop** | mount after adding jakobtfaber@gmail.com — expected `~/Library/CloudStorage/GoogleDrive-jakobtfaber@gmail.com/My Drive/Research/CHIME_DSA_Codetections/` |
-
-**Staging source (iacobus) — DRAINED 2026-07-13:** upload complete and verified (`rclone check --size-only`: 0 differences, 5437 matching files; 244.815 GiB / 5438 objects on Drive). The tree was moved (move-only, never `rm`) to `iacobus:~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` with a `PROVENANCE.md`. Upload script remains `scripts/migration/iacobus_to_gdrive.sh` (direct iacobus→Drive; jakob-mbp orchestrates only); closeout in [`docs/infrastructure/HANDOFF_mbp_tailscale_ssh_iacobus.md`](docs/infrastructure/HANDOFF_mbp_tailscale_ssh_iacobus.md).
-
-**Legacy iCloud mirror:** `~/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections/` — demoted; jakob-mbp shows placeholders only. The gdrive upload is now verified (2026-07-13), so the iacobus CloudDocs clone's retention condition is met — disposal is an owner decision.
-
-| Subdir | Role |
-|--------|------|
-| `burst_npys/` | DSA/CHIME burst `.npy` (h23 drained 2026-06-25) |
-| `burst_pickles/` | 24 full-Stokes `.pkl` (Dropbox → iacobus) |
-| `dsa_fullstokes_waterfalls/` | IQUV `.npy` from h23 |
-| `scattering_results/` | Fit PDFs, corners (h23 + hpcc JSON merged) |
-| `dm_budget/` | DM budget code + h23 merge |
-| `metadata/` | CSVs, localizations |
-| `presentations/` | DM phase deck/keynote plus `DSA_DM_phase/` per-burst PDFs |
-| `archive/` | `OLD_CHIME_DSA_Codetections/`, `dsa110-scat/` |
-
-Sentinels: [`codetections_manifest.yaml`](codetections_manifest.yaml)
-
-**Out of scope:** nihari (`Research/nihari/` on iCloud; h23 `jfaber/nihari/` remains on source).
-
-## CHIME Morphologies (separate project)
-
-**Not part of CHIME–DSA co-detections or the gdrive upload.**
-
-| Host | Path | Size (2026-06-26) |
-|------|------|-------------------|
-| **iacobus** | `~/Research/CHIME_Morphologies/burstprop_paper/` | 67G |
-
-Moved from `CHIME_DSA_Codetections/archive/burstprop_paper/` on iacobus 2026-06-26. iCloud CloudDocs may still show the old path until mirror sync catches up; authoritative live path is `~/Research/CHIME_Morphologies/`.
-
-### rclone setup (gdrive-jakob)
-
-No Drive remote existed on jakob-mbp or iacobus as of 2026-06-26. One-time OAuth (browser required):
-
-```bash
-# jakob-mbp — interactive config
-rclone config
-# n) New remote → name: gdrive-jakob → Storage: drive → scope: drive
-# client_id/secret: blank → advanced: drive.readonly=false
-# auto config: y  (opens browser; sign in jakobtfaber@gmail.com)
-
-rclone about gdrive-jakob:
-rclone mkdir gdrive-jakob:Research/CHIME_DSA_Codetections   # create canonical root
-
-# Headless iacobus — copy token from jakob-mbp authorize:
-rclone authorize "drive"    # jakob-mbp: copy JSON blob
-ssh iacobus rclone config   # paste at config_token prompt
-```
-
-Verify: `rclone about gdrive-jakob:` · `rclone lsd gdrive-jakob:Research/`
-
-**Note:** jakob-mbp currently mounts **jakobtfaber.caltech@gmail.com** only (`GoogleDrive-jakobtfaber.caltech@gmail.com`); personal account mount is optional after upload.
-
 ## Burst `.npy` for fits (arc + local replica)
 
 | Host | Path | Role |
 |------|------|------|
 | **arc** | `arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/DSA_bursts` | CANFAR primary (~2.9G) |
-| **arc** | `.../CHIME_bursts` | Separate namespace from iacobus burst_npys |
+| **arc** | `.../CHIME_bursts` | Separate CHIME/FRB namespace |
 | **jakob-mbp** | `~/Data/Faber2026/chimefrb/CHIME_bursts` | Current CHIME/FRB full-resolution replica |
 | **jakob-mbp** | `~/Data/Faber2026/dsa110/DSA_bursts` | Current DSA-110 full-resolution replica (moved from `~/Developer/dsa110-local-data/DSA_bursts` 2026-06-30) |
 
@@ -117,7 +54,7 @@ Distinct from the raw-data root above. `/data/Faber2026/data/` is authoritative 
 | `/data/research/astrophysics/frbs/chime-dsa-codetections` | ~72G | Compute + artifact cache (not a git source of truth). Held the raw files before the 2026-07-21 migration; paths into it for raw input are stale |
 | `.../dsa110-FLITS/` | clone | Canonical FLITS checkout on h17 (`jakobtfaber/dsa110-FLITS`) |
 | `.../upchan_codetections` | ~1.8G | Upchan products (12-target table in baseband_recovery worker) |
-| `.../archive/arc_trash_2026-06` | 36G | arc trash copy; optional dedupe → iacobus |
+| `.../archive/arc_trash_2026-06` | 36G | Cold arc trash copy |
 | `.../scripts/h17_codetections/` (in clone) | — | Promoted compute workers (see that README) |
 
 Full layout, promotion rules, and sync commands:
@@ -141,13 +78,6 @@ Phase B moves bulk campaign `results/`, `_a1_fits/`, `joint_json/`, and `pipelin
 
 Full posteriors / dynesty samples remain under `$FLITS_RUNS` (see compute-scratch), not the results library.
 
-## Legacy Documents-Area Clone
-
-Drain-only snapshot, not active dev:
-
-- `~/Documents/research/caltech/ovro/dsa110/dsa110-FLITS/` (iCloud Areas mirror)
-- See [`docs/migration/chime-dsa-documents-area-migration.md`](docs/migration/chime-dsa-documents-area-migration.md)
-
 ## Retired hosts (quarantine / read-only)
 
 Move-only policy; restore one-liners in each host's `_quarantine/README.md`.
@@ -158,21 +88,12 @@ Move-only policy; restore one-liners in each host's `_quarantine/README.md`.
 | **h23** | `/dataz/dsa110/T3/` | **Not quarantined** — 59T raw pipeline; leave on source |
 | **hpcc** | `/home/jfaber/_quarantine/flits-20260625` | Full flits tree quarantined 2026-06-25; JSON artifacts on jakob-mbp |
 | **dsacamera** | — | Decommissioned; no codetection content |
-| **iacobus** | `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` | Drained staging tree; recovery quarantine only |
-
 ## CANFAR arc compute
 
 Storage: `vos`/`vls` with `~/.ssl/cadcproxy.pem`. Compute: `canfar` CLI (`canfar create --gpu N`). Notebook sessions without `--gpu` are CPU-only. Live A100 MIG smoke test passed 2026-06-25.
-
-## Dropbox exit
-
-The Dropbox exit was staged historically through iacobus CloudDocs
-`Dropbox-Migration/`; that staging area is not an active access path. Burst
-pickles are retained in the processed-data archive described above.
 
 ## Related repos
 
 - subhalos: https://github.com/jakobtfaber/subhalos — archived 2026-07-05; consolidated into frb-foreground-halos (June 2026), itself integrated into `galaxies/foreground/vo/`
 - frb-foreground-halos: https://github.com/jakobtfaber/frb-foreground-halos — archived 2026-07-05; integrated into `galaxies/foreground/vo/` (PR #123). Physical results data: `~/Data/frb-foreground-halos/results/` (symlink pattern per the ~/Data convention)
 - los_halos: https://github.com/jakobtfaber/los_halos — archived 2026-07-05; VO-TAP pipeline integrated into `galaxies/foreground/vo/`
-- dsa110-scat: git + iacobus `archive/dsa110-scat/`

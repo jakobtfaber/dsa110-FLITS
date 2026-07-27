@@ -30,7 +30,7 @@ not a GitHub fork of `FLITS_GBT`).
 `dsa110-FLITS` additionally carries top-level docs/manifests that have no
 counterpart in `FLITS_GBT`: `SCINTILLATION_PIPELINE_TECHNICAL_REPORT.md`,
 `FLITS-Complete-Agent-Configuration-Guide.md`, `ONBOARDING_STATUS_REPORT.md`,
-`codetections_manifest.yaml`, `DATA_LOCATIONS.md`, plus `.archive/` and
+`data-manifest.csv`, `DATA_LOCATIONS.md`, plus `.archive/` and
 `.deprecated/` trees holding legacy code.
 
 ---
@@ -76,7 +76,7 @@ rather than the original interactive CLI script built on PSRCHIVE.
     geometric-delay corrections.
   - `galaxies/` — host / foreground galaxy catalog queries (DESI, Pan-STARRS,
     Legacy Survey, WISE), impact-parameter and stellar-mass estimation.
-  - `codetections_manifest.yaml`, co-detection sample handling, `animations/`.
+  - `data-manifest.csv`, co-detection sample handling, `animations/`.
 - **Packaging & infrastructure**: pip-installable `flits` package with console
   scripts (`flits-scat`, `flits-scint`, `flits-batch`, `flits-configs`), conda
   `environment.yml`, `docs/` site, `pytest` suite, Codacy/CI, and agent configs.

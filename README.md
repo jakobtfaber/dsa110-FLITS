@@ -30,7 +30,7 @@ the Mac-local `chime_dsa_codetections/` tree was folded in on branch
 | `.archive/external/` | 2026-04-23 | `chime_dsa_codetections/{subhalos,halos,dm_budget/FRB,dm_budget/frb_baryon_connor2024}` | n/a (URL + SHA pointers only) | originals remain as standalone repos (plan: "do not touch") |
 
 For the data tier, see [`DATA_LOCATIONS.md`](DATA_LOCATIONS.md) and
-[`codetections_manifest.yaml`](codetections_manifest.yaml).
+[`data-manifest.csv`](data-manifest.csv).
 
 ---
 
