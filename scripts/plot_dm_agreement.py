@@ -6,11 +6,14 @@ Reads ``crossmatching/dm_provenance.csv`` and plots, per burst, the DM residual
 +-1 pc/cm^3 "agreement floor" band that dm_status cites. A twin axis reports the
 agreement in sigma.
 
-The visual makes the P6.2 finding legible: every constrained burst sits inside
-the ~1 pc/cm^3 floor (they agree), yet the formal sigma is large because it is
-divided by the DSA-side 0.1 pc/cm^3 *placeholder* uncertainty -- so a large
-sigma here is an artifact of the placeholder floor, not a real tension. CHIME
-also reads systematically below DSA (7 of 8 residuals negative).
+The committed dm_provenance.csv predates the 2026-07-27 bursts.yaml change and
+is the arrival-regression-era artifact: its DSA errors are the retired uniform
+0.1 pc/cm^3 placeholder, so its large formal sigmas are placeholder artifacts,
+not real tension (CHIME reads systematically below DSA, 7 of 8 residuals
+negative). Since 2026-07-27 bursts.yaml mirrors the adopted CHIME-primary
+catalog; regenerating the CSV requires build_dm_provenance.py --dsa-catalog
+pointing at analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv for the
+independent DSA dsa_dm/dsa_sigma columns.
 
     conda run -n flits python scripts/plot_dm_agreement.py
 """

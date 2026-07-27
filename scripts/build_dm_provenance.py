@@ -2,10 +2,19 @@
 """Build the per-burst, per-telescope DM provenance table (V6 / Phase 6 P6.2).
 
 Joins the CHIME-side DM measurements in ``crossmatching/chime_side_inputs.json``
-with the DSA-side reference DMs in ``configs/bursts.yaml``, documents the
-dedispersion method and producing artifact for each side, and quantifies the
-CHIME-DSA agreement per burst (``delta_dm`` and ``delta_dm_sigma``). Emits
-``crossmatching/dm_provenance.csv``.
+with independent DSA-side DMs, documents the dedispersion method and producing
+artifact for each side, and quantifies the CHIME-DSA agreement per burst
+(``delta_dm`` and ``delta_dm_sigma``). Emits ``crossmatching/dm_provenance.csv``.
+
+SOURCE CHANGE (2026-07-27): ``configs/bursts.yaml`` no longer carries the
+independent DSA measurement — its dm/dm_err now mirror the adopted
+CHIME-primary catalog (analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv in
+the Faber2026 parent repo). Reading the yaml here would compare CHIME against
+CHIME while labeling one side DSA. Regeneration therefore REQUIRES
+``--dsa-catalog CSV`` pointing at that catalog, whose ``dsa_dm``/``dsa_sigma``
+columns preserve the independent DSA phase-coherence measurement; without the
+flag this script raises. The committed crossmatching/dm_provenance.csv predates
+the yaml change and remains the arrival-regression-era artifact.
 
 Trust context (CONTEXT.md, Wave 3): DM_obs is revoked until this per-telescope
 provenance exists. This table does NOT by itself re-certify DM_obs -- it exposes
@@ -25,7 +34,8 @@ findings are baked into the data and surfaced here rather than smoothed over:
      not UNDOCUMENTED.
 
 Run from a FLITS checkout at the Faber2026 pin:
-    conda run -n flits python scripts/build_dm_provenance.py
+    conda run -n flits python scripts/build_dm_provenance.py \
+        --dsa-catalog ../analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv
 """
 from __future__ import annotations
 
@@ -36,7 +46,6 @@ from math import hypot
 
 ROOT = pathlib.Path(__file__).parents[1]
 CHIME_INPUTS = ROOT / "crossmatching/chime_side_inputs.json"
-BURSTS_YAML = ROOT / "configs/bursts.yaml"
 OUT = ROOT / "crossmatching/dm_provenance.csv"
 
 # Physical DM tolerance floor on the combined sigma, matching
@@ -46,13 +55,14 @@ OUT = ROOT / "crossmatching/dm_provenance.csv"
 # reads as many-sigma. sigma_eff = max(quadrature errors, DM_FLOOR).
 DM_FLOOR = 1.0
 
-# DSA-side DM is a frozen catalog reference remeasured by neither this pipeline
-# nor CHIME (DM audit, dm-provenance-audit-2026-07-07.md): bursts.yaml carries
-# the value with a uniform dm_err=0.1 placeholder. Document both facts.
-DM_DSA_METHOD = "catalog value (frozen DSA-110 reference DM)"
+# DSA-side DM must come from the manuscript DM catalog's dsa columns (see the
+# SOURCE CHANGE note in the module docstring); bursts.yaml is no longer an
+# independent DSA source.
+DM_DSA_METHOD = "DSA-110 phase-coherence measurement (manuscript DM catalog)"
 DM_DSA_SOURCE = (
-    "configs/bursts.yaml [dm]; dm_err=0.1 is a uniform placeholder floor, "
-    "not a measured per-burst uncertainty"
+    "manuscript_dm_catalog.csv [dsa_dm, dsa_sigma] via --dsa-catalog; "
+    "bursts.yaml mirrors the adopted CHIME-primary values since 2026-07-27 "
+    "and is not an independent DSA source"
 )
 # CHIME extraction artifacts (chime_dm_final.json, grid NPZ) live off-repo on
 # h17 and are not pinned (DM audit gap #2); the pinned repo has only the summary
@@ -72,26 +82,30 @@ FIELDS = [
 ]
 
 
-def _load_bursts_yaml() -> dict:
-    import yaml
+def _load_dsa_catalog(path: pathlib.Path) -> dict[str, tuple[float, float]]:
+    # Case-insensitive nick keys (catalog uses johndoeII, other sources johndoeii).
+    with open(path, newline="") as fh:
+        return {r["nick"].lower(): (float(r["dsa_dm"]), float(r["dsa_sigma"]))
+                for r in csv.DictReader(fh)}
 
-    raw = yaml.safe_load(BURSTS_YAML.open())
-    return raw["bursts"]
 
-
-def build_rows() -> list[dict]:
+def build_rows(dsa_catalog: pathlib.Path | None = None) -> list[dict]:
+    if dsa_catalog is None:
+        raise RuntimeError(
+            "configs/bursts.yaml no longer carries the independent DSA DM "
+            "measurement: since 2026-07-27 it mirrors the adopted CHIME-primary "
+            "catalog (analysis/dm-joint-phase-v2/manuscript_dm_catalog.csv). "
+            "Regenerating dm_provenance.csv from the yaml would compare CHIME "
+            "against CHIME while labeling one side DSA. Pass --dsa-catalog "
+            "pointing at that catalog to source dsa_dm/dsa_sigma correctly."
+        )
     chime = json.load(CHIME_INPUTS.open())
-    dsa = _load_bursts_yaml()
+    dsa = _load_dsa_catalog(dsa_catalog)
 
     rows: list[dict] = []
     for rec in chime:  # preserves the sample (chronological-by-MJD) order
         nick = rec["name"]
-        # bursts.yaml keys are lowercased (johndoeii); chime inputs use
-        # johndoeII. Normalise the join key.
-        dsa_rec = dsa[nick.lower()]
-
-        dm_dsa = dsa_rec["dm"]
-        dm_dsa_err = dsa_rec["dm_err"]
+        dm_dsa, dm_dsa_err = dsa[nick.lower()]
         dm_chime = rec.get("dm_chime")
         dm_chime_err = rec.get("dm_chime_err")
         method = rec.get("method") or "UNDOCUMENTED"
@@ -103,9 +117,8 @@ def build_rows() -> list[dict]:
             sigma_eff = max(hypot(dm_chime_err, dm_dsa_err), DM_FLOOR)
             delta_s = f"{delta:+.4f}"
             sigma_s = f"{delta / sigma_eff:+.3f}"
-            note = ("sigma_eff = max(quadrature, 1.0 floor); DSA err is a 0.1 "
-                    "placeholder, so the floor governs; consistent within the "
-                    "physical DM scale")
+            note = ("sigma_eff = max(quadrature, 1.0 floor); DSA err is the "
+                    "catalog dsa_sigma (phase-coherence measurement)")
         else:
             # CHIME-unconstrained: documented non-detection, agreement undefined.
             delta_s = ""
@@ -133,7 +146,14 @@ def build_rows() -> list[dict]:
 
 
 def main() -> None:
-    rows = build_rows()
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--dsa-catalog", type=pathlib.Path, default=None,
+                    help="manuscript_dm_catalog.csv providing independent "
+                         "dsa_dm/dsa_sigma (required to regenerate)")
+    args = ap.parse_args()
+    rows = build_rows(args.dsa_catalog)
     with OUT.open("w", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=FIELDS)
         writer.writeheader()
