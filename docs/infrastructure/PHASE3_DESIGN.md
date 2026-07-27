@@ -49,7 +49,7 @@ arc VOSpace ──dedupe──► iacobus ~/Research/CHIME_DSA_Codetections
 ```
 
 - **Orchestrator:** jakob-mbp runs `scripts/migration/audit_arc_delta.py`.
-- **Data plane:** read-only `vls`/`vcat` on arc; `ssh iacobus find/du` for local authority.
+- **Data plane:** read-only `vls`/`vcat` on arc; `ssh iacobus find/du` for the then-current staging-tree comparison.
 - **Auth:** X509 proxy `~/.ssl/cadcproxy.pem` (exp **2026-07-18**).
 - **Reports:** `reports/phase3_audit.json`.
 
