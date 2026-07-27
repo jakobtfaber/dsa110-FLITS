@@ -2,7 +2,7 @@
 # Live-probed inventory of CHIME–DSA co-detection assets by host.
 # Query: yq / scripts/query_machine_inventory.py (see docs/infrastructure/MACHINE_INVENTORY.md)
 schema: 3
-generated_utc: "2026-06-26T22:00:00Z"
+generated_utc: "2026-07-27T18:04:11Z"
 generated_by: "Four-host inventory with scoped custody updates through 2026-07-21"
 project: CHIME-DSA codetections
 excluded:
@@ -388,8 +388,8 @@ machines:
       - id: research_chime_codetections
         path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713
         kind: recovery_quarantine
-        migration_action: keep
-        migration_target: iacobus
+        migration_action: quarantine
+        migration_target: null
         size_human: 244G
         size_bytes: null
         file_count: 5438
@@ -475,16 +475,16 @@ machines:
       - id: icloud_chime_codetections
         path: /Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections
         kind: data_mirror
-        migration_action: keep
-        migration_target: iacobus
+        migration_action: quarantine
+        migration_target: null
         size_human: 218G
         file_count: 1546
         notes: legacy CloudDocs mirror; June 17 comparison only; not an active access path
       - id: chime_canfar_archive
         path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/chime_canfar
         kind: archive
-        migration_action: keep
-        migration_target: iacobus
+        migration_action: quarantine
+        migration_target: null
         size_human: 2.7G
         file_count: 725
         children:
