@@ -32,14 +32,14 @@ bandpass-corrected) was located on none of the live hosts. Searched
   `archive/arc_trash_2026-06/stokes_cubes_npy/phineas_dsa_I_610_274_5121b_…`
   (different 5121b window, not a manifest cube).
 - **h23** (retired): quarantine + residual tree — no hits.
-- **iacobus**: whole `Research/CHIME_DSA_Codetections` — `cntr_bpc` appears
-  only in three *consumer* notebooks (`scat_analysis.ipynb` loads
-  chromatica; `chromatica_v0.ipynb`/`wilhelm-Copy1.ipynb` load DSA cubes).
+- The retired staging archive contains `cntr_bpc` only in three *consumer*
+  notebooks (`scat_analysis.ipynb` loads chromatica;
+  `chromatica_v0.ipynb`/`wilhelm-Copy1.ipynb` load DSA cubes).
 - **arc**: `get_stokes/` (this capture) + `arc_trash_2026-06/code/*.py`
   (analysis tools, no cube writer).
 
 Partial chain reconstructed from the archived notebooks
-(`arc_trash_2026-06/notebooks/`, mirrored h17 + iacobus):
+(`arc_trash_2026-06/notebooks/`, retained on h17):
 `<id>_fullstokes.pkl` → `Codetections_Analysis.ipynb` (`np.save('I_<id>')`)
 → `Codetection_Waterfalls.ipynb` (DM-grid `I_<id>_<nick>_<DM>.npy` variants)
 → **[missing: center/window + bandpass-correct + rename to *_cntr_bpc]** →

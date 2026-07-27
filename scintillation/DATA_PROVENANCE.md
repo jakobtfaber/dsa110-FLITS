@@ -344,7 +344,7 @@ The CANFAR-era collaborator scripts and worked notebooks behind the CHIME
 recipe (up-channelize -> clean -> ACF -> Lorentzian fit; Nimmo-method
 lineage) are captured **verbatim** in
 [`scint_analysis/reference_arc/`](scint_analysis/reference_arc/) with a
-sha256 manifest and full hunt log in its `ORIGIN.md`. Sources: the h17/iacobus
+sha256 manifest and full hunt log in its `ORIGIN.md`. Source: the h17
 `arc_trash_2026-06` rescue (`code/*.py`, `notebooks/scint_*.ipynb`) plus two
 live `arc:home/jfaber` notebooks (`scint_freya_trash.ipynb`,
 `scint_chromatica_trash.ipynb`) not present in the trash rescue. This is the

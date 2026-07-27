@@ -156,7 +156,7 @@ def _dsa_burst_config(nick):
     if not cfg.exists():
         raise FileNotFoundError(f"{cfg} missing -- no DSA burst config for {nick}")
     c = yaml.safe_load(cfg.read_text())
-    # config `path` values are host-specific; the npy is staged at data/dsa/ (external, iacobus:burst_npys)
+    # Config `path` values are host-specific; stage the npy under data/dsa/.
     npy = root / "data" / "dsa" / Path(c["path"]).name
     return npy, int(c.get("f_factor", 1)), int(c.get("t_factor", 1))
 
@@ -168,14 +168,14 @@ def dsa_band_fluence_jy_ms_hz(nick):
     per-channel on-pulse S/N spectrum into Jy with sigma_S(nu)=SEFD_beam/(sqrt(2*dnu*dt)*G(theta,nu)),
     and integrates over the DSA band. SEFD_beam is the COHERENT-beam SEFD (per-element / N_ant);
     using the per-element SEFD directly over-estimates the fluence by ~N_ant. Raises
-    FileNotFoundError if the .npy is not staged locally (data/dsa/ is external -- iacobus:burst_npys).
+    FileNotFoundError if the external .npy is not staged under data/dsa/.
     """
     from analysis.dsa_beam import beam_gain
 
     npy, f_factor, t_factor = _dsa_burst_config(nick)
     if not npy.exists():
         raise FileNotFoundError(
-            f"{npy} not materialized -- stage the DSA .npy (iacobus:burst_npys) under data/dsa/"
+            f"{npy} not materialized -- stage the DSA .npy under data/dsa/"
         )
     freq_hz, sn_int, dt_ms, dnu_hz = sn_spectrum_from_npy(npy, "dsa", f_factor, t_factor)
     _mjd, _ra, dec_src = burst_epoch_position(nick)

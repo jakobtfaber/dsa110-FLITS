@@ -8,293 +8,13 @@ project: CHIME-DSA codetections
 excluded:
   - nihari
   - Faber2024_bursts
-
-migration:
-  plan_doc: docs/infrastructure/MIGRATION_PLAN_4HOST.md
-  target_hosts: [jakob-mbp, arc, h17]
-  retired_hosts: [h23, hpcc, dsacamera, iacobus]
-  git_source_of_truth: https://github.com/jakobtfaber/dsa110-FLITS.git
-  deletion_policy: move-only quarantine; never rm
-
 canonical:
   code_repo: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
   raw_data_host: h17
   raw_data_root: /data/Faber2026/data
-  processed_data_archive: gdrive-jakob:Research/CHIME_DSA_Codetections
-  processed_data_archive_account: jakobtfaber@gmail.com
   fit_input_store: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data
   local_chime_fit_replica: /Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts
   local_dsa_fit_replica: /Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts
-
-migration_map:
-  - id: hpcc_joint_fit_json
-    phase: 1
-    status: completed
-    completed_utc: "2026-06-25T08:54:00Z"
-    action: migrate
-    source_host: hpcc
-    source_path: /home/jfaber/flits/dsa110-FLITS/analysis/scattering-refit-2026-06/_a1_fits
-    target_host: jakob-mbp
-    target_path: analysis/scattering-refit-2026-06/_a1_fits
-    notes: 22 JSON; sha256sum match hpcc vs jakob-mbp 2026-06-25
-  - id: hpcc_flits_tree
-    phase: 1
-    status: completed
-    completed_utc: "2026-06-25T08:54:00Z"
-    action: quarantine
-    source_host: hpcc
-    source_path: /home/jfaber/flits
-    quarantine_path: /home/jfaber/_quarantine/flits-20260625
-    target_host: null
-    notes: mv after artifact verify; restore in _quarantine/README.md
-  - id: arc_flits_checkout
-    phase: 1
-    status: completed
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: dedupe
-    source_host: arc
-    source_path: arc:home/jfaber/dsa110-FLITS
-    target_host: jakob-mbp
-    notes: GitHub/jakob-mbp canonical; no rescue needed (reports/phase3_arc_flits_diff.json); arc-only crossmatch_paper.tex optional Phase 5
-  - id: arc_codetection_flits_tree
-    phase: 1
-    status: completed
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: dedupe
-    source_host: arc
-    source_path: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/FLITS
-    target_host: jakob-mbp
-    notes: legacy ~5G arc subset; jakob superset; arc-only CANFAR notebooks/plots — dedupe skip arc (reports/phase3_arc_flits_diff.json)
-  - id: h23_chime_bursts
-    phase: 2
-    status: completed
-    completed_utc: "2026-06-25T10:08:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/bursts
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/burst_npys
-    notes: rsync reconcile 2026-06-25; iacobus 218f/29G superset of h23 166f/7.5G
-  - id: h23_stokes_i_npys
-    phase: 2
-    status: skipped
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/data/stokes_I_npys
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/dsa_fullstokes_waterfalls
-    notes: audit skip; iacobus 58f/6G superset; sentinel PASS
-  - id: h23_dm_budget
-    phase: 2
-    status: completed
-    completed_utc: "2026-06-25T09:40:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/dm_budget
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/dm_budget/h23_dm_budget
-    notes: rsync 846f/329M 2026-06-25
-  - id: h23_scattering
-    phase: 2
-    status: skipped
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/scattering
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/scattering_results
-    notes: audit skip; iacobus 112f superset; sentinel PASS
-  - id: h23_dm
-    phase: 2
-    status: skipped
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/dm
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/dm_budget
-    notes: merged on iacobus; dm_budget sentinel PASS
-  - id: h23_localizations
-    phase: 2
-    status: skipped
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/chime_dsa_codetections/localizations
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/metadata
-    notes: audit skip; sentinel PASS interveners.ipynb
-  - id: h23_old_chime_archive
-    phase: 2
-    status: skipped
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/archive/OLD_CHIME_DSA_Codetections
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/OLD_CHIME_DSA_Codetections
-    notes: iacobus canonical (105G vs h23 79G); freya sentinel PASS
-  - id: h23_burstprop_bursts
-    phase: 2
-    status: completed
-    completed_utc: "2026-06-25T10:30:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/burstprop_paper/bursts
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_Morphologies/burstprop_paper
-    notes: rsync 2026-06-25; re-homed from codetections/archive 2026-06-26 (67G live)
-  - id: h23_dsa110_scat_archive
-    phase: 2
-    status: completed
-    completed_utc: "2026-06-25T09:52:00Z"
-    action: migrate
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/archive/dsa110-scat
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/dsa110-scat
-    notes: rsync 314f/5.9G 2026-06-25
-  - id: h23_jfaber_root
-    phase: 5
-    status: completed
-    completed_utc: "2026-06-25T23:51:00Z"
-    action: quarantine
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber
-    quarantine_path: /media/ubuntu/ssd/_quarantine/jfaber-drain-20260625
-    target_host: null
-    notes: partial quarantine 2026-06-25; mv archive+burstprop_paper+chime_dsa_codetections (~137G); nihari/tools/dsa110-continuum/frb_inventory/scratch remain at jfaber root; restore in _quarantine/README.md
-  - id: arc_old_chime_dedupe
-    phase: 3
-    status: skipped
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: dedupe
-    source_host: arc
-    source_path: arc:home/jfaber/baseband_morphologies/OLD_CHIME_DSA_Codetections
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/OLD_CHIME_DSA_Codetections
-    notes: iacobus canonical; freya sentinel PASS; arc sentinel path absent (CHIME_pkl layout); no bulk copy — reports/phase3_audit.json
-  - id: arc_dsa_bursts
-    phase: 3
-    status: completed
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: migrate
-    source_host: arc
-    source_path: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/DSA_bursts
-    target_host: jakob-mbp
-    target_path: /Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts
-    notes: vcp gap sync uncorrected+pdfs+corner.png; local 45f superset of arc 33f; arc stays CANFAR primary
-  - id: arc_chime_bursts
-    phase: 3
-    status: skipped
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: dedupe
-    source_host: arc
-    source_path: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/CHIME_bursts
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/burst_npys
-    notes: separate namespaces; 0 exact basename match; no bulk copy 5.9G — reports/phase3_chime_basename_inventory.csv
-  - id: dsacamera_decommission
-    phase: 1
-    status: completed
-    completed_utc: "2026-06-25T08:54:00Z"
-    action: decommission
-    source_host: dsacamera
-    source_path: null
-    target_host: null
-    notes: 2026-06-25 probe — no dsa110-FLITS or chime_dsa_codetections tree
-  - id: arc_flits_run
-    phase: 3
-    status: skipped
-    completed_utc: "2026-06-25T10:30:22Z"
-    action: quarantine
-    source_host: arc
-    source_path: arc:home/jfaber/flits_run
-    target_host: null
-    notes: ephemeral CANFAR scratch; regenerate not migrate
-  - id: h17_compute_workspace
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-26T18:30:00Z"
-    action: keep
-    source_host: h17
-    source_path: /data/research/astrophysics/frbs/chime-dsa-codetections
-    target_host: h17
-    notes: 2275f/~65G CHIME docker workspace (includes arc archive + upchan); keep on h17 — reports/phase4_audit.json h17_compute_workspace
-  - id: h17_upchan_products
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-26T18:30:00Z"
-    action: keep
-    source_host: h17
-    source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections
-    target_host: h17
-    notes: 11f/473M five-target upchan; consolidated into compute workspace 2026-06-27; promote finished .npy when stable — phase4_audit
-  - id: h17_ubuntu_stub
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-26T18:30:00Z"
-    action: skip
-    source_host: h17
-    source_path: /data/ubuntu/chime-dsa-codetections
-    target_host: null
-    notes: path absent on h17 2026-06-26 probe; stub already removed; no rmdir needed
-  - id: h17_chime_singlebeam_empty
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-26T18:30:00Z"
-    action: skip
-    source_host: h17
-    source_path: /data/jfaber/chime_singlebeam
-    target_host: null
-    notes: path absent on h17 2026-06-26 probe; baseband under compute workspace chime_singlebeam/14G
-  - id: iacobus_chime_canfar_archive
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-27T01:43:00Z"
-    action: migrate
-    source_host: iacobus
-    source_path: /Users/iacobus/Archives/CHIME_canfar
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
-    notes: D2 move-only mv 2026-06-27; pre-move 725f/2.7G vs archive 937f/178G — zero basename overlap (reports/d2_chime_canfar_inventory.csv); post-move source absent target 725f/2.7G
-  - id: h17_arc_archive_copy
-    phase: 4
-    status: completed
-    completed_utc: "2026-06-27T07:24:00Z"
-    action: copy
-    source_host: h17
-    source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06
-    target_host: iacobus
-    target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06
-    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staged the later gdrive archive upload
-  - id: iacobus_to_gdrive
-    phase: 5
-    status: completed
-    completed_utc: "2026-07-14T06:52:03Z"
-    action: migrate
-    source_host: iacobus
-    source_path: /Users/iacobus/Research/CHIME_DSA_Codetections
-    target_host: gdrive
-    target_path: gdrive-jakob:Research/CHIME_DSA_Codetections
-    notes: upload completed 2026-07-13; size-only parity verified with 0 differences and 5437 matching files; closeout committed at completed_utc; source moved to dated recovery quarantine
-  - id: h23_nihari
-    phase: 0
-    status: out_of_scope
-    action: out_of_scope
-    source_host: h23
-    source_path: /media/ubuntu/ssd/jfaber/nihari
-    target_host: null
-  - id: h23_raw_t3
-    phase: 0
-    status: out_of_scope
-    action: leave_on_source
-    source_host: h23
-    source_path: /dataz/dsa110/T3
-    target_host: null
-    notes: 59T raw pipeline; not in 4-host plan
-
 machines:
   jakob-mbp:
     hostname: jakob-mbp
@@ -358,140 +78,6 @@ machines:
           - presentations
           - scattering_results
         notes: legacy mirror; not an active access path
-      - id: gdrive_chime_codetections
-        path: gdrive-jakob:Research/CHIME_DSA_Codetections
-        kind: data_root
-        migration_action: keep
-        migration_target: gdrive
-        size_human: 244.815GiB
-        size_bytes: 262867770271
-        object_count: 5438
-        notes: processed-data archive for jakobtfaber@gmail.com; upload and size-only parity verified 2026-07-13
-
-  iacobus:
-    hostname: iacobus
-    migration_status: retired
-    role: retired staging source; dated recovery quarantine only
-    access:
-      ssh: iacobus
-      user: iacobus
-      tailscale: 100.93.229.114
-    disk:
-      mount: /System/Volumes/Data
-      size_gib: 932
-      used_gib: 705
-      avail_gib: 209
-      used_pct: 78
-    compute:
-      gpus: []
-    locations:
-      - id: research_chime_codetections
-        path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713
-        kind: recovery_quarantine
-        migration_action: quarantine
-        migration_target: null
-        size_human: 244G
-        size_bytes: null
-        file_count: 5438
-        directory_count: 994
-        notes: move-only quarantine created after the verified gdrive upload; former active path is absent
-        children:
-          - id: archive
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive
-            size_human: 127G
-            file_count: 401
-            children:
-              - path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/chime_canfar
-                size_human: 2.7G
-              - path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/OLD_CHIME_DSA_Codetections
-                size_human: 105G
-          - id: burst_npys
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/burst_npys
-            size_human: 21G
-            file_count: 32
-            notes: manifest lists 52; live dir has 32 top-level entries
-          - id: burst_pickles
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/burst_pickles
-            size_human: 61G
-            file_count: 24
-            files:
-              - casey_240229aaad_fullstokes_interp.pkl
-              - casey_362593221_fullstokes_interp.pkl
-              - chromatica_240203aacl_fullstokes_interp.pkl
-              - chromatica_356959136_fullstokes_interp.pkl
-              - freya_230325aaag_fullstokes_interp.pkl
-              - freya_278720455_fullstokes_interp.pkl
-              - hamilton_230913aaao_fullstokes_interp.pkl
-              - hamilton_318353610_fullstokes_interp.pkl
-              - isha_221113aaao_fullstokes_interp.pkl
-              - isha_252069198_fullstokes_interp.pkl
-              - johndoe_230814aaas_fullstokes_interp.pkl
-              - johndoe_311723353_fullstokes_interp.pkl
-              - mahi_240122aaag_fullstokes_interp.pkl
-              - mahi_354049284_fullstokes_interp.pkl
-              - oran_220506aabd_fullstokes_interp.pkl
-              - oran_224263996_fullstokes_interp.pkl
-              - phineas_230307aaao_fullstokes_interp.pkl
-              - phineas_274819243_fullstokes_interp.pkl
-              - whitney_215063905_fullstokes_interp.pkl
-              - whitney_220310aaam_fullstokes_interp.pkl
-              - wilhelm_221203aaaa_fullstokes_interp.pkl
-              - wilhelm_253635173_fullstokes_interp.pkl
-              - zach_210456524_fullstokes_interp.pkl
-              - zach_220207aabh_fullstokes_interp.pkl
-          - id: dsa_fullstokes_waterfalls
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/dsa_fullstokes_waterfalls
-            size_human: 6.0G
-            file_count: 58
-          - id: scattering_results
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/scattering_results
-            size_human: 86M
-            file_count: 115
-          - id: dm_budget
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/dm_budget
-            size_human: 127M
-          - id: metadata
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/metadata
-            size_human: 584K
-            file_count: 7
-          - id: presentations
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/presentations
-            size_human: 32M
-            file_count: 2
-          - id: codetections_manifest
-            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/codetections_manifest.yaml
-            kind: manifest
-            size_human: 4K
-      - id: research_chime_morphologies
-        path: /Users/iacobus/Research/CHIME_Morphologies
-        kind: data_root
-        migration_action: keep
-        migration_target: null
-        size_human: 67G
-        notes: burstprop_paper only; separate from CHIME–DSA codetections; moved from codetections/archive 2026-06-26
-        children:
-          - path: /Users/iacobus/Research/CHIME_Morphologies/burstprop_paper
-            size_human: 67G
-      - id: icloud_chime_codetections
-        path: /Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections
-        kind: data_mirror
-        migration_action: quarantine
-        migration_target: null
-        size_human: 218G
-        file_count: 1546
-        notes: legacy CloudDocs mirror; June 17 comparison only; not an active access path
-      - id: chime_canfar_archive
-        path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/chime_canfar
-        kind: archive
-        migration_action: quarantine
-        migration_target: null
-        size_human: 2.7G
-        file_count: 725
-        children:
-          - baseband_morphologies
-          - forJason
-        notes: D2 move-only mv 2026-06-27 from ~/Archives/CHIME_canfar; pre-move 0 basename overlap vs Research/archive
-
   h17:
     hostname: lxd110h17-hpc
     migration_status: target
@@ -522,7 +108,7 @@ machines:
         size_human: 36G
         file_count: 1924
         source: arc VOSpace trash migration (2026-06); consolidated from /data/jfaber/ 2026-06-27
-        notes: optional promote to iacobus archive/arc_trash_2026-06 after dedupe
+        notes: cold archive; retain on h17
         children:
           - path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06/fullstokes_pkl
             size_human: 25G
@@ -617,11 +203,10 @@ machines:
         size_human: 0
         file_count: 0
         notes: absent 2026-06-26; ubuntu stub already removed; compute workspace canonical
-
   h23:
     hostname: lxd110h23
     migration_status: retired
-    role: decommissioned codetection store; Phase 2 drained to iacobus; Phase 5 partial quarantine 2026-06-25
+    role: decommissioned codetection store; partial quarantine completed 2026-06-25
     access:
       ssh: h23
       user: ubuntu
@@ -674,7 +259,6 @@ machines:
         migration_target: null
         size_human: 59T
         notes: raw T3 pipeline output; keep on server
-
   hpcc:
     hostname: login.hpc.caltech.edu
     migration_status: retired
@@ -721,7 +305,6 @@ machines:
         migration_status: completed
         file_glob: "*.json"
         file_count: 22
-
   dsacamera:
     hostname: dsacamera
     migration_status: retired
@@ -747,7 +330,6 @@ machines:
         kind: unrelated
         size_human: 46M
     notes: no dsa110-FLITS or chime_dsa_codetections tree found; decommissioned 2026-06-25
-
   arc:
     hostname: ws-uv.canfar.net
     migration_status: target

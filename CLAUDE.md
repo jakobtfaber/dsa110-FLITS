@@ -49,7 +49,7 @@ Three analysis surfaces plus a shared package. The **canonical physics kernel** 
 `M0` unresolved (delta source; DM fixed, β=2) → `M1` adds intrinsic width `zeta` → `M2` adds scattering tail `tau_1ghz` (α fixed, default 4.4) → `M3` full model (adds `alpha`, `delta_dm`). `mixed` fits multiple components each with its own model (params suffixed by component index, e.g. `tau_1ghz_2`). Model selection picks the winner by BIC.
 
 ### Data & metadata
-- Raw data: `.npy`, shape `(n_freq, n_time)`, **frequency standardized to ascending** on load (`BurstDataset`). Large `.npy` are gitignored / external — see `DATA_LOCATIONS.md`, `DATA_SOURCES.md`, `data-manifest.csv`, `codetections_manifest.yaml`.
+- Raw data: `.npy`, shape `(n_freq, n_time)`, **frequency standardized to ascending** on load (`BurstDataset`). Large `.npy` are gitignored / external — see `DATA_LOCATIONS.md`, `DATA_SOURCES.md`, and `data-manifest.csv`.
 - Burst registry: `configs/bursts.yaml` (source of truth) + `chimedsa_burst_specs.csv` (nickname↔TNS). Internal **nicknames** (`casey`, `freya`) key filenames/configs; **TNS names** (`FRB 20240229A`) are for publication. Convert via `scattering.scat_analysis.burst_metadata`.
 - Results: JSON (`best_params`, `best_key`, `goodness_of_fit`, `chain_stats`); batch results also in a SQLite DB.
 

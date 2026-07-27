@@ -21,7 +21,7 @@ this file is the route/plan that produced it.
 
 ## Why this work exists (prior art)
 
-All OLD scint notebooks (`scint_{casey,phineas,whitney,mahi,isha}.ipynb` on iacobus) are
+All old scintillation notebooks (`scint_{casey,phineas,whitney,mahi,isha}.ipynb`) are
 **DSA-110-only** (1.3–1.5 GHz, 6144 ch @ 30.5 kHz). **None loaded or analyzed CHIME data**; there is
 no CHIME scint notebook for these sources anywhere. A CHIME `upchannel()` helper was staged in a stray
 checkpoint but a tree-wide grep finds **zero callers** — never wired in. Of the OLD DSA fits, only
