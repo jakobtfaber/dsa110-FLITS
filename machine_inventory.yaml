@@ -11,8 +11,8 @@ excluded:
 
 migration:
   plan_doc: docs/infrastructure/MIGRATION_PLAN_4HOST.md
-  target_hosts: [jakob-mbp, iacobus, arc, h17]
-  retired_hosts: [h23, hpcc, dsacamera]
+  target_hosts: [jakob-mbp, arc, h17]
+  retired_hosts: [h23, hpcc, dsacamera, iacobus]
   git_source_of_truth: https://github.com/jakobtfaber/dsa110-FLITS.git
   deletion_policy: move-only quarantine; never rm
 
@@ -271,13 +271,14 @@ migration_map:
     notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staged the later gdrive archive upload
   - id: iacobus_to_gdrive
     phase: 5
-    status: skipped
+    status: completed
+    completed_utc: "2026-07-14T06:52:03Z"
     action: migrate
     source_host: iacobus
     source_path: /Users/iacobus/Research/CHIME_DSA_Codetections
     target_host: gdrive
     target_path: gdrive-jakob:Research/CHIME_DSA_Codetections
-    notes: DEFERRED 2026-06-27 — ~283G upload time; target was gdrive-jakob:Research/CHIME_DSA_Codetections; scripts/migration/iacobus_to_gdrive.sh; OAuth blocker 2026-06-26
+    notes: upload completed 2026-07-13; size-only parity verified with 0 differences and 5437 matching files; closeout committed at completed_utc; source moved to dated recovery quarantine
   - id: h23_nihari
     phase: 0
     status: out_of_scope

@@ -4,7 +4,8 @@
 **Inventory gate:** `python scripts/query_machine_inventory.py --migration-status pending` → empty.  
 **Policy:** move-only; no bulk transfers without explicit approval. See [`MIGRATION_PLAN_4HOST.md`](MIGRATION_PLAN_4HOST.md).
 
-Optional follow-ups below are **skipped** in `machine_inventory.yaml` — not blockers for the 4-host model.
+The items below record work that was initially deferred. D5 later completed;
+remaining skipped items are not blockers for the current host model.
 
 ---
 
@@ -84,31 +85,22 @@ compute artifacts onto staging ahead of D5 upload.
 
 ---
 
-## D5 — iacobus → Google Drive bulk upload **DEFERRED**
+## D5 — iacobus → Google Drive bulk upload **COMPLETED 2026-07-13**
 
-**Decision (2026-06-27):** Google Drive (`jakobtfaber@gmail.com`) is the
-processed-data archive target, but the ~283 GiB bulk upload from iacobus is
-**deferred** — estimated transfer time too long for the active manuscript
-window. Bytes remain on iacobus staging until upload resumes.
+The upload was initially deferred on 2026-06-27, then completed directly from
+iacobus on 2026-07-13. Final `rclone check --size-only` reported 0 differences
+and 5,437 matching files. Google Drive holds 244.815 GiB / 5,438 objects.
 
 | Source | Target | Size |
 |--------|--------|------|
-| iacobus `~/Research/CHIME_DSA_Codetections` | `gdrive-jakob:Research/CHIME_DSA_Codetections` | ~283 G |
+| iacobus former staging tree | `gdrive-jakob:Research/CHIME_DSA_Codetections` | 244.815 GiB |
 
-**Prerequisite:** rclone remote `gdrive-jakob` on iacobus (OAuth — browser on jakob-mbp, token paste on iacobus).
+The source tree was then moved, without deletion, to
+`iacobus:~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/`.
+Full evidence:
+[`HANDOFF_mbp_tailscale_ssh_iacobus.md`](HANDOFF_mbp_tailscale_ssh_iacobus.md).
 
-**When resumed:**
-
-```bash
-scripts/migration/iacobus_to_gdrive.sh --dry-run --subdir metadata
-scripts/migration/iacobus_to_gdrive.sh --subdir metadata   # smoke
-scripts/migration/iacobus_to_gdrive.sh --dry-run           # review log
-scripts/migration/iacobus_to_gdrive.sh                     # bulk ~280G direct iacobus→Drive
-```
-
-**Do not:** route via jakob-mbp intermediary (~19 GiB free insufficient for staging).
-
-**Inventory id:** `iacobus_to_gdrive` (`status: skipped` — deferred pending upload window).
+**Inventory id:** `iacobus_to_gdrive` (`status: completed`).
 
 ---
 
@@ -132,7 +124,7 @@ canfar create headless skaha/astroml-cuda:latest --gpu 1 -n gpu-smoke-test -- nv
 | D2 CHIME_canfar | none (additive, iacobus-local) | yes — move-only merge |
 | D3 h17 arc trash | 36 G mostly unique (97.5% hash) | executed — iacobus staging toward gdrive |
 | D4 GPU docs | none | no (docs only) |
-| D5 iacobus→gdrive | ~283G upload time | **deferred** — gdrive remains the archive target |
+| D5 iacobus→gdrive | completed and verified | **completed 2026-07-13** |
 
 **Audit artifacts:** `reports/phase3_audit.json`, `reports/phase4_audit.json`, `reports/phase3_chime_basename_inventory.csv`.
 
