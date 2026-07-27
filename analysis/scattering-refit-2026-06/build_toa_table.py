@@ -26,6 +26,7 @@ from pathlib import Path
 
 import numpy as np
 from dynesty.utils import resample_equal
+from scat_analysis.turbulence import alpha_from_beta
 
 RUNS = Path(os.environ.get("FLITS_RUNS", os.path.expanduser("~/Developer/scratch/flits-local-runs")))
 JOINT = RUNS / "data/joint"
@@ -50,6 +51,62 @@ BURSTS = [
     ("phineas", "_C3D3", "_C3D3"),
     ("zach", "_C2D3", "_C1D1"),
 ]
+
+# Bands excluded from the TOA analysis for data-availability reasons (not physics):
+# isha's DSA product is unusable for timing (owner decision), so its DSA-band TOA
+# is not reported.
+EXCLUDE_D = {"isha"}
+
+# beta_native alpha_from_beta clamps to exactly 4.0 for beta >= 4 - BETA_EXP_EPS
+# (= 3.98): inside that exponential-PBF regime alpha is pinned at 4.0, so the
+# derived alpha is NOT a free measurement. The one-sided limits below are the
+# honest statement of the constraint; the UNCLAMPED alpha constraint comes from
+# the relaxed-alpha A/B, not this table.
+#
+# Two rails exist. HIGH: beta -> 4 (Gaussian/thin-screen ceiling), alpha -> 4 --
+# report beta > lo95, alpha < hi95. LOW: beta -> 3 (Kolmogorov steep-index floor),
+# alpha -> 6 -- the COMPLEMENTARY limit, report beta < hi95, alpha > lo95 (phineas).
+BETA_RAIL_HI = 3.98   # >= this fraction of samples above -> rails at beta=4
+BETA_RAIL_LO = 3.05   # <= this fraction of samples below -> rails at beta=3
+
+
+def rail_limits(samp_npz: Path):
+    """Corner-aware one-sided 95% limits on beta and (per-sample derived) alpha.
+
+    Returns None if the samples are absent. ``corner`` is "high" (beta=4 ceiling),
+    "low" (beta=3 floor / alpha=6), or "resolved". ``limit_str`` is the manuscript
+    phrasing for the relevant tail; a two-sided posterior reports the median with
+    its 5-95 spread instead of a spurious rail.
+    """
+    if not samp_npz.exists():
+        return None
+    z = np.load(samp_npz, allow_pickle=True)
+    names = list(z["param_names"])
+    if "beta" not in names:
+        return None
+    bi = names.index("beta")
+    eq = resample_equal(z["samples"], z["weights"])
+    b = eq[:, bi]
+    a = np.array([alpha_from_beta(float(min(max(bb, 2.001), 4.0))) for bb in b])
+    b_lo95, b_hi95 = float(np.percentile(b, 5)), float(np.percentile(b, 95))
+    a_lo95, a_hi95 = float(np.percentile(a, 5)), float(np.percentile(a, 95))
+    frac_hi = float(np.mean(b > BETA_RAIL_HI))
+    frac_lo = float(np.mean(b < BETA_RAIL_LO))
+    if frac_hi >= 0.90:
+        corner, limit_str = "high", f"beta > {b_lo95:.3f} (95%), alpha < {a_hi95:.3f} (95%)"
+    elif frac_lo >= 0.90:
+        corner, limit_str = "low", f"beta < {b_hi95:.3f} (95%), alpha > {a_lo95:.3f} (95%)"
+    else:
+        corner, limit_str = "resolved", (
+            f"beta = {float(np.median(b)):.3f} [{b_lo95:.3f}, {b_hi95:.3f}], "
+            f"alpha = {float(np.median(a)):.3f} [{a_lo95:.3f}, {a_hi95:.3f}]"
+        )
+    return dict(
+        beta_med=float(np.median(b)), alpha_med=float(np.median(a)),
+        beta_lo95=b_lo95, beta_hi95=b_hi95, alpha_lo95=a_lo95, alpha_hi95=a_hi95,
+        frac_beta_hi=frac_hi, frac_beta_lo=frac_lo,
+        corner=corner, railed=(corner != "resolved"), limit_str=limit_str,
+    )
 
 
 def load(fp: Path):
@@ -145,6 +202,18 @@ def fmt(v, u=1e3):
     return "--" if v is None else f"{v[0]:+.4f} (+{v[2]:.4f}/-{v[1]:.4f})"
 
 
+def shape_inflate(toa, chi2, resid):
+    """Inflate a band's TOA (+/-)error by sqrt(chi2_red) when its residual is a
+    shape mismatch. A single-component model that is shape-misspecified has
+    chi2_red > 1, and the posterior-spread error understates the true timing
+    uncertainty by ~sqrt(chi2_red) (the standard EFAC correction). Returns the
+    TOA unchanged for well-fit bands."""
+    if toa is None or not resid or not resid.get("shape_mismatch") or not chi2:
+        return toa, False
+    s = float(np.sqrt(max(float(chi2), 1.0)))
+    return (toa[0], toa[1] * s, toa[2] * s), (s > 1.0)
+
+
 def main():
     rows = []
     print("=" * 120)
@@ -164,8 +233,26 @@ def main():
         samp = JOINT / f"{burst}_joint_samples{ntag}.npz"
         toaC, compC = centroid_toa(samp, (da or {}).get("fluenceC"), "C")
         toaD, compD = centroid_toa(samp, (da or {}).get("fluenceD"), "D")
+        rl = rail_limits(samp)
 
         flags = []
+        # DSA band excluded from timing for data-availability reasons.
+        if burst in EXCLUDE_D:
+            toaD, compD = None, []
+            flags.append("DSA TOA EXCLUDED (data availability, not physics)")
+        # Inflate shape-mismatch band TOA errors by sqrt(chi2_red) (EFAC).
+        toaC, infC = shape_inflate(toaC, (da or {}).get("chi2C"), (rj or {}).get("C"))
+        toaD, infD = shape_inflate(toaD, (da or {}).get("chi2D"), (rj or {}).get("D"))
+        if infC:
+            flags.append("CHIME TOA error INFLATED x sqrt(chi2_red) (shape mismatch)")
+        if infD:
+            flags.append("DSA TOA error INFLATED x sqrt(chi2_red) (shape mismatch)")
+        if rl and rl["railed"]:
+            ceiling = "beta=4 ceiling (alpha=4)" if rl["corner"] == "high" else "beta=3 floor (alpha=6)"
+            quote = "alpha=4.0" if rl["corner"] == "high" else "alpha=6.0"
+            flags.append(
+                f"beta AT {ceiling}: report LIMIT {rl['limit_str']} — do NOT quote {quote} as a measurement"
+            )
         if nC != nD:
             flags.append(f"CHIME/DSA resolve DIFFERENT counts (C{nC} vs D{nD}) — matched-ref delicate")
         oc = (old or {}).get("components_C", 1)
@@ -194,6 +281,10 @@ def main():
         for key, lab in [("tau_1ghz", "tau_1GHz(ms)"), ("alpha", "alpha"), ("beta", "beta"),
                          ("delta_dm_C", "dDM_C(pc/cc)"), ("delta_dm_D", "dDM_D(pc/cc)")]:
             print(f"   {lab:14s} OLD {fmt(pget(old,key)):32s}  NEW {fmt(pget(new,key))}")
+        if rl:
+            tag_r = {"high": "RAILED beta=4", "low": "RAILED beta=3", "resolved": "resolved"}[rl["corner"]]
+            print(f"   scatter {rl['limit_str']}"
+                  f"   [{tag_r}; frac_beta>3.98={rl['frac_beta_hi']:.2f}, frac_beta<3.05={rl['frac_beta_lo']:.2f}]")
         print(f"   TOA_CHIME (centroid, ms)  NEW {fmt(toaC)}")
         for nm, m, w in compC:
             print(f"       component {nm:7s} t0={m:+.4f} ms  (fluence weight {w:.2f})")
@@ -219,6 +310,15 @@ def main():
             chi2_C=(da or {}).get("chi2C"), chi2_D=(da or {}).get("chi2D"),
             tau_ms=(tau_n[0] if tau_n else None),
             alpha=(al_n[0] if al_n else None),
+            beta_med=(rl["beta_med"] if rl else None),
+            beta_lo95=(rl["beta_lo95"] if rl else None),
+            beta_hi95=(rl["beta_hi95"] if rl else None),
+            alpha_lo95=(rl["alpha_lo95"] if rl else None),
+            alpha_hi95=(rl["alpha_hi95"] if rl else None),
+            rail_corner=(rl["corner"] if rl else None),
+            railed=(rl["railed"] if rl else None),
+            scatter_limit=(rl["limit_str"] if rl else None),
+            dsa_excluded=(burst in EXCLUDE_D),
             toa_C_ms=(toaC[0] if toaC else None),
             toa_C_err_ms=((toaC[1] + toaC[2]) / 2 if toaC else None),
             toa_D_ms=(toaD[0] if toaD else None),
