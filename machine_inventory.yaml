@@ -2,8 +2,8 @@
 # Live-probed inventory of CHIME–DSA co-detection assets by host.
 # Query: yq / scripts/query_machine_inventory.py (see docs/infrastructure/MACHINE_INVENTORY.md)
 schema: 3
-generated_utc: "2026-06-26T22:00:00Z"
-generated_by: "GDrive authority decision — iacobus demoted to staging (2026-06-26)"
+generated_utc: "2026-07-27T18:04:11Z"
+generated_by: "Host inventory with scoped custody updates through 2026-07-21"
 project: CHIME-DSA codetections
 excluded:
   - nihari
@@ -11,18 +11,20 @@ excluded:
 
 migration:
   plan_doc: docs/infrastructure/MIGRATION_PLAN_4HOST.md
-  target_hosts: [jakob-mbp, iacobus, arc, h17]
-  retired_hosts: [h23, hpcc, dsacamera]
+  target_hosts: [jakob-mbp, arc, h17]
+  retired_hosts: [h23, hpcc, dsacamera, iacobus]
   git_source_of_truth: https://github.com/jakobtfaber/dsa110-FLITS.git
   deletion_policy: move-only quarantine; never rm
 
 canonical:
   code_repo: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
-  data_authority: gdrive-jakob:Research/CHIME_DSA_Codetections
-  data_authority_account: jakobtfaber@gmail.com
-  data_staging: iacobus:/Users/iacobus/Research/CHIME_DSA_Codetections
-  arc_storage: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections
-  arc_burst_npys: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/DSA_bursts
+  raw_data_host: h17
+  raw_data_root: /data/Faber2026/data
+  processed_data_archive: gdrive-jakob:Research/CHIME_DSA_Codetections
+  processed_data_archive_account: jakobtfaber@gmail.com
+  fit_input_store: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data
+  local_chime_fit_replica: /Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts
+  local_dsa_fit_replica: /Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts
 
 migration_map:
   - id: hpcc_joint_fit_json
@@ -266,16 +268,17 @@ migration_map:
     source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06
     target_host: iacobus
     target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06
-    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staging toward gdrive authority
+    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staged the later gdrive archive upload
   - id: iacobus_to_gdrive
     phase: 5
-    status: skipped
+    status: completed
+    completed_utc: "2026-07-14T06:52:03Z"
     action: migrate
     source_host: iacobus
     source_path: /Users/iacobus/Research/CHIME_DSA_Codetections
     target_host: gdrive
     target_path: gdrive-jakob:Research/CHIME_DSA_Codetections
-    notes: DEFERRED 2026-06-27 — ~283G upload time; gdrive-jakob@gmail.com remains canonical target; scripts/migration/iacobus_to_gdrive.sh; OAuth blocker 2026-06-26
+    notes: upload completed 2026-07-13; size-only parity verified with 0 differences and 5437 matching files; closeout committed at completed_utc; source moved to dated recovery quarantine
   - id: h23_nihari
     phase: 0
     status: out_of_scope
@@ -344,7 +347,7 @@ machines:
         migration_action: keep
         migration_target: jakob-mbp
         size_human: 1.5M
-        size_note: iCloud placeholders only on jakob-mbp; demoted — gdrive is authority
+        size_note: iCloud placeholders only on jakob-mbp; legacy mirror
         subdirs:
           - archive
           - burst_npys
@@ -354,20 +357,21 @@ machines:
           - metadata
           - presentations
           - scattering_results
-        notes: legacy mirror; bytes on iacobus staging until gdrive upload complete
+        notes: legacy mirror; not an active access path
       - id: gdrive_chime_codetections
         path: gdrive-jakob:Research/CHIME_DSA_Codetections
         kind: data_root
         migration_action: keep
         migration_target: gdrive
-        size_human: pending
-        size_note: target ~280G from iacobus; remote not configured 2026-06-26
-        notes: canonical cloud authority jakobtfaber@gmail.com; rclone remote gdrive-jakob on iacobus
+        size_human: 244.815GiB
+        size_bytes: 262867770271
+        object_count: 5438
+        notes: processed-data archive for jakobtfaber@gmail.com; upload and size-only parity verified 2026-07-13
 
   iacobus:
     hostname: iacobus
-    migration_status: target
-    role: staging source for gdrive upload; legacy iCloud uploader; materialized CHIME/DSA products until gdrive verified
+    migration_status: retired
+    role: retired staging source; dated recovery quarantine only
     access:
       ssh: iacobus
       user: iacobus
@@ -382,31 +386,32 @@ machines:
       gpus: []
     locations:
       - id: research_chime_codetections
-        path: /Users/iacobus/Research/CHIME_DSA_Codetections
-        kind: data_root
-        migration_action: migrate
-        migration_target: gdrive
-        size_human: 223G
+        path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713
+        kind: recovery_quarantine
+        migration_action: quarantine
+        migration_target: null
+        size_human: 244G
         size_bytes: null
-        file_count: 1546
-        notes: staging source for gdrive upload; demoted from data authority 2026-06-26; burstprop_paper moved to CHIME_Morphologies 2026-06-26
+        file_count: 5438
+        directory_count: 994
+        notes: move-only quarantine created after the verified gdrive upload; former active path is absent
         children:
           - id: archive
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive
             size_human: 127G
             file_count: 401
             children:
-              - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
+              - path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/chime_canfar
                 size_human: 2.7G
-              - path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/OLD_CHIME_DSA_Codetections
+              - path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/OLD_CHIME_DSA_Codetections
                 size_human: 105G
           - id: burst_npys
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/burst_npys
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/burst_npys
             size_human: 21G
             file_count: 32
             notes: manifest lists 52; live dir has 32 top-level entries
           - id: burst_pickles
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/burst_pickles
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/burst_pickles
             size_human: 61G
             file_count: 24
             files:
@@ -435,26 +440,26 @@ machines:
               - zach_210456524_fullstokes_interp.pkl
               - zach_220207aabh_fullstokes_interp.pkl
           - id: dsa_fullstokes_waterfalls
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/dsa_fullstokes_waterfalls
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/dsa_fullstokes_waterfalls
             size_human: 6.0G
             file_count: 58
           - id: scattering_results
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/scattering_results
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/scattering_results
             size_human: 86M
             file_count: 115
           - id: dm_budget
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/dm_budget
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/dm_budget
             size_human: 127M
           - id: metadata
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/metadata
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/metadata
             size_human: 584K
             file_count: 7
           - id: presentations
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/presentations
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/presentations
             size_human: 32M
             file_count: 2
           - id: codetections_manifest
-            path: /Users/iacobus/Research/CHIME_DSA_Codetections/codetections_manifest.yaml
+            path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/codetections_manifest.yaml
             kind: manifest
             size_human: 4K
       - id: research_chime_morphologies
@@ -470,16 +475,16 @@ machines:
       - id: icloud_chime_codetections
         path: /Users/iacobus/Library/Mobile Documents/com~apple~CloudDocs/Research/CHIME_DSA_Codetections
         kind: data_mirror
-        migration_action: keep
-        migration_target: iacobus
+        migration_action: quarantine
+        migration_target: null
         size_human: 218G
         file_count: 1546
-        notes: CloudDocs mirror; byte-identical to Research/ per 2026-06-17 diff
+        notes: legacy CloudDocs mirror; June 17 comparison only; not an active access path
       - id: chime_canfar_archive
-        path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/chime_canfar
+        path: /Users/iacobus/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/archive/chime_canfar
         kind: archive
-        migration_action: keep
-        migration_target: iacobus
+        migration_action: quarantine
+        migration_target: null
         size_human: 2.7G
         file_count: 725
         children:

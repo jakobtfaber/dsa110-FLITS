@@ -46,7 +46,7 @@ h17 (/data, 1.8T free)
     ├── arc trash archive  .../archive/arc_trash_2026-06 (36G; moved from /data/jfaber/ 2026-06-27)
     └── empty stubs        /data/ubuntu/chime-dsa-codetections (remove)
 
-iacobus (data authority) ◄── optional deduped copy of arc trash
+iacobus (then-current staging tree) ◄── optional deduped copy of arc trash
 arc (CANFAR) ◄── promote stable .npy / fit inputs only
 ```
 

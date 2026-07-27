@@ -6,7 +6,7 @@
 
 **Host roles:** jakob-mbp (code), **h17** (raw-data authority + compute), gdrive (processed-data archive), arc/CANFAR (CHIME baseband upstream origin; `.npy` replica). Retired hosts h23, hpcc, dsacamera are read-only quarantine references only. `iacobus` (`iacobus-bkp-mbp`) was the staging source; its tree was drained 2026-07-13 and it is not an access path for anything.
 
-History of the host migration that produced this layout: [`docs/infrastructure/MIGRATION_PLAN_4HOST.md`](docs/infrastructure/MIGRATION_PLAN_4HOST.md) (describes a superseded authority model; kept as a record) · Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py) · Upload: [`scripts/migration/iacobus_to_gdrive.sh`](scripts/migration/iacobus_to_gdrive.sh)
+History of the host migration that produced this layout: [`docs/infrastructure/MIGRATION_PLAN_4HOST.md`](docs/infrastructure/MIGRATION_PLAN_4HOST.md) (superseded host-role plan; kept as a record) · Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py) · Upload: [`scripts/migration/iacobus_to_gdrive.sh`](scripts/migration/iacobus_to_gdrive.sh)
 
 ## Code (GitHub canonical)
 
@@ -158,6 +158,7 @@ Move-only policy; restore one-liners in each host's `_quarantine/README.md`.
 | **h23** | `/dataz/dsa110/T3/` | **Not quarantined** — 59T raw pipeline; leave on source |
 | **hpcc** | `/home/jfaber/_quarantine/flits-20260625` | Full flits tree quarantined 2026-06-25; JSON artifacts on jakob-mbp |
 | **dsacamera** | — | Decommissioned; no codetection content |
+| **iacobus** | `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` | Drained staging tree; recovery quarantine only |
 
 ## CANFAR arc compute
 
@@ -165,7 +166,9 @@ Storage: `vos`/`vls` with `~/.ssl/cadcproxy.pem`. Compute: `canfar` CLI (`canfar
 
 ## Dropbox exit
 
-Authoritative staging on iacobus CloudDocs `Dropbox-Migration/`; codetection-scope folders renamed `*_retired_2026-04-24_iCloud_is_authoritative/` on Dropbox source. Burst pickles live only under `Research/CHIME_DSA_Codetections/burst_pickles/`.
+The Dropbox exit was staged historically through iacobus CloudDocs
+`Dropbox-Migration/`; that staging area is not an active access path. Burst
+pickles are retained in the processed-data archive described above.
 
 ## Related repos
 
