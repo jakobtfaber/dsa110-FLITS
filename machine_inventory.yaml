@@ -3,7 +3,7 @@
 # Query: yq / scripts/query_machine_inventory.py (see docs/infrastructure/MACHINE_INVENTORY.md)
 schema: 3
 generated_utc: "2026-07-27T18:04:11Z"
-generated_by: "Four-host inventory with scoped custody updates through 2026-07-21"
+generated_by: "Host inventory with scoped custody updates through 2026-07-21"
 project: CHIME-DSA codetections
 excluded:
   - nihari
