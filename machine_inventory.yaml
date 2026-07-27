@@ -3,7 +3,7 @@
 # Query: yq / scripts/query_machine_inventory.py (see docs/infrastructure/MACHINE_INVENTORY.md)
 schema: 3
 generated_utc: "2026-06-26T22:00:00Z"
-generated_by: "GDrive authority decision — iacobus demoted to staging (2026-06-26)"
+generated_by: "Four-host inventory with scoped custody updates through 2026-07-21"
 project: CHIME-DSA codetections
 excluded:
   - nihari
@@ -18,11 +18,13 @@ migration:
 
 canonical:
   code_repo: /Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS
-  data_authority: gdrive-jakob:Research/CHIME_DSA_Codetections
-  data_authority_account: jakobtfaber@gmail.com
-  data_staging: iacobus:/Users/iacobus/Research/CHIME_DSA_Codetections
-  arc_storage: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections
-  arc_burst_npys: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data/DSA_bursts
+  raw_data_host: h17
+  raw_data_root: /data/Faber2026/data
+  processed_data_archive: gdrive-jakob:Research/CHIME_DSA_Codetections
+  processed_data_archive_account: jakobtfaber@gmail.com
+  fit_input_store: arc:home/jfaber/baseband_morphologies/chime_dsa_codetections/data
+  local_chime_fit_replica: /Users/jakobfaber/Data/Faber2026/chimefrb/CHIME_bursts
+  local_dsa_fit_replica: /Users/jakobfaber/Data/Faber2026/dsa110/DSA_bursts
 
 migration_map:
   - id: hpcc_joint_fit_json
@@ -266,7 +268,7 @@ migration_map:
     source_path: /data/research/astrophysics/frbs/chime-dsa-codetections/archive/arc_trash_2026-06
     target_host: iacobus
     target_path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive/arc_trash_2026-06
-    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staging toward gdrive authority
+    notes: D3 rsync 2026-06-27T03:45 via h17_to_iacobus.sh (97.5% unique bytes); h17 source consolidated move-only from /data/jfaber/arc_archive_2026-06 2026-06-27T07:24; iacobus staged the later gdrive archive upload
   - id: iacobus_to_gdrive
     phase: 5
     status: skipped
@@ -275,7 +277,7 @@ migration_map:
     source_path: /Users/iacobus/Research/CHIME_DSA_Codetections
     target_host: gdrive
     target_path: gdrive-jakob:Research/CHIME_DSA_Codetections
-    notes: DEFERRED 2026-06-27 — ~283G upload time; gdrive-jakob@gmail.com remains canonical target; scripts/migration/iacobus_to_gdrive.sh; OAuth blocker 2026-06-26
+    notes: DEFERRED 2026-06-27 — ~283G upload time; target was gdrive-jakob:Research/CHIME_DSA_Codetections; scripts/migration/iacobus_to_gdrive.sh; OAuth blocker 2026-06-26
   - id: h23_nihari
     phase: 0
     status: out_of_scope
@@ -362,7 +364,7 @@ machines:
         migration_target: gdrive
         size_human: pending
         size_note: target ~280G from iacobus; remote not configured 2026-06-26
-        notes: canonical cloud authority jakobtfaber@gmail.com; rclone remote gdrive-jakob on iacobus
+        notes: processed-data archive for jakobtfaber@gmail.com; rclone remote gdrive-jakob on iacobus
 
   iacobus:
     hostname: iacobus
@@ -389,7 +391,7 @@ machines:
         size_human: 223G
         size_bytes: null
         file_count: 1546
-        notes: staging source for gdrive upload; demoted from data authority 2026-06-26; burstprop_paper moved to CHIME_Morphologies 2026-06-26
+        notes: former staging source for the gdrive archive upload; burstprop_paper moved to CHIME_Morphologies 2026-06-26
         children:
           - id: archive
             path: /Users/iacobus/Research/CHIME_DSA_Codetections/archive

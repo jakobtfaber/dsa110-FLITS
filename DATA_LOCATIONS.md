@@ -6,7 +6,7 @@
 
 **Host roles:** jakob-mbp (code), **h17** (raw-data authority + compute), gdrive (processed-data archive), arc/CANFAR (CHIME baseband upstream origin; `.npy` replica). Retired hosts h23, hpcc, dsacamera are read-only quarantine references only. `iacobus` (`iacobus-bkp-mbp`) was the staging source; its tree was drained 2026-07-13 and it is not an access path for anything.
 
-History of the host migration that produced this layout: [`docs/infrastructure/MIGRATION_PLAN_4HOST.md`](docs/infrastructure/MIGRATION_PLAN_4HOST.md) (describes a superseded authority model; kept as a record) · Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py) · Upload: [`scripts/migration/iacobus_to_gdrive.sh`](scripts/migration/iacobus_to_gdrive.sh)
+History of the host migration that produced this layout: [`docs/infrastructure/MIGRATION_PLAN_4HOST.md`](docs/infrastructure/MIGRATION_PLAN_4HOST.md) (superseded host-role plan; kept as a record) · Inventory: [`machine_inventory.yaml`](machine_inventory.yaml) · Query: [`scripts/query_machine_inventory.py`](scripts/query_machine_inventory.py) · Upload: [`scripts/migration/iacobus_to_gdrive.sh`](scripts/migration/iacobus_to_gdrive.sh)
 
 ## Code (GitHub canonical)
 

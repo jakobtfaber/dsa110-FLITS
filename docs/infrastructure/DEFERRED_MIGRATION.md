@@ -76,7 +76,9 @@ python scripts/query_machine_inventory.py --migration-map --json | jq '.[] | sel
 
 Pre-move audit: [`reports/d3_h17_arc_inventory.csv`](../../reports/d3_h17_arc_inventory.csv), [`reports/d3_h17_arc_inventory.json`](../../reports/d3_h17_arc_inventory.json).
 
-**Cloud authority note (2026-06-26):** iacobus is **staging only** — canonical cloud target is Google Drive (`jakobtfaber@gmail.com`). This copy consolidates h17 compute artifacts onto staging ahead of D5 upload; it does not designate iacobus as cloud authority.
+**Archive-target note (2026-06-26):** iacobus is **staging only** — the upload
+target is Google Drive (`jakobtfaber@gmail.com`). This copy consolidates h17
+compute artifacts onto staging ahead of D5 upload.
 
 **Inventory id:** `h17_arc_archive_copy` (`status: completed`).
 
@@ -84,7 +86,10 @@ Pre-move audit: [`reports/d3_h17_arc_inventory.csv`](../../reports/d3_h17_arc_in
 
 ## D5 — iacobus → Google Drive bulk upload **DEFERRED**
 
-**Decision (2026-06-27):** Google Drive (`jakobtfaber@gmail.com`) is the **canonical cloud authority** for co-detection processed data, but the ~283 GiB bulk upload from iacobus is **deferred** — estimated transfer time too long for the active manuscript window. Bytes remain on iacobus staging until upload resumes.
+**Decision (2026-06-27):** Google Drive (`jakobtfaber@gmail.com`) is the
+processed-data archive target, but the ~283 GiB bulk upload from iacobus is
+**deferred** — estimated transfer time too long for the active manuscript
+window. Bytes remain on iacobus staging until upload resumes.
 
 | Source | Target | Size |
 |--------|--------|------|
@@ -127,7 +132,7 @@ canfar create headless skaha/astroml-cuda:latest --gpu 1 -n gpu-smoke-test -- nv
 | D2 CHIME_canfar | none (additive, iacobus-local) | yes — move-only merge |
 | D3 h17 arc trash | 36 G mostly unique (97.5% hash) | executed — iacobus staging toward gdrive |
 | D4 GPU docs | none | no (docs only) |
-| D5 iacobus→gdrive | ~283G upload time | **deferred** — gdrive remains canonical target |
+| D5 iacobus→gdrive | ~283G upload time | **deferred** — gdrive remains the archive target |
 
 **Audit artifacts:** `reports/phase3_audit.json`, `reports/phase4_audit.json`, `reports/phase3_chime_basename_inventory.csv`.
 

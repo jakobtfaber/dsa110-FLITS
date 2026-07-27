@@ -8,8 +8,8 @@ Drained the sparse, non-git holding tree at:
 
 `/Users/jakobfaber/Developer/research-holding/caltech/ovro/dsa110/chime_dsa_codetections`
 
-This tree was not a source for a wholesale merge. FLITS remains the canonical code
-home; data remains off-repo under the CHIME-DSA data authority.
+This tree was not a source for a wholesale merge. FLITS remains the canonical
+code home; bulk data remains off-repo in the documented stores.
 
 ## Promoted to FLITS
 
@@ -18,7 +18,7 @@ home; data remains off-repo under the CHIME-DSA data authority.
 | `frb_cluster_associations.csv` | `notebooks/codetections/data/frb_cluster_associations.csv` | Required by `notebooks/codetections/interveners.ipynb` |
 | `frb_halo_associations.csv` | `notebooks/codetections/data/frb_halo_associations.csv` | Required by `notebooks/codetections/interveners.ipynb` |
 
-## Copied to external data authority
+## Copied to external data storage
 
 | holding path | external path | reason |
 |---|---|---|

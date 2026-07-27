@@ -31,7 +31,7 @@ jakob-mbp (orchestrator, logs)
     ▼
 iacobus ──rsync──► h23:/media/ubuntu/ssd/jfaber/…
     │
-    └──► ~/Research/CHIME_DSA_Codetections/   (data authority)
+    └──► ~/Research/CHIME_DSA_Codetections/   (then-current staging tree)
               └── CloudDocs mirror (bird upload; not blocking Phase 2)
 ```
 

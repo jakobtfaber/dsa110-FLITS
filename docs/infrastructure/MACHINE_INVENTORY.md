@@ -2,7 +2,10 @@
 
 Canonical file: [`machine_inventory.yaml`](../../machine_inventory.yaml)
 
-Live-probed 2026-06-25 across jakob-mbp, iacobus, h17, h23, hpcc, dsacamera, and arc (VOSpace).
+Initial inventory live-probed 2026-06-25 across jakob-mbp, iacobus, h17, h23,
+hpcc, dsacamera, and arc (VOSpace), with scoped custody updates through
+2026-07-21. Current access roles are defined in
+[`DATA_LOCATIONS.md`](../../DATA_LOCATIONS.md).
 
 **4-host migration plan:** [`MIGRATION_PLAN_4HOST.md`](MIGRATION_PLAN_4HOST.md) — Phase 2 design: [`PHASE2_DESIGN.md`](PHASE2_DESIGN.md) — log: [`MIGRATION_LOG.md`](MIGRATION_LOG.md)
 
@@ -10,10 +13,10 @@ Live-probed 2026-06-25 across jakob-mbp, iacobus, h17, h23, hpcc, dsacamera, and
 
 | Machine | migration_status | Role | Key path |
 |---------|------------------|------|----------|
-| **iacobus** | target | data authority | `/Users/iacobus/Research/CHIME_DSA_Codetections` (218G) |
-| **jakob-mbp** | target | dev + placeholders | `~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS` |
-| **arc** | target | institutional storage + CANFAR compute | `arc:home/jfaber/baseband_morphologies/chime_dsa_codetections` |
-| **h17** | target | OVRO compute + arc archive | `/data/research/.../chime-dsa-codetections` (includes `archive/arc_trash_2026-06`) |
+| **iacobus** | drained | retired staging source | `~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` |
+| **jakob-mbp** | target | development + local replicas | `~/Developer/repos/github.com/jakobtfaber/dsa110-FLITS` |
+| **arc** | target | fit-input store + CANFAR compute | `arc:home/jfaber/baseband_morphologies/chime_dsa_codetections` |
+| **h17** | target | raw-data access + compute | `/data/Faber2026/data` |
 | **h23** | retired | cold upstream (drain) | `/media/ubuntu/ssd/jfaber/chime_dsa_codetections` |
 | **hpcc** | retired | Slurm batch (drain) | `/home/jfaber/flits/dsa110-FLITS` |
 | **dsacamera** | retired | negligible codetection | — |

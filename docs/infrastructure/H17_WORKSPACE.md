@@ -3,9 +3,15 @@
 **Host:** `h17` (`lxd110h17`)  
 **Compute root:** `/data/research/astrophysics/frbs/chime-dsa-codetections`  
 **Source-input root:** `/data/Faber2026/data`  
-**Role:** CHIME/DSA co-detection **compute + artifact cache** plus the canonical h17 source-input layout. Not the project data authority.
+**Role:** CHIME/DSA co-detection **raw-data access + compute + artifact cache**.
 
-Canonical code lives in GitHub (`jakobtfaber/dsa110-FLITS`, developed on `jakob-mbp`). The manuscript pin is `jakobtfaber/Faber2026` → submodule `pipeline/` → this fork. Data authority is **Google Drive** (`gdrive-jakob:Research/CHIME_DSA_Codetections`, verified drained 2026-07-13); the iacobus staging tree is quarantined move-only at `iacobus:~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/` (see [`DATA_LOCATIONS.md`](../../DATA_LOCATIONS.md)).
+Canonical code lives in GitHub (`jakobtfaber/dsa110-FLITS`, developed on
+`jakob-mbp`). The manuscript pin is `jakobtfaber/Faber2026` → submodule
+`pipeline/` → this fork. Raw inputs are read from `/data/Faber2026/data`;
+Google Drive holds the processed-data archive. The former iacobus staging tree
+is quarantined move-only at
+`iacobus:~/Research/_quarantine/CHIME_DSA_Codetections-drained-20260713/`
+(see [`DATA_LOCATIONS.md`](../../DATA_LOCATIONS.md)).
 
 ## Layout
 

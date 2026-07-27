@@ -5,7 +5,10 @@
 **Inventory:** [`machine_inventory.yaml`](../../machine_inventory.yaml) (`migration_map` phase-3 + phase-1 arc dedupe entries)  
 **Sentinels:** [`codetections_manifest.yaml`](../../codetections_manifest.yaml)
 
-Phase 3 reconciles **arc VOSpace** burst products and archive trees with **iacobus** (data authority) and **jakob-mbp** (small local replicas). No bulk upload of the 218G iacobus tree to arc — arc quota is ~200G and `baseband_morphologies` already holds ~113G.
+Phase 3 reconciles **arc VOSpace** burst products and archive trees with the
+then-current **iacobus** staging tree and **jakob-mbp** local replicas. No bulk
+upload of the 218G iacobus tree to arc — arc quota is ~200G and
+`baseband_morphologies` already holds ~113G.
 
 Phase 2 (h23 → iacobus) may run in parallel; Phase 3 does not depend on Phase 2 completion except where both touch `OLD_CHIME_DSA_Codetections` policy.
 
@@ -153,7 +156,7 @@ Legacy: arc uploads via CANFAR container FS — not CLI `vcp` — when paths con
 | Host | Relevant size (2026-06-25) | Phase 3 constraint |
 |------|----------------------------|-------------------|
 | arc | ~113G `baseband_morphologies`; quota ~200G | **≤~87G headroom** — no 218G upload |
-| iacobus | 218G data authority; 209G free | source for archive canonical |
+| iacobus | 218G staging tree; 209G free | source for archive reconciliation |
 | jakob-mbp | 25G free | DSA replica ≤5G only |
 
 ---
