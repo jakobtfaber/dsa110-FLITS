@@ -53,6 +53,8 @@ class BurstDataset:
         self.onpulse_crop = onpulse_crop
         self.onpulse_pad_factor = onpulse_pad_factor
         self.onpulse_thresh = onpulse_thresh
+        self.onpulse_crop_status = "not_requested"
+        self.onpulse_crop_bounds = None
         self.data = self.freq = self.time = self.df_MHz = self.dt_ms = self.model = None
         if not lazy:
             self.load()
@@ -185,10 +187,12 @@ class BurstDataset:
         mu = np.median(base)
         sig = 1.4826 * np.median(np.abs(base - mu))
         if sig <= 0:
+            self.onpulse_crop_status = "failed_zero_offpulse_spread"
             log.warning(f"[{self.name}] on-pulse crop skipped: zero off-pulse spread")
             return
         on = np.where((prof - mu) > self.onpulse_thresh * sig)[0]
         if on.size == 0:
+            self.onpulse_crop_status = "failed_no_samples_above_threshold"
             log.warning(f"[{self.name}] on-pulse crop skipped: no samples above "
                         f"{self.onpulse_thresh}-sigma")
             return
@@ -196,8 +200,16 @@ class BurstDataset:
         span = hi - lo + 1
         pad = int(self.onpulse_pad_factor * span)
         lo2, hi2 = max(0, lo - pad), min(n, hi + pad + 1)
+        if hi2 - lo2 < 2:
+            self.onpulse_crop_status = "failed_insufficient_crop_samples"
+            log.warning(
+                f"[{self.name}] on-pulse crop skipped: fewer than two samples"
+            )
+            return
         self.data = self.data[:, lo2:hi2]
         self.time = np.arange(self.data.shape[1]) * self.dt_ms
+        self.onpulse_crop_status = "applied"
+        self.onpulse_crop_bounds = (lo2, hi2)
         log.info(f"[{self.name}] on-pulse crop: {n} -> {self.data.shape[1]} samples "
                  f"(span {span}, pad {pad}); off-pulse fraction "
                  f"{1 - span / self.data.shape[1]:.2f}")
