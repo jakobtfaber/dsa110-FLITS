@@ -65,6 +65,23 @@ flits-halos = "galaxies.foreground.vo.cli:main"
 [tool.setuptools.packages.find]
 where = ["."]
 namespaces = true
+include = [
+  "crossmatching*",
+  "dispersion*",
+  "flits*",
+  "galaxies*",
+  "scattering*",
+  "scintillation*",
+  "simulation*",
+]
+exclude = [
+  "analysis*",
+  "tests*",
+  "tools*",
+]
+
+[tool.setuptools.package-data]
+"flits.resources" = ["matplotlibrc", "*.yaml"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"
