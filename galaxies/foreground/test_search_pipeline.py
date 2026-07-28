@@ -147,7 +147,25 @@ def test_deduplicate_matches_ignores_already_dropped_entries():
 
     deduped = _deduplicate_matches(matches)
 
-    assert deduped["name"].tolist() == ["kept_first", "kept_third"]
+    assert deduped["name"].tolist() == ["kept_first"]
+
+
+def test_deduplicate_transitive_group_is_input_order_independent():
+    rows = [
+        {"name": "a", "ra": 10.0, "dec": 20.0, "z": 0.3, "catalog": "NED"},
+        {"name": "b", "ra": 10.0 + 8 / 3600, "dec": 20.0, "z": 0.3, "catalog": "VII/292/north"},
+        {"name": "c", "ra": 10.0 + 16 / 3600, "dec": 20.0, "z": 0.3, "catalog": "VII/292/north"},
+    ]
+    for order in ([0, 1, 2], [1, 0, 2], [2, 1, 0]):
+        result = _deduplicate_matches(pd.DataFrame([rows[index] for index in order]))
+        assert result["name"].tolist() == ["a"]
+
+
+def test_unknown_host_redshift_retains_candidates_without_calling_them_foreground():
+    df = pd.DataFrame(
+        {"z": [0.05, 0.4], "impact_kpc": [50.0, 80.0], "catalog": ["NED", "NED"]}
+    )
+    assert _foreground_mask(df, None, 0.01, 100.0).tolist() == [True, True]
 
 
 def test_add_desi_stellar_mass_from_fluxes_and_redshift():
@@ -230,11 +248,11 @@ def test_enrich_with_ps1_handles_no_match(monkeypatch):
 
 
 def test_cluster_impact_limit_uses_r200_when_mass_present():
-    # A 5e14 Msun cluster at z=0.1: limit = 2 * r200(M200=1.3*M500).
+    # A 5e14 Msun cluster at z=0.1: limit = 2 * R200c after NFW conversion.
     df = pd.DataFrame(
         {"classification": ["cluster"], "z": [0.1], "m500_msun": [5.0e14], "impact_kpc": [1.0]}
     )
-    r200 = scat.r_delta_kpc(1.3 * 5.0e14, 0.1, 200)
+    r200 = scat.r_delta_kpc(scat.m200_from_m500_nfw(5.0e14, 0.1), 0.1, 200)
     limit = _cluster_impact_limit_kpc(df, impact_kpc=100.0, r200_factor=2.0, fallback_kpc=5000.0)
     assert abs(limit.iloc[0] - 2.0 * r200) / (2.0 * r200) < 1e-9
 
@@ -246,7 +264,8 @@ def test_cluster_impact_limit_falls_back_without_mass():
 
 
 def test_foreground_mask_r200_rejects_far_cluster_keeps_near():
-    # r200(1.3*5e14, z=0.1) ~ 2 Mpc; 2*r200 ~ 4 Mpc. 3 Mpc kept, 6 Mpc rejected.
+    # The shared NFW M500->M200 conversion gives a selection radius between
+    # these two impacts.
     df = pd.DataFrame(
         {
             "classification": ["cluster", "cluster"],

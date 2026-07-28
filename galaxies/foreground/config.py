@@ -30,26 +30,33 @@ SPEED_OF_LIGHT_KMS = 299792.458
 # DESI VII/292/north is the lone photo-z catalog.
 SPEC_Z_CATALOG_SUBSTRINGS = ("ned", "vii/291", "glade", "sdss", "desi_dr1")
 PHOTO_Z_CATALOG_SUBSTRINGS = ("vii/292", "legacy_dr9_photoz")
-MAX_SEARCH_RADIUS_DEG = (
-    2.0  # Cap angular query radius (low-z clusters otherwise blow up Vizier query cones)
-)
-
-# The 12 FRB sightlines in our sample
+# The 12 FRB sightlines in our sample. ``None`` means that no host redshift is
+# established; acquisition may return candidates, but must not call them
+# foreground/background until a redshift posterior is supplied.
 # Format: (name, RA, Dec, z_frb)
-TARGETS: list[tuple[str, str, str, float]] = [
+TARGETS: list[tuple[str, str, str, float | None]] = [
     ("Zach", "20h40m47.886s", "+72d52m56.378s", 0.0430),
     ("Whitney", "08h58m52.92s", "+73d29m27.0s", 0.4790),
     ("Oran", "21h12m10.760s", "+72d49m38.20s", 0.3005),
     ("Isha", "04h45m38.64s", "+70d18m26.6s", 0.2505),
-    ("Wilhelm", "21h00m31.09s", "+72d02m15.22s", 1.0000),
+    ("Wilhelm", "21h00m31.09s", "+72d02m15.22s", None),
     ("Phineas", "11h51m07.52s", "+71d41m44.3s", 0.2710),
-    ("Freya", "05h52m45.12s", "+74d12m01.7s", 1.0000),
+    ("Freya", "05h52m45.12s", "+74d12m01.7s", None),
     ("Hamilton", "20h20m08.92s", "+70d47m33.96s", 0.3024),
-    ("Mahi", "02h39m03.96s", "+71d01m04.3s", 1.0000),
+    ("Mahi", "02h39m03.96s", "+71d01m04.3s", None),
     ("Chromatica", "20h50m28.59s", "+73d54m00.0s", 0.0740),
     ("Casey", "11h19m56.05s", "+70d40m34.4s", 0.2870),
     ("Johndoeii", "22h23m53.94s", "+73d01m33.26s", 0.5535),
 ]
+
+# Diagnostic DM-z distributions from analysis/scripts/dm_redshift_inference.py.
+# These are not established host redshifts and must never enter a point-estimate
+# DM budget. They permit probability-labeled candidate triage only.
+TARGET_DM_REDSHIFT_ESTIMATES = {
+    "Wilhelm": {"z16": 0.4102, "z50": 0.5492, "z84": 0.7048},
+    "Freya": {"z16": 0.7256, "z50": 0.9173, "z84": 1.1441},
+    "Mahi": {"z16": 0.7365, "z50": 0.9317, "z84": 1.1631},
+}
 
 # Catalog identifiers for Vizier
 VIZIER_CATALOGS = {
@@ -87,14 +94,38 @@ ENABLE_ENRICHERS = False
 # docs/rse/specs/research-foreground-galaxies-sightlines.md). PSZ2 reports M500 as
 # MSZ (1e14 Msun); MCXC/MCXC-II report M500 (1e14) + R500 (Mpc).
 CLUSTER_VIZIER_CATALOGS = {
+    "WEN_HAN_2024": "J/ApJS/272/39/table2",
     "PSZ2": "J/A+A/594/A27/psz2",
     "MCXC": "J/A+A/534/A109/mcxc",
     "MCXC_II": "J/A+A/688/A187/mcxcii",  # MCXC-II (A&A 688, A187; arXiv:2402.01538), live-confirmed
 }
+
+# Pinned acquisition contract. Depth values are approximate catalog selection
+# limits, not local exposure-map completeness; per-position depth remains a
+# required downstream qualification field.
+SURVEY_CONTRACT = {
+    "NED": {"release": "live TAP snapshot", "depth": "heterogeneous", "role": "discovery"},
+    "GLADE+": {"release": "VII/291/gladep", "depth": "heterogeneous", "role": "discovery"},
+    "DESI_DR8_NORTH": {
+        "release": "VII/292/north",
+        "depth": "Legacy DR8 North source selection",
+        "role": "photo-z discovery",
+    },
+    "SDSS_DR12": {"release": "V/147/sdss12", "depth": "DR12 selection", "role": "discovery"},
+    "GSC242": {"release": "I/353/gsc242", "depth": "catalog selection", "role": "classification"},
+    "CATWISE2020": {
+        "release": "II/365/catwise",
+        "depth": "CatWISE2020 selection",
+        "role": "classification",
+    },
+    "UNWISE": {"release": "II/363/unwise", "depth": "unWISE selection", "role": "classification"},
+    "CLUSTERS": {
+        "release": "Wen & Han 2024 + PSZ2 + MCXC + MCXC-II",
+        "depth": "Wen-Han M500 >= 4.7e13 Msun; other catalog-specific selections",
+        "role": "cluster discovery",
+    },
+}
 # Keep a cluster when impact <= this multiple of its own r200 (research: meaningful
 # cluster DM needs the sightline within ~1-2 r200).
 CLUSTER_R200_FACTOR = 2.0
-# M200/M500 conversion for r200 + halo-mass injection (order-of-magnitude; typical
-# NFW c500 ~ 1.5 gives M200/M500 ~ 1.3).
-CLUSTER_M500_TO_M200 = 1.3
 ENABLE_CLUSTER_ENGINE = True
