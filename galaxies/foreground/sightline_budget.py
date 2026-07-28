@@ -1116,11 +1116,22 @@ def make_budget_figure(df: pd.DataFrame):
     return fig
 
 
-def main():
+def main(argv=None):
+    import argparse
+
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    results_dir = os.path.join(base_dir, "results")
-    configs_dir = os.path.join(base_dir, "scattering", "configs", "bursts", "chime")
-    bursts_dir = os.path.join(results_dir, "bursts")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--results-dir", default=os.path.join(base_dir, "results"))
+    parser.add_argument(
+        "--configs-dir",
+        default=os.path.join(base_dir, "scattering", "configs", "bursts", "chime"),
+    )
+    parser.add_argument("--bursts-dir")
+    args = parser.parse_args(argv)
+    results_dir = args.results_dir
+    configs_dir = args.configs_dir
+    bursts_dir = args.bursts_dir or os.path.join(results_dir, "bursts")
+    os.makedirs(results_dir, exist_ok=True)
 
     df = build_all_budgets(
         results_dir=results_dir, configs_dir=configs_dir, bursts_dir=bursts_dir, enrich=False
