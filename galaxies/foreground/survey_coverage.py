@@ -24,7 +24,7 @@ FOOTPRINT_RULES: dict[str, str] = {
 }
 
 
-def survey_in_footprint(survey_key: str, coord: SkyCoord) -> bool:
+def survey_in_footprint(survey_key: str, coord: SkyCoord) -> bool | None:
     """Return whether the sightline lies inside the catalog's sky footprint.
 
     Exact CDS MOC containment when a cached MOC exists (survey_footprint_mocs;
@@ -49,18 +49,14 @@ def survey_in_footprint(survey_key: str, coord: SkyCoord) -> bool:
                     )
                 )
         except Exception as exc:
-            # Fall through to the nominal declination rule, but VISIBLY: the
-            # dec rules return True for the whole +70..+74 deg sample, so a
-            # silently broken MOC cache would mislabel uncovered positions as
-            # "searched and empty" (the exact conflation the MOC path fixes).
             import warnings
 
             warnings.warn(
                 f"exact-MOC containment unavailable for {survey_key} "
-                f"({type(exc).__name__}: {exc}); falling back to the "
-                "declination-only footprint rule",
+                f"({type(exc).__name__}: {exc}); footprint is unknown",
                 stacklevel=2,
             )
+            return None
     rule = FOOTPRINT_RULES.get(survey_key, "all_sky")
     dec = coord.dec.deg
     if rule == "all_sky":
@@ -104,7 +100,7 @@ def engine_survey_key(engine: Any) -> str:
 
 def classify_coverage(
     *,
-    in_footprint: bool,
+    in_footprint: bool | None,
     raw_count: int,
     foreground_count: int,
     query_status: str = "ok",
@@ -125,6 +121,8 @@ def classify_coverage(
         return "foreground"
     if raw_count > 0:
         return "catalog_hits"
+    if in_footprint is None:
+        return "footprint_unknown"
     if not in_footprint:
         return "no_footprint"
     return "footprint_empty"

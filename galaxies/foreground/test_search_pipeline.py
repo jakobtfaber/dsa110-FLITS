@@ -147,7 +147,7 @@ def test_deduplicate_matches_ignores_already_dropped_entries():
 
     deduped = _deduplicate_matches(matches)
 
-    assert deduped["name"].tolist() == ["kept_first"]
+    assert deduped["name"].tolist() == ["kept_first", "kept_third"]
 
 
 def test_deduplicate_transitive_group_is_input_order_independent():
@@ -158,7 +158,7 @@ def test_deduplicate_transitive_group_is_input_order_independent():
     ]
     for order in ([0, 1, 2], [1, 0, 2], [2, 1, 0]):
         result = _deduplicate_matches(pd.DataFrame([rows[index] for index in order]))
-        assert result["name"].tolist() == ["a"]
+        assert result["name"].tolist() == ["a", "c"]
 
 
 def test_unknown_host_redshift_retains_candidates_without_calling_them_foreground():
@@ -276,3 +276,15 @@ def test_foreground_mask_r200_rejects_far_cluster_keeps_near():
     )
     mask = _foreground_mask(df, z_frb=0.5, z_eps=0.01, impact_kpc=100.0)
     assert mask.tolist() == [True, False]
+
+
+def test_deduplication_does_not_single_link_distinct_endpoints():
+    frame = pd.DataFrame(
+        {
+            "ra": [10.0, 10.0 + 9.0 / 3600.0, 10.0 + 18.0 / 3600.0],
+            "dec": [0.0, 0.0, 0.0],
+            "z": [0.1, 0.1, 0.1],
+            "catalog": ["a", "b", "c"],
+        }
+    )
+    assert len(_deduplicate_matches(frame)) == 2

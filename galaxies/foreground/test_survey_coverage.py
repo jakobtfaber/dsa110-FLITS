@@ -31,6 +31,10 @@ def test_classify_coverage_states():
     assert classify_coverage(in_footprint=True, raw_count=0, foreground_count=0) == "footprint_empty"
     assert classify_coverage(in_footprint=True, raw_count=10, foreground_count=0) == "catalog_hits"
     assert classify_coverage(in_footprint=True, raw_count=10, foreground_count=2) == "foreground"
+    assert (
+        classify_coverage(in_footprint=None, raw_count=0, foreground_count=0)
+        == "footprint_unknown"
+    )
 
 
 def test_full_sky_moc_rasterizes():

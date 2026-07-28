@@ -223,30 +223,46 @@ def _deduplicate_matches(all_matches: pd.DataFrame) -> pd.DataFrame:
         return all_matches
 
     coords = SkyCoord(ra=all_matches["ra"].values * u.deg, dec=all_matches["dec"].values * u.deg)
-    parent = list(range(len(all_matches)))
-
-    def find(pos: int) -> int:
-        while parent[pos] != pos:
-            parent[pos] = parent[parent[pos]]
-            pos = parent[pos]
-        return pos
-
-    def union(left: int, right: int) -> None:
-        root_left, root_right = find(left), find(right)
-        if root_left != root_right:
-            parent[max(root_left, root_right)] = min(root_left, root_right)
-
-    for left in range(len(all_matches)):
-        for right in range(left + 1, len(all_matches)):
-            if _is_duplicate(
-                all_matches.iloc[left], all_matches.iloc[right], coords[left], coords[right]
-            ):
-                union(left, right)
-
-    groups: dict[int, list[int]] = {}
-    for pos in range(len(all_matches)):
-        groups.setdefault(find(pos), []).append(pos)
-    kept_positions = sorted(_best_duplicate_position(all_matches, group) for group in groups.values())
+    # Complete-linkage groups prevent a chain A~B~C from merging endpoints A,C
+    # that exceed the duplicate threshold. Stable coordinate/catalog ordering
+    # makes the partition independent of input row order.
+    ordered = sorted(
+        range(len(all_matches)),
+        key=lambda pos: (
+            float(all_matches.iloc[pos]["ra"]),
+            float(all_matches.iloc[pos]["dec"]),
+            float(all_matches.iloc[pos]["z"]),
+            str(all_matches.iloc[pos].get("catalog", "")),
+        ),
+    )
+    groups: list[list[int]] = []
+    for pos in ordered:
+        compatible = [
+            group
+            for group in groups
+            if all(
+                _is_duplicate(
+                    all_matches.iloc[pos],
+                    all_matches.iloc[other],
+                    coords[pos],
+                    coords[other],
+                )
+                for other in group
+            )
+        ]
+        if compatible:
+            compatible[0].append(pos)
+        else:
+            groups.append([pos])
+    kept_positions = sorted(
+        (_best_duplicate_position(all_matches, group) for group in groups),
+        key=lambda pos: (
+            float(all_matches.iloc[pos]["ra"]),
+            float(all_matches.iloc[pos]["dec"]),
+            float(all_matches.iloc[pos]["z"]),
+            str(all_matches.iloc[pos].get("catalog", "")),
+        ),
+    )
     return all_matches.iloc[kept_positions].reset_index(drop=True)
 
 

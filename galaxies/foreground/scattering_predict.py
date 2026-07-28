@@ -36,7 +36,7 @@ def dm_halo_mnfw(
 ) -> float | None:
     """Return observer-frame hot-halo DM using ``FRBs/FRB`` ``ModifiedNFW``.
 
-    Delegates to :func:`dm_mnfw_projected` (Bryan--Norman ``rvir``, ``alpha=2``,
+    Delegates to :func:`dm_mnfw_projected` (critical-density ``R200c``, ``alpha=2``,
     ``y0=2``, ``c=7.67``, ``f_hot=0.75`` by default — same as
     ``frb.halos.models.ModifiedNFW`` in ``search_for_halos.py``).
     """

@@ -195,6 +195,7 @@ class LegacySurveyDr9PhotozSweepEngine(BaseEngine):
             return pd.DataFrame()
 
         frames = []
+        missing_pairs = []
         for ra_min, dec_min in _candidate_sweep_bounds(coord, radius):
             tractor_name = _sweep_filename(ra_min, dec_min)
             photoz_name = _sweep_filename(ra_min, dec_min, pz=True)
@@ -211,12 +212,19 @@ class LegacySurveyDr9PhotozSweepEngine(BaseEngine):
                 if not photoz_path.exists():
                     _download_file(_legacy_file_url(self.region, "9.1-photo-z", photoz_name), photoz_path)
             if not tractor_path.exists() or not photoz_path.exists():
+                missing_pairs.append(f"{tractor_name}|{photoz_name}")
                 continue
 
             frame = _read_legacy_dr9_pair(tractor_path, photoz_path)
             if not frame.empty:
                 frames.append(frame)
 
+        if missing_pairs:
+            self.last_query_status = "query_error"
+            self.last_query_error = "missing required Legacy DR9 sweep pairs: " + ", ".join(
+                missing_pairs
+            )
+            return pd.DataFrame()
         if not frames:
             return pd.DataFrame()
 
