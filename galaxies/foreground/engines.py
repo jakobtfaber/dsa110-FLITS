@@ -34,6 +34,17 @@ def _retry(fn, attempts: int = 3, base_delay: float = 2.0):
 class BaseEngine(ABC):
     """Abstract base class for catalog query engines."""
 
+    last_query_status: str = "not_run"
+    last_query_error: str = ""
+
+    def _query_ok(self) -> None:
+        self.last_query_status = "ok"
+        self.last_query_error = ""
+
+    def _query_failed(self, exc: Exception) -> None:
+        self.last_query_status = "query_error"
+        self.last_query_error = f"{type(exc).__name__}: {exc}"
+
     @abstractmethod
     def query(self, coord: SkyCoord, radius: u.Quantity) -> pd.DataFrame:
         pass
@@ -48,6 +59,7 @@ class NedEngine(BaseEngine):
         Ned.TIMEOUT = int(os.environ.get("FLITS_NED_TIMEOUT", "180"))
 
     def query(self, coord: SkyCoord, radius: u.Quantity) -> pd.DataFrame:
+        self._query_ok()
         try:
             result_table = Ned.query_region(coord, radius=radius)
             if result_table is None or len(result_table) == 0:
@@ -71,6 +83,7 @@ class NedEngine(BaseEngine):
                 keep.insert(4, "classification")
             return df[keep]
         except Exception as e:
+            self._query_failed(e)
             print(f"NED query failed: {e}")
             return pd.DataFrame()
 
@@ -87,6 +100,7 @@ class VizierEngine(BaseEngine):
         )
 
     def query(self, coord: SkyCoord, radius: u.Quantity) -> pd.DataFrame:
+        self._query_ok()
         try:
             result = _retry(
                 lambda: self.vizier.query_region(coord, radius=radius, catalog=self.catalog_id)
@@ -125,6 +139,7 @@ class VizierEngine(BaseEngine):
             df = _add_desi_stellar_mass(df, self.catalog_id)
             return df
         except Exception as e:
+            self._query_failed(e)
             print(f"Vizier query ({self.catalog_id}) failed: {e}")
             return pd.DataFrame()
 

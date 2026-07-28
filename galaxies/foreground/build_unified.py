@@ -99,7 +99,7 @@ def _boolish(value: Any) -> bool:
             return False
     except TypeError:
         return False
-    if isinstance(value, (bool, np.bool_)):
+    if isinstance(value, bool | np.bool_):
         return bool(value)
     if isinstance(value, str):
         return value.strip().lower() in {"true", "t", "1", "yes", "y"}
@@ -439,7 +439,7 @@ def build_unified_records(
         # cool-CGM / tau are zeroed and the stellar-mass ladder is bypassed.
         m500_msun = _num(row, "m500_msun")
         if _finite(m500_msun) and m500_msun > 0.0:
-            m_halo = config.CLUSTER_M500_TO_M200 * m500_msun
+            m_halo = scat.m200_from_m500_nfw(m500_msun, z_gal)
             logm_best = logm_halo = math.log10(m_halo)
             mass_source, mass_method = "cluster_catalog", "cluster_catalog_m500"
             r_vir = scat.r_delta_kpc(m_halo, z_gal, 200)

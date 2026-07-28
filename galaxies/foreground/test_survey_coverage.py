@@ -6,11 +6,6 @@ from galaxies.foreground.survey_coverage import (
     classify_coverage,
     survey_in_footprint,
 )
-from galaxies.foreground.survey_footprint_mocs import (
-    _full_sky_moc,
-    moc_sky_area_deg2,
-    rasterize_moc,
-)
 
 
 def test_high_latitude_in_northern_surveys():
@@ -23,6 +18,15 @@ def test_high_latitude_in_northern_surveys():
 
 
 def test_classify_coverage_states():
+    assert (
+        classify_coverage(
+            in_footprint=True,
+            raw_count=0,
+            foreground_count=0,
+            query_status="query_error",
+        )
+        == "query_error"
+    )
     assert classify_coverage(in_footprint=False, raw_count=0, foreground_count=0) == "no_footprint"
     assert classify_coverage(in_footprint=True, raw_count=0, foreground_count=0) == "footprint_empty"
     assert classify_coverage(in_footprint=True, raw_count=10, foreground_count=0) == "catalog_hits"
@@ -30,6 +34,15 @@ def test_classify_coverage_states():
 
 
 def test_full_sky_moc_rasterizes():
+    import pytest
+
+    pytest.importorskip("healpy")
+    from galaxies.foreground.survey_footprint_mocs import (
+        _full_sky_moc,
+        moc_sky_area_deg2,
+        rasterize_moc,
+    )
+
     moc = _full_sky_moc(order=4)
     assert moc_sky_area_deg2(moc) > 40000
     hmap = rasterize_moc(moc, order=4)

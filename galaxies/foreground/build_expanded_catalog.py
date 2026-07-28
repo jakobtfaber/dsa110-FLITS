@@ -75,7 +75,9 @@ def _match_columns(name: str, payload: dict[str, Any], query: dict[str, Any]) ->
     match = select_match(
         query.get("rows"), None, float(payload["search_radius_arcsec"]), AMBIGUITY_ARCSEC
     )
-    selected = dict(match.selected_row or {})
+    # Ambiguity is evidence about the match set, not authority to borrow one
+    # candidate's identifier or measurements.
+    selected = dict(match.selected_row or {}) if match.status == "matched" else {}
     base = {
         f"{prefix}_status": match.status,
         f"{prefix}_id": selected.get(native_id) or selected.get("catalog_id"),

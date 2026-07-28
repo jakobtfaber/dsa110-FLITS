@@ -1,5 +1,6 @@
 """Main pipeline for finding foreground galaxies."""
 
+import json
 import math
 import os
 import re
@@ -11,7 +12,6 @@ from astropy.coordinates import SkyCoord
 from . import scattering_predict as scat
 from .build_unified import build_for_target
 from .config import (
-    CLUSTER_M500_TO_M200,
     CLUSTER_R200_FACTOR,
     DEFAULT_CLUSTER_IMPACT_KPC,
     DEFAULT_IMPACT_KPC,
@@ -21,11 +21,12 @@ from .config import (
     ENABLE_LEGACY_DR9_PHOTOZ,
     FOREGROUND_AMBIGUITY_KMS,
     FOREGROUND_PHOTOZ_FLOOR,
-    MAX_SEARCH_RADIUS_DEG,
     MIN_Z_SEARCH,
     PHOTO_Z_CATALOG_SUBSTRINGS,
     SPEC_Z_CATALOG_SUBSTRINGS,
     SPEED_OF_LIGHT_KMS,
+    SURVEY_CONTRACT,
+    TARGET_DM_REDSHIFT_ESTIMATES,
     TARGETS,
     VIZIER_CATALOGS,
 )
@@ -76,7 +77,7 @@ def _first_available_numeric(df: pd.DataFrame, columns: tuple[str, ...]) -> pd.S
 
 def _foreground_mask(
     df: pd.DataFrame,
-    z_frb: float,
+    z_frb: float | None,
     z_eps: float,
     impact_kpc: float,
     cluster_impact_kpc: float = DEFAULT_CLUSTER_IMPACT_KPC,
@@ -103,7 +104,11 @@ def _foreground_mask(
     """
     z = pd.to_numeric(df["z"], errors="coerce")
     impact = pd.to_numeric(df["impact_kpc"], errors="coerce")
-    z_limit = z_frb + z_eps
+    if z_frb is None or not math.isfinite(float(z_frb)):
+        impact_limit = _cluster_impact_limit_kpc(
+            df, impact_kpc, fallback_kpc=cluster_impact_kpc
+        )
+        return z.notna() & (z > 0.0) & (impact <= impact_limit)
 
     catalog = (
         df["catalog"].astype(str).str.lower()
@@ -124,7 +129,7 @@ def _foreground_mask(
     dv_kms = SPEED_OF_LIGHT_KMS * (z_frb - z) / (1.0 + z_frb)
     spec_foreground = is_specz & (dv_kms >= ambiguity_kms)
     # Photo-z: credible-floor point estimate strictly in the foreground.
-    photo_foreground = is_photoz & (z >= photoz_floor) & (z < z_limit)
+    photo_foreground = is_photoz & (z >= photoz_floor) & (z < z_frb)
     foreground = spec_foreground | photo_foreground
     # Clusters get a mass-scaled r200 impact limit; galaxies keep impact_kpc.
     impact_limit = _cluster_impact_limit_kpc(df, impact_kpc, fallback_kpc=cluster_impact_kpc)
@@ -147,8 +152,9 @@ def _cluster_impact_limit_kpc(
     """Per-row impact limit (kpc).
 
     Galaxies keep ``impact_kpc``. A cluster row with a catalog M500 gets
-    ``r200_factor * r200`` (r200 from M200 = CLUSTER_M500_TO_M200 * M500); a cluster
-    row without a catalog mass (e.g. NED-Type only) falls back to ``fallback_kpc``.
+    ``r200_factor * r200`` after the shared NFW M500-to-M200 conversion; a
+    cluster row without a catalog mass (e.g. NED-Type only) falls back to
+    ``fallback_kpc``.
     """
     limit = pd.Series(float(impact_kpc), index=df.index, dtype="float64")
     is_cluster = _cluster_mask(df)
@@ -162,7 +168,8 @@ def _cluster_impact_limit_kpc(
         mi = m500.get(i, math.nan)
         zi = z.get(i, math.nan)
         if pd.notna(mi) and mi > 0.0 and pd.notna(zi) and zi > 0.0:
-            r200 = scat.r_delta_kpc(CLUSTER_M500_TO_M200 * float(mi), float(zi), 200)
+            m200 = scat.m200_from_m500_nfw(float(mi), float(zi))
+            r200 = scat.r_delta_kpc(m200, float(zi), 200)
             limit.at[i] = r200_factor * r200 if math.isfinite(r200) else fallback_kpc
         else:
             limit.at[i] = fallback_kpc
@@ -216,31 +223,30 @@ def _deduplicate_matches(all_matches: pd.DataFrame) -> pd.DataFrame:
         return all_matches
 
     coords = SkyCoord(ra=all_matches["ra"].values * u.deg, dec=all_matches["dec"].values * u.deg)
-    kept_positions: list[int] = []
+    parent = list(range(len(all_matches)))
 
-    for candidate_pos in range(len(all_matches)):
-        candidate_row = all_matches.iloc[candidate_pos]
-        duplicate_positions = [
-            kept_pos
-            for kept_pos in kept_positions
+    def find(pos: int) -> int:
+        while parent[pos] != pos:
+            parent[pos] = parent[parent[pos]]
+            pos = parent[pos]
+        return pos
+
+    def union(left: int, right: int) -> None:
+        root_left, root_right = find(left), find(right)
+        if root_left != root_right:
+            parent[max(root_left, root_right)] = min(root_left, root_right)
+
+    for left in range(len(all_matches)):
+        for right in range(left + 1, len(all_matches)):
             if _is_duplicate(
-                all_matches.iloc[kept_pos],
-                candidate_row,
-                coords[kept_pos],
-                coords[candidate_pos],
-            )
-        ]
+                all_matches.iloc[left], all_matches.iloc[right], coords[left], coords[right]
+            ):
+                union(left, right)
 
-        if not duplicate_positions:
-            kept_positions.append(candidate_pos)
-            continue
-
-        group_positions = duplicate_positions + [candidate_pos]
-        best_pos = _best_duplicate_position(all_matches, group_positions)
-        kept_positions = [pos for pos in kept_positions if pos not in duplicate_positions]
-        kept_positions.append(best_pos)
-
-    kept_positions.sort()
+    groups: dict[int, list[int]] = {}
+    for pos in range(len(all_matches)):
+        groups.setdefault(find(pos), []).append(pos)
+    kept_positions = sorted(_best_duplicate_position(all_matches, group) for group in groups.values())
     return all_matches.iloc[kept_positions].reset_index(drop=True)
 
 
@@ -329,19 +335,20 @@ def run_search(
     for i, (name, ra_str, dec_str, z_frb) in enumerate(TARGETS):
         print(f"Processing {name} (Target {i + 1}): {ra_str}, {dec_str} (z={z_frb})")
         coord = parse_coord(ra_str, dec_str)
-        # Query the larger of the two impact limits (clusters reach out to ~5 Mpc).
-        # Use MIN_Z_SEARCH to capture low-z foreground at larger angular separation, and
-        # cap the cone at MAX_SEARCH_RADIUS_DEG so low-z clusters don't time out Vizier.
-        radius = min(
-            get_angular_radius(min(z_frb, MIN_Z_SEARCH), max(impact_kpc, cluster_impact_kpc)),
-            MAX_SEARCH_RADIUS_DEG * u.deg,
-        )
-
         target_matches = []
         for engine in engines:
+            query_impact_kpc = (
+                cluster_impact_kpc if isinstance(engine, ClusterEngine) else impact_kpc
+            )
+            radius = get_angular_radius(
+                min(z_frb, MIN_Z_SEARCH) if z_frb is not None else MIN_Z_SEARCH,
+                query_impact_kpc,
+            )
             survey_key = engine_survey_key(engine)
             in_fp = survey_in_footprint(survey_key, coord)
             df = engine.query(coord, radius)
+            query_status = getattr(engine, "last_query_status", "ok")
+            query_error = getattr(engine, "last_query_error", "")
             engine_name = engine.__class__.__name__
             if isinstance(engine, VizierEngine):
                 # Find the catalog name from VIZIER_CATALOGS
@@ -389,6 +396,12 @@ def run_search(
                             _foreground_mask(df, z_frb, z_eps, impact_kpc, cluster_impact_kpc)
                         ]
                         if not df_filtered.empty:
+                            df_filtered = df_filtered.copy()
+                            df_filtered["foreground_status"] = (
+                                "candidate_host_redshift_unknown"
+                                if z_frb is None
+                                else "foreground"
+                            )
                             target_matches.append(df_filtered)
                             foreground_count = len(df_filtered)
                             print(
@@ -409,6 +422,28 @@ def run_search(
                     "engine": engine_name,
                     "in_footprint": in_fp,
                     "queried": True,
+                    "query_status": query_status,
+                    "query_error": query_error,
+                    "query_radius_deg": float(radius.to_value(u.deg)),
+                    "survey_release": SURVEY_CONTRACT.get(survey_key, {}).get(
+                        "release", "unregistered"
+                    ),
+                    "survey_depth": SURVEY_CONTRACT.get(survey_key, {}).get(
+                        "depth", "unregistered"
+                    ),
+                    "survey_role": SURVEY_CONTRACT.get(survey_key, {}).get(
+                        "role", "unregistered"
+                    ),
+                    "host_redshift_basis": (
+                        "established"
+                        if z_frb is not None
+                        else "diagnostic_dm_z_distribution"
+                    ),
+                    "host_redshift_estimate": (
+                        json.dumps(TARGET_DM_REDSHIFT_ESTIMATES.get(name), sort_keys=True)
+                        if z_frb is None
+                        else ""
+                    ),
                     "raw_count": raw_count,
                     "with_z_count": with_z_count,
                     "foreground_count": foreground_count,
@@ -416,6 +451,7 @@ def run_search(
                         in_footprint=in_fp,
                         raw_count=raw_count,
                         foreground_count=foreground_count,
+                        query_status=query_status,
                     ),
                 }
             )

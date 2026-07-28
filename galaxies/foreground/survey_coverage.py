@@ -107,6 +107,7 @@ def classify_coverage(
     in_footprint: bool,
     raw_count: int,
     foreground_count: int,
+    query_status: str = "ok",
 ) -> str:
     """Coverage status for one burst x survey query.
 
@@ -118,6 +119,8 @@ def classify_coverage(
     outside it the survey simply does not apply (no_footprint) -- absence
     of coverage is NOT absence of foreground.
     """
+    if query_status != "ok":
+        return "query_error"
     if foreground_count > 0:
         return "foreground"
     if raw_count > 0:

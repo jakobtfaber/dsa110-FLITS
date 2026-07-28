@@ -5,7 +5,7 @@ import math
 import astropy.units as u
 import numpy as np
 
-from .config import CLUSTER_M500_TO_M200, COSMO
+from .config import COSMO
 
 
 def _is_bad(x: float | None) -> bool:
@@ -327,11 +327,8 @@ def cool_covering_fraction(
     return float(fc), float(lo), float(hi)
 
 
-# --- Cluster foreground dispersion (FRB ModifiedNFW) -------------------------
-# R200/R500 = (M200/M500 * 500/200)^(1/3) = (1.3*2.5)^(1/3) = 1.48, consistent with
-# config.CLUSTER_M500_TO_M200 = 1.3 (typical c500 ~ 1.5). The earlier 1.54 assumed a
-# different concentration and was inconsistent with the 1.3 mass ratio used for R200.
-CLUSTER_R200_OVER_R500 = 1.48
+# --- Cluster foreground dispersion (modified NFW) ----------------------------
+CLUSTER_C200 = 4.0
 CLUSTER_MNFW_CONCENTRATION = 7.67
 CLUSTER_MNFW_ALPHA = 2.0
 CLUSTER_MNFW_Y0 = 2.0
@@ -357,13 +354,39 @@ def r_delta_kpc(m_delta_msun: float, z: float, delta: float) -> float:
 
 
 def _frb_mnfw_rvir_kpc(m_halo_msun: float, z: float) -> float:
-    """FRB ModifiedNFW virial radius using the Bryan-Norman overdensity convention."""
+    """Legacy Bryan-Norman radius. New foreground calculations use R200c."""
     q = COSMO.Ode0 / (COSMO.Ode0 + COSMO.Om0 * (1.0 + float(z)) ** 3)
     delta_vir = 18.0 * math.pi**2 - 82.0 * q - 39.0 * q**2
     rho_vir = delta_vir * COSMO.critical_density(float(z)).to(u.Msun / u.kpc**3).value
     if rho_vir <= 0.0 or not math.isfinite(rho_vir):
         return float("nan")
     return float((3.0 * float(m_halo_msun) / (4.0 * math.pi * rho_vir)) ** (1.0 / 3.0))
+
+
+def m200_from_m500_nfw(
+    m500_msun: float, z: float, concentration_200: float = CLUSTER_C200
+) -> float:
+    """Convert M500c to M200c for an NFW halo with explicit c200."""
+    if (
+        any(_is_bad(value) for value in (m500_msun, z, concentration_200))
+        or float(m500_msun) <= 0.0
+        or float(concentration_200) <= 0.0
+    ):
+        return float("nan")
+    from scipy.optimize import brentq
+
+    c200 = float(concentration_200)
+
+    def enclosed(x: float) -> float:
+        return math.log1p(x) - x / (1.0 + x)
+
+    f200 = enclosed(c200)
+    radius_ratio = brentq(
+        lambda x: enclosed(c200 * x) / f200 - 2.5 * x**3,
+        0.1,
+        0.99,
+    )
+    return float(m500_msun) / (2.5 * radius_ratio**3)
 
 
 def dm_mnfw_projected(
@@ -385,10 +408,15 @@ def dm_mnfw_projected(
     """
     if any(_is_bad(x) for x in (m_halo_msun, z, impact_kpc, concentration, alpha, y0, f_hot)):
         return 0.0
-    if min(float(m_halo_msun), float(concentration), float(y0), float(f_hot), float(rmax)) <= 0.0:
+    if (
+        min(float(m_halo_msun), float(concentration), float(y0), float(f_hot), float(rmax))
+        <= 0.0
+        or float(impact_kpc) < 0.0
+        or float(alpha) < 1.0
+    ):
         return 0.0
 
-    rvir = _frb_mnfw_rvir_kpc(m_halo_msun, z)
+    rvir = r_delta_kpc(m_halo_msun, z, 200.0)
     if _is_bad(rvir) or rvir <= 0.0:
         return 0.0
     b = float(impact_kpc)
@@ -411,7 +439,7 @@ def dm_mnfw_projected(
     norm, _ = quad(
         lambda r: 4.0 * math.pi * r * r * shape_from_r(r),
         0.0,
-        rvir,
+        r_trunc,
         epsabs=0.0,
         epsrel=1e-6,
         limit=200,
@@ -428,7 +456,7 @@ def dm_mnfw_projected(
 
     l_half = math.sqrt(max(r_trunc**2 - b**2, 0.0))
     column_kpc_cm3, _ = quad(
-        lambda l: ne_cm3(math.hypot(b, l)),
+        lambda los: ne_cm3(math.hypot(b, los)),
         -l_half,
         l_half,
         epsabs=0.0,
@@ -444,12 +472,16 @@ def dm_cluster_mnfw_model(
     m500_msun: float,
     z: float,
     impact_kpc: float,
-    m500_to_m200: float = CLUSTER_M500_TO_M200,
+    m500_to_m200: float | None = None,
+    concentration_200: float = CLUSTER_C200,
     **kwargs,
 ) -> float:
     """Cluster foreground DM using the FRB mNFW halo profile instead of a beta model."""
-    if any(_is_bad(x) for x in (m500_msun, z, impact_kpc, m500_to_m200)) or float(m500_msun) <= 0.0:
+    if any(_is_bad(x) for x in (m500_msun, z, impact_kpc)) or float(m500_msun) <= 0.0:
         return 0.0
-    return dm_mnfw_projected(float(m500_to_m200) * float(m500_msun), z, impact_kpc, **kwargs)
-
-
+    m200 = (
+        float(m500_to_m200) * float(m500_msun)
+        if m500_to_m200 is not None
+        else m200_from_m500_nfw(m500_msun, z, concentration_200)
+    )
+    return dm_mnfw_projected(m200, z, impact_kpc, **kwargs)

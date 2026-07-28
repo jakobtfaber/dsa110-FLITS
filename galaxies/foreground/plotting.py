@@ -9,8 +9,8 @@ from adjustText import adjust_text
 
 from flits.plotting import use_flits_style
 
-from .config import CLUSTER_M500_TO_M200, TARGETS
-from .scattering_predict import r_delta_kpc
+from .config import TARGETS
+from .scattering_predict import m200_from_m500_nfw, r_delta_kpc
 from .utils import get_angular_radius, parse_coord
 
 # Mirror of search._CLUSTER_RE / CLASSIFICATION_COLUMNS, kept local so this plotting
@@ -151,7 +151,7 @@ def plot_sightline(target_info: dict, galaxies_df: pd.DataFrame, output_path: st
     if not gals.empty:
         dra = (gals["ra"] - ra0) * 60.0 * cos_dec
         ddec = (gals["dec"] - dec0) * 60.0
-        offsets += list(zip(dra, ddec))
+        offsets += list(zip(dra, ddec, strict=False))
         scatter = ax.scatter(
             dra,
             ddec,
@@ -163,7 +163,7 @@ def plot_sightline(target_info: dict, galaxies_df: pd.DataFrame, output_path: st
             label="Foreground Galaxies",
             zorder=6,
         )
-        for (_, row), x, y in zip(gals.iterrows(), dra, ddec):
+        for (_, row), x, y in zip(gals.iterrows(), dra, ddec, strict=False):
             label = (
                 row["name"]
                 if pd.notna(row.get("name")) and row.get("name") != ""
@@ -176,7 +176,7 @@ def plot_sightline(target_info: dict, galaxies_df: pd.DataFrame, output_path: st
     if not clusters.empty:
         cdra = (clusters["ra"] - ra0) * 60.0 * cos_dec
         cddec = (clusters["dec"] - dec0) * 60.0
-        offsets += list(zip(cdra, cddec))
+        offsets += list(zip(cdra, cddec, strict=False))
         m500 = (
             pd.to_numeric(clusters["m500_msun"], errors="coerce")
             if "m500_msun" in clusters.columns
@@ -193,12 +193,13 @@ def plot_sightline(target_info: dict, galaxies_df: pd.DataFrame, output_path: st
             label="Foreground Clusters",
             zorder=7,
         )
-        for (idx, row), x, y in zip(clusters.iterrows(), cdra, cddec):
+        for (idx, row), x, y in zip(clusters.iterrows(), cdra, cddec, strict=False):
             mass = m500.loc[idx]
-            # Dashed R200 ring only when a catalog mass exists (R200 from M200 =
-            # CLUSTER_M500_TO_M200 * M500); unmassed NED clusters stay unsized markers.
+            # Dashed R200 ring only when a catalog mass exists; convert the
+            # catalog M500 to M200 with the same NFW convention as the DM model.
             if pd.notna(mass) and mass > 0:
-                r200 = r_delta_kpc(CLUSTER_M500_TO_M200 * float(mass), float(row["z"]), 200.0)
+                m200 = m200_from_m500_nfw(float(mass), float(row["z"]))
+                r200 = r_delta_kpc(m200, float(row["z"]), 200.0)
                 theta = get_angular_radius(float(row["z"]), r200).to(u.arcmin).value
                 ax.add_artist(
                     plt.Circle(
