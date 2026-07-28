@@ -17,6 +17,8 @@ from pathlib import Path
 import numpy as np
 import yaml
 
+from flits.resources import path as resource_path
+
 from .codetection_plots import BandSpectrum
 
 __all__ = [
@@ -53,7 +55,7 @@ BURST_ORDER: tuple[str, ...] = (
 )
 
 _REPO = Path(__file__).resolve().parents[2]
-_TEL_CFG = _REPO / "scattering/configs/telescopes.yaml"
+_TEL_CFG = resource_path("scattering_telescopes.yaml")
 _TOA_JSON = _REPO / "crossmatching/toa_crossmatch_results.json"
 _TARGET_DT_MS = float(yaml.safe_load(_TEL_CFG.read_text())["dsa"]["dt_ms_raw"])
 SUBBURST_PAD_MS = 3.0

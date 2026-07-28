@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from flits.batch import codetection_data
 from flits.resources import path
 from galaxies.foreground import sightline_budget
 
@@ -16,6 +17,11 @@ def test_installed_generic_resources_are_available():
         assert isinstance(resource, Path)
         assert resource.is_file()
         assert resource.stat().st_size > 0
+
+
+def test_codetection_data_uses_installed_telescope_resource():
+    assert codetection_data._TEL_CFG == path("scattering_telescopes.yaml")
+    assert codetection_data._TARGET_DT_MS > 0
 
 
 def test_budget_forwards_explicit_census_inputs(monkeypatch, tmp_path):
