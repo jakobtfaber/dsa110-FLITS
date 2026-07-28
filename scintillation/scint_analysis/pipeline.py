@@ -53,10 +53,13 @@ class ScintillationAnalysis:
         `analysis` block plus input path and downsample factors errs toward
         recomputation, never toward stale reuse.
         """
+        from .acf_mask_provenance import configured_mask_cache_identity
+
         relevant = {
             "input_data_path": self.config.get("input_data_path"),
             "downsample": self.config.get("pipeline_options", {}).get("downsample", {}),
             "analysis": self.config.get("analysis", {}),
+            "bad_channel_artifact_bytes": configured_mask_cache_identity(self.config),
         }
         payload = json.dumps(relevant, sort_keys=True, default=str)
         return hashlib.sha256(payload.encode()).hexdigest()[:12]
@@ -142,6 +145,9 @@ class ScintillationAnalysis:
         if os.path.exists(processed_spec_cache) and not self.config.get("pipeline_options", {}).get(
             "force_recalc", False
         ):
+            from .acf_mask_provenance import validate_configured_effective_mask
+
+            validate_configured_effective_mask(self.config)
             log.info(f"Loading cached processed spectrum from {processed_spec_cache}")
             with open(processed_spec_cache, "rb") as f:
                 # The cache now only needs to store the masked spectrum
@@ -157,6 +163,9 @@ class ScintillationAnalysis:
 
             # --------------------------------------------------------------------
             spectrum = core.DynamicSpectrum.from_numpy_file(self.config["input_data_path"])
+            from .acf_mask_provenance import apply_configured_effective_mask
+
+            spectrum = apply_configured_effective_mask(spectrum, self.config)
             # Gapped-grid regularization (analysis.grid_regularization) must run
             # before downsampling and shares gating with the freya CLI path so a
             # config enabling it cannot be silently bypassed here (issue #120).
@@ -580,6 +589,9 @@ class ScintillationAnalysis:
         if os.path.exists(acf_results_cache) and not self.config.get("pipeline_options", {}).get(
             "force_recalc", False
         ):
+            from .acf_mask_provenance import validate_configured_effective_mask
+
+            validate_configured_effective_mask(self.config)
             log.info(f"Loading cached ACF results from {acf_results_cache}")
             with open(acf_results_cache, "rb") as f:
                 self.acf_results = pickle.load(f)

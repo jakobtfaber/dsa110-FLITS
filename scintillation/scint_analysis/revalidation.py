@@ -81,18 +81,26 @@ def _acf_masked(x, keep, denom, maxlag):
     n = len(x)
     maxlag = int(min(maxlag, n - 1))
     out = np.zeros(maxlag)
+    counts = np.zeros(maxlag, dtype=np.int64)
     for k in range(1, maxlag + 1):
         m = keep[: n - k] * keep[k:]
         sm = m.sum()
+        counts[k - 1] = int(sm)
         if sm > 0:
             out[k - 1] = np.nansum(x[: n - k] * x[k:] * m) / (sm * denom)
         else:
             out[k - 1] = np.nan
-    return out
+    return out, counts
 
 
 def _mean_normalized_acf(
-    spec, keep, channel_width_mhz, max_lag_mhz=None, first_lag=1, offspec_mean=None
+    spec,
+    keep,
+    channel_width_mhz,
+    max_lag_mhz=None,
+    first_lag=1,
+    offspec_mean=None,
+    return_support=False,
 ):
     """Two-sided mean-normalized ACF + lags in MHz, low lags omitted.
 
@@ -123,13 +131,24 @@ def _mean_normalized_acf(
     if max_lag_mhz is None:
         max_lag_mhz = 0.25 * band
     maxlag = max(2, int(max_lag_mhz / channel_width_mhz))
-    acf_all = _acf_masked(x, keep, denom, maxlag)  # lags 1..maxlag
+    acf_all, count_all = _acf_masked(x, keep, denom, maxlag)  # lags 1..maxlag
     drop = max(0, int(first_lag) - 1)  # extra leading lags to omit (lag 0 already gone)
     acf_pos = acf_all[drop:]
+    count_pos = count_all[drop:]
+    possible_pos = n - np.arange(1 + drop, len(acf_all) + 1)
+    weight_pos = count_pos / possible_pos
     lags_pos = np.arange(1 + drop, len(acf_all) + 1) * channel_width_mhz
     lags = np.concatenate((-lags_pos[::-1], lags_pos))
     acf = np.concatenate((acf_pos[::-1], acf_pos))
     peak = float(acf_pos[0]) if len(acf_pos) else np.nan
+    if return_support:
+        return (
+            lags,
+            acf,
+            peak,
+            np.concatenate((count_pos[::-1], count_pos)),
+            np.concatenate((weight_pos[::-1], weight_pos)),
+        )
     return lags, acf, peak
 
 

@@ -664,6 +664,9 @@ def prepare_spectrum_from_config(
     f_factor = int(ds_cfg.get("f_factor", 1))
     t_factor = int(ds_cfg.get("t_factor", 1))
     spectrum = DynamicSpectrum.from_numpy_file(cfg["input_data_path"])
+    from .acf_mask_provenance import apply_configured_effective_mask
+
+    spectrum = apply_configured_effective_mask(spectrum, cfg)
     spectrum = apply_grid_regularization(spectrum, cfg)
     spectrum = spectrum.downsample(f_factor, t_factor)
     masked = spectrum.mask_rfi(cfg)

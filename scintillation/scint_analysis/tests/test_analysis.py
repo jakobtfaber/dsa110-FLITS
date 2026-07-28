@@ -179,6 +179,59 @@ class TestACFCalculation:
         
         assert result is None
 
+    def test_acf_reports_exact_surviving_pairs_and_weights(self):
+        values = np.arange(24, dtype=float) + 10.0
+        mask = np.zeros(24, dtype=bool)
+        mask[[2, 7, 8, 19]] = True
+        spectrum = np.ma.MaskedArray(values, mask=mask)
+
+        result = calculate_acf(
+            spectrum, channel_width_mhz=0.25, max_lag_bins=5
+        )
+
+        expected = np.array(
+            [
+                np.sum(~(mask[:-lag] | mask[lag:]))
+                for lag in range(1, 5)
+            ]
+        )
+        assert_allclose(result.lags, [-1.0, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1.0])
+        assert np.array_equal(result.support_counts, np.r_[expected[::-1], expected])
+        possible = np.array([24 - lag for lag in range(1, 5)])
+        assert_allclose(
+            result.effective_weights,
+            np.r_[(expected / possible)[::-1], expected / possible],
+        )
+        assert result.support_valid
+
+    def test_masked_extreme_value_cannot_leak_into_acf(self):
+        values = np.linspace(10.0, 30.0, 24)
+        baseline = np.ma.MaskedArray(values, mask=np.arange(24) == 4)
+        extreme = baseline.copy()
+        extreme.data[4] = 1e300
+
+        left = calculate_acf(baseline, 0.25, max_lag_bins=5)
+        right = calculate_acf(extreme, 0.25, max_lag_bins=5)
+
+        assert_allclose(left.acf, right.acf)
+        assert np.array_equal(left.support_counts, right.support_counts)
+
+    def test_declared_minimum_support_fails_closed(self):
+        values = np.arange(24, dtype=float) + 10.0
+        mask = np.ones(24, dtype=bool)
+        mask[:20] = False
+        spectrum = np.ma.MaskedArray(values, mask=mask)
+
+        result = calculate_acf(
+            spectrum,
+            0.25,
+            max_lag_bins=5,
+            min_support_pairs=20,
+            min_support_fraction=0.9,
+        )
+
+        assert result is None
+
     def test_acf_max_lag_bins(self, correlated_spectrum):
         """Test max_lag_bins parameter."""
         result_full = calculate_acf(correlated_spectrum, channel_width_mhz=0.39)

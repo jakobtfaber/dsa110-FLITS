@@ -160,6 +160,7 @@ if _NUMBA:
         nlag = lags.size
         acf_vals = np.empty(nlag, dtype=np.float64)
         stat_errs = np.empty(nlag, dtype=np.float64)
+        support_counts = np.empty(nlag, dtype=np.int64)
         for i in range(nlag):
             lag = lags[i]
             prod = x[:-lag] * x[lag:]
@@ -171,6 +172,7 @@ if _NUMBA:
                     count += 1
                     sum_prod += p
                     sum_sq += p * p
+            support_counts[i] = count
             if count > 1:
                 mean = sum_prod / count
                 acf_vals[i] = mean / denom
@@ -179,12 +181,13 @@ if _NUMBA:
             else:
                 acf_vals[i] = np.nan
                 stat_errs[i] = np.nan
-        return acf_vals, stat_errs
+        return acf_vals, stat_errs, support_counts
 
     @nb.njit(cache=True)
     def _acf_noerrs(x, lags, denom):
         nlag = lags.size
         acf_vals = np.empty(nlag, dtype=np.float64)
+        support_counts = np.empty(nlag, dtype=np.int64)
         for i in range(nlag):
             lag = lags[i]
             prod = x[:-lag] * x[lag:]
@@ -194,20 +197,23 @@ if _NUMBA:
                 if not np.isnan(p):
                     count += 1
                     sum_prod += p
+            support_counts[i] = count
             if count > 1:
                 acf_vals[i] = sum_prod / (count * denom)
             else:
                 acf_vals[i] = np.nan
-        return acf_vals
+        return acf_vals, support_counts
 else:
 
     def _acf_with_errs(x, lags, denom):
         acf_vals = np.zeros(len(lags))
         stat_errs = np.zeros(len(lags))
+        support_counts = np.zeros(len(lags), dtype=np.int64)
         for i, lag in enumerate(lags):
             prod = x[:-lag] * x[lag:]
             valid_products = prod[~np.isnan(prod)]
             num_valid = len(valid_products)
+            support_counts[i] = num_valid
             if num_valid > 1:
                 acf_vals[i] = np.mean(valid_products) / denom
                 var_of_products = np.var(valid_products, ddof=1)
@@ -216,19 +222,21 @@ else:
             else:
                 acf_vals[i] = np.nan
                 stat_errs[i] = np.nan
-        return acf_vals, stat_errs
+        return acf_vals, stat_errs, support_counts
 
     def _acf_noerrs(x, lags, denom):
         acf_vals = np.zeros(len(lags))
+        support_counts = np.zeros(len(lags), dtype=np.int64)
         for i, lag in enumerate(lags):
             v1, v2 = x[:-lag], x[lag:]
             prod = v1 * v2
             num_valid = np.sum(~np.isnan(prod))
+            support_counts[i] = num_valid
             if num_valid > 1:
                 acf_vals[i] = np.nansum(prod) / (num_valid * denom)
             else:
                 acf_vals[i] = np.nan
-        return acf_vals
+        return acf_vals, support_counts
 
 
 def _bandwidth_fields(gamma_hwhm_mhz, gamma_err_mhz=None):
@@ -249,6 +257,8 @@ def calculate_acf(
     off_burst_spectrum_mean=None,
     max_lag_bins=None,
     first_fit_lag=1,
+    min_support_pairs=2,
+    min_support_fraction=0.0,
 ):
     """
     Calculates the ACF and its diagonal errors, including statistical and
@@ -300,9 +310,19 @@ def calculate_acf(
         denom = 1.0
 
     x = spectrum_1d.filled(np.nan) - mean_on
-    lags = np.arange(max(1, int(first_fit_lag)), max_lag_bins)
+    lags = np.arange(
+        max(1, int(first_fit_lag)),
+        min(int(max_lag_bins), len(spectrum_1d)),
+    )
 
-    acf_vals, stat_errs = _acf_with_errs(x, lags, denom)
+    acf_vals, stat_errs, support_counts = _acf_with_errs(x, lags, denom)
+    possible_pairs = len(spectrum_1d) - lags
+    effective_weights = support_counts / possible_pairs
+    support_ok = (support_counts >= int(min_support_pairs)) & (
+        effective_weights >= float(min_support_fraction)
+    )
+    acf_vals[~support_ok] = np.nan
+    stat_errs[~support_ok] = np.nan
 
     # --- 2. Finite Scintle Error Calculation ---
     # Use the calculated ACF to estimate the decorrelation bandwidth (Δν_DC)
@@ -349,8 +369,20 @@ def calculate_acf(
 
     # Combine the two error sources in quadrature to get the total diagonal error
     total_diag_err = np.sqrt(full_stat_err**2 + full_finite_err**2)
-
-    return ACF(full_acf, full_lags, acf_err=total_diag_err)
+    retained_counts = support_counts[clean_mask]
+    retained_weights = effective_weights[clean_mask]
+    return ACF(
+        full_acf,
+        full_lags,
+        acf_err=total_diag_err,
+        support_counts=np.concatenate((retained_counts[::-1], retained_counts)),
+        effective_weights=np.concatenate((retained_weights[::-1], retained_weights)),
+        support_threshold={
+            "min_pairs": int(min_support_pairs),
+            "min_fraction": float(min_support_fraction),
+        },
+        support_valid=bool(np.all(support_ok)),
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -542,14 +574,26 @@ def calculate_acf_noerrs(
     if max_lag_bins is None:
         max_lag_bins = n_chan
 
-    lags = np.arange(max(1, int(first_fit_lag)), max_lag_bins)
-    acf_vals = _acf_noerrs(x, lags, denom)
+    lags = np.arange(
+        max(1, int(first_fit_lag)),
+        min(int(max_lag_bins), n_chan),
+    )
+    acf_vals, support_counts = _acf_noerrs(x, lags, denom)
 
     pos_lags_mhz = lags * channel_width_mhz
     full_acf = np.concatenate((acf_vals[::-1], acf_vals))
     full_lags = np.concatenate((-pos_lags_mhz[::-1], pos_lags_mhz))
 
-    return ACF(full_acf, full_lags)
+    possible_pairs = n_chan - lags
+    effective_weights = support_counts / possible_pairs
+    return ACF(
+        full_acf,
+        full_lags,
+        support_counts=np.concatenate((support_counts[::-1], support_counts)),
+        effective_weights=np.concatenate((effective_weights[::-1], effective_weights)),
+        support_threshold={"min_pairs": 2, "min_fraction": 0.0},
+        support_valid=bool(np.all(support_counts >= 2)),
+    )
 
 
 def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=None):
@@ -576,6 +620,8 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
     use_snr = acf_cfg.get("use_snr_subbanding", False)
     max_lag_mhz_global = acf_cfg.get("max_lag_mhz", 45.0)
     first_fit_lag = acf_cfg.get("first_fit_lag", 1)
+    min_support_pairs = int(acf_cfg.get("min_support_pairs", 2))
+    min_support_fraction = float(acf_cfg.get("min_support_fraction", 0.0))
 
     # Self‑noise width and optional off‑burst reference
     if config.get("analysis", {}).get("self_noise", {}).get("disable", False):
@@ -607,6 +653,13 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         "subband_center_freqs_mhz": [],
         "subband_channel_widths_mhz": [],
         "subband_num_channels": [],
+        "subband_support_counts": [],
+        "subband_effective_weights": [],
+        "support_threshold": {
+            "min_pairs": min_support_pairs,
+            "min_fraction": min_support_fraction,
+            "software_qualified_only": True,
+        },
         # (start, end) channel-index slice for each stored sub-band, so a
         # downstream off-pulse ACF null (chime_artifact_guards) can re-slice the
         # off-pulse spectrum on the IDENTICAL channel boundaries the on-pulse
@@ -673,6 +726,8 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
             off_burst_spectrum_mean=sub_off_mean,
             max_lag_bins=max_lag_bins_sub,
             first_fit_lag=first_fit_lag,
+            min_support_pairs=min_support_pairs,
+            min_support_fraction=min_support_fraction,
         )
         if not acf_obj:
             start_idx = end_idx
@@ -701,6 +756,8 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         results["subband_acfs"].append(acf_obj.acf)
         results["subband_lags_mhz"].append(acf_obj.lags)
         results["subband_acfs_err"].append(acf_obj.err)
+        results["subband_support_counts"].append(acf_obj.support_counts)
+        results["subband_effective_weights"].append(acf_obj.effective_weights)
         results["subband_center_freqs_mhz"].append(float(np.mean(sub_freqs)))
         results["subband_channel_widths_mhz"].append(chan_width)
         results["subband_num_channels"].append(sub_spec.count())
@@ -2278,6 +2335,8 @@ def analyze_intra_pulse_scintillation(masked_spectrum, burst_lims, config, noise
             off_burst_spectrum_mean=sub_off_mean,
             max_lag_bins=max_lag_bins_sub,
             first_fit_lag=acf_config.get("first_fit_lag", 1),
+            min_support_pairs=int(acf_config.get("min_support_pairs", 2)),
+            min_support_fraction=float(acf_config.get("min_support_fraction", 0.0)),
         )
         if not acf_obj:
             continue

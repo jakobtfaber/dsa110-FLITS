@@ -19,6 +19,7 @@ sys.path.insert(0, str(_test_dir.parent.parent))  # scintillation dir
 import numpy as np
 
 from scint_analysis.revalidation import (
+    _mean_normalized_acf,
     emission_size,
     fit_two_screen_acf,
     off_pulse_mask,
@@ -26,6 +27,22 @@ from scint_analysis.revalidation import (
     revalidate_dnu,
     rfi_flag,
 )
+
+
+def test_reference_acf_exposes_exact_lag_support():
+    spec = np.arange(10, dtype=float) + 5.0
+    keep = np.array([1, 1, 0, 1, 1, 1, 0, 1, 1, 1], dtype=float)
+    lags, _acf, _peak, counts, weights = _mean_normalized_acf(
+        spec,
+        keep,
+        channel_width_mhz=0.5,
+        max_lag_mhz=2.0,
+        return_support=True,
+    )
+    expected = np.array([5, 4, 4, 5])
+    assert np.array_equal(counts, np.r_[expected[::-1], expected])
+    assert np.allclose(weights, np.r_[(expected / [9, 8, 7, 6])[::-1], expected / [9, 8, 7, 6]])
+    assert np.allclose(lags, [-2.0, -1.5, -1.0, -0.5, 0.5, 1.0, 1.5, 2.0])
 
 
 def test_rfi_spike_flagged():

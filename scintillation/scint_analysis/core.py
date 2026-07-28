@@ -453,7 +453,17 @@ class ACF:
     Container for a 1-D spectral autocorrelation function.
     """
 
-    def __init__(self, acf_data, lags_mhz, acf_err=None):
+    def __init__(
+        self,
+        acf_data,
+        lags_mhz,
+        acf_err=None,
+        *,
+        support_counts=None,
+        effective_weights=None,
+        support_threshold=None,
+        support_valid=None,
+    ):
         # --- validate & coerce to NumPy arrays
         acf_data = np.asarray(acf_data, dtype=float)
         lags_mhz = np.asarray(lags_mhz, dtype=float)
@@ -466,10 +476,22 @@ class ACF:
             raise ValueError("acf_data and lags_mhz must have the same length.")
         if acf_err is not None and len(acf_err) != len(acf_data):
             raise ValueError("acf_err must match acf_data length.")
+        if support_counts is not None and len(support_counts) != len(acf_data):
+            raise ValueError("support_counts must match acf_data length.")
+        if effective_weights is not None and len(effective_weights) != len(acf_data):
+            raise ValueError("effective_weights must match acf_data length.")
 
         self.acf  = acf_data
         self.lags = lags_mhz
         self.err  = acf_err          # may be None
+        self.support_counts = (
+            None if support_counts is None else np.asarray(support_counts, dtype=np.int64)
+        )
+        self.effective_weights = (
+            None if effective_weights is None else np.asarray(effective_weights, dtype=float)
+        )
+        self.support_threshold = support_threshold
+        self.support_valid = support_valid
 
     # optional convenience: length & repr
     def __len__(self):
