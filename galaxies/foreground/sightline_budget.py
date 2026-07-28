@@ -464,6 +464,7 @@ def foreground_unified(
     results_dir: str = "results",
     enrich: bool = False,
     registry_path: str | Path | None = None,
+    census_data_dir: str | Path | None = None,
     use_registry: bool = True,
 ) -> pd.DataFrame:
     """The budget's foreground set for one sightline as unified records.
@@ -497,7 +498,9 @@ def foreground_unified(
             registry_to_matches,
         )
 
-        if name.lower() in census_roster_nicknames():
+        census_dir = Path(census_data_dir) if census_data_dir is not None else None
+        roster_path = census_dir / "frozen_census/bursts.csv" if census_dir else None
+        if name.lower() in census_roster_nicknames(roster_path):
             # Census burst: the registry and its adjudication inputs are
             # committed repo data and REQUIRED -- any load failure raises
             # rather than falling back to the revoked legacy candidate lists
@@ -511,6 +514,21 @@ def foreground_unified(
                 z_frb,
                 sight_ra_deg=sight_ra,
                 sight_dec_deg=sight_dec,
+                adjudicated_masses_path=(
+                    census_dir / "census_masses/halo_rvir_ADJUDICATED.csv"
+                    if census_dir
+                    else None
+                ),
+                duplicates_path=(
+                    census_dir / "census_masses/census_duplicates.csv"
+                    if census_dir
+                    else None
+                ),
+                mass_overrides_path=(
+                    census_dir / "census_masses/mass_overrides.csv"
+                    if census_dir
+                    else None
+                ),
             )
             registry_authoritative = True
         else:
@@ -547,6 +565,7 @@ def build_sightline_budget(
     tau_obs: float | None = None,
     dm_mw_halo: float = DM_MW_HALO,
     registry_path: str | Path | None = None,
+    census_data_dir: str | Path | None = None,
     use_registry: bool = True,
 ) -> dict:
     """Assemble the full DM + scattering budget for one FRB sightline."""
@@ -611,6 +630,7 @@ def build_sightline_budget(
         results_dir=results_dir,
         enrich=enrich,
         registry_path=registry_path,
+        census_data_dir=census_data_dir,
         use_registry=use_registry,
     )
     if len(unified):
@@ -842,6 +862,8 @@ def build_all_budgets(
     dm_mw_fn: Callable | None = None,
     dm_obs_map: Mapping[str, float] | None = None,
     tau_obs_map: Mapping[str, float] | None = None,
+    registry_path: str | Path | None = None,
+    census_data_dir: str | Path | None = None,
 ) -> pd.DataFrame:
     """Build the DM + scattering budget for every configured sightline."""
     if targets is None:
@@ -863,6 +885,8 @@ def build_all_budgets(
                 dm_mw_fn=dm_mw_fn,
                 dm_obs=dm_obs,
                 tau_obs=tau_obs,
+                registry_path=registry_path,
+                census_data_dir=census_data_dir,
             )
         )
     return pd.DataFrame(rows)
@@ -1127,6 +1151,7 @@ def main(argv=None):
         default=os.path.join(base_dir, "scattering", "configs", "bursts", "chime"),
     )
     parser.add_argument("--bursts-dir")
+    parser.add_argument("--census-data-dir", required=True)
     args = parser.parse_args(argv)
     results_dir = args.results_dir
     configs_dir = args.configs_dir
@@ -1134,7 +1159,14 @@ def main(argv=None):
     os.makedirs(results_dir, exist_ok=True)
 
     df = build_all_budgets(
-        results_dir=results_dir, configs_dir=configs_dir, bursts_dir=bursts_dir, enrich=False
+        results_dir=results_dir,
+        configs_dir=configs_dir,
+        bursts_dir=bursts_dir,
+        enrich=False,
+        registry_path=os.path.join(
+            args.census_data_dir, "intervening_census_registry.csv"
+        ),
+        census_data_dir=args.census_data_dir,
     )
 
     # Emit TNS designations (not internal nicknames) in the CSV, table, and figure (#26).

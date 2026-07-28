@@ -80,11 +80,25 @@ DEFAULT_RESULTS_DIR = os.path.join(_REPO, "results")
 DEFAULT_OUT_DIR = os.path.join(os.path.dirname(_REPO), "figures")
 
 
-def dominant_foreground_halo(name: str, ra: str, dec: str, z_frb: float, results_dir: str) -> dict:
+def dominant_foreground_halo(
+    name: str,
+    ra: str,
+    dec: str,
+    z_frb: float,
+    results_dir: str,
+    census_data_dir: str,
+) -> dict:
     """Return the dominant foreground halo record + sightline DM sum for a galaxy."""
     sc = SkyCoord(ra, dec, unit=(u.hourangle, u.deg))
     uni = foreground_unified(
-        name, z_frb, sc.ra.deg, sc.dec.deg, results_dir=results_dir, enrich=False
+        name,
+        z_frb,
+        sc.ra.deg,
+        sc.dec.deg,
+        results_dir=results_dir,
+        enrich=False,
+        registry_path=os.path.join(census_data_dir, "intervening_census_registry.csv"),
+        census_data_dir=census_data_dir,
     )
     # Budget-wide DM sum (all foreground rows, clusters included) for the
     # reproduction self-check against results/sightline_dm_scattering_budget.csv.
@@ -163,12 +177,16 @@ def select_gal_targets(results_dir: str, n: int = N_GAL_PANELS) -> list[tuple]:
     return [(name, load_tns_name(name), ra, dec, z, row) for _, name, ra, dec, z, row in ranked[:n]]
 
 
-def make_galaxy_figure(targets: list[tuple], results_dir: str):
+def make_galaxy_figure(
+    targets: list[tuple], results_dir: str, census_data_dir: str
+):
     """1xN mNFW hot-halo DM(b) panels for the dominant foreground galaxies."""
     fig, axes = plt.subplots(1, len(targets), figsize=(13.4, 4.5), dpi=150, facecolor=BG_LIGHT)
     for ax, (name, tns, ra, dec, z_frb, _row) in zip(np.atleast_1d(axes).ravel(), targets):
         ax.set_facecolor(BG_LIGHT)
-        d = dominant_foreground_halo(name, ra, dec, z_frb, results_dir)
+        d = dominant_foreground_halo(
+            name, ra, dec, z_frb, results_dir, census_data_dir
+        )
         rvir, b, mh, zg = d["r_vir"], d["impact_kpc"], d["m_halo"], d["z_gal"]
         b_cap = INTERIOR_B_OVER_RVIR * rvir
         interior = d["b_over_rvir"] < INTERIOR_B_OVER_RVIR
@@ -391,6 +409,7 @@ def main():
         help="dir of *_galaxies.csv + sightline_dm_scattering_budget.csv",
     )
     p.add_argument("--out-dir", default=DEFAULT_OUT_DIR, help="figure output directory")
+    p.add_argument("--census-data-dir", required=True)
     args = p.parse_args()
 
     targets = select_gal_targets(args.results_dir)
@@ -398,7 +417,12 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
 
     for fig, stem in (
-        (make_galaxy_figure(targets, args.results_dir), "galaxies_cgm"),
+        (
+            make_galaxy_figure(
+                targets, args.results_dir, args.census_data_dir
+            ),
+            "galaxies_cgm",
+        ),
         (make_cluster_figure(), "clusters_icm"),
     ):
         for ext in ("pdf", "svg", "png"):

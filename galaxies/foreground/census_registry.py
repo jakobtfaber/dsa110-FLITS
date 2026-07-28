@@ -302,7 +302,7 @@ def load_adjudicated_masses(path: Path | str | None = None) -> pd.DataFrame:
     return df
 
 
-def census_roster_nicknames() -> frozenset[str]:
+def census_roster_nicknames(path: Path | str | None = None) -> frozenset[str]:
     """Lowercased nicknames of the census bursts (frozen V4 roster).
 
     The registry is *authoritative* for these sightlines: a burst on this
@@ -312,7 +312,7 @@ def census_roster_nicknames() -> frozenset[str]:
     (synthetic test bursts, future events) are unknown to the census and may
     use their own acquisition paths.
     """
-    bursts_csv = DATA_DIR / "frozen_census" / "bursts.csv"
+    bursts_csv = Path(path) if path is not None else DATA_DIR / "frozen_census" / "bursts.csv"
     df = pd.read_csv(bursts_csv)
     return frozenset(str(n).lower() for n in df["nickname"])
 
@@ -323,6 +323,9 @@ def registry_to_matches(
     z_frb: float,
     *,
     adjudicated_masses: pd.DataFrame | None = None,
+    adjudicated_masses_path: Path | str | None = None,
+    duplicates_path: Path | str | None = None,
+    mass_overrides_path: Path | str | None = None,
     sight_ra_deg: float | None = None,
     sight_dec_deg: float | None = None,
 ) -> pd.DataFrame:
@@ -347,7 +350,7 @@ def registry_to_matches(
     # (review finding on this PR: a swallowed FileNotFoundError here would
     # un-dedupe the census and drop every mass adjudication without warning).
     if adjudicated_masses is None:
-        adjudicated_masses = load_adjudicated_masses()
+        adjudicated_masses = load_adjudicated_masses(adjudicated_masses_path)
     adj_by_key: dict[tuple[str, str], dict] = {}
     for _, a in adjudicated_masses.iterrows():
         logm = pd.to_numeric(a.get("logM_adj"), errors="coerce")
@@ -356,12 +359,12 @@ def registry_to_matches(
                 "logM_adj": float(logm),
                 "mass_source_adj": str(a.get("mass_source", "census_adjudicated")),
             }
-    for _, o in load_mass_overrides().iterrows():
+    for _, o in load_mass_overrides(mass_overrides_path).iterrows():
         adj_by_key[(str(o.nickname).lower(), str(o.obj))] = {
             "logM_adj": float(o.logM_adj),
             "mass_source_adj": str(o.mass_source),
         }
-    duplicates = load_census_duplicates()
+    duplicates = load_census_duplicates(duplicates_path)
 
     sub = registry[
         (registry.nickname.str.lower() == nickname.lower())
