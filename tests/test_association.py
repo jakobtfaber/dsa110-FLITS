@@ -221,8 +221,6 @@ def test_report_pillar2_active_8_of_12_with_floor():
     # genuine non-detections (<3 sub-bands @ S/N>=4). Pillar 4 stays 12/12.
     chime = ROOT / "crossmatching/chime_side_inputs.json"
     if not chime.exists():
-        import pytest
-
         pytest.skip("chime_side_inputs.json not present")
     report = build_association_report(
         ROOT / "crossmatching/notebook_reproduction_fixture.json", chime_inputs_path=chime
@@ -241,5 +239,12 @@ def test_report_pillar2_active_8_of_12_with_floor():
             assert b["dm_agreement"]["consistent"] is None
             assert b["dm_confidence"] == "unconstrained"
     assert sum(b["dm_agreement"]["consistent"] is True for b in report["bursts"]) == 8
+    assert sum(b["chance_coincidence_class"] == "dm_position_time" for b in report["bursts"]) == 8
+    assert sum(b["chance_coincidence_class"] == "position_time" for b in report["bursts"]) == 4
+    for b in report["bursts"]:
+        if b["chance_coincidence_class"] == "position_time":
+            assert b["chance_coincidence_f_DM"] == 1.0
+            assert b["chance_coincidence_P"] == pytest.approx(4.40707975496297e-7)
+    assert report["expected_chance_associations"] == pytest.approx(1.801122544244318e-6)
     # Pillar 4 intact: all 12 CHIME positions still consistent with DSA
     assert all(b["position"]["consistent"] is True for b in report["bursts"])
