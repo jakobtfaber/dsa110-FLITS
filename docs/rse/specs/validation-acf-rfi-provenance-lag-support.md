@@ -23,7 +23,7 @@ Cache names bind current source-valid, owner-map, effective-mask, mapping, and
 provenance bytes. Cached spectrum and ACF loads revalidate the configured
 artifacts.
 
-Tests cover production upchannelization factors 16, 64, 128, 256, and 512;
+Tests cover candidate upchannelization factors 16, 32, 64, 128, 256, and 512;
 frequency averaging; partial and fully masked blocks; extreme-value
 non-leakage; exact lag values, pair counts, and weights; missing or altered
 provenance; axis/order failures; cache invalidation; and both preparation

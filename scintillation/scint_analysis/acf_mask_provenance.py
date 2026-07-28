@@ -11,6 +11,9 @@ import numpy as np
 
 from .core import DynamicSpectrum
 
+SUPPORTED_CHIME_UPCHANNEL_FACTORS = (16, 32, 64, 128, 256, 512)
+UPCHANNEL_PRODUCT_SCHEMA = "faber2026-chime-upchannel-product-v1"
+
 
 class ProvenanceError(ValueError):
     """The configured mask cannot be proven to belong to this spectrum."""
@@ -30,6 +33,177 @@ def _array_sha256(value: np.ndarray) -> str:
     return hashlib.sha256(buffer.getvalue()).hexdigest()
 
 
+def _configured_upchannel_product(config: dict) -> dict | None:
+    return config.get("analysis", {}).get("upchannel_product")
+
+
+def configured_upchannel_product_cache_identity(config: dict) -> dict:
+    """Return factor-tagged product bytes and identities for cache keys."""
+    cfg = _configured_upchannel_product(config)
+    if not cfg:
+        return {"configured": False}
+    manifest_path = cfg.get("manifest_path")
+    try:
+        manifest_hash = _file_sha256(manifest_path) if manifest_path else None
+    except OSError:
+        manifest_hash = "missing"
+    return {
+        "configured": True,
+        "required": bool(cfg.get("required", False)),
+        "manifest_sha256": manifest_hash,
+        "expected_manifest_sha256": cfg.get("expected_manifest_sha256"),
+        "event": cfg.get("event"),
+        "instrument": cfg.get("instrument"),
+        "upchannel_factor": cfg.get("upchannel_factor"),
+        "dm_provenance_sha256": cfg.get("dm_provenance_sha256"),
+        "worker_sha256": cfg.get("worker_sha256"),
+        "container_identity": cfg.get("container_identity"),
+    }
+
+
+def validate_configured_upchannel_product(config: dict) -> dict | None:
+    """Fail closed when an ACF input is not the declared immutable product."""
+    cfg = _configured_upchannel_product(config)
+    if not cfg:
+        return None
+    required_fields = (
+        "manifest_path",
+        "expected_manifest_sha256",
+        "event",
+        "instrument",
+        "upchannel_factor",
+        "dm_provenance_sha256",
+        "worker_sha256",
+        "container_identity",
+    )
+    missing = [field for field in required_fields if not cfg.get(field)]
+    if missing:
+        if cfg.get("required", False):
+            raise ProvenanceError(
+                "required upchannel-product provenance missing: " + ", ".join(missing)
+            )
+        return None
+    manifest_path = Path(cfg["manifest_path"])
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ProvenanceError(f"cannot read upchannel product manifest: {exc}") from exc
+    if _file_sha256(manifest_path) != cfg["expected_manifest_sha256"]:
+        raise ProvenanceError("upchannel product manifest hash mismatch")
+    if manifest.get("schema") != UPCHANNEL_PRODUCT_SCHEMA:
+        raise ProvenanceError("unsupported upchannel product manifest schema")
+    if manifest.get("status") != "complete" or manifest.get("mode") != "authoritative":
+        raise ProvenanceError("upchannel product is not complete authoritative output")
+
+    identity = manifest.get("identity", {})
+    dm_identity = identity.get("dm_provenance", {})
+    expected_identity = {
+        "event": cfg["event"],
+        "instrument": cfg["instrument"],
+        "upchannel_factor": int(cfg["upchannel_factor"]),
+    }
+    for field, expected in expected_identity.items():
+        if identity.get(field) != expected:
+            raise ProvenanceError(f"upchannel product {field} mismatch")
+    if identity["upchannel_factor"] not in SUPPORTED_CHIME_UPCHANNEL_FACTORS:
+        raise ProvenanceError("unsupported upchannel factor in product manifest")
+    factor = int(identity["upchannel_factor"])
+    if (
+        dm_identity.get("sha256") != cfg["dm_provenance_sha256"]
+        or dm_identity.get("ratification_status") != "ratified"
+    ):
+        raise ProvenanceError("ratified DM identity mismatch")
+    software = identity.get("software", {})
+    if software.get("worker_sha256") != cfg["worker_sha256"]:
+        raise ProvenanceError("upchannel worker identity mismatch")
+    if identity.get("container", {}).get("identity") != cfg["container_identity"]:
+        raise ProvenanceError("upchannel container identity mismatch")
+
+    products = manifest.get("products", {})
+    acf_entry = products.get("acf_input", {})
+    source_valid_entry = products.get("source_valid", {})
+    acf_input_path = (manifest_path.parent / str(acf_entry.get("path", ""))).resolve()
+    source_valid_path = (
+        manifest_path.parent / str(source_valid_entry.get("path", ""))
+    ).resolve()
+    configured_input = Path(config["input_data_path"]).resolve()
+    if acf_input_path != configured_input:
+        raise ProvenanceError("configured ACF input path does not match product manifest")
+    for label, path, entry in (
+        ("ACF input", acf_input_path, acf_entry),
+        ("source-valid", source_valid_path, source_valid_entry),
+    ):
+        try:
+            actual_hash = _file_sha256(path)
+        except OSError as exc:
+            raise ProvenanceError(f"cannot read {label} product: {exc}") from exc
+        if actual_hash != entry.get("sha256"):
+            raise ProvenanceError(f"{label} product hash mismatch")
+
+    expected = manifest.get("expected", {})
+    expected_shape = expected.get("shape")
+    if (
+        not isinstance(expected_shape, list)
+        or len(expected_shape) != 2
+        or expected_shape[0] != 1024 * factor
+        or not np.isclose(expected.get("df_mhz", np.nan), 0.390625 / factor)
+        or not np.isclose(expected.get("dt_s", np.nan), 2.56e-6 * 2 * factor)
+    ):
+        raise ProvenanceError("factor-specific product geometry is inconsistent")
+    try:
+        with np.load(acf_input_path, allow_pickle=False) as data:
+            power = np.asarray(data["power_2d"])
+            frequency = np.asarray(data["frequencies_mhz"], dtype=float)
+            times = np.asarray(data["times_s"], dtype=float)
+    except (OSError, KeyError, ValueError) as exc:
+        raise ProvenanceError(f"cannot inspect ACF input product: {exc}") from exc
+    if list(power.shape) != expected_shape:
+        raise ProvenanceError("ACF input shape does not match product manifest")
+    if frequency.shape != (power.shape[0],) or times.shape != (power.shape[1],):
+        raise ProvenanceError("ACF input coordinate shape mismatch")
+    if frequency.size > 1 and not np.isclose(
+        abs(np.median(np.diff(frequency))), expected.get("df_mhz"), rtol=1e-8
+    ):
+        raise ProvenanceError("ACF input frequency resolution mismatch")
+    if times.size > 1 and not np.isclose(
+        abs(np.median(np.diff(times))), expected.get("dt_s"), rtol=1e-8
+    ):
+        raise ProvenanceError("ACF input time resolution mismatch")
+
+    mask_cfg = config.get("analysis", {}).get("bad_channel_mask", {})
+    if not mask_cfg.get("required", False):
+        raise ProvenanceError("factor-tagged CHIME input requires a fail-closed bad-channel mask")
+    if Path(mask_cfg.get("source_valid_path", "")).resolve() != source_valid_path:
+        raise ProvenanceError("bad-channel mask uses the wrong source-valid product")
+    try:
+        mapping_record = json.loads(
+            Path(mask_cfg["provenance_path"]).read_text(encoding="utf-8")
+        )
+    except (KeyError, OSError, json.JSONDecodeError) as exc:
+        raise ProvenanceError(
+            f"factor-tagged CHIME input requires mapping provenance: {exc}"
+        ) from exc
+    product_binding = mapping_record.get("upchannel_product", {})
+    if (
+        product_binding.get("manifest_sha256") != cfg["expected_manifest_sha256"]
+        or product_binding.get("upchannel_factor") != factor
+        or product_binding.get("dm_provenance_sha256")
+        != cfg["dm_provenance_sha256"]
+    ):
+        raise ProvenanceError("mapping provenance is not bound to this upchannel product")
+    acf_cfg = config.get("analysis", {}).get("acf", {})
+    required_lag_fields = manifest.get("acf_contract", {}).get(
+        "required_lag_support_fields", []
+    )
+    missing_lag = [field for field in required_lag_fields if field not in acf_cfg]
+    if missing_lag:
+        raise ProvenanceError(
+            "factor-tagged CHIME input requires explicit ACF lag support: "
+            + ", ".join(missing_lag)
+        )
+    return manifest
+
+
 def write_mapping_artifact(
     *,
     mapping_path: str | Path,
@@ -43,6 +217,8 @@ def write_mapping_artifact(
     full_to_compact: np.ndarray,
     event: str,
     instrument: str,
+    product_manifest_path: str | Path | None = None,
+    upchannel_factor: int | None = None,
 ) -> dict:
     """Write an index mapping and a byte-bound provenance record.
 
@@ -57,6 +233,38 @@ def write_mapping_artifact(
     _validate_mapping_arrays(
         full_axis, compact_axis, source_valid, effective_mask, mapping
     )
+    if (product_manifest_path is None) != (upchannel_factor is None):
+        raise ProvenanceError(
+            "product_manifest_path and upchannel_factor must be supplied together"
+        )
+    product_binding = None
+    if product_manifest_path is not None:
+        product_manifest_path = Path(product_manifest_path)
+        try:
+            product_manifest = json.loads(
+                product_manifest_path.read_text(encoding="utf-8")
+            )
+        except (OSError, json.JSONDecodeError) as exc:
+            raise ProvenanceError(f"cannot read upchannel product manifest: {exc}") from exc
+        dm_provenance_sha256 = (
+            product_manifest.get("identity", {})
+            .get("dm_provenance", {})
+            .get("sha256")
+        )
+        if (
+            product_manifest.get("schema") != UPCHANNEL_PRODUCT_SCHEMA
+            or product_manifest.get("status") != "complete"
+            or product_manifest.get("identity", {}).get("upchannel_factor")
+            != int(upchannel_factor)
+            or not dm_provenance_sha256
+        ):
+            raise ProvenanceError("upchannel product manifest identity mismatch")
+        product_binding = {
+            "manifest_path": str(product_manifest_path.resolve()),
+            "manifest_sha256": _file_sha256(product_manifest_path),
+            "upchannel_factor": int(upchannel_factor),
+            "dm_provenance_sha256": dm_provenance_sha256,
+        }
     mapping_path = Path(mapping_path)
     np.savez_compressed(
         mapping_path,
@@ -80,6 +288,9 @@ def write_mapping_artifact(
             "compact_frequency_axis": _array_sha256(compact_axis),
         },
     }
+    if product_binding is not None:
+        record["sha256"]["product_manifest"] = product_binding["manifest_sha256"]
+        record["upchannel_product"] = product_binding
     Path(provenance_path).write_text(
         json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )

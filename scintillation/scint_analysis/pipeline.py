@@ -53,13 +53,19 @@ class ScintillationAnalysis:
         `analysis` block plus input path and downsample factors errs toward
         recomputation, never toward stale reuse.
         """
-        from .acf_mask_provenance import configured_mask_cache_identity
+        from .acf_mask_provenance import (
+            configured_mask_cache_identity,
+            configured_upchannel_product_cache_identity,
+        )
 
         relevant = {
             "input_data_path": self.config.get("input_data_path"),
             "downsample": self.config.get("pipeline_options", {}).get("downsample", {}),
             "analysis": self.config.get("analysis", {}),
             "bad_channel_artifact_bytes": configured_mask_cache_identity(self.config),
+            "upchannel_product_identity": configured_upchannel_product_cache_identity(
+                self.config
+            ),
         }
         payload = json.dumps(relevant, sort_keys=True, default=str)
         return hashlib.sha256(payload.encode()).hexdigest()[:12]
@@ -145,8 +151,12 @@ class ScintillationAnalysis:
         if os.path.exists(processed_spec_cache) and not self.config.get("pipeline_options", {}).get(
             "force_recalc", False
         ):
-            from .acf_mask_provenance import validate_configured_effective_mask
+            from .acf_mask_provenance import (
+                validate_configured_effective_mask,
+                validate_configured_upchannel_product,
+            )
 
+            validate_configured_upchannel_product(self.config)
             validate_configured_effective_mask(self.config)
             log.info(f"Loading cached processed spectrum from {processed_spec_cache}")
             with open(processed_spec_cache, "rb") as f:
@@ -162,6 +172,9 @@ class ScintillationAnalysis:
             t_factor = int(ds_cfg.get("t_factor", 1))
 
             # --------------------------------------------------------------------
+            from .acf_mask_provenance import validate_configured_upchannel_product
+
+            validate_configured_upchannel_product(self.config)
             spectrum = core.DynamicSpectrum.from_numpy_file(self.config["input_data_path"])
             from .acf_mask_provenance import apply_configured_effective_mask
 

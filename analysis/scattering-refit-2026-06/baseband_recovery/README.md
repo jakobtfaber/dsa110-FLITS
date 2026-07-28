@@ -7,6 +7,14 @@ FLITS scintillation pipeline.
 
 `upchannelize_chime.py` is the worker (runs in the baseband_analysis image). This file is the plan.
 
+> **Historical campaign receipt.** The commands and flat output names below
+> describe the June/July 2026 first pass and must not be reused. The current
+> worker requires explicit dispersion-measure provenance and a pinned container
+> digest, supports the six-factor ladder, writes immutable factor-tagged
+> products, and refuses overwrites. The authoritative rerun remains blocked on
+> ratified per-burst dispersion measures and owner review. See
+> [`chime-upchannel-factor-ladder.md`](../../../docs/rse/specs/chime-upchannel-factor-ladder.md).
+
 ## TL;DR — feasibility: **ready on h17**
 
 Runs on **h17 (`lxd110h17`)** in the already-pulled `chimefrb/baseband-analysis:latest` docker image

@@ -663,6 +663,9 @@ def prepare_spectrum_from_config(
     ds_cfg = cfg.get("pipeline_options", {}).get("downsample", {})
     f_factor = int(ds_cfg.get("f_factor", 1))
     t_factor = int(ds_cfg.get("t_factor", 1))
+    from .acf_mask_provenance import validate_configured_upchannel_product
+
+    validate_configured_upchannel_product(cfg)
     spectrum = DynamicSpectrum.from_numpy_file(cfg["input_data_path"])
     from .acf_mask_provenance import apply_configured_effective_mask
 

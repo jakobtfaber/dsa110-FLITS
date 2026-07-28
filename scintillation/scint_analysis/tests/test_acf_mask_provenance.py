@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 
 import numpy as np
@@ -8,6 +9,7 @@ import pytest
 from scint_analysis.acf_mask_provenance import (
     ProvenanceError,
     apply_verified_effective_mask,
+    validate_configured_upchannel_product,
     write_mapping_artifact,
 )
 from scint_analysis.core import DynamicSpectrum
@@ -15,7 +17,7 @@ from scint_analysis.freya_scintillation import prepare_spectrum_from_config
 from scint_analysis.pipeline import ScintillationAnalysis
 
 
-@pytest.mark.parametrize("upchannelization", [16, 64, 128, 256, 512])
+@pytest.mark.parametrize("upchannelization", [16, 32, 64, 128, 256, 512])
 @pytest.mark.parametrize("frequency_average", [1, 2, 4])
 def test_full_grid_mapping_masks_before_frequency_averaging(
     tmp_path, upchannelization, frequency_average
@@ -275,3 +277,184 @@ def test_mapping_writer_rejects_axis_or_row_order_failure(tmp_path, failure):
             event="zach",
             instrument="CHIME/FRB",
         )
+
+
+def _sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _factor_tagged_product_config(tmp_path, factor=32):
+    product_dir = tmp_path / "u0032"
+    product_dir.mkdir()
+    n_freq = 1024 * factor
+    dt_s = 2.56e-6 * 2 * factor
+    frequency = np.arange(n_freq, dtype=np.float64) * (0.390625 / factor)
+    times = np.arange(2, dtype=np.float64) * dt_s
+    input_path = product_dir / "acf_input.npz"
+    source_valid_path = product_dir / "source_valid.npy"
+    np.savez(
+        input_path,
+        power_2d=np.ones((n_freq, 2), dtype=np.float32),
+        frequencies_mhz=frequency,
+        times_s=times,
+    )
+    np.save(source_valid_path, np.ones(n_freq, dtype=bool))
+    worker_sha = "1" * 64
+    dm_sha = "2" * 64
+    container = f"image@sha256:{'3' * 64}"
+    manifest = {
+        "schema": "faber2026-chime-upchannel-product-v1",
+        "status": "complete",
+        "mode": "authoritative",
+        "identity": {
+            "event": "zach",
+            "instrument": "CHIME/FRB",
+            "upchannel_factor": factor,
+            "dm_provenance": {
+                "sha256": dm_sha,
+                "ratification_status": "ratified",
+            },
+            "software": {"worker_sha256": worker_sha},
+            "container": {"identity": container},
+        },
+        "expected": {
+            "shape": [n_freq, 2],
+            "df_mhz": 0.390625 / factor,
+            "dt_s": dt_s,
+        },
+        "products": {
+            "acf_input": {
+                "path": input_path.name,
+                "sha256": _sha256(input_path),
+            },
+            "source_valid": {
+                "path": source_valid_path.name,
+                "sha256": _sha256(source_valid_path),
+            },
+        },
+        "acf_contract": {
+            "required_lag_support_fields": [
+                "first_fit_lag",
+                "min_support_pairs",
+                "min_support_fraction",
+            ]
+        },
+    }
+    manifest_path = product_dir / "manifest.json"
+    manifest_path.write_text(json.dumps(manifest, sort_keys=True))
+    manifest_sha = _sha256(manifest_path)
+    mapping_provenance_path = product_dir / "mapping-provenance.json"
+    mapping_provenance_path.write_text(
+        json.dumps(
+            {
+                "schema": "faber2026-acf-full-to-compact-v1",
+                "upchannel_product": {
+                    "manifest_sha256": manifest_sha,
+                    "upchannel_factor": factor,
+                    "dm_provenance_sha256": dm_sha,
+                },
+            }
+        )
+    )
+    config = {
+        "input_data_path": str(input_path),
+        "analysis": {
+            "upchannel_product": {
+                "required": True,
+                "manifest_path": str(manifest_path),
+                "expected_manifest_sha256": manifest_sha,
+                "event": "zach",
+                "instrument": "CHIME/FRB",
+                "upchannel_factor": factor,
+                "dm_provenance_sha256": dm_sha,
+                "worker_sha256": worker_sha,
+                "container_identity": container,
+            },
+            "bad_channel_mask": {
+                "required": True,
+                "source_valid_path": str(source_valid_path),
+                "provenance_path": str(mapping_provenance_path),
+            },
+            "acf": {
+                "first_fit_lag": 2,
+                "min_support_pairs": 2,
+                "min_support_fraction": 0.5,
+            },
+        },
+    }
+    return config, manifest_path
+
+
+def test_factor_tagged_product_provenance_accepts_u32_and_enters_cache_identity(
+    tmp_path,
+):
+    config, manifest_path = _factor_tagged_product_config(tmp_path, factor=32)
+
+    manifest = validate_configured_upchannel_product(config)
+    assert manifest["identity"]["upchannel_factor"] == 32
+    first = ScintillationAnalysis(config)._get_cache_path("processed_spectrum")
+    manifest_path.write_text(manifest_path.read_text() + "\n")
+    second = ScintillationAnalysis(config)._get_cache_path("processed_spectrum")
+    assert first != second
+
+
+def test_factor_tagged_product_requires_explicit_lag_support(tmp_path):
+    config, _ = _factor_tagged_product_config(tmp_path, factor=32)
+    del config["analysis"]["acf"]["min_support_fraction"]
+
+    with pytest.raises(ProvenanceError, match="explicit ACF lag support"):
+        validate_configured_upchannel_product(config)
+
+
+def test_mapping_receipt_binds_factor_tagged_product_manifest(tmp_path):
+    full_axis = np.arange(4, dtype=float)
+    input_path = tmp_path / "input.npz"
+    source_path = tmp_path / "source.npy"
+    mask_path = tmp_path / "mask.npy"
+    map_path = tmp_path / "map.json"
+    mapping_path = tmp_path / "mapping.npz"
+    provenance_path = tmp_path / "mapping.json"
+    manifest_path = tmp_path / "product.json"
+    np.savez(
+        input_path,
+        power_2d=np.ones((4, 2)),
+        frequencies_mhz=full_axis,
+        times_s=[0, 1],
+    )
+    np.save(source_path, np.ones(4, dtype=bool))
+    np.save(mask_path, np.zeros(4, dtype=bool))
+    map_path.write_text('{"approval_status":"owner-approved"}')
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schema": "faber2026-chime-upchannel-product-v1",
+                "status": "complete",
+                "identity": {
+                    "upchannel_factor": 32,
+                    "dm_provenance": {"sha256": "2" * 64},
+                },
+            }
+        )
+    )
+
+    record = write_mapping_artifact(
+        mapping_path=mapping_path,
+        provenance_path=provenance_path,
+        input_path=input_path,
+        full_frequency_axis=full_axis,
+        compact_frequency_axis=full_axis,
+        source_valid_path=source_path,
+        map_path=map_path,
+        effective_mask_path=mask_path,
+        full_to_compact=np.arange(4),
+        event="zach",
+        instrument="CHIME/FRB",
+        product_manifest_path=manifest_path,
+        upchannel_factor=32,
+    )
+
+    assert record["upchannel_product"]["manifest_sha256"] == _sha256(
+        manifest_path
+    )
+    assert record["upchannel_product"]["upchannel_factor"] == 32
+    assert record["upchannel_product"]["dm_provenance_sha256"] == "2" * 64

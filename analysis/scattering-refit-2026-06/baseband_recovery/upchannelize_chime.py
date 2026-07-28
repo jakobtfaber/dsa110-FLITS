@@ -4,11 +4,12 @@
 Runs INSIDE the `chimefrb/baseband-analysis:latest` docker image on h17 (lxd110h17), which carries
 baseband_analysis 1.9.0 + the CADC `vos` client. h17 reaches the CHIME baseband store on CANFAR/arc
 directly (verified: `vls arc:projects/chime_frb/...` works in-container with ~/.ssl/cadcproxy.pem),
-so there is NO CANFAR Science-Platform / Harbor dependency. Per target this:
-  1. vcp's the ~1 GB singlebeam_<id>.h5 from arc to local scratch (idempotent),
+so there is NO CANFAR Science-Platform / Harbor dependency. Campaign mode uses only explicitly
+staged h17 inputs and never fetches data implicitly. Per target this:
+  1. verifies the staged singlebeam_<id>.h5 and records its SHA-256,
   2. coherently dedisperses the complex per-channel baseband at the burst DM,
   3. upchannelizes each 0.390625 MHz CHIME coarse channel by the verified per-target factor,
-  4. forms a Stokes-I dynamic spectrum and writes a small <name>_chime_upchan.npy + _freq.npy.
+  4. forms Stokes I and writes an immutable factor/software/container-tagged product directory.
 
 WHY coherent dedispersion + PFB upchannelization (not a cheap incoherent rechannel):
   The scintillation measurement is a spectral autocorrelation (ACF) of the time-integrated burst
@@ -49,8 +50,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import re
+import shlex
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 import numpy as np
@@ -60,13 +65,15 @@ CHIME_NATIVE_DT_S = 2.56e-6  # CHIME single-pol baseband sample time
 CHIME_NOMINAL_COARSE_CHANNELS = 1024
 CHIME_TOP_EDGE_MHZ = 800.1953125
 CHIME_BOTTOM_EDGE_MHZ = 400.1953125
+SUPPORTED_UPCHANNEL_FACTORS = (16, 32, 64, 128, 256, 512)
+INSTRUMENT_ID = "CHIME/FRB"
+DM_PROVENANCE_SCHEMA = "faber2026-chime-dm-provenance-v1"
+PRODUCT_MANIFEST_SCHEMA = "faber2026-chime-upchannel-product-v1"
+PLAN_MANIFEST_SCHEMA = "faber2026-chime-upchannel-campaign-plan-v1"
 
-ARC_VOS_ROOT = "arc:projects/chime_frb/data/chime/baseband/processed"  # vcp source (CADC vos URI)
-# All 12 singlebeam .h5 are staged by project ID on h17 -> use in place, no vcp / no arc dependency.
+# All 12 singlebeam .h5 are staged by project ID on h17. Campaign operation
+# fails closed when a staged input is absent; it never fetches data implicitly.
 LOCAL_H5_DIR = "/data/Faber2026/data/chime-frb"
-DEFAULT_SCRATCH = (
-    "/data/jfaber/chime_singlebeam"  # vcp fallback landing if a file is NOT pre-staged
-)
 DEFAULT_OUT_DIR = "/data/research/astrophysics/frbs/chime-dsa-codetections/upchan_codetections"
 
 # id/dm/fwhm_ms from crossmatching/notebook_reproduction_fixture.json (DM also in configs/bursts.yaml).
@@ -207,21 +214,301 @@ def _sha256(path: str | Path) -> str:
     return digest.hexdigest()
 
 
+def _validate_factor(value: int) -> int:
+    factor = int(value)
+    if factor not in SUPPORTED_UPCHANNEL_FACTORS:
+        allowed = ", ".join(str(item) for item in SUPPORTED_UPCHANNEL_FACTORS)
+        raise ValueError(f"unsupported upchannel factor {factor}; choose one of {allowed}")
+    return factor
+
+
+def _container_digest(identity: str) -> str:
+    match = re.search(r"sha256:([0-9a-fA-F]{64})(?:$|[^0-9a-fA-F])", identity)
+    if match is None:
+        raise ValueError("container identity must include a pinned sha256:<64 hex> digest")
+    return match.group(1).lower()
+
+
+def _load_dm_provenance(
+    path: str | Path,
+    *,
+    event: str,
+    require_ratified: bool,
+) -> dict:
+    provenance_path = Path(path)
+    try:
+        payload = json.loads(provenance_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read DM provenance {provenance_path}: {exc}") from exc
+    if payload.get("schema") != DM_PROVENANCE_SCHEMA:
+        raise ValueError(f"unsupported DM provenance schema in {provenance_path}")
+    if payload.get("event") != event or payload.get("instrument") != INSTRUMENT_ID:
+        raise ValueError(f"DM provenance event/instrument mismatch for {event}")
+    dm = payload.get("dm_pc_cm3")
+    if not isinstance(dm, (int, float)) or not np.isfinite(dm) or dm <= 0:
+        raise ValueError("DM provenance must contain a positive finite dm_pc_cm3")
+    status = payload.get("ratification_status")
+    if status not in {"candidate", "ratified"}:
+        raise ValueError("DM ratification_status must be candidate or ratified")
+    if require_ratified:
+        missing = [
+            field
+            for field in ("ratified_by", "ratified_at_utc", "decision_record")
+            if not payload.get(field)
+        ]
+        if status != "ratified" or missing:
+            detail = f"; missing {', '.join(missing)}" if missing else ""
+            raise ValueError(
+                f"authoritative generation requires ratified DM provenance for {event}{detail}"
+            )
+        try:
+            datetime.fromisoformat(str(payload["ratified_at_utc"]).replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise ValueError("ratified_at_utc must be an ISO-8601 timestamp") from exc
+    return {
+        "path": str(provenance_path.resolve()),
+        "sha256": _sha256(provenance_path),
+        "schema": payload["schema"],
+        "event": event,
+        "instrument": INSTRUMENT_ID,
+        "dm_pc_cm3": float(dm),
+        "ratification_status": status,
+        "ratified_by": payload.get("ratified_by"),
+        "ratified_at_utc": payload.get("ratified_at_utc"),
+        "decision_record": payload.get("decision_record"),
+    }
+
+
+def _inspect_h5_layout(path: str | Path) -> dict:
+    import h5py  # noqa: PLC0415
+
+    with h5py.File(path, "r") as handle:
+        if "tiedbeam_baseband" not in handle:
+            raise ValueError(f"{path}: missing tiedbeam_baseband dataset")
+        shape = tuple(int(value) for value in handle["tiedbeam_baseband"].shape)
+    if len(shape) != 3 or shape[1] != 2:
+        raise ValueError(
+            f"{path}: tiedbeam_baseband must have shape (coarse_channel, 2, native_time)"
+        )
+    return {
+        "tiedbeam_baseband_shape": list(shape),
+        "coarse_channels_present": shape[0],
+        "polarizations": shape[1],
+        "native_time_samples": shape[2],
+    }
+
+
+def _expected_geometry(
+    *,
+    upchannel_factor: int,
+    source_layout: dict,
+    fine_oversample: int | None,
+) -> dict:
+    factor = _validate_factor(upchannel_factor)
+    oversample = 2 if fine_oversample is None else int(fine_oversample)
+    fft_size = factor * oversample
+    hop_samples = 2 * factor
+    native_time = int(source_layout["native_time_samples"])
+    if oversample == 2:
+        time_bins = native_time // fft_size
+    else:
+        time_bins = 0 if native_time < fft_size else 1 + (native_time - fft_size) // hop_samples
+    return {
+        "df_mhz": CHIME_COARSE_DF_MHZ / factor,
+        "dt_s": CHIME_NATIVE_DT_S * hop_samples,
+        "shape": [
+            CHIME_NOMINAL_COARSE_CHANNELS * factor,
+            time_bins,
+        ],
+        "grid": {
+            "nominal_coarse_channels": CHIME_NOMINAL_COARSE_CHANNELS,
+            "nominal_fine_positions": CHIME_NOMINAL_COARSE_CHANNELS * factor,
+            "expected_measured_fine_positions": (
+                int(source_layout["coarse_channels_present"]) * factor
+            ),
+            "frequency_order": "ascending",
+            "authoritative_coordinate": "integer fine_channel_id",
+            "nominal_frequency_formula_mhz": (
+                "800.1953125 - (fine_channel_id + 0.5) * "
+                "(0.390625 / upchannel_factor)"
+            ),
+        },
+        "channelizer": {
+            "fft_size": fft_size,
+            "oversample": oversample,
+            "hop_samples": hop_samples,
+        },
+    }
+
+
+def _software_identity() -> dict:
+    worker = Path(__file__).resolve()
+    try:
+        commit = subprocess.run(
+            ["git", "-C", str(worker.parent), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        commit = None
+    return {
+        "worker_path": str(worker),
+        "worker_sha256": _sha256(worker),
+        "git_commit": commit,
+        "version": "chime-upchannel-factor-ladder-v1",
+    }
+
+
+def _dm_identity(dm_pc_cm3: float, provenance_sha256: str) -> str:
+    value = f"{dm_pc_cm3:.9f}".rstrip("0").rstrip(".").replace(".", "p")
+    return f"dm-{value}-{provenance_sha256[:12]}"
+
+
+def _product_directory(
+    out_root: str | Path,
+    *,
+    event: str,
+    dm_provenance: dict,
+    upchannel_factor: int,
+    software: dict,
+    container_identity: str,
+) -> Path:
+    container = _container_digest(container_identity)
+    return (
+        Path(out_root)
+        / "instrument-chime-frb"
+        / f"event-{event}"
+        / _dm_identity(dm_provenance["dm_pc_cm3"], dm_provenance["sha256"])
+        / f"u{_validate_factor(upchannel_factor):04d}"
+        / f"worker-{software['worker_sha256'][:12]}"
+        / f"container-{container[:12]}"
+    )
+
+
+def _assert_product_path_available(path: str | Path) -> None:
+    product_dir = Path(path)
+    if product_dir.exists():
+        raise FileExistsError(
+            f"existing product collision; refusing to overwrite immutable path: {product_dir}"
+        )
+    parent = product_dir
+    while not parent.exists() and parent != parent.parent:
+        parent = parent.parent
+    if not parent.is_dir():
+        raise FileNotFoundError(f"no existing parent directory for output path {product_dir}")
+
+
+def _planned_product_manifest(
+    *,
+    event: str,
+    source_h5: str | Path,
+    dm_provenance: dict,
+    upchannel_factor: int,
+    container_identity: str,
+    out_root: str | Path,
+    fine_window: str | None,
+    fine_oversample: int | None,
+    save_polarizations: bool,
+    command: list[str],
+) -> dict:
+    factor = _validate_factor(upchannel_factor)
+    source_path = Path(source_h5)
+    if not source_path.is_file():
+        raise FileNotFoundError(f"staged CHIME H5 input missing: {source_path}")
+    software = _software_identity()
+    source_layout = _inspect_h5_layout(source_path)
+    expected = _expected_geometry(
+        upchannel_factor=factor,
+        source_layout=source_layout,
+        fine_oversample=fine_oversample,
+    )
+    out_root = Path(out_root)
+    if not out_root.is_dir() or not os.access(out_root, os.W_OK):
+        raise ValueError(f"output root must be an existing writable directory: {out_root}")
+    product_dir = _product_directory(
+        out_root,
+        event=event,
+        dm_provenance=dm_provenance,
+        upchannel_factor=factor,
+        software=software,
+        container_identity=container_identity,
+    )
+    _assert_product_path_available(product_dir)
+    product_names = {
+        "stokes_i": "stokes_i.npy",
+        "acf_input": "acf_input.npz",
+        "nominal_frequencies": "frequencies_mhz.npy",
+        "package_frequencies": "package_frequencies_mhz.npy",
+        "source_valid": "source_valid.npy",
+    }
+    if save_polarizations:
+        product_names["polarizations"] = [
+            "polarization_0.npy",
+            "polarization_1.npy",
+        ]
+    ratified = dm_provenance["ratification_status"] == "ratified"
+    return {
+        "schema": PRODUCT_MANIFEST_SCHEMA,
+        "status": "planned",
+        "mode": "authoritative" if ratified else "preflight_only",
+        "science_status": (
+            "input_product_only_pending_owner_review"
+            if ratified
+            else "diagnostic_plan_blocked_pending_ratified_dm"
+        ),
+        "identity": {
+            "event": event,
+            "instrument": INSTRUMENT_ID,
+            "dm_provenance": dm_provenance,
+            "upchannel_factor": factor,
+            "software": software,
+            "container": {
+                "identity": container_identity,
+                "digest": f"sha256:{_container_digest(container_identity)}",
+            },
+        },
+        "source": {
+            "h5_path": str(source_path.resolve()),
+            "h5_sha256": _sha256(source_path),
+            **source_layout,
+        },
+        "expected": expected,
+        "product_directory": str(product_dir),
+        "products": {
+            name: (
+                [{"path": item, "sha256": None} for item in value]
+                if isinstance(value, list)
+                else {"path": value, "sha256": None}
+            )
+            for name, value in product_names.items()
+        },
+        "acf_contract": {
+            "owner_approved_mask_identity": None,
+            "full_to_compact_mapping_identity": None,
+            "status": "required_before_acf",
+            "required_lag_support_fields": [
+                "first_fit_lag",
+                "min_support_pairs",
+                "min_support_fraction",
+            ],
+            "note": (
+                "The downstream ACF provenance record must bind the exact source-valid, "
+                "owner-approved mask, mapping, and product-manifest bytes."
+            ),
+        },
+        "processing": {
+            "command": shlex.join(command),
+            "time_shift": None,
+            "fine_window": fine_window or "rectangular",
+            "fine_oversample": fine_oversample or 2,
+        },
+    }
+
+
 def _local_h5_path(name: str, relpath: str) -> Path:
     """Return the canonical h17 path for one project's staged singlebeam file."""
     return Path(LOCAL_H5_DIR) / name / Path(relpath).name
-
-
-def _fetch_h5(name: str, relpath: str, scratch: str) -> str:
-    """Locate the singlebeam .h5: prefer the h17 pre-staged copy; vcp from arc only if absent."""
-    local = _local_h5_path(name, relpath)
-    if local.exists():
-        return str(local)
-    dst = Path(scratch) / Path(relpath).name
-    if not dst.exists():
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        subprocess.run(["vcp", f"{ARC_VOS_ROOT}/{relpath}", str(dst)], check=True)
-    return str(dst)
 
 
 def _detected_products(spec: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
@@ -383,33 +670,36 @@ def _waterfall(
     )
 
 
-def _variant_suffix(fine_window: str | None, fine_oversample: int | None) -> str:
-    if fine_window is None and fine_oversample is None:
-        return ""
-    if fine_window is None or fine_oversample is None:
-        raise ValueError("fine_window and fine_oversample must be supplied together")
-    return f"_{fine_window}_os{fine_oversample}"
-
-
 def recover_target(
-    name: str,
-    scratch: str,
-    out_dir: str,
+    plan: dict,
     run_unresolvable: bool = False,
     save_polarizations: bool = False,
     time_shift: bool = True,
     fine_window: str | None = None,
     fine_oversample: int | None = None,
 ) -> Path:
+    """Materialize one already-preflighted authoritative product."""
+    name = plan["identity"]["event"]
     t = TARGETS[name]
     if not t["recoverable"] and not run_unresolvable:
         raise SystemExit(
             f"{name} is flagged NOT cleanly resolvable ({t['note']}). "
             f"Re-run with --run-unresolvable to produce a lower-confidence upper-bound spectrum."
         )
-
-    h5_path = _fetch_h5(name, t["h5_relpath"], scratch)
-    U = t["upchan"]
+    dm_provenance = plan["identity"]["dm_provenance"]
+    if (
+        plan.get("mode") != "authoritative"
+        or dm_provenance.get("ratification_status") != "ratified"
+    ):
+        raise ValueError("production accepts only an authoritative plan with a ratified DM")
+    if _sha256(Path(__file__).resolve()) != plan["identity"]["software"]["worker_sha256"]:
+        raise ValueError(f"{name}: worker bytes changed after preflight")
+    h5_path = plan["source"]["h5_path"]
+    if _sha256(h5_path) != plan["source"]["h5_sha256"]:
+        raise ValueError(f"{name}: source H5 changed after preflight")
+    U = _validate_factor(plan["identity"]["upchannel_factor"])
+    product_dir = Path(plan["product_directory"])
+    _assert_product_path_available(product_dir)
     (
         stokes_i,
         per_pol,
@@ -419,7 +709,7 @@ def recover_target(
         channelizer_metadata,
     ) = _waterfall(
         h5_path,
-        t["dm"],
+        dm_provenance["dm_pc_cm3"],
         U,
         time_shift=time_shift,
         fine_window=fine_window,
@@ -472,71 +762,82 @@ def recover_target(
     assert np.isclose(measured_df, df_fine, rtol=0.05), (
         f"{name}: fine channel width {measured_df:.6f} MHz != expected {df_fine:.6f} MHz (U={U})"
     )
+    expected_shape = tuple(plan["expected"]["shape"])
+    if stokes_i.shape != expected_shape:
+        raise ValueError(
+            f"{name}: realized shape {stokes_i.shape} != preflight shape {expected_shape}"
+        )
 
-    out = Path(out_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    suffix = _variant_suffix(fine_window, fine_oversample)
-    spec_path = out / f"{name}_chime_upchan{suffix}.npy"
+    product_dir.mkdir(parents=True, exist_ok=False)
+    spec_path = product_dir / "stokes_i.npy"
     np.save(spec_path, stokes_i.astype(np.float32))
     polarization_paths = []
     if save_polarizations:
         for pol_index, power in enumerate(per_pol):
-            path = out / f"{name}_chime_pol{pol_index}_upchan{suffix}.npy"
+            path = product_dir / f"polarization_{pol_index}.npy"
             np.save(path, power.astype(np.float32))
             polarization_paths.append(path)
-    frequency_path = out / f"{name}_chime_freq{suffix}.npy"
+    frequency_path = product_dir / "frequencies_mhz.npy"
     np.save(frequency_path, freq)
-    package_frequency_path = out / f"{name}_chime_package_freq{suffix}.npy"
+    package_frequency_path = product_dir / "package_frequencies_mhz.npy"
     np.save(package_frequency_path, package_freq)
-    source_valid_path = out / f"{name}_chime_source_valid{suffix}.npy"
+    source_valid_path = product_dir / "source_valid.npy"
     np.save(source_valid_path, source_valid)
-    metadata = {
-        **source_metadata,
-        "schema_version": 2,
-        "target": name,
-        "dm_pc_cm3": float(t["dm"]),
-        "upchannel_factor": int(U),
-        "time_shift": bool(time_shift),
-        "channelizer": channelizer_metadata,
-        "channel_grid": {
-            "nominal_coarse_channels": CHIME_NOMINAL_COARSE_CHANNELS,
-            "nominal_fine_positions": int(n_fine),
+    dt_s = CHIME_NATIVE_DT_S * int(channelizer_metadata["hop_samples"])
+    times_s = np.arange(n_time, dtype=np.float64) * dt_s
+    acf_input_path = product_dir / "acf_input.npz"
+    np.savez(
+        acf_input_path,
+        power_2d=stokes_i[::-1, :].astype(np.float32),
+        frequencies_mhz=freq,
+        times_s=times_s,
+    )
+
+    metadata = json.loads(json.dumps(plan))
+    metadata.update(
+        {
+            "status": "complete",
+            "completed_at_utc": datetime.now(UTC).isoformat(),
+            "source_time0": source_metadata,
+            "channelizer": channelizer_metadata,
+        }
+    )
+    metadata["processing"]["time_shift"] = bool(time_shift)
+    metadata["realized"] = {
+        "shape": [int(n_fine), int(n_time)],
+        "df_mhz": float(measured_df),
+        "dt_s": float(dt_s),
+        "finite_fraction": finite_frac,
+        "source_valid": {
             "measured_fine_positions": int(source_valid.sum()),
             "missing_fine_positions": int((~source_valid).sum()),
-            "authoritative_coordinate": "integer fine_channel_id",
-            "nominal_frequency_formula_mhz": (
-                "800.1953125 - (fine_channel_id + 0.5) * (0.390625 / upchannel_factor)"
-            ),
-            "package_frequency_convention": (
-                "baseband_analysis_1.9.0 inclusive linspace(800.1953125, "
-                "400.1953125, 1024 * upchannel_factor)"
-            ),
-            "max_package_nominal_offset_mhz": float(
-                np.max(np.abs(package_freq - freq))
-            ),
             "missing_value": "NaN",
         },
-        "source_h5": str(h5_path),
-        "source_h5_sha256": _sha256(h5_path),
-        "producer": str(Path(__file__).resolve()),
-        "producer_sha256": _sha256(Path(__file__).resolve()),
-        "products": {
-            "stokes_i": {"path": spec_path.name, "sha256": _sha256(spec_path)},
-            "polarizations": [
-                {"path": path.name, "sha256": _sha256(path)} for path in polarization_paths
-            ],
-            "nominal_frequencies": {
-                "path": frequency_path.name,
-                "sha256": _sha256(frequency_path),
-            },
-            "package_frequencies": {
-                "path": package_frequency_path.name,
-                "sha256": _sha256(package_frequency_path),
-            },
-            "source_valid": {
-                "path": source_valid_path.name,
-                "sha256": _sha256(source_valid_path),
-            },
+        "max_package_nominal_offset_mhz": float(
+            np.max(np.abs(package_freq - freq))
+        ),
+    }
+    metadata["products"] = {
+        "stokes_i": {"path": spec_path.name, "sha256": _sha256(spec_path)},
+        "acf_input": {
+            "path": acf_input_path.name,
+            "sha256": _sha256(acf_input_path),
+        },
+        "polarizations": [
+            {"path": path.name, "sha256": _sha256(path)}
+            for path in polarization_paths
+        ],
+        "nominal_frequencies": {
+            "path": frequency_path.name,
+            "sha256": _sha256(frequency_path),
+        },
+        "package_frequencies": {
+            "path": package_frequency_path.name,
+            "sha256": _sha256(package_frequency_path),
+        },
+        "source_valid": {
+            "path": source_valid_path.name,
+            "sha256": _sha256(source_valid_path),
         },
     }
     if fine_window is not None:
@@ -545,16 +846,12 @@ def recover_target(
             "path": str(companion.resolve()),
             "sha256": _sha256(companion),
         }
-    metadata_path = out / f"{name}_chime_preprocessing_metadata{suffix}.json"
-    metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
-    if save_polarizations:
-        (out / f"{name}_crossacf_metadata{suffix}.json").write_text(
-            json.dumps(metadata, indent=2, sort_keys=True) + "\n"
-        )
-    dt_s = CHIME_NATIVE_DT_S * int(channelizer_metadata["hop_samples"])
+    metadata_path = product_dir / "manifest.json"
+    with metadata_path.open("x", encoding="utf-8") as stream:
+        stream.write(json.dumps(metadata, indent=2, sort_keys=True) + "\n")
     print(
         f"[{name}] U={U} shape={stokes_i.shape} df={df_fine * 1e3:.3f} kHz "
-        f"dt={dt_s * 1e3:.4f} ms finite={finite_frac:.1%} -> {spec_path.name}"
+        f"dt={dt_s * 1e3:.4f} ms finite={finite_frac:.1%} -> {product_dir}"
     )
     return spec_path
 
@@ -564,8 +861,38 @@ def main(argv: list[str]) -> int:
 
     p = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     p.add_argument("targets", nargs="*", default=list(TARGETS), help="targets (default: all)")
-    p.add_argument("--scratch", default=DEFAULT_SCRATCH, help="local landing dir for the .h5 files")
-    p.add_argument("--out", default=DEFAULT_OUT_DIR, help="output dir for the .npy products")
+    p.add_argument("--out", default=DEFAULT_OUT_DIR, help="immutable product-tree root")
+    p.add_argument(
+        "--upchannel-factor",
+        type=int,
+        choices=SUPPORTED_UPCHANNEL_FACTORS,
+        action="append",
+        help=(
+            "factor to generate; repeat for a ladder. If omitted, use each target's "
+            "historical candidate factor"
+        ),
+    )
+    p.add_argument(
+        "--dm-provenance-dir",
+        type=Path,
+        required=True,
+        help="directory containing one <target>.json DM provenance artifact per target",
+    )
+    p.add_argument(
+        "--container-identity",
+        required=True,
+        help="pinned container identity containing sha256:<64 hex>",
+    )
+    p.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="preflight only; never upchannelize or write burst products",
+    )
+    p.add_argument(
+        "--planned-manifest",
+        type=Path,
+        help="exclusive output path for the dry-run campaign plan",
+    )
     p.add_argument(
         "--no-time-shift",
         action="store_true",
@@ -596,16 +923,90 @@ def main(argv: list[str]) -> int:
 
     if (args.fine_window is None) != (args.fine_oversample is None):
         p.error("--fine-window and --fine-oversample must be supplied together")
+    if args.dry_run != (args.planned_manifest is not None):
+        p.error("--dry-run and --planned-manifest must be supplied together")
 
     targets = args.targets or list(TARGETS)
     unknown = [n for n in targets if n not in TARGETS]
     if unknown:
         raise SystemExit(f"unknown target(s) {unknown}; known: {list(TARGETS)}")
+    blocked_targets = [
+        name for name in targets if not TARGETS[name]["recoverable"]
+    ]
+    if blocked_targets and not args.dry_run and not args.run_unresolvable:
+        raise SystemExit(
+            "production preflight blocked for targets requiring --run-unresolvable: "
+            + ", ".join(blocked_targets)
+        )
+    plans = []
     for name in targets:
+        provenance = _load_dm_provenance(
+            args.dm_provenance_dir / f"{name}.json",
+            event=name,
+            require_ratified=not args.dry_run,
+        )
+        factors = args.upchannel_factor or [TARGETS[name]["upchan"]]
+        for factor in factors:
+            source_h5 = _local_h5_path(name, TARGETS[name]["h5_relpath"])
+            plan = _planned_product_manifest(
+                event=name,
+                source_h5=source_h5,
+                dm_provenance=provenance,
+                upchannel_factor=factor,
+                container_identity=args.container_identity,
+                out_root=args.out,
+                fine_window=args.fine_window,
+                fine_oversample=args.fine_oversample,
+                save_polarizations=args.save_polarizations,
+                command=[str(Path(__file__).resolve()), *argv],
+            )
+            plan["processing"]["time_shift"] = not args.no_time_shift
+            plans.append(plan)
+
+    product_directories = [item["product_directory"] for item in plans]
+    if len(set(product_directories)) != len(product_directories):
+        raise ValueError("duplicate target/factor product identity in requested campaign")
+
+    if args.dry_run:
+        plan_status = (
+            "ready_for_authoritative_generation"
+            if all(
+                item["identity"]["dm_provenance"]["ratification_status"] == "ratified"
+                for item in plans
+            )
+            else "blocked_pending_ratified_dm"
+        )
+        campaign = {
+            "schema": PLAN_MANIFEST_SCHEMA,
+            "status": plan_status,
+            "science_status": "planning_only_no_burst_products_generated",
+            "supported_upchannel_factors": list(SUPPORTED_UPCHANNEL_FACTORS),
+            "planned_product_count": len(plans),
+            "products": plans,
+        }
+        args.planned_manifest.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            with args.planned_manifest.open("x", encoding="utf-8") as stream:
+                stream.write(json.dumps(campaign, indent=2, sort_keys=True) + "\n")
+        except FileExistsError as exc:
+            raise FileExistsError(
+                f"refusing to overwrite existing planned manifest: {args.planned_manifest}"
+            ) from exc
+        print(
+            json.dumps(
+                {
+                    "status": plan_status,
+                    "planned_product_count": len(plans),
+                    "planned_manifest": str(args.planned_manifest),
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
+
+    for plan in plans:
         recover_target(
-            name,
-            args.scratch,
-            args.out,
+            plan,
             run_unresolvable=args.run_unresolvable,
             save_polarizations=args.save_polarizations,
             time_shift=not args.no_time_shift,
