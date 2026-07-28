@@ -5549,3 +5549,17 @@ preserving for future agents.
 - `origin` `entire/*` refs:
   - entire/checkpoints/v1 -> a90492d
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
+
+## 2026-07-28T02:29:04-07:00 — jakob
+- repo: `/Users/jakobfaber/Developer/scratch/worktrees/dsa110-FLITS-chime-upchan-ladder-20260728`
+- branch: `codex/chime-upchannel-factor-ladder-20260728`
+- head: `76363bb`
+- origin/main: `34cb032`
+- worktree: clean
+- note: watched path changed: analysis/scattering-refit-2026-06/baseband_recovery/README.md
+- tracked status: clean
+- local `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d
+- `origin` `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d
+- note: `.entire/` remains host-local runtime state; only this ledger is tracked.
