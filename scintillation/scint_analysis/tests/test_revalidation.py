@@ -96,6 +96,8 @@ def test_two_screen_wide_and_narrow_recovered():
     res_d = fit_two_screen_acf(spec, channel_width_mhz=0.0305)  # DSA-like fine res
     assert res_d["dnu_wide_mhz"] > 5 * res_d["dnu_narrow_mhz"]  # two distinct scales
     assert 0.0 < res_d["m_total"] <= 2.0 and res_d["center_omitted"] is True
+    assert res_d["modulation_parameterization"] == "phenomenological_sum"
+    assert res_d["m_total_is_physical_screen_model"] is False
 
 
 def test_emission_size_nimmo_port():

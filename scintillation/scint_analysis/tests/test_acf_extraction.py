@@ -66,6 +66,12 @@ def test_subband_measurements_populated():
 
     # The bug: this list was always empty. Fixed: one dict per sub-band.
     assert len(sm) == len(freqs), f"expected {len(freqs)} measurements, got {len(sm)}"
+    assert final_results["acf_fit_contract"]["zero_lag_in_fit"] is False
+    assert final_results["acf_fit_contract"]["lag_unit"] == "MHz"
+    assert (
+        final_results["acf_fit_contract"]["lorentzian_parameterization"]
+        == "single_lorentzian"
+    )
     for meas in sm:
         assert isinstance(meas, dict)
         assert set(meas) >= {"bw", "mod", "bw_err", "mod_err", "finite_err", "gof"}

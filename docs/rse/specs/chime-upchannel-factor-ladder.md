@@ -121,3 +121,7 @@ whose `source_valid_path` is the manifest-bound file, plus explicit
 `min_support_fraction`. The downstream cache identity includes the product
 manifest bytes and the existing mask/mapping bytes. This adds no fit and changes
 no scientific claim.
+
+The software-qualified ACF fitting interface and model semantics are documented
+in `docs/rse/specs/chime-acf-factor-analysis.md`. It accepts all six factors but
+does not authorize the pilot or campaign.

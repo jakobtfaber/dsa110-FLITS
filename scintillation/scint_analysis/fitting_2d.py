@@ -30,12 +30,15 @@ Usage:
     result = model.fit()
 """
 
-import numpy as np
 import logging
+import warnings
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple, Literal, Union
-from lmfit import Parameters, minimize, Minimizer
-import warnings
+
+import numpy as np
+from lmfit import Minimizer, Parameters, minimize
+
+from .acf_fitting import lorentzian_component as _canonical_lorentzian_component
 
 log = logging.getLogger(__name__)
 
@@ -175,7 +178,7 @@ def lorentzian_acf(lag: np.ndarray, gamma: float, m: float) -> np.ndarray:
     np.ndarray
         ACF values
     """
-    return (m**2) / (1 + (lag / gamma)**2)
+    return _canonical_lorentzian_component(lag, gamma, m)
 
 
 def gen_lorentzian_acf(lag: np.ndarray, gamma: float, m: float, eta: float = 2.0) -> np.ndarray:

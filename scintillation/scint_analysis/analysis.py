@@ -32,6 +32,8 @@ from scipy.odr import ODR, RealData
 from scipy.odr import Model as ModelODR
 from tqdm import tqdm
 
+from .acf_fitting import build_subband_plan, spectrum_difference_noise_rms
+from .acf_fitting import lorentzian_component as _canonical_lorentzian_component
 from .core import ACF
 
 # -------------------------
@@ -41,7 +43,7 @@ from .core import ACF
 
 def lorentzian_component(x, gamma, m):
     """A single Lorentzian component without a baseline constant."""
-    return (m**2) / (1 + (x / gamma) ** 2)
+    return _canonical_lorentzian_component(x, gamma, m)
 
 
 def gaussian_component(x, sigma, m):
@@ -612,11 +614,7 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
     use_template = not analysis_cfg.get("noise", {}).get("disable_template", False)
 
     fixed_slices = acf_cfg.get("subband_channel_slices")
-    if fixed_slices is not None:
-        fixed_slices = [(int(start), int(end)) for start, end in fixed_slices]
-        n_sub = len(fixed_slices)
-    else:
-        n_sub = acf_cfg.get("num_subbands", 8)
+    n_sub = len(fixed_slices) if fixed_slices is not None else int(acf_cfg.get("num_subbands", 8))
     use_snr = acf_cfg.get("use_snr_subbanding", False)
     max_lag_mhz_global = acf_cfg.get("max_lag_mhz", 45.0)
     first_fit_lag = acf_cfg.get("first_fit_lag", 1)
@@ -631,17 +629,27 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         if sigma_self_mhz is None:
             log.warning("Could not estimate σ_self; Gaussian self‑noise term will be skipped.")
 
+    # One explicit off-pulse interval supplies both the legacy ACF baseline and
+    # the per-channel noise used by true equal-S/N sub-band allocation.
+    rfi_cfg = analysis_cfg.get("rfi_masking", {})
+    if rfi_cfg.get("use_symmetric_noise_window", False):
+        on_dur = burst_lims[1] - burst_lims[0]
+        off_end = max(burst_lims[0] - 1, 0)
+        off_start = max(off_end - on_dur, 0)
+    else:
+        off_end = max(burst_lims[0] - rfi_cfg.get("off_burst_buffer", 100), 0)
+        off_start = 0
+    if off_end > off_start:
+        off_burst_spec_for_plan = masked_spectrum.get_spectrum((off_start, off_end))
+        off_power_for_plan = np.ma.asarray(masked_spectrum.power[:, off_start:off_end])
+    else:
+        off_burst_spec_for_plan = None
+        off_power_for_plan = None
+
     if noise_desc is None:
-        # Legacy off‑burst mean estimate for downward compatibility
-        rfi_cfg = analysis_cfg.get("rfi_masking", {})
-        if rfi_cfg.get("use_symmetric_noise_window", False):
-            on_dur = burst_lims[1] - burst_lims[0]
-            off_end = max(burst_lims[0] - 1, 0)
-            off_start = max(off_end - on_dur, 0)
-        else:
-            off_end = max(burst_lims[0] - rfi_cfg.get("off_burst_buffer", 100), 0)
-            off_start = 0
-        off_burst_spec = masked_spectrum.get_spectrum((off_start, off_end))
+        if off_burst_spec_for_plan is None:
+            raise ValueError("off-pulse interval is empty; cannot normalize sub-band ACFs")
+        off_burst_spec = off_burst_spec_for_plan
     else:
         off_burst_spec = None  # not used when we have a descriptor
 
@@ -665,6 +673,7 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         # off-pulse spectrum on the IDENTICAL channel boundaries the on-pulse
         # ACF used. Additive key; existing consumers ignore it.
         "subband_channel_slices": [],
+        "subband_plan": None,
         "noise_template": [],
         "sigma_self_mhz": sigma_self_mhz,
     }
@@ -674,31 +683,48 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
     # give the matched-filter spectrum estimator — see core.get_spectrum for why.
     burst_spec_full = masked_spectrum.get_spectrum(
         burst_lims, time_weights=acf_cfg.get("time_weights"))
-    start_idx = 0
-    total_signal = np.sum(burst_spec_full.compressed())
+    product_cfg = analysis_cfg.get("upchannel_product") or {}
+    upchannel_factor = product_cfg.get("upchannel_factor")
+    if fixed_slices is not None:
+        subband_mode = "fixed"
+        signal_for_plan = None
+        noise_for_plan = None
+    elif use_snr:
+        if off_burst_spec_for_plan is None or off_power_for_plan is None:
+            raise ValueError("equal-S/N sub-bands require a non-empty off-pulse interval")
+        subband_mode = "equal_snr"
+        signal_for_plan = burst_spec_full - off_burst_spec_for_plan
+        on_power_for_plan = np.ma.asarray(
+            masked_spectrum.power[:, int(burst_lims[0]) : int(burst_lims[1])]
+        )
+        time_weights = acf_cfg.get("time_weights")
+        if time_weights is not None:
+            time_weights = np.asarray(time_weights, dtype=float)
+            if time_weights.size == masked_spectrum.num_timesteps:
+                time_weights = time_weights[int(burst_lims[0]) : int(burst_lims[1])]
+        noise_for_plan = spectrum_difference_noise_rms(
+            off_power_for_plan,
+            on_power_for_plan,
+            time_weights=time_weights,
+        )
+    else:
+        subband_mode = "equal_channels"
+        signal_for_plan = None
+        noise_for_plan = None
+    plan = build_subband_plan(
+        masked_spectrum.frequencies,
+        n_sub,
+        mode=subband_mode,
+        signal=signal_for_plan,
+        noise_rms=noise_for_plan,
+        fixed_slices=fixed_slices,
+        upchannel_factor=upchannel_factor,
+    )
+    results["subband_plan"] = plan.to_dict()
+    results["upchannel_factor"] = plan.upchannel_factor
 
-    for i in tqdm(range(n_sub), desc="ACF per sub‑band"):
-        # Decide indices [start_idx:end_idx)
-        if fixed_slices is not None:
-            start_idx, end_idx = fixed_slices[i]
-            if not (0 <= start_idx < end_idx <= masked_spectrum.num_channels):
-                raise ValueError(
-                    f"invalid fixed sub-band slice {(start_idx, end_idx)} for "
-                    f"{masked_spectrum.num_channels} channels"
-                )
-        elif not use_snr:
-            sub_len = masked_spectrum.num_channels // n_sub
-            end_idx = start_idx + sub_len if i < n_sub - 1 else masked_spectrum.num_channels
-        else:
-            target_signal = total_signal / n_sub
-            cum_sig = 0.0
-            end_idx = start_idx
-            while cum_sig < target_signal and end_idx < masked_spectrum.num_channels:
-                if not burst_spec_full.mask[end_idx]:
-                    cum_sig += burst_spec_full.data[end_idx]
-                end_idx += 1
-            if i == n_sub - 1:
-                end_idx = masked_spectrum.num_channels  # ensure coverage
+    for i, planned_subband in enumerate(tqdm(plan.subbands, desc="ACF per sub‑band")):
+        start_idx, end_idx = planned_subband.start, planned_subband.stop
 
         sub_spec = burst_spec_full[start_idx:end_idx]
         sub_freqs = masked_spectrum.frequencies[start_idx:end_idx]
@@ -712,7 +738,6 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         # Basic dimensions
         if len(sub_freqs) < 2:
             log.warning("Sub‑band %d too narrow; skipped.", i)
-            start_idx = end_idx
             continue
         chan_width = float(np.abs(np.mean(np.diff(sub_freqs))))
         available_bw = sub_spec.count() * chan_width
@@ -730,7 +755,6 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
             min_support_fraction=min_support_fraction,
         )
         if not acf_obj:
-            start_idx = end_idx
             continue
 
         #  Synthetic-noise template handling
@@ -763,7 +787,6 @@ def calculate_acfs_for_subbands(masked_spectrum, config, burst_lims, noise_desc=
         results["subband_num_channels"].append(sub_spec.count())
         results["subband_channel_slices"].append((int(start_idx), int(end_idx)))
 
-        start_idx = end_idx  # next sub‑band
         log.debug(f"Cache now holds {len(_noise_acf_cache)} noise ACF template(s)")
 
     return results
@@ -1710,21 +1733,32 @@ def _select_overall_best_model(all_subband_fits):
 
 def _determine_n_components(acf_results, max_components=3):
     """Burst-level Lorentzian component count from the BIC + nested-F-test selector
-    (``revalidation.compare_lorentzian_components``) run on each sub-band ACF and
+    (``acf_fitting.fit_lorentzian_components``) run on each sub-band ACF and
     aggregated by plurality (ties → fewer components, the conservative default).
 
-    The pipeline feeds its OWN ACFs (``calculate_acf``) to the selector, so this does
-    not compromise the cross-check independence of the revalidation ACF estimator —
-    only the model-selection statistic is shared. Returns ``(n_components, per_subband)``.
+    The pipeline and independent revalidation estimator share model definitions
+    but not ACF estimators. Returns ``(n_components, per_subband)``.
     """
-    from .revalidation import compare_lorentzian_components
+    from .acf_fitting import fit_lorentzian_components
 
     per = []
     for i in range(len(acf_results["subband_acfs"])):
         lags = np.asarray(acf_results["subband_lags_mhz"][i], dtype=float)
         acf = np.asarray(acf_results["subband_acfs"][i], dtype=float)
         try:
-            per.append(compare_lorentzian_components(lags, acf, max_components=max_components))
+            acf_err = (acf_results.get("subband_acfs_err") or [None] * len(
+                acf_results["subband_acfs"]
+            ))[i]
+            per.append(
+                fit_lorentzian_components(
+                    lags,
+                    acf,
+                    max_components=max_components,
+                    acf_err=acf_err,
+                    channel_width_mhz=acf_results["subband_channel_widths_mhz"][i],
+                    upchannel_factor=acf_results.get("upchannel_factor"),
+                )
+            )
         except Exception as e:  # a single bad sub-band must not sink the burst
             log.debug(f"component-count selector failed on sub-band {i}: {e}")
             per.append({"n_preferred": 1})
@@ -1796,7 +1830,12 @@ def _extract_multi_component(per_subband, num_comps, n_subbands):
         gof = {"bic": fit_n["bic"], "redchi": fit_n["redchi"]} if (fit_n and comps) else {}
         for c in range(num_comps):
             cc = comps[c] if c < len(comps) else None
-            if cc and np.isfinite(cc["dnu_mhz"]) and cc["dnu_mhz"] > 0:
+            if (
+                cc
+                and cc.get("measurement_admissible", True)
+                and np.isfinite(cc["dnu_mhz"])
+                and cc["dnu_mhz"] > 0
+            ):
                 params_per_comp[c].append(
                     {
                         "bw": cc["dnu_mhz"],
@@ -1965,6 +2004,24 @@ def analyze_scintillation_from_acfs(acf_results, config):
 
     final_results = {"best_model": best_model_name, "components": {}}
     final_results["n_components"] = num_comps
+    final_results["acf_fit_contract"] = {
+        "lag_unit": "MHz",
+        "zero_lag_in_fit": False,
+        "upchannel_factor": acf_results.get("upchannel_factor"),
+        "subband_plan": acf_results.get("subband_plan"),
+        "lorentzian_parameterization": (
+            "single_lorentzian" if num_comps == 1 else "phenomenological_sum"
+        ),
+        "multi_component_total_modulation_is_physical_screen_model": num_comps == 1,
+        "component_count_scope": (
+            "diagnostic_only; science-facing component selection requires "
+            "correlated-lag evidence and its calibrated gate"
+        ),
+        "note": (
+            "multi-component m_i values parameterize additive ACF amplitudes m_i^2; "
+            "a physical multiplicative-screen model requires cross terms"
+        ),
+    }
     if n_comp_detail is not None:
         final_results["component_selection"] = {
             "n_per_subband": [int(v.get("n_preferred", 1)) for v in n_comp_detail],

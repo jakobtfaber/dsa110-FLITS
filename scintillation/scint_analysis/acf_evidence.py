@@ -33,6 +33,12 @@ from __future__ import annotations
 
 import numpy as np
 
+from .acf_fitting import (
+    lorentzian_from_amplitude,
+    multiplicative_lorentzian_acf,
+    validate_chime_factor_grid,
+)
+
 # Rail constants mirror the ADR-0008 rail-classifier SSOT values
 # (EDGE_WIDTH_FRAC / EDGE_MASS_FRAC in flits/fitting rails); duplicated here
 # as module constants so the evidence engine has no import-time dependency on
@@ -43,7 +49,7 @@ EDGE_MASS_FRAC = 0.30
 
 def lorentzian_1(lags, gamma, m2, c):
     """Single-screen ACF model: c + m2 / (1 + (lag/gamma)^2). gamma = HWHM."""
-    return c + m2 / (1.0 + (lags / gamma) ** 2)
+    return c + lorentzian_from_amplitude(lags, m2, gamma)
 
 
 def two_screen_model(lags, gamma1, m2_1, f, m2_2, c):
@@ -52,9 +58,12 @@ def two_screen_model(lags, gamma1, m2_1, f, m2_2, c):
     The multiplicative cross term is the physical prediction for two
     independent scintillating screens (reference recipe form).
     """
-    l1 = m2_1 / (1.0 + (lags / gamma1) ** 2)
-    l2 = m2_2 / (1.0 + (lags / (f * gamma1)) ** 2)
-    return c + l1 + l2 + l1 * l2
+    return multiplicative_lorentzian_acf(
+        lags,
+        [gamma1, f * gamma1],
+        [np.sqrt(m2_1), np.sqrt(m2_2)],
+        baseline=c,
+    )
 
 
 def _mvn_loglike_factory(lags, acf, cov):
@@ -84,9 +93,13 @@ def _mvn_loglike_factory(lags, acf, cov):
 
 
 def _weighted_median(x, w):
+    return _weighted_quantile(x, w, 0.5)
+
+
+def _weighted_quantile(x, w, quantile):
     idx = np.argsort(x)
     cw = np.cumsum(w[idx])
-    return float(x[idx][np.searchsorted(cw, 0.5 * cw[-1])])
+    return float(x[idx][np.searchsorted(cw, quantile * cw[-1])])
 
 
 def _edge_mass_flags(samples, weights, bounds,
@@ -103,9 +116,9 @@ def _edge_mass_flags(samples, weights, bounds,
     w = weights / weights.sum()
     for i, (name, lo, hi, is_log) in enumerate(bounds):
         x = np.log(samples[:, i]) if is_log else samples[:, i]
-        l, h = (np.log(lo), np.log(hi)) if is_log else (lo, hi)
-        edge = edge_frac * (h - l)
-        if w[(x < l + edge) | (x > h - edge)].sum() > mass_frac:
+        lower, upper = (np.log(lo), np.log(hi)) if is_log else (lo, hi)
+        edge = edge_frac * (upper - lower)
+        if w[(x < lower + edge) | (x > upper - edge)].sum() > mass_frac:
             flags.append(name)
     return flags
 
@@ -150,8 +163,19 @@ def _run_nested(loglike, prior_transform, ndim, nlive, dlogz, seed,
     }
 
 
-def compare_acf_evidence(lags, acf, cov, channel_width_mhz, band_width_mhz,
-                         nlive=500, dlogz=0.1, seed=0, f_lo=3.0, f_hi=300.0):
+def compare_acf_evidence(
+    lags,
+    acf,
+    cov,
+    channel_width_mhz,
+    band_width_mhz,
+    nlive=500,
+    dlogz=0.1,
+    seed=0,
+    f_lo=3.0,
+    f_hi=300.0,
+    upchannel_factor=None,
+):
     """dlnZ for two-screen (M2) vs single-Lorentzian (M1) on a one-sided ACF.
 
     Parameters
@@ -179,6 +203,8 @@ def compare_acf_evidence(lags, acf, cov, channel_width_mhz, band_width_mhz,
         raise ValueError("lags and acf must be matching 1-D arrays")
     if not np.all(lags > 0):
         raise ValueError("one-sided positive lags required (lag-0 excluded)")
+    if upchannel_factor is not None:
+        validate_chime_factor_grid(upchannel_factor, channel_width_mhz)
 
     g_lo = 0.5 * channel_width_mhz
     g_hi = band_width_mhz / 4.0
@@ -221,10 +247,31 @@ def compare_acf_evidence(lags, acf, cov, channel_width_mhz, band_width_mhz,
     m1["rail_flags"] = _edge_mass_flags(m1["samples"], m1["weights"], bounds1)
     m2["rail_flags"] = _edge_mass_flags(m2["samples"], m2["weights"], bounds2)
 
-    m1["params_median"] = dict(zip(("gamma", "m2", "c"), m1["median"]))
+    m1["params_median"] = dict(zip(("gamma", "m2", "c"), m1["median"], strict=True))
+    m1["params_median"]["m"] = float(np.sqrt(m1["params_median"]["m2"]))
+    m1["modulation_parameterization"] = "single_lorentzian_m_squared"
     g1, m2_1, f, m2_2, c = m2["median"]
-    m2["params_median"] = {"gamma1": g1, "m2_1": m2_1, "f": f,
-                           "gamma2": g1 * f, "m2_2": m2_2, "c": c}
+    component_mods = [float(np.sqrt(m2_1)), float(np.sqrt(m2_2))]
+    m_total_samples = np.sqrt(
+        (1.0 + m2["samples"][:, 1]) * (1.0 + m2["samples"][:, 3]) - 1.0
+    )
+    m_total_median = _weighted_quantile(m_total_samples, m2["weights"], 0.5)
+    m_total_low = _weighted_quantile(m_total_samples, m2["weights"], 0.16)
+    m_total_high = _weighted_quantile(m_total_samples, m2["weights"], 0.84)
+    m2["params_median"] = {
+        "gamma1": g1,
+        "m2_1": m2_1,
+        "m_1": component_mods[0],
+        "f": f,
+        "gamma2": g1 * f,
+        "m2_2": m2_2,
+        "m_2": component_mods[1],
+        "m_total": m_total_median,
+        "m_total_err_lower": m_total_median - m_total_low,
+        "m_total_err_upper": m_total_high - m_total_median,
+        "c": c,
+    }
+    m2["modulation_parameterization"] = "multiplicative_screens_with_cross_terms"
 
     return {
         "m1": m1,
@@ -233,6 +280,18 @@ def compare_acf_evidence(lags, acf, cov, channel_width_mhz, band_width_mhz,
         "dlnz_err": float(np.hypot(m1["logz_err"], m2["logz_err"])),
         "priors": {"gamma_mhz": (g_lo, g_hi), "f": (f_lo, f_hi),
                    "m2": (0.01, 2.0), "c": (-0.5, 0.5)},
+        "fit_contract": {
+            "lag_unit": "MHz",
+            "zero_lag_in_fit": False,
+            "channel_width_mhz": float(channel_width_mhz),
+            "band_width_mhz": float(band_width_mhz),
+            "upchannel_factor": (
+                int(upchannel_factor) if upchannel_factor is not None else None
+            ),
+            "factor_dependent_priors": (
+                "gamma lower = 0.5 channel width; gamma upper = 0.25 fitted band"
+            ),
+        },
     }
 
 
@@ -266,9 +325,19 @@ def escalation_trigger_verdict(dlnz, rail_flags, ppc_pvalues, calibration):
             "reasons": []}
 
 
-def evidence_with_mc_covariance(masked_spectrum, channel_width_mhz, snr,
-                                n_real=500, seed=0, nlive=500, dlogz=0.1,
-                                max_lag_bins=None, f_lo=3.0, f_hi=300.0):
+def evidence_with_mc_covariance(
+    masked_spectrum,
+    channel_width_mhz,
+    snr,
+    n_real=500,
+    seed=0,
+    nlive=500,
+    dlogz=0.1,
+    max_lag_bins=None,
+    f_lo=3.0,
+    f_hi=300.0,
+    upchannel_factor=None,
+):
     """End-to-end limb-i comparison: production ACF -> matched MC covariance
     -> dlnZ.
 
@@ -310,6 +379,7 @@ def evidence_with_mc_covariance(masked_spectrum, channel_width_mhz, snr,
         lags[:n_lag], acf[:n_lag], cov,
         channel_width_mhz=channel_width_mhz, band_width_mhz=band_width_mhz,
         nlive=nlive, dlogz=dlogz, seed=seed, f_lo=f_lo, f_hi=f_hi,
+        upchannel_factor=upchannel_factor,
     )
     res["gamma_hat_mhz"] = gamma_hat
     res["mod_index_hat"] = m_hat

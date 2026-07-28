@@ -17,6 +17,7 @@ import numpy as np
 from scipy.optimize import curve_fit
 
 from . import config as config_module
+from .acf_fitting import lorentzian_from_amplitude
 from .analysis import calculate_acf, harmonic_lag_mask
 from .core import ACF, DynamicSpectrum
 
@@ -136,7 +137,7 @@ class NumpyJSONEncoder(json.JSONEncoder):
 
 
 def _lorentzian_with_baseline(lag_mhz, amplitude, gamma_mhz, baseline):
-    return amplitude / (1.0 + (lag_mhz / gamma_mhz) ** 2) + baseline
+    return lorentzian_from_amplitude(lag_mhz, amplitude, gamma_mhz) + baseline
 
 
 def _finite_float_list(values: np.ndarray) -> list[float | None]:

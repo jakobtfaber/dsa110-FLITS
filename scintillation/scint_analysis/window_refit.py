@@ -121,7 +121,11 @@ def _lorentz2(l, A_n, g_n, A_b, g_b, c0):
     scattering component (zach_hi 622 MHz: unfit narrow feature at lag<0.15 MHz under a
     ~5-MHz ramp, owner-identified 2026-07-17); a single Lorentzian latches onto whichever
     dominates the least-squares and the other is censored or folded into m."""
-    return A_n / (1 + (l / g_n) ** 2) + A_b / (1 + (l / g_b) ** 2) + c0
+    return (
+        fs._lorentzian_with_baseline(l, A_n, g_n, 0.0)
+        + fs._lorentzian_with_baseline(l, A_b, g_b, 0.0)
+        + c0
+    )
 
 
 DBIC_2COMP = 6.0   # M2 must beat M1 by this (Kass-Raftery "strong"); injection round 4
