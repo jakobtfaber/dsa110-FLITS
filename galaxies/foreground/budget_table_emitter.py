@@ -6,7 +6,7 @@ The manuscript's ``budget_table.tex`` was historically hand-transcribed, which
 let values drift from the pipeline (e.g. the DR8/DR9 survey-release mismatch
 caught in ``language_audit.md``). This module makes the table *generated*: the
 values live in ``budget_table_data.json`` (one place to review and edit) and the
-AASTeX ``deluxetable`` markup is assembled here. The DM_host posterior column is
+AASTeX ``deluxetable`` markup is assembled here. The induced DM_host residual column is
 cross-checked against the forward-model output of
 ``scripts/dm_budget_uncertainty.py`` by ``tests/test_budget_table_emitter.py``.
 
@@ -55,7 +55,7 @@ $40\,\mathrm{pc\,cm^{-3}}$ halo; $\langle\mathrm{DM_{cos}}\rangle$ is
 the Macquart mean at the host redshift; $\mathrm{DM_{int}}$ is the intervening
 circumgalactic column summed over the confirmed foreground systems (two-phase
 hot mNFW + cool, capped at $b=0.1\,R_{\mathrm{vir}}$ in the galaxy-interior
-regime); $\mathrm{DM_{host}}$ is the forward-modeled host posterior (median with
+regime); $\mathrm{DM_{host}}$ is the induced host residual (median with
 $16$th--$84$th-percentile interval; Appendix~\ref{app:host-forward-model}),
 which supersedes the arithmetic residual by sampling the full
 $P(\mathrm{DM_{cosmic}}\,|\,z)$ and the Galactic-disk, Galactic-halo, and
@@ -87,10 +87,10 @@ intervening term is \emph{unconstrained by the searched surveys}, not
 excluded---absence of coverage is not absence of foreground
 (Section~\ref{sec:obs-fg}).}
 \tablecomments{Because the diffuse cosmic term follows a skewed log-normal,
-the host posteriors are asymmetric and their medians exceed the naive
+the induced host residuals are asymmetric and their medians exceed the naive
 mean-subtracted residuals. One high-redshift sightline
 (FRB 20220310F; $z=0.48$), where the diffuse cosmic term
-dominates the budget, has a host posterior consistent with zero
+dominates the budget, has an induced host residual consistent with zero
 ($P(\mathrm{DM_{host}}<0)\approx0.5$): its marginally negative median reflects
 sightline-to-sightline scatter about the cosmological normalization rather than an
 unphysical host, and a small downward shift of the IGM baryon fraction within

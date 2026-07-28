@@ -2,9 +2,29 @@
 
 import math
 
+import pandas as pd
 import pytest
 
 from galaxies.foreground import scattering_predict as sp
+from galaxies.foreground.engines_extra import _standardize_cluster_columns
+
+
+def test_wen_han_cluster_columns_are_standardized_with_declared_units():
+    raw = pd.DataFrame(
+        {
+            "RAJ2000": [177.0],
+            "DEJ2000": [71.0],
+            "zCl": [0.25],
+            "M500": [0.47],
+            "r500": [0.28],
+        }
+    )
+    row = _standardize_cluster_columns(raw, "J/ApJS/272/39/table2").iloc[0]
+    assert row["ra"] == 177.0
+    assert row["dec"] == 71.0
+    assert row["z"] == 0.25
+    assert row["m500_msun"] == 4.7e13
+    assert row["r500_kpc"] == 280.0
 
 
 def test_dm_halo_mnfw_is_positive_decreasing_and_handles_edges():
@@ -180,36 +200,49 @@ def test_r_delta_kpc_matches_overdensity_definition():
     assert math.isnan(sp.r_delta_kpc(-1.0, z, 200))
 
 
-def test_dm_mnfw_projected_matches_frb_reference_value():
-    # Independent reference from the local FRBs/FRB ModifiedNFW implementation
-    # for log_Mhalo=14, z=0.25, alpha=2, y0=2, f_hot=0.75, c=7.67, Rperp=100 kpc.
+def test_dm_mnfw_projected_matches_r200c_reference_value():
+    # Independently recomputed R200c-truncated reference value.
     dm = sp.dm_mnfw_projected(1.0e14, 0.25, 100.0)
-    assert dm == pytest.approx(350.87500100524943, rel=5e-4)
+    assert dm == pytest.approx(474.35505679857243, rel=5e-6)
 
 
 def test_dm_cluster_mnfw_model_zero_beyond_truncation():
     m500, z = 5.0e14, 0.25
-    m200 = sp.CLUSTER_M500_TO_M200 * m500
-    rvir = sp._frb_mnfw_rvir_kpc(m200, z)
+    m200 = sp.m200_from_m500_nfw(m500, z)
+    rvir = sp.r_delta_kpc(m200, z, 200)
     assert sp.dm_cluster_mnfw_model(m500, z, rvir + 1.0) == 0.0
     assert sp.dm_cluster_mnfw_model(-1.0, z, 100.0) == 0.0
 
 
-def test_cluster_mnfw_uses_frb_virial_truncation_not_r200_over_r500():
+def test_cluster_mnfw_uses_r200c_truncation():
     m500, z = 5.0e14, 0.25
     r500 = sp.r_delta_kpc(m500, z, 500)
-    rvir_mnfw = sp._frb_mnfw_rvir_kpc(sp.CLUSTER_M500_TO_M200 * m500, z)
-
-    assert rvir_mnfw / r500 > sp.CLUSTER_R200_OVER_R500
-    assert sp.dm_cluster_mnfw_model(m500, z, 1.55 * r500) > 0.0
+    r200 = sp.r_delta_kpc(sp.m200_from_m500_nfw(m500, z), z, 200)
+    assert r200 > r500
+    assert sp.dm_cluster_mnfw_model(m500, z, r200 + 1.0) == 0.0
 
 
 def test_dm_cluster_mnfw_model_monotonic_and_linear_in_fhot():
     m500, z = 5.0e14, 0.25
-    rvir = sp._frb_mnfw_rvir_kpc(sp.CLUSTER_M500_TO_M200 * m500, z)
+    rvir = sp.r_delta_kpc(sp.m200_from_m500_nfw(m500, z), z, 200)
     near = sp.dm_cluster_mnfw_model(m500, z, 0.1 * rvir)
     far = sp.dm_cluster_mnfw_model(m500, z, 0.6 * rvir)
     assert near > far > 0.0
     d1 = sp.dm_cluster_mnfw_model(m500, z, 0.2 * rvir, f_hot=0.10)
     d2 = sp.dm_cluster_mnfw_model(m500, z, 0.2 * rvir, f_hot=0.20)
     assert abs(d2 / d1 - 2.0) < 1e-6  # DM linear in hot-baryon fraction
+
+
+def test_m500_to_m200_uses_explicit_cluster_concentration():
+    m500 = 1.0e14
+    ratio = sp.m200_from_m500_nfw(m500, 0.2, concentration_200=4.0) / m500
+    assert ratio == pytest.approx(1.445, rel=5e-3)
+
+
+def test_nondefault_truncation_renormalizes_declared_gas_mass():
+    base = sp.dm_mnfw_projected(1.0e14, 0.2, 100.0, rmax=1.0)
+    extended = sp.dm_mnfw_projected(1.0e14, 0.2, 100.0, rmax=2.0)
+    assert base > 0.0
+    assert extended > 0.0
+    assert sp.dm_mnfw_projected(1.0e14, 0.2, -1.0) == 0.0
+    assert sp.dm_mnfw_projected(1.0e14, 0.2, 1.0, alpha=0.5) == 0.0

@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from galaxies.foreground.build_expanded_catalog import build_frame
+from galaxies.foreground.census_registry import load_intervening_census_registry
 from galaxies.foreground.expanded_catalog import (
     cluver14_log_mstar,
     dutton_maccio14_c200c,
@@ -21,8 +23,6 @@ from galaxies.foreground.expanded_catalog import (
     select_match,
     stern12_status,
 )
-from galaxies.foreground.build_expanded_catalog import build_frame
-from galaxies.foreground.census_registry import load_intervening_census_registry
 from galaxies.foreground.vo.halos import mstar_to_mhalo
 
 
@@ -152,6 +152,19 @@ def test_derived_values_are_null_unless_status_is_pass_like() -> None:
     ):
         finite = pd.to_numeric(frame[value], errors="coerce").notna()
         assert frame.loc[finite, status].str.startswith("pass").all()
+
+
+def test_ambiguous_crossmatches_do_not_expose_selected_measurements() -> None:
+    frame, _ = build_frame()
+    for catalog, measurement in (
+        ("gsc242", "gsc242_class"),
+        ("allwise", "allwise_w1_mag"),
+        ("catwise2020", "catwise2020_w1_mag"),
+        ("unwise", "unwise_w1_flux"),
+    ):
+        ambiguous = frame[f"{catalog}_status"] == "ambiguous"
+        assert frame.loc[ambiguous, f"{catalog}_id"].isna().all()
+        assert frame.loc[ambiguous, measurement].isna().all()
 
 
 def test_committed_snapshots_are_complete_and_query_clean() -> None:

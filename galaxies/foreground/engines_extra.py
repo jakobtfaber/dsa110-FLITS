@@ -188,7 +188,10 @@ class LegacySurveyDr9PhotozSweepEngine(BaseEngine):
         self.require_resolved = require_resolved
 
     def query(self, coord, radius) -> pd.DataFrame:
+        self._query_ok()
         if self.cache_dir is None:
+            self.last_query_status = "query_error"
+            self.last_query_error = f"{LEGACY_DR9_PHOTOZ_CACHE_ENV} is not configured"
             return pd.DataFrame()
 
         frames = []
@@ -246,33 +249,30 @@ def _tap_box_query(
     ("function point does not exist"), so use a portable RA/Dec BETWEEN box and
     perform the physically correct circular cut with Astropy on the client side.
     """
-    try:
-        radius_deg = radius.to(u.deg).value
-        ra0 = coord.ra.deg
-        dec0 = coord.dec.deg
-        ddec = radius_deg
-        cos_dec = max(abs(np.cos(np.radians(dec0))), 1.0e-6)
-        dra = radius_deg / cos_dec
+    radius_deg = radius.to(u.deg).value
+    ra0 = coord.ra.deg
+    dec0 = coord.dec.deg
+    ddec = radius_deg
+    cos_dec = max(abs(np.cos(np.radians(dec0))), 1.0e-6)
+    dra = radius_deg / cos_dec
 
-        predicates = [
-            f"{dec_col} BETWEEN {dec0 - ddec:.12g} AND {dec0 + ddec:.12g}",
-            f"{ra_col} BETWEEN {ra0 - dra:.12g} AND {ra0 + dra:.12g}",
-        ]
-        if where is not None:
-            predicates.append(f"({where})")
+    predicates = [
+        f"{dec_col} BETWEEN {dec0 - ddec:.12g} AND {dec0 + ddec:.12g}",
+        f"{ra_col} BETWEEN {ra0 - dra:.12g} AND {ra0 + dra:.12g}",
+    ]
+    if where is not None:
+        predicates.append(f"({where})")
 
-        adql = f"SELECT {', '.join(columns)} FROM {table} WHERE {' AND '.join(predicates)}"
-        df = _tap_search_to_dataframe(tap_url, adql)
-        if df.empty:
-            return pd.DataFrame()
-
-        matches = SkyCoord(df[ra_col].to_numpy() * u.deg, df[dec_col].to_numpy() * u.deg)
-        df = df.loc[coord.separation(matches) <= radius].copy()
-        if df.empty:
-            return pd.DataFrame()
-        return df.rename(columns={ra_col: "ra", dec_col: "dec"})
-    except Exception:
+    adql = f"SELECT {', '.join(columns)} FROM {table} WHERE {' AND '.join(predicates)}"
+    df = _tap_search_to_dataframe(tap_url, adql)
+    if df.empty:
         return pd.DataFrame()
+
+    matches = SkyCoord(df[ra_col].to_numpy() * u.deg, df[dec_col].to_numpy() * u.deg)
+    df = df.loc[coord.separation(matches) <= radius].copy()
+    if df.empty:
+        return pd.DataFrame()
+    return df.rename(columns={ra_col: "ra", dec_col: "dec"})
 
 
 class DesiDr1Engine(BaseEngine):
@@ -281,6 +281,7 @@ class DesiDr1Engine(BaseEngine):
         self.require_primary = require_primary
 
     def query(self, coord, radius) -> pd.DataFrame:
+        self._query_ok()
         columns = [
             "mean_fiber_ra",
             "mean_fiber_dec",
@@ -293,16 +294,20 @@ class DesiDr1Engine(BaseEngine):
             "zcat_primary",
         ]
         where = "zcat_primary='true' AND zwarn=0" if self.require_primary else "zwarn=0"
-        df = _tap_box_query(
-            self.tap_url,
-            "desi_dr1.zpix",
-            coord,
-            radius,
-            columns,
-            where=where,
-            ra_col="mean_fiber_ra",
-            dec_col="mean_fiber_dec",
-        )
+        try:
+            df = _tap_box_query(
+                self.tap_url,
+                "desi_dr1.zpix",
+                coord,
+                radius,
+                columns,
+                where=where,
+                ra_col="mean_fiber_ra",
+                dec_col="mean_fiber_dec",
+            )
+        except Exception as exc:
+            self._query_failed(exc)
+            return pd.DataFrame()
         if df.empty:
             return pd.DataFrame()
 
@@ -329,6 +334,7 @@ class DesiDr1Engine(BaseEngine):
 # Per-catalog column maps for all-sky cluster catalogs:
 # catalog_id -> (ra_col, dec_col, z_col, m500_col_1e14, r500_col_mpc_or_None).
 _CLUSTER_COLUMN_MAPS = {
+    "J/ApJS/272/39/table2": ("RAJ2000", "DEJ2000", "zCl", "M500", "r500"),
     "J/A+A/594/A27/psz2": ("RAdeg", "DEdeg", "z", "MSZ", None),
     "J/A+A/534/A109/mcxc": ("RAJ2000", "DEJ2000", "z", "M500", "R500"),
     "J/A+A/688/A187/mcxcii": ("RAJ2000", "DEJ2000", "z", "M500", "R500"),
@@ -362,7 +368,7 @@ def _standardize_cluster_columns(df: pd.DataFrame, catalog_id: str) -> pd.DataFr
 
 
 class ClusterEngine(BaseEngine):
-    """All-sky galaxy-cluster engine (PSZ2 + MCXC + MCXC-II via Vizier).
+    """All-sky galaxy-cluster engine (Wen-Han, PSZ2, MCXC, MCXC-II).
 
     Only all-sky cluster catalogs cover the sample's high declination; each
     catalog supplies redshift + M500 (and R500 where available) so the search can
@@ -377,9 +383,17 @@ class ClusterEngine(BaseEngine):
         self.catalogs = dict(catalogs)
 
     def query(self, coord, radius) -> pd.DataFrame:
+        self._query_ok()
         frames = []
+        failures = []
         for cat_id in self.catalogs.values():
-            raw = VizierEngine(cat_id).query(coord, radius)
+            engine = VizierEngine(cat_id)
+            raw = engine.query(coord, radius)
+            if getattr(engine, "last_query_status", "ok") != "ok":
+                failures.append(
+                    f"{cat_id}: {getattr(engine, 'last_query_error', 'unknown query error')}"
+                )
+                continue
             if raw.empty:
                 continue
             std = _standardize_cluster_columns(raw, cat_id)
@@ -389,6 +403,9 @@ class ClusterEngine(BaseEngine):
                 if c in std.columns
             ]
             frames.append(std[keep])
+        if failures:
+            self.last_query_status = "query_error"
+            self.last_query_error = "; ".join(failures)
         if not frames:
             return pd.DataFrame()
         return pd.concat(frames, ignore_index=True)
@@ -451,6 +468,7 @@ class NedTapEngine(BaseEngine):
         )
 
     def query(self, coord, radius) -> pd.DataFrame:
+        self._query_ok()
         ra0, dec0 = coord.ra.deg, coord.dec.deg
         sr = min(radius.to(u.deg).value, self.max_radius_deg)
         adql = (
@@ -461,6 +479,7 @@ class NedTapEngine(BaseEngine):
         try:
             df = _tap_search_to_dataframe(self.tap_url, adql)
         except Exception as e:
+            self._query_failed(e)
             print(f"NED TAP query failed: {e}")
             return pd.DataFrame()
         if df.empty:
