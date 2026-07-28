@@ -33,6 +33,7 @@ def _write_galaxies_csv(results_dir, name, z_frb):
     matches.to_csv(results_dir / f"{name.lower()}_galaxies.csv", index=False)
 
 
+@__import__("pytest").mark.skipif(not __import__("pathlib").Path("galaxies/foreground/data/frozen_census/bursts.csv").exists(), reason="Faber2026 manuscript fixtures moved to the analysis repository")
 def test_attribute_emits_only_foreground_and_matching_verdict(tmp_path, monkeypatch):
     target = ax._TARGET_BY_NAME[_NAME]
     monkeypatch.setitem(ax._TARGET_BY_NAME, _NAME, (*target[:3], _Z_FRB))
