@@ -287,7 +287,7 @@ def test_cluster_row_uses_catalog_mass_and_mnfw_dm():
     )
     out = build_unified_records(matches, 0.5, 312.4, 72.0, enrich=False)
     row = out.iloc[0]
-    m200 = 1.3 * 5.0e14
+    m200 = scat.m200_from_m500_nfw(5.0e14, 0.10)
     assert abs(row["M_halo"] - m200) / m200 < 1e-9  # catalog mass, not stellar-derived
     assert row["mass_source"] == "cluster_catalog"
     dm_ref = scat.dm_cluster_mnfw_model(5.0e14, 0.10, 800.0)

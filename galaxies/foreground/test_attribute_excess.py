@@ -13,7 +13,7 @@ from galaxies.foreground import sightline_budget as sb
 from scattering.scat_analysis.burst_metadata import load_tns_name
 
 _NAME = "Wilhelm"
-_Z_FRB = ax._TARGET_BY_NAME[_NAME][3]  # 0.51
+_Z_FRB = 0.51
 
 
 def _write_galaxies_csv(results_dir, name, z_frb):
@@ -33,7 +33,9 @@ def _write_galaxies_csv(results_dir, name, z_frb):
     matches.to_csv(results_dir / f"{name.lower()}_galaxies.csv", index=False)
 
 
-def test_attribute_emits_only_foreground_and_matching_verdict(tmp_path):
+def test_attribute_emits_only_foreground_and_matching_verdict(tmp_path, monkeypatch):
+    target = ax._TARGET_BY_NAME[_NAME]
+    monkeypatch.setitem(ax._TARGET_BY_NAME, _NAME, (*target[:3], _Z_FRB))
     _write_galaxies_csv(tmp_path, _NAME, _Z_FRB)
 
     attr = ax.attribute(str(tmp_path), budget_df=None)

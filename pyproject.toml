@@ -46,6 +46,8 @@ dev = [
   "nox>=2025.5.1",
 ]
 test = [
+  "dynesty>=3.0",
+  "pyarrow>=17.0",
   "pytest>=7.0",
   "pytest-cov>=4.0",
 ]
@@ -85,14 +87,17 @@ exclude = [
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = ["-ra", "--strict-config", "--strict-markers"]
+addopts = ["-ra", "--strict-config", "--strict-markers", "-m", "not network"]
 pythonpath = ["."]  # make repo-root namespace dirs (analysis/, galaxies/) importable in tests
 log_level = "INFO"
 xfail_strict = true
 markers = [
+    "integration: marks tests that cross package or service boundaries",
+    "network: marks tests that require live network services",
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]
-testpaths = ["tests", "scattering/scripts", "scattering/scat_analysis/tests", "scintillation/scint_analysis/tests", "flits/batch/tests", "analysis/scattering-refit-2026-06/test_gate_joint_committed.py", "analysis/scattering-refit-2026-06/test_posterior_compare.py", "analysis/scattering-refit-2026-06/test_tail_coverage.py", "analysis/scattering-refit-2026-06/test_likelihood_equivalence.py", "analysis/beta_poc/test_compare_routes.py", "analysis/beta_poc/test_build_verdict.py", "analysis/chime-scallop-calibration-2026-07-13/test_scallop_injections.py"]
+testpaths = ["."]
+norecursedirs = [".git", ".venv", ".archive", "build", "dist"]
 filterwarnings = [
     "ignore::DeprecationWarning",
 ]

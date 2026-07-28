@@ -350,6 +350,8 @@ def test_shipped_burst_configs_carry_single_block_caveat():
     import yaml
 
     bursts = Path(__file__).parents[2] / "configs" / "bursts"
+    if not bursts.exists():
+        pytest.skip("project burst configs moved to the analysis repository")
     for nick in ("hamilton", "johndoeII"):
         config = yaml.safe_load((bursts / f"{nick}_chime.yaml").read_text())
         assert config["provenance_caveat"] == "single_block", nick

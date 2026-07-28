@@ -4,12 +4,13 @@ import numpy as np
 import os
 import pytest
 
-from dmphasev2 import get_dm
-
 @pytest.fixture
 def waterfall():
     """Bursts from B0355+54 detected by CHIME/FRB."""
-    waterfall = np.load("B0355+54_DM57.2403.npy")
+    source = os.path.join(os.path.dirname(__file__), "B0355+54_DM57.2403.npy")
+    if not os.path.exists(source):
+        pytest.skip("external B0355+54 fixture is not distributed with FLITS")
+    waterfall = np.load(source)
 
     # calculate per-channel mean and variance
     mean = np.nanmean(waterfall, axis=1)
@@ -28,6 +29,10 @@ def waterfall():
 
 def test_get_dm(waterfall):
     """Test phase-DM determination."""
+    try:
+        from dmphase import get_dm
+    except ImportError:
+        pytest.skip("optional dmphase reference implementation is unavailable")
 
     nchan = waterfall.shape[0]
 

@@ -12,6 +12,8 @@ Test Categories:
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 from numpy.testing import assert_allclose
@@ -344,6 +346,9 @@ class TestBurstCatalogIntegration:
     
     def test_catalog_lookup_raises_for_unknown(self):
         """Should raise for unknown burst name."""
+        catalog = Path(__file__).parents[2] / "configs" / "bursts.yaml"
+        if not catalog.exists():
+            pytest.skip("project burst catalog moved to the analysis repository")
         with pytest.raises(ValueError, match="not in catalog"):
             get_burst_priors_from_catalog("nonexistent_burst_xyz123")
     

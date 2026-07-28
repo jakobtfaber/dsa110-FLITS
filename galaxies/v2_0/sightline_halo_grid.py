@@ -68,6 +68,17 @@ CMAP = "magma"
 Y_LIM = 600.0  # impact parameter axis half-range, kpc
 
 
+def _contributor_mask(frame: pd.DataFrame) -> pd.Series:
+    """Return a Boolean mask for optional budget-contributor annotations."""
+    if "budget_contributor" not in frame:
+        return pd.Series(False, index=frame.index, dtype=bool)
+    return frame["budget_contributor"].map(
+        lambda value: value is True
+        or value == 1
+        or (isinstance(value, str) and value.strip().lower() in {"1", "true"})
+    )
+
+
 def _load(halo_csv: str):
     """Return (foreground-halo frame, {frb_name: frb_z} for all z-known sightlines).
 
