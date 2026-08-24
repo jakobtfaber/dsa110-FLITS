@@ -5549,3 +5549,32 @@ preserving for future agents.
 - `origin` `entire/*` refs:
   - entire/checkpoints/v1 -> a90492d
 - note: `.entire/` remains host-local runtime state; only this ledger is tracked.
+
+## 2026-07-26T17:45:12-07:00 — jakob
+- repo: `/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS`
+- branch: `fix/fig3-transient-names`
+- head: `a3219152`
+- origin/main: `f5c1d1f3`
+- worktree: clean
+- note: watched path changed: docs/rse/specs/reproducibility-foreground-galaxies.md
+- tracked status: clean
+- local `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d7
+- `origin` `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d
+- note: `.entire/` remains host-local runtime state; only this ledger is tracked.
+
+## 2026-07-26T17:53:49-07:00 — jakob
+- repo: `/Users/jakobfaber/Developer/repos/github.com/jakobtfaber/dsa110-FLITS`
+- branch: `main`
+- head: `24632890`
+- origin/main: `24632890`
+- worktree: dirty
+- note: watched path changed: docs/rse/specs/reproducibility-foreground-galaxies.md
+- tracked status:
+  - M docs/entire-tracing-checkpoints.md
+- local `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d7
+- `origin` `entire/*` refs:
+  - entire/checkpoints/v1 -> a90492d
+- note: `.entire/` remains host-local runtime state; only this ledger is tracked.
