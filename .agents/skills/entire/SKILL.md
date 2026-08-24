@@ -5,7 +5,7 @@ description: Recall prior session/checkpoint context in this repo via the Entire
 
 # Entire
 
-Entire tracks agent sessions as checkpoints (git ref `entire/checkpoints/v1`). Use it to answer "what happened before" instead of guessing from git log alone. All commands below are read-only and allowlisted in `.Codex/settings.json`.
+Entire tracks agent sessions as checkpoints (git ref `entire/checkpoints/v1`). Use it to answer "what happened before" instead of guessing from git log alone. All commands below are read-only and allowlisted in `.claude/settings.json`.
 
 - `entire search "<query>" --json` — hybrid semantic+keyword search over checkpoints, commits, sessions (needs `entire login`). Scoped to this repo; `--all-repos` to widen. For nontrivial searches, dispatch the `entire-search` subagent instead of running this inline.
 - `entire recap` — summarize recent checkpoint activity.
